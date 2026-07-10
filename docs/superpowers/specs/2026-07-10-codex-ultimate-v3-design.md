@@ -118,6 +118,8 @@ Skill 不使用 `hogen-` 前缀。各 Skill 的 YAML 元数据使用短且领域
 - 默认配置、项目配置 schema 与样例覆盖的可解析性。
 - 安装脚本 dry-run 和冲突保护行为。
 
+校验器的 `--root PATH` 始终指向 Skill 包根目录；需要校验其他仓库的覆盖文件时，使用 `--project-root PATH`。默认项目根目录与包根目录相同。无论项目根目录为何处，`config/defaults.yaml` 和 `config/project-config.schema.yaml` 都从包根目录读取，而仅 `hogen-codex.yaml` 从项目根目录读取；项目覆盖会进行嵌套合并，并在合并前后拒绝未知键或类型不匹配。
+
 没有 GitNexus、OpenSpec、Memory 或其他可选工具时，对应 Skill 只可执行安全替代步骤：报告缺失能力、使用普通只读检查或要求用户提供必要信息。任何验证失败或未执行都必须写入最终结果。
 
 ## 验收标准
@@ -134,3 +136,17 @@ Skill 不使用 `hogen-` 前缀。各 Skill 的 YAML 元数据使用短且领域
 - Figma、iOS、微信小程序、CloudBase、MCP 集成等领域专属 Skill。
 - 自动发布到 marketplace 或封装为 Codex Plugin。
 - 目标项目业务代码、基础设施或运行态服务的任何修改。
+
+## 验证记录（2026-07-11）
+
+在临时虚拟环境 `/tmp/codextamplate-validator-venv`（PyYAML 6.0.3）中实际执行：
+
+```bash
+/tmp/codextamplate-validator-venv/bin/python -m unittest discover -s tests -v
+/tmp/codextamplate-validator-venv/bin/python scripts/validate-all-skills.py
+PATH="/tmp/codextamplate-validator-venv/bin:$PATH" bash -c 'set -e; for validator in skills/*/scripts/validate.sh; do "$validator"; done'
+bash -n scripts/install.sh skills/*/scripts/validate.sh
+git diff --check
+```
+
+结果：30 个单元测试全部通过；根校验器输出六个 `OK: <skill>`；六个 Skill wrapper 均通过；Bash 语法检查和 diff 空白检查均通过。负向测试已覆盖外部 `--project-root` 中未知的嵌套覆盖键、配置类型不匹配、空 templates/examples/scripts、示例 TODO/TBD、未引用 `$<skill>` 的 default prompt、缺失/未加引号的 interface 字段，以及缺失 PyYAML 时的可操作错误提示；正向测试覆盖从包根读取 defaults/schema 并与外部项目覆盖进行嵌套合并。

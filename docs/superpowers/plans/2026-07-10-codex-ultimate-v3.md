@@ -311,7 +311,7 @@ Implement `load_yaml(path)`, `load_skill_metadata(path)`, `validate_skill(skill_
 
 - [ ] **Step 2: Implement command behavior**
 
-Support exactly `--skill NAME` and `--root PATH`. Without `--skill`, read `manifest.yaml`, validate all listed skills and both config files, print `OK: <name>` for every valid Skill, and exit 0. With errors, print `ERROR: <path>: <reason>` for each and exit 1.
+Support `--skill NAME`, `--root PATH`, and `--project-root PATH`. `--root` identifies the package root; `--project-root` identifies the optional external `hogen-codex.yaml` and defaults to the package root. Without `--skill`, read `manifest.yaml`, validate all listed skills, load defaults and schema from the package root, then validate and merge the project override, print `OK: <name>` for every valid Skill, and exit 0. With errors, print `ERROR: <path>: <reason>` for each and exit 1.
 
 - [ ] **Step 3: Extend tests for broken links and invalid configuration**
 
