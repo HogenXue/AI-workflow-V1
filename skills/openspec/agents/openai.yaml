@@ -1,0 +1,6 @@
+interface:
+  display_name: "OpenSpec Design"
+  short_description: "Create requirements, designs, contracts, and implementation tasks."
+  default_prompt: "Use $openspec to define or update the requirements, design, contracts, risks, and validation plan for this medium or large change."
+policy:
+  allow_implicit_invocation: true

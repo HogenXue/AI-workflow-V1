@@ -88,9 +88,26 @@ class BundledSkillContractTests(unittest.TestCase):
                 "radius, working with Git worktrees, or validating affected flows before a commit."
             ),
         },
+        "openspec": {
+            "name": "openspec",
+            "description": (
+                "Create and maintain requirements, technical designs, RFCs, API "
+                "contracts, database contracts, and implementation tasks for medium or "
+                "large changes. Use before architecture-heavy, cross-module, data-model, "
+                "or interface changes."
+            ),
+        },
+        "review": {
+            "name": "review",
+            "description": (
+                "Review code changes for correctness, security, compatibility, "
+                "maintainability, performance, and regression risk. Use for pull-request "
+                "review, pre-merge review, release review, or a focused review of changed files."
+            ),
+        },
     }
 
-    def test_memory_and_gitnexus_package_contracts(self) -> None:
+    def test_standard_skill_package_contracts(self) -> None:
         for name, expected_metadata in self.EXPECTED_METADATA.items():
             with self.subTest(skill=name):
                 skill = ROOT / "skills" / name
@@ -103,3 +120,23 @@ class BundledSkillContractTests(unittest.TestCase):
                 )
                 agent = yaml.safe_load((skill / "agents" / "openai.yaml").read_text(encoding="utf-8"))
                 self.assertIn(f"${name}", agent["interface"]["default_prompt"])
+
+    def test_openspec_and_review_workflows_cover_configuration_and_fallbacks(self) -> None:
+        expected_phrases = {
+            "openspec": (
+                "config/defaults.yaml",
+                "hogen-codex.yaml",
+                "OpenSpec 不可用时",
+            ),
+            "review": (
+                "config/defaults.yaml",
+                "hogen-codex.yaml",
+                "审查工具不可用时",
+            ),
+        }
+
+        for name, phrases in expected_phrases.items():
+            with self.subTest(skill=name):
+                content = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+                for phrase in phrases:
+                    self.assertIn(phrase, content)
