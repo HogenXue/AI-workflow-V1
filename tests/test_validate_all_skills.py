@@ -59,6 +59,26 @@ class ValidateAllSkillsTests(unittest.TestCase):
 
         self.assertIn("invalid YAML", error_text)
 
+    def test_broken_relative_link_is_reported(self) -> None:
+        skill = create_complete_skill(self.root, "review")
+        (skill / "SKILL.md").write_text(
+            "---\nname: review\ndescription: review code\n---\n"
+            "[missing](references/nope.md)\n",
+            encoding="utf-8",
+        )
+
+        errors = self.validator.validate_skill(skill)
+
+        self.assertIn("broken relative reference: references/nope.md", errors)
+
+    def test_invalid_configuration_yaml_is_reported(self) -> None:
+        config = self.root / "defaults.yaml"
+        config.write_text("language: zh-CN: broken\n", encoding="utf-8")
+
+        errors = self.validator.validate_config(config)
+
+        self.assertIn("invalid YAML", errors)
+
 
 class ManifestTests(unittest.TestCase):
     def test_manifest_lists_exactly_six_standard_skill_names(self) -> None:
