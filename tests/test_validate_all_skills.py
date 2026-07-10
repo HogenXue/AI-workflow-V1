@@ -68,3 +68,38 @@ class ManifestTests(unittest.TestCase):
             metadata["skills"],
             ["memory", "gitnexus", "openspec", "review", "debugging", "release"],
         )
+
+
+class BundledSkillContractTests(unittest.TestCase):
+    EXPECTED_METADATA = {
+        "memory": {
+            "name": "memory",
+            "description": (
+                "Retrieve and record durable project context, decisions, learned "
+                "constraints, and completed outcomes. Use for prior-work questions, "
+                "architecture decisions, handoffs, and preserving important conclusions."
+            ),
+        },
+        "gitnexus": {
+            "name": "gitnexus",
+            "description": (
+                "Analyze code relationships, change impact, worktrees, commit scope, "
+                "and release branches. Use before changing symbols, reviewing blast "
+                "radius, working with Git worktrees, or validating affected flows before a commit."
+            ),
+        },
+    }
+
+    def test_memory_and_gitnexus_package_contracts(self) -> None:
+        for name, expected_metadata in self.EXPECTED_METADATA.items():
+            with self.subTest(skill=name):
+                skill = ROOT / "skills" / name
+                for directory in ("agents", "references", "templates", "examples", "scripts"):
+                    self.assertTrue((skill / directory).is_dir(), f"missing {name}/{directory}")
+                self.assertTrue((skill / "scripts" / "validate.sh").is_file())
+                self.assertEqual(
+                    yaml.safe_load((skill / "SKILL.md").read_text(encoding="utf-8").split("---", 2)[1]),
+                    expected_metadata,
+                )
+                agent = yaml.safe_load((skill / "agents" / "openai.yaml").read_text(encoding="utf-8"))
+                self.assertIn(f"${name}", agent["interface"]["default_prompt"])

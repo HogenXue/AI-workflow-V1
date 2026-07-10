@@ -1,0 +1,6 @@
+interface:
+  display_name: "Project Memory"
+  short_description: "Retrieve durable context and record verified project decisions."
+  default_prompt: "Use $memory to retrieve verified project context or record an authorized durable conclusion."
+policy:
+  allow_implicit_invocation: true
