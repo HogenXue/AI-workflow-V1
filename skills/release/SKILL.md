@@ -1,9 +1,12 @@
 ---
 name: release
-description: |
-  Release, deployment, rollout, rollback and monitoring.
+description: "Plan, verify, execute, and report releases with versioning, change notes, rollback readiness, and post-release checks. Use for release preparation, deployment, rollout, rollback, or release-status verification."
 ---
 
 # Release
 
-Build, test, changelog, rollback, monitor.
+先读取包内 `config/defaults.yaml`，再读取目标仓库根目录的 `hogen-codex.yaml`（若存在）；项目值覆盖默认值。发布范围、版本、目标环境、批准状态或回滚路径不明确时，先报告限制，不能将准备工作表述为已发布。
+
+按[发布门禁](references/release-gates.md)确认范围、版本与变更说明，完成可执行的构建、测试和迁移检查，准备可操作的回滚，再执行已获授权的发布或灰度。发布后记录实际操作与结果，完成健康检查并列出风险、观察窗口和未执行事项。
+
+发布工具不可用时，只能用本地构建、测试、版本文件、变更记录和只读部署配置进行准备或状态核对，并明确未执行部署、远端监控、回滚或生产验证。不得虚报发布成功、生产健康、变更已上线或回滚已演练。使用[发布清单模板](templates/release-checklist.md)记录状态，参见[发布准备示例](examples/prepare-release.md)。

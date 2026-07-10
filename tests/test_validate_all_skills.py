@@ -105,6 +105,22 @@ class BundledSkillContractTests(unittest.TestCase):
                 "review, pre-merge review, release review, or a focused review of changed files."
             ),
         },
+        "debugging": {
+            "name": "debugging",
+            "description": (
+                "Investigate bugs, crashes, test failures, and unexpected behavior through "
+                "reproduction, evidence collection, root-cause isolation, minimal repair, and "
+                "verification. Use whenever diagnosing or fixing a defect."
+            ),
+        },
+        "release": {
+            "name": "release",
+            "description": (
+                "Plan, verify, execute, and report releases with versioning, change notes, "
+                "rollback readiness, and post-release checks. Use for release preparation, "
+                "deployment, rollout, rollback, or release-status verification."
+            ),
+        },
     }
 
     def test_standard_skill_package_contracts(self) -> None:
@@ -140,3 +156,48 @@ class BundledSkillContractTests(unittest.TestCase):
                 content = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
                 for phrase in phrases:
                     self.assertIn(phrase, content)
+
+    def test_debugging_and_release_workflows_cover_configuration_and_fallbacks(self) -> None:
+        expected_phrases = {
+            "debugging": (
+                "config/defaults.yaml",
+                "hogen-codex.yaml",
+                "调试工具不可用时",
+            ),
+            "release": (
+                "config/defaults.yaml",
+                "hogen-codex.yaml",
+                "发布工具不可用时",
+            ),
+        }
+
+        for name, phrases in expected_phrases.items():
+            with self.subTest(skill=name):
+                content = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+                for phrase in phrases:
+                    self.assertIn(phrase, content)
+
+    def test_debugging_and_release_templates_use_fixed_evidence_gates(self) -> None:
+        expected_headings = {
+            "debugging": (
+                "templates/debug-report.md",
+                ("Reproduction", "Observed evidence", "Root cause", "Minimal fix", "Verification", "Unverified"),
+            ),
+            "release": (
+                "templates/release-checklist.md",
+                (
+                    "Scope",
+                    "Pre-release checks",
+                    "Rollback",
+                    "Execution record",
+                    "Post-release checks",
+                    "Outstanding risks",
+                ),
+            ),
+        }
+
+        for name, (template_path, headings) in expected_headings.items():
+            with self.subTest(skill=name):
+                content = (ROOT / "skills" / name / template_path).read_text(encoding="utf-8")
+                for heading in headings:
+                    self.assertIn(f"## {heading}", content)

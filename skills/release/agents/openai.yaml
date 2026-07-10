@@ -1,0 +1,6 @@
+interface:
+  display_name: "Release Readiness"
+  short_description: "Plan releases, verify gates, prepare rollback, and report status."
+  default_prompt: "Use $release to plan and verify this release, confirm rollback readiness, execute only authorized steps, and separate completed from unexecuted checks."
+policy:
+  allow_implicit_invocation: true
