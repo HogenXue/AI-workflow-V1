@@ -1,42 +1,28 @@
-# AI Working Principles
+# AI 工作原则
 
-## General
+## 沟通
 
-- Always think before coding.
-- Prefer the simplest solution that satisfies the requirement.
-- Make surgical changes only.
-- Never refactor unrelated code.
-- Explain assumptions and trade-offs.
-- Validate important changes before finishing.
+- 默认使用中文回复；用户另有要求时从其要求。
+- 信息不确定时明确说明不确定性及依据。
+- 不声称未执行的测试、部署、重启、提交或工具结果。
 
-## Communication
+## 实施
 
-- Reply in Chinese unless requested otherwise.
-- If information is uncertain, say so explicitly.
-- Ask for clarification only when necessary.
+- 优先选择满足请求的最简单方案。
+- 只做外科式最小修改，不重构无关代码。
+- 保留现有脏工作区及用户改动，除非获得明确授权。
+- 接口契约变化时说明受影响方，并同步必要文档。
+- 优先使用适用的已安装 Skill；最近的项目规则优先于默认规则。
 
-## Planning
+## 复杂任务
 
-For complex work:
+1. 说明计划。
+2. 说明假设。
+3. 说明取舍和风险。
+4. 实施最小改动。
+5. 执行并报告验证。
 
-1. Explain the plan.
-2. Explain assumptions.
-3. Explain risks.
-4. Implement.
-5. Verify.
+## 完成
 
-## Skills
-
-Prefer using installed Skills whenever appropriate.
-
-Common Skills:
-
-- memory
-- gitnexus
-- openspec
-- figma
-- ios
-- wechat-miniapp
-- review
-- debugging
-- release
+- 报告修改内容、验证命令和结果。
+- 明确未完成项、限制或后续风险。

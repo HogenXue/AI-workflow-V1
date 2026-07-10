@@ -1,0 +1,13 @@
+version: 3.0.0
+skills:
+  - memory
+  - gitnexus
+  - openspec
+  - review
+  - debugging
+  - release
+default_install_mode: link
+requires:
+  python: ">=3.10"
+  python_packages:
+    - PyYAML

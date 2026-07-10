@@ -3,6 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -57,3 +58,13 @@ class ValidateAllSkillsTests(unittest.TestCase):
         _, error_text = self.validator.load_skill_metadata(skill / "SKILL.md")
 
         self.assertIn("invalid YAML", error_text)
+
+
+class ManifestTests(unittest.TestCase):
+    def test_manifest_lists_exactly_six_standard_skill_names(self) -> None:
+        metadata = yaml.safe_load((ROOT / "manifest.yaml").read_text(encoding="utf-8"))
+
+        self.assertEqual(
+            metadata["skills"],
+            ["memory", "gitnexus", "openspec", "review", "debugging", "release"],
+        )

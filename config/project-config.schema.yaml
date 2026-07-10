@@ -1,0 +1,25 @@
+type: mapping
+allowed_keys:
+  language:
+    type: string
+  change_policy:
+    type: mapping
+    allowed_keys:
+      minimal_change:
+        type: boolean
+      preserve_dirty_worktree:
+        type: boolean
+      require_impact_analysis_before_symbol_edit:
+        type: boolean
+  verification:
+    type: mapping
+    allowed_keys:
+      report_unexecuted_steps:
+        type: boolean
+      require_spec_for_complex_change:
+        type: boolean
+  tools:
+    type: mapping
+    allowed_keys:
+      missing_tool_policy:
+        type: string

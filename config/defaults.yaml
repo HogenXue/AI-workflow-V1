@@ -1,0 +1,10 @@
+language: zh-CN
+change_policy:
+  minimal_change: true
+  preserve_dirty_worktree: true
+  require_impact_analysis_before_symbol_edit: false
+verification:
+  report_unexecuted_steps: true
+  require_spec_for_complex_change: true
+tools:
+  missing_tool_policy: report-and-degrade
