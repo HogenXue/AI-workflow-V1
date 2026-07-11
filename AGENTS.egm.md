@@ -48,15 +48,13 @@ Controller → Application → Domain → Infrastructure
 
 ## Skill 默认策略
 
-- 探索代码、改符号前、提交前 → `$gitnexus`（项目名 **EGM**）。
 - 规范驱动变更 → `$openspec`。
 - 会话延续与项目记忆 → `$memory`。
+- 代码探索、改符号、提交前检查 → 见文末 GitNexus 块，或调用 `$gitnexus` skill。
 
 ---
 
 ## Git 提交格式
-
-提交前须执行 `$gitnexus` 的 `detect_changes()`。
 
 版本号与风格参考 `egm_docs/RELEASE_NOTE.md`：
 
