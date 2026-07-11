@@ -26,3 +26,12 @@
 
 - 报告修改内容、验证命令和结果。
 - 明确未完成项、限制或后续风险。
+
+## 记忆与上下文
+
+涉及历史决策、项目上下文、任务延续、规则或交接时，优先调用 `$memory` skill，并按 [memory-backends.md](skills/memory/references/memory-backends.md) 选择后端：
+
+- **Recallium**（项目记忆）：会话开始或延续任务时先 `session_recap`；问历史/规则/任务时用 `search_memories`、`get_rules`；用户说 recallium 时立即调用 `recallium` 工具。
+- **Mem0**（语义事实）：用 `memory_search` / `memory_add`；mem0 插件 hooks 可能已注入部分上下文，仍按需补检索。
+
+先检索再回答；MCP 不可用或失败时明确说明，不得虚报已检索或已保存。
