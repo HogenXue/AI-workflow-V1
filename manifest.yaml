@@ -6,6 +6,7 @@ skills:
   - review
   - debugging
   - release
+  - karpathy-guidelines-zh
 default_install_mode: link
 requires:
   python: ">=3.10"

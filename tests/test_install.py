@@ -50,7 +50,15 @@ class InstallTests(unittest.TestCase):
             result.stdout.splitlines(),
             [
                 f"DRY-RUN: link {name} -> {self.target / name}"
-                for name in ("memory", "gitnexus", "openspec", "review", "debugging", "release")
+                for name in (
+                    "memory",
+                    "gitnexus",
+                    "openspec",
+                    "review",
+                    "debugging",
+                    "release",
+                    "karpathy-guidelines-zh",
+                )
             ],
         )
         self.assertFalse(self.target.exists())
@@ -132,7 +140,15 @@ class InstallTests(unittest.TestCase):
         result = self.run_install("--link", "--replace")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        for name in ("memory", "gitnexus", "openspec", "review", "debugging", "release"):
+        for name in (
+            "memory",
+            "gitnexus",
+            "openspec",
+            "review",
+            "debugging",
+            "release",
+            "karpathy-guidelines-zh",
+        ):
             with self.subTest(skill=name):
                 installed = self.target / name
                 self.assertTrue(installed.is_symlink())

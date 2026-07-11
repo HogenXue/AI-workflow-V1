@@ -94,8 +94,8 @@ done < <(
   ' "$manifest"
 )
 
-if ((${#skills[@]} != 6)); then
-  printf 'ERROR: manifest must list exactly six skills\n' >&2
+if ((${#skills[@]} == 0)); then
+  printf 'ERROR: manifest must list at least one skill\n' >&2
   exit 1
 fi
 

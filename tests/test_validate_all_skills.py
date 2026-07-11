@@ -331,12 +331,20 @@ class ValidateAllSkillsTests(unittest.TestCase):
 
 
 class ManifestTests(unittest.TestCase):
-    def test_manifest_lists_exactly_six_standard_skill_names(self) -> None:
+    def test_manifest_lists_standard_skill_names(self) -> None:
         metadata = yaml.safe_load((ROOT / "manifest.yaml").read_text(encoding="utf-8"))
 
         self.assertEqual(
             metadata["skills"],
-            ["memory", "gitnexus", "openspec", "review", "debugging", "release"],
+            [
+                "memory",
+                "gitnexus",
+                "openspec",
+                "review",
+                "debugging",
+                "release",
+                "karpathy-guidelines-zh",
+            ],
         )
 
 
@@ -389,6 +397,14 @@ class BundledSkillContractTests(unittest.TestCase):
                 "Plan, verify, execute, and report releases with versioning, change notes, "
                 "rollback readiness, and post-release checks. Use for release preparation, "
                 "deployment, rollout, rollback, or release-status verification."
+            ),
+        },
+        "karpathy-guidelines-zh": {
+            "name": "karpathy-guidelines-zh",
+            "description": (
+                "Apply Karpathy-inspired 12-rule behavior contract for coding, review, refactor, "
+                "and multi-step agent work. Use to reduce silent assumptions, over-engineering, "
+                "unrelated edits, weak tests, context drift, and hidden failures."
             ),
         },
     }

@@ -13,6 +13,7 @@
 - 保留现有脏工作区及用户改动，除非获得明确授权。
 - 接口契约变化时说明受影响方，并同步必要文档。
 - 优先使用适用的已安装 Skill；最近的项目规则优先于默认规则。
+- 编码、审查、重构或多步骤任务时，遵循 `$karpathy-guidelines-zh`（源自 [Karpathy Skills 12](https://github.com/twj515895394/andrej-karpathy-skills-12/blob/main/README.zh.md)）。
 
 ## 复杂任务
 
