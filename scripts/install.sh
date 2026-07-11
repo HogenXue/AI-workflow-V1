@@ -17,7 +17,7 @@ root_dir="$(cd "$script_dir/.." && pwd)"
 manifest="$root_dir/manifest.yaml"
 target="${CODEX_HOME:-"$HOME/.codex"}/skills"
 backup_dir=""
-mode="link"
+mode="copy"
 mode_selected=""
 explicit_dry_run=0
 execute_requested=0
@@ -74,6 +74,13 @@ while (($#)); do
   esac
   shift
 done
+
+if [[ -z "$mode_selected" ]]; then
+  manifest_mode="$(awk -F': ' '/^default_install_mode:/ { gsub(/[[:space:]]+$/, "", $2); print $2; exit }' "$manifest")"
+  if [[ -n "$manifest_mode" ]]; then
+    mode="$manifest_mode"
+  fi
+fi
 
 if ((explicit_dry_run)); then
   dry_run=1

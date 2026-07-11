@@ -50,9 +50,9 @@ class InstallTests(unittest.TestCase):
         self.assertEqual(
             result.stdout.splitlines(),
             [
-                f"DRY-RUN: link config -> {config_dest}",
+                f"DRY-RUN: copy config -> {config_dest}",
                 *(
-                    f"DRY-RUN: link {name} -> {self.target / name}"
+                    f"DRY-RUN: copy {name} -> {self.target / name}"
                     for name in (
                         "memory",
                         "gitnexus",
@@ -100,10 +100,10 @@ class InstallTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn(
-            f"DRY-RUN: link config -> {codex_home / 'config'}",
+            f"DRY-RUN: copy config -> {codex_home / 'config'}",
             result.stdout,
         )
-        self.assertIn(f"DRY-RUN: link release -> {codex_home / 'skills' / 'release'}", result.stdout)
+        self.assertIn(f"DRY-RUN: copy release -> {codex_home / 'skills' / 'release'}", result.stdout)
         self.assertFalse((codex_home / "skills").exists())
         self.assertFalse((codex_home / "config").exists())
 
@@ -143,6 +143,27 @@ class InstallTests(unittest.TestCase):
         backup_sentinels = list(self.backup.glob("*/release/sentinel"))
         self.assertEqual(len(backup_sentinels), 1)
         self.assertEqual(backup_sentinels[0].read_text(encoding="utf-8"), "replace")
+
+    def test_copy_installs_config_and_skills_as_files(self) -> None:
+        result = self.run_install("--copy", "--replace")
+        config_dest = self.target.parent / "config"
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(config_dest.is_dir())
+        self.assertFalse(config_dest.is_symlink())
+        self.assertTrue((config_dest / "defaults.yaml").is_file())
+        for name in (
+            "memory",
+            "gitnexus",
+            "openspec",
+            "release",
+            "karpathy-guidelines-zh",
+        ):
+            with self.subTest(skill=name):
+                installed = self.target / name
+                self.assertTrue(installed.is_dir())
+                self.assertFalse(installed.is_symlink())
+                self.assertTrue((installed / "SKILL.md").is_file())
 
     def test_link_installs_all_manifest_skills(self) -> None:
         result = self.run_install("--link", "--replace")

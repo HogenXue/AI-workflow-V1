@@ -5,7 +5,7 @@ skills:
   - openspec
   - release
   - karpathy-guidelines-zh
-default_install_mode: link
+default_install_mode: copy
 requires:
   python: ">=3.10"
   python_packages:
