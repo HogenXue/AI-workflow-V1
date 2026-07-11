@@ -1,116 +1,23 @@
-# AI 工作原则（V6）
+<!-- TRELLIS:START -->
 
-> 版本：V6
-> 本文件定义 AI 在所有项目中的默认协作方式。
-> 项目目录中的 AGENTS.md 优先级高于本文件。
+# Trellis Instructions
 
----
+These instructions are for AI assistants working in this project.
 
-# 1. 沟通
+This project is managed by Trellis. The working knowledge you need lives under `.trellis/`:
 
-- 默认使用中文回复（用户另有要求除外）。
-- 不确定时明确说明依据和不确定性。
-- 不虚构事实，不猜测工具结果。
-- 不声称已执行未实际执行的操作（测试、部署、提交、推送等）。
+- `.trellis/workflow.md` — development phases, when to create tasks, skill routing
+- `.trellis/spec/` — package- and layer-scoped coding guidelines (read before writing code in a given layer)
+- `.trellis/workspace/` — per-developer journals and session traces
+- `.trellis/tasks/` — active and archived tasks (PRDs, research, jsonl context)
 
----
+If a Trellis command is available on your platform (e.g. `/trellis:finish-work`, `/trellis:continue`), prefer it over manual steps. Not every platform exposes every command.
 
-# 2. 工作原则
+If you're using Codex or another agent-capable tool, additional project-scoped helpers may live in:
 
-- 优先满足用户目标，而不是展示能力。
-- 优先采用最简单、最稳定、最容易维护的方案。
-- 外科式修改，只改完成任务所必需的内容。
-- 不重构、不优化、不格式化无关代码。
-- 保留用户已有修改，未经授权不得覆盖。
+- `.agents/skills/` — reusable Trellis skills
+- `.codex/agents/` — optional custom subagents
 
----
+Managed by Trellis. Edits outside this block are preserved; edits inside may be overwritten by a future `trellis update`.
 
-# 3. 复杂任务
-
-复杂任务开始前：
-
-1. 简述目标
-2. 给出计划
-3. 说明关键假设
-4. 说明风险或取舍
-5. 实施最小修改
-6. 验证结果
-
-简单任务直接执行。
-
----
-
-# 4. Skill Routing
-
-根据任务主动判断是否需要调用 Skill：
-
-| Skill                     | 使用场景               |
-| ------------------------- | ------------------ |
-| `$memory`                 | 历史上下文、长期记忆、任务延续    |
-| `$gitnexus`               | 代码理解、调用链、影响分析、安全修改 |
-| `$openspec`               | 功能设计、接口修改、跨模块变更    |
-| `$release`                | Release Note、版本说明  |
-| `$karpathy-guidelines-zh` | 编码、Review、重构       |
-
-优先使用 Skill，不重复实现 Skill 已包含的流程。
-
----
-
-# 5. Memory
-
-涉及：
-
-- 历史任务
-- 项目规则
-- 长期决策
-- 上下文延续
-
-优先调用 `$memory`。
-
-如果 Memory 不可用：
-
-- 明确说明
-- 不伪造检索结果
-
----
-
-# 6. Git
-
-未经明确要求：
-
-- 不 commit
-- 不 push
-- 不 merge
-- 不 rebase
-- 不创建 PR
-
-避免：
-
-- git reset --hard
-- git clean
-- git push --force
-
----
-
-# 7. 完成任务
-
-完成后说明：
-
-- 修改内容
-- 验证方式
-- 验证结果
-- 已知限制（如有）
-
-不要隐瞒未完成事项。
-
----
-
-# 8. 优先级
-
-规则优先级（从高到低）：
-
-1. 项目 `AGENTS.md`
-2. 当前目录 `AGENTS.md`
-3. 本文件
-
-发生冲突时，以距离当前工作目录最近的 AGENTS.md 为准。
+<!-- TRELLIS:END -->
