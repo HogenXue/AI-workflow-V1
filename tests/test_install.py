@@ -44,22 +44,27 @@ class InstallTests(unittest.TestCase):
 
     def test_dry_run_does_not_create_target_or_release(self) -> None:
         result = self.run_install("--dry-run")
+        config_dest = self.target.parent / "config"
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(
             result.stdout.splitlines(),
             [
-                f"DRY-RUN: link {name} -> {self.target / name}"
-                for name in (
-                    "memory",
-                    "gitnexus",
-                    "openspec",
-                    "release",
-                    "karpathy-guidelines-zh",
-                )
+                f"DRY-RUN: link config -> {config_dest}",
+                *(
+                    f"DRY-RUN: link {name} -> {self.target / name}"
+                    for name in (
+                        "memory",
+                        "gitnexus",
+                        "openspec",
+                        "release",
+                        "karpathy-guidelines-zh",
+                    )
+                ),
             ],
         )
         self.assertFalse(self.target.exists())
+        self.assertFalse(config_dest.exists())
         self.assertFalse((self.target / "release").exists())
         self.assertFalse(self.backup.exists())
 
@@ -94,8 +99,13 @@ class InstallTests(unittest.TestCase):
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(
+            f"DRY-RUN: link config -> {codex_home / 'config'}",
+            result.stdout,
+        )
         self.assertIn(f"DRY-RUN: link release -> {codex_home / 'skills' / 'release'}", result.stdout)
         self.assertFalse((codex_home / "skills").exists())
+        self.assertFalse((codex_home / "config").exists())
 
     def test_invalid_arguments_exit_two_without_writes(self) -> None:
         for args in (("--link", "--copy"), ("--target",), ("--unknown",)):
@@ -136,8 +146,13 @@ class InstallTests(unittest.TestCase):
 
     def test_link_installs_all_manifest_skills(self) -> None:
         result = self.run_install("--link", "--replace")
+        config_dest = self.target.parent / "config"
 
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(config_dest.is_symlink())
+        self.assertEqual(config_dest.resolve(), (ROOT / "config").resolve())
+        self.assertTrue((config_dest / "defaults.yaml").is_file())
+        self.assertIn("INSTALLED: config ->", result.stdout)
         for name in (
             "memory",
             "gitnexus",
@@ -196,4 +211,5 @@ class InstallTests(unittest.TestCase):
         self.assertFalse((self.target / "memory").exists())
         self.assertFalse((self.target / "gitnexus").exists())
         self.assertFalse((self.target / "openspec").exists())
+        self.assertFalse((self.target.parent / "config").exists())
         self.assertEqual(list(self.backup.glob("*/release")), [])

@@ -5,7 +5,7 @@ description: "Plan, verify, execute, and report releases with versioning, change
 
 # Release
 
-先读取包内 `config/defaults.yaml`，再读取目标仓库根目录的 `hogen-codex.yaml`（若存在）；项目值覆盖默认值。发布范围、版本、目标环境、批准状态或回滚路径不明确时，先报告限制，不能将准备工作表述为已发布。
+先读取 skill 目录上两级的 `config/defaults.yaml`（安装后如 `~/.agents/config/defaults.yaml`，源码仓库则为包根 `config/defaults.yaml`），再读取目标仓库根目录的 `hogen-codex.yaml`（若存在）；项目值覆盖默认值。发布范围、版本、目标环境、批准状态或回滚路径不明确时，先报告限制，不能将准备工作表述为已发布。
 
 按[发布门禁](references/release-gates.md)确认范围、版本与变更说明，完成可执行的构建、测试和迁移检查，准备可操作的回滚，再执行已获授权的发布或灰度。发布后记录实际操作与结果，完成健康检查并列出风险、观察窗口和未执行事项。
 

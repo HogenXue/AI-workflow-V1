@@ -22,6 +22,20 @@ mode_selected=""
 explicit_dry_run=0
 execute_requested=0
 replace=0
+config_source="$root_dir/config"
+config_dest=""
+
+set_config_dest() {
+  local parent
+  parent="$(dirname "$target")"
+  if [[ -d "$parent" ]]; then
+    config_dest="$(cd "$parent" && pwd)/config"
+  else
+    config_dest="$parent/config"
+  fi
+}
+
+set_config_dest
 
 while (($#)); do
   case "$1" in
@@ -48,6 +62,7 @@ while (($#)); do
       fi
       if [[ "$option" == '--target' ]]; then
         target="$2"
+        set_config_dest
       else
         backup_dir="$2"
       fi
@@ -74,6 +89,11 @@ fi
 
 if [[ ! -f "$manifest" ]]; then
   printf 'ERROR: manifest not found: %s\n' "$manifest" >&2
+  exit 1
+fi
+
+if [[ ! -d "$config_source" ]]; then
+  printf 'ERROR: config directory not found: %s\n' "$config_source" >&2
   exit 1
 fi
 
@@ -114,25 +134,43 @@ for skill in "${skills[@]}"; do
   fi
 done
 
+config_conflict=0
+if [[ -e "$config_dest" || -L "$config_dest" ]]; then
+  config_conflict=1
+fi
+
 if ((dry_run)); then
-  if ((${#conflicts[@]})); then
-    printf 'CONFLICT: existing skills: %s\n' "${conflicts[*]}" >&2
+  if ((${#conflicts[@]} || config_conflict)); then
+    if ((${#conflicts[@]})); then
+      printf 'CONFLICT: existing skills: %s\n' "${conflicts[*]}" >&2
+    fi
+    if ((config_conflict)); then
+      printf 'CONFLICT: existing config: %s\n' "$config_dest" >&2
+    fi
     printf '%s\n' 'Use --replace to back up and replace them.' >&2
   fi
+  printf 'DRY-RUN: %s config -> %s\n' "$mode" "$config_dest"
   for skill in "${skills[@]}"; do
     printf 'DRY-RUN: %s %s -> %s\n' "$mode" "$skill" "$target/$skill"
   done
   exit 0
 fi
 
-if (( ${#conflicts[@]} > 0 && replace == 0 )); then
-  printf 'CONFLICT: existing skills: %s\n' "${conflicts[*]}" >&2
+if (( (${#conflicts[@]} > 0 || config_conflict) && replace == 0 )); then
+  if ((${#conflicts[@]})); then
+    printf 'CONFLICT: existing skills: %s\n' "${conflicts[*]}" >&2
+  fi
+  if ((config_conflict)); then
+    printf 'CONFLICT: existing config: %s\n' "$config_dest" >&2
+  fi
   printf '%s\n' 'Use --replace to back up and replace them.' >&2
   exit 1
 fi
 
 moved_skills=()
 created_skills=()
+config_moved=0
+config_created=0
 backup_root=""
 
 rollback() {
@@ -140,9 +178,20 @@ rollback() {
   local skill
 
   printf '%s\n' 'ERROR: installation failed; rolling back.' >&2
+  if ((config_created)); then
+    rm -rf "$config_dest" || true
+  fi
   for skill in "${created_skills[@]}"; do
     rm -rf "$target/$skill" || true
   done
+  if ((config_moved)); then
+    rm -rf "$config_dest" || true
+    if [[ -e "$backup_root/config" || -L "$backup_root/config" ]]; then
+      if ! mv "$backup_root/config" "$config_dest"; then
+        printf 'ERROR: could not restore config backup\n' >&2
+      fi
+    fi
+  fi
   for skill in "${moved_skills[@]}"; do
     rm -rf "$target/$skill" || true
     if [[ -e "$backup_root/$skill" || -L "$backup_root/$skill" ]]; then
@@ -154,7 +203,7 @@ rollback() {
   exit "$status"
 }
 
-if ((${#conflicts[@]})); then
+if ((${#conflicts[@]} || config_conflict)); then
   backup_root="$backup_dir/$(date -u +%Y%m%dT%H%M%SZ)"
   if [[ -e "$backup_root" || -L "$backup_root" ]]; then
     printf 'ERROR: backup destination already exists: %s\n' "$backup_root" >&2
@@ -163,6 +212,12 @@ if ((${#conflicts[@]})); then
   if ! mkdir -p "$backup_root"; then
     printf 'ERROR: could not create backup directory: %s\n' "$backup_root" >&2
     exit 1
+  fi
+  if ((config_conflict)); then
+    if ! mv "$config_dest" "$backup_root/config"; then
+      rollback 1
+    fi
+    config_moved=1
   fi
   for skill in "${conflicts[@]}"; do
     if ! mv "$target/$skill" "$backup_root/$skill"; then
@@ -175,6 +230,22 @@ fi
 if ! mkdir -p "$target"; then
   rollback 1
 fi
+
+if ! mkdir -p "$(dirname "$config_dest")"; then
+  rollback 1
+fi
+
+if [[ "$mode" == 'link' ]]; then
+  if ! ln -s "$config_source" "$config_dest"; then
+    rm -rf "$config_dest" || true
+    rollback 1
+  fi
+elif ! cp -R "$config_source" "$config_dest"; then
+  rm -rf "$config_dest" || true
+  rollback 1
+fi
+config_created=1
+printf 'INSTALLED: config -> %s\n' "$config_dest"
 
 for skill in "${skills[@]}"; do
   destination="$target/$skill"

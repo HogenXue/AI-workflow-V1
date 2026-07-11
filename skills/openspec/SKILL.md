@@ -5,7 +5,7 @@ description: "Create and maintain requirements, technical designs, RFCs, API con
 
 # OpenSpec
 
-先读取包内 `config/defaults.yaml`，再读取目标仓库根目录的 `hogen-codex.yaml`（若存在）；项目值覆盖默认值。配置文件无效或包含未知项时，报告限制并仅采用可解析的默认值。
+先读取 skill 目录上两级的 `config/defaults.yaml`（安装后如 `~/.agents/config/defaults.yaml`，源码仓库则为包根 `config/defaults.yaml`），再读取目标仓库根目录的 `hogen-codex.yaml`（若存在）；项目值覆盖默认值。配置文件无效或包含未知项时，报告限制并仅采用可解析的默认值。
 
 按[变更分类](references/change-classification.md)确认是否需要规格：中大型、跨模块、数据模型或接口变更先定义问题、范围、验收条件、设计、风险和验证，再开始实施。小型且局部的改动可说明不建规格的理由，并保留最小验证计划。
 

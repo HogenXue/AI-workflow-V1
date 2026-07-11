@@ -5,7 +5,7 @@ description: "Retrieve and record durable project context, decisions, learned co
 
 # Memory
 
-先读取包内 `config/defaults.yaml`，再读取目标仓库根目录的 `hogen-codex.yaml`（若存在）；项目值覆盖默认值。
+先读取 skill 目录上两级的 `config/defaults.yaml`（安装后如 `~/.agents/config/defaults.yaml`，源码仓库则为包根 `config/defaults.yaml`），再读取目标仓库根目录的 `hogen-codex.yaml`（若存在）；项目值覆盖默认值。
 
 检测当前会话可用的记忆后端及其检索、写入能力。先检索已有上下文，再回答或记录；不要把 Skill 的存在当作后端可用的证据。仅在用户明确要求保留、已完成重要决策或需要交接时，记录经过验证的稳定结论。
 
