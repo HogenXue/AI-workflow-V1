@@ -1,6 +1,0 @@
-interface:
-  display_name: "Debug Evidence Loop"
-  short_description: "Reproduce defects, isolate root causes, and verify minimal repairs."
-  default_prompt: "Use $debugging to reproduce the defect, collect evidence, isolate the root cause, make the minimal repair, and report verified versus unverified steps."
-policy:
-  allow_implicit_invocation: true

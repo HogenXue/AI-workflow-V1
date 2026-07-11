@@ -42,7 +42,7 @@ class InstallTests(unittest.TestCase):
             check=False,
         )
 
-    def test_dry_run_does_not_create_target_or_review(self) -> None:
+    def test_dry_run_does_not_create_target_or_release(self) -> None:
         result = self.run_install("--dry-run")
 
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -54,19 +54,17 @@ class InstallTests(unittest.TestCase):
                     "memory",
                     "gitnexus",
                     "openspec",
-                    "review",
-                    "debugging",
                     "release",
                     "karpathy-guidelines-zh",
                 )
             ],
         )
         self.assertFalse(self.target.exists())
-        self.assertFalse((self.target / "review").exists())
+        self.assertFalse((self.target / "release").exists())
         self.assertFalse(self.backup.exists())
 
     def test_dry_run_reports_conflict_and_replace_advice_without_writes(self) -> None:
-        sentinel = self.target / "review" / "sentinel"
+        sentinel = self.target / "release" / "sentinel"
         sentinel.parent.mkdir(parents=True)
         sentinel.write_text("keep", encoding="utf-8")
         self.backup.mkdir()
@@ -79,7 +77,7 @@ class InstallTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         output = f"{result.stdout}\n{result.stderr}".lower()
         self.assertIn("conflict", output)
-        self.assertIn("review", output)
+        self.assertIn("release", output)
         self.assertIn("--replace", output)
         self.assertEqual(snapshot_tree(self.target), target_before)
         self.assertEqual(snapshot_tree(self.backup), backup_before)
@@ -96,7 +94,7 @@ class InstallTests(unittest.TestCase):
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn(f"DRY-RUN: link review -> {codex_home / 'skills' / 'review'}", result.stdout)
+        self.assertIn(f"DRY-RUN: link release -> {codex_home / 'skills' / 'release'}", result.stdout)
         self.assertFalse((codex_home / "skills").exists())
 
     def test_invalid_arguments_exit_two_without_writes(self) -> None:
@@ -109,8 +107,8 @@ class InstallTests(unittest.TestCase):
                 self.assertFalse(self.target.exists())
                 self.assertFalse(self.backup.exists())
 
-    def test_copy_without_replace_preserves_existing_review(self) -> None:
-        sentinel = self.target / "review" / "sentinel"
+    def test_copy_without_replace_preserves_existing_release(self) -> None:
+        sentinel = self.target / "release" / "sentinel"
         sentinel.parent.mkdir(parents=True)
         sentinel.write_text("keep", encoding="utf-8")
         before = snapshot_tree(self.target)
@@ -124,15 +122,15 @@ class InstallTests(unittest.TestCase):
         self.assertEqual(snapshot_tree(self.target), before)
 
     def test_copy_replace_installs_skill_and_creates_backup(self) -> None:
-        review = self.target / "review"
-        review.mkdir(parents=True)
-        (review / "sentinel").write_text("replace", encoding="utf-8")
+        release = self.target / "release"
+        release.mkdir(parents=True)
+        (release / "sentinel").write_text("replace", encoding="utf-8")
 
         result = self.run_install("--copy", "--replace")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertTrue((self.target / "review" / "SKILL.md").is_file())
-        backup_sentinels = list(self.backup.glob("*/review/sentinel"))
+        self.assertTrue((self.target / "release" / "SKILL.md").is_file())
+        backup_sentinels = list(self.backup.glob("*/release/sentinel"))
         self.assertEqual(len(backup_sentinels), 1)
         self.assertEqual(backup_sentinels[0].read_text(encoding="utf-8"), "replace")
 
@@ -144,8 +142,6 @@ class InstallTests(unittest.TestCase):
             "memory",
             "gitnexus",
             "openspec",
-            "review",
-            "debugging",
             "release",
             "karpathy-guidelines-zh",
         ):
@@ -156,9 +152,9 @@ class InstallTests(unittest.TestCase):
                 self.assertIn(f"INSTALLED: {name}", result.stdout)
 
     def test_failed_creation_rolls_back_new_links_and_restores_backup(self) -> None:
-        review = self.target / "review"
-        review.mkdir(parents=True)
-        (review / "sentinel").write_text("restore", encoding="utf-8")
+        release = self.target / "release"
+        release.mkdir(parents=True)
+        (release / "sentinel").write_text("restore", encoding="utf-8")
         fake_bin = Path(self.temp_dir.name) / "bin"
         fake_bin.mkdir()
         failing_link = fake_bin / "ln"
@@ -196,8 +192,8 @@ class InstallTests(unittest.TestCase):
 
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("rolling back", result.stderr.lower())
-        self.assertEqual((review / "sentinel").read_text(encoding="utf-8"), "restore")
+        self.assertEqual((release / "sentinel").read_text(encoding="utf-8"), "restore")
         self.assertFalse((self.target / "memory").exists())
         self.assertFalse((self.target / "gitnexus").exists())
         self.assertFalse((self.target / "openspec").exists())
-        self.assertEqual(list(self.backup.glob("*/review")), [])
+        self.assertEqual(list(self.backup.glob("*/release")), [])

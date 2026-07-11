@@ -3,8 +3,6 @@ skills:
   - memory
   - gitnexus
   - openspec
-  - review
-  - debugging
   - release
   - karpathy-guidelines-zh
 default_install_mode: link

@@ -1,6 +1,0 @@
-interface:
-  display_name: "Code Review"
-  short_description: "Review changed code for correctness, risk, and regressions."
-  default_prompt: "Use $review to review the requested changes, report prioritized findings with evidence, and state unverified scope."
-policy:
-  allow_implicit_invocation: true
