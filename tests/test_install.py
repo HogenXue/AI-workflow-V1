@@ -12,6 +12,7 @@ SKILLS = (
     "openspec",
     "release",
     "karpathy-guidelines-zh",
+    "grill-me",
 )
 
 
@@ -38,6 +39,7 @@ class ComponentInstallTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn(f"DRY-RUN: copy memory -> {self.skills_target / 'memory'}", result.stdout)
+        self.assertIn(f"DRY-RUN: copy grill-me -> {self.skills_target / 'grill-me'}", result.stdout)
         self.assertFalse(self.skills_target.exists())
         self.assertFalse(self.config_target.exists())
 

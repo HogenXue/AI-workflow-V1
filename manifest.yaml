@@ -5,6 +5,7 @@ skills:
   - openspec
   - release
   - karpathy-guidelines-zh
+  - grill-me
 default_install_mode: copy
 requires:
   python: ">=3.10"

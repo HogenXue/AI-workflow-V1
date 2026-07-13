@@ -1,6 +1,6 @@
 # AI-workflow-V1
 
-可安装的 AI 协作 Skill 包：5 个独立 Skill、全局 AGENTS 模板，以及共享默认配置（`config/`）。
+可安装的 AI 协作 Skill 包：6 个独立 Skill、全局 AGENTS 模板，以及共享默认配置（`config/`）。
 
 GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
@@ -8,7 +8,7 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
 | 组件 | 说明 |
 | --- | --- |
-| **Skills** | `memory`、`gitnexus`、`openspec`、`release`、`karpathy-guidelines-zh` |
+| **Skills** | `memory`、`gitnexus`、`openspec`、`release`、`karpathy-guidelines-zh`、`grill-me` |
 | **AGENTS 模板** | [trellis/AGENTS.global.md](trellis/AGENTS.global.md)：跨项目通用规则，兼容 Trellis 路由 |
 | **config/** | 默认工作流配置；项目可用 `hogen-codex.yaml` 覆盖 |
 
@@ -112,6 +112,7 @@ bash scripts/install.sh config --copy --replace --target ~/.codex/config
     ├── gitnexus/
     ├── openspec/
     ├── release/
+    ├── grill-me/
     └── karpathy-guidelines-zh/
 ```
 
@@ -165,7 +166,7 @@ python3 scripts/validate-all-skills.py
 
 本包提供一个可选的 Trellis 兼容迁移包，详情见 [trellis/README.zh-CN.md](trellis/README.zh-CN.md)。
 
-- 存在 `.trellis/` 的项目：新功能、较大重构或需求不明确时使用 Trellis Brainstorm → PRD → 实现；简单小改动可直接实现。
+- 存在 `.trellis/` 的项目：复杂需求先由 `grill-me` 澄清，再由 OpenSpec 管理需求、场景和验收 Spec（不维护任务清单）；用户确认 Spec 后，Trellis 管理 task 级 PRD/计划、状态和 Journal，并只引用该 Spec。实施由 TDD 管理，GitNexus 负责影响与 Git 检查；简单小改动可直接实现。
 - 不存在 `.trellis/` 的项目：继续使用 Superpowers 与 OpenSpec。
 - 迁移工具默认仅预览；它不会覆盖 `~/.codex/config.toml`、MCP、插件或 hooks。
 

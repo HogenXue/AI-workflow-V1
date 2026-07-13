@@ -12,18 +12,21 @@
 ## 工作流路由
 
 - 若项目存在 `.trellis/`：Trellis 是该项目的工作流来源。
-  - 新功能、较大重构或需求不明确时，先进入 Trellis Brainstorm；一问一答澄清需求，生成 PRD 后再实现。
+  - 复杂需求或需求不明确时，先使用 `$grill-me` 一问一答澄清；简单修改不自动触发它。
+  - 澄清后由 OpenSpec 维护正式 Spec（需求、场景和验收的唯一事实来源），且 OpenSpec 不维护任务清单。用户确认 Spec 后，再取得同意创建 Trellis task；Trellis 维护 task 级 PRD/计划、该 Spec 引用、任务状态和 Journal，不复制需求、场景或验收。
+  - 实施时使用 TDD 管理测试先行；使用 GitNexus 在修改前分析影响、在提交前检查 Git 范围。用户明确授权实施后，才可运行 `task.py start`。
   - 预计少于约 5 分钟的简单修改可直接实现，但仍需针对性验证。
   - 不创建第二套 Task、PRD、Design 或 Spec；不自动创建 `.trellis/`。
-- 若项目不存在 `.trellis/`：使用项目既有的 Superpowers 与 OpenSpec 工作流。
+- 若项目不存在 `.trellis/`：使用项目既有的 OpenSpec 与实施工作流。
 
 ## 能力型 Skill
 
 - 历史上下文、长期决策或跨会话延续：使用 Memory。
-- 调用链、影响范围或安全修改：使用 GitNexus。
+- 调用链、影响范围或安全修改，以及提交前 Git 范围检查：使用 GitNexus。
 - Release Note、CHANGELOG 或版本说明：使用 Release。
 - 编码、重构或代码审查：使用 Karpathy Guidelines。
-- OpenSpec 仅用于未启用 Trellis 的项目。
+- 复杂需求的前置访谈：使用 Grill Me；它交接给 OpenSpec，不替代任何正式 Spec。
+- OpenSpec 管理行为 Spec；Trellis 的 task 级 PRD/计划必须引用它，不得复制需求、场景或验收。
 
 Skill 负责增强能力，不替代当前工作流，也不为了调用而调用。
 

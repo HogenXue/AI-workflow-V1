@@ -342,6 +342,7 @@ class ManifestTests(unittest.TestCase):
                 "openspec",
                 "release",
                 "karpathy-guidelines-zh",
+                "grill-me",
             ],
         )
 
@@ -368,9 +369,8 @@ class BundledSkillContractTests(unittest.TestCase):
             "name": "openspec",
             "description": (
                 "Create and maintain requirements, technical designs, RFCs, API "
-                "contracts, database contracts, and implementation tasks for medium or "
-                "large changes. Use before architecture-heavy, cross-module, data-model, "
-                "or interface changes."
+                "contracts, and database contracts for medium or large changes. Use before "
+                "architecture-heavy, cross-module, data-model, or interface changes."
             ),
         },
         "release": {
@@ -387,6 +387,14 @@ class BundledSkillContractTests(unittest.TestCase):
                 "Apply Karpathy-inspired 12-rule behavior contract for coding, review, refactor, "
                 "and multi-step agent work. Use to reduce silent assumptions, over-engineering, "
                 "unrelated edits, weak tests, context drift, and hidden failures."
+            ),
+        },
+        "grill-me": {
+            "name": "grill-me",
+            "description": (
+                "Clarify complex requirements through a repository-aware, "
+                "one-question-at-a-time interview before OpenSpec creates the canonical "
+                "Spec. Use for complex or unclear changes in a Trellis project."
             ),
         },
     }
@@ -407,7 +415,15 @@ class BundledSkillContractTests(unittest.TestCase):
 
     def test_openspec_workflow_covers_configuration_and_fallbacks(self) -> None:
         content = (ROOT / "skills" / "openspec" / "SKILL.md").read_text(encoding="utf-8")
-        for phrase in ("config/defaults.yaml", "hogen-codex.yaml", "OpenSpec 不可用时"):
+        for phrase in (
+            "config/defaults.yaml",
+            "hogen-codex.yaml",
+            "OpenSpec 不可用时",
+            ".trellis/",
+            "需求、场景和验收",
+            "不维护任务清单",
+            "task 级 PRD/计划",
+        ):
             self.assertIn(phrase, content)
 
     def test_release_workflow_covers_configuration_and_fallbacks(self) -> None:
@@ -428,3 +444,15 @@ class BundledSkillContractTests(unittest.TestCase):
             "Outstanding risks",
         ):
             self.assertIn(f"## {heading}", content)
+
+    def test_grill_me_enables_implicit_invocation_and_openspec_handoff(self) -> None:
+        skill = ROOT / "skills" / "grill-me"
+        content = (skill / "SKILL.md").read_text(encoding="utf-8")
+        frontmatter = yaml.safe_load(content.split("---", 2)[1])
+        agent = yaml.safe_load((skill / "agents" / "openai.yaml").read_text(encoding="utf-8"))
+
+        self.assertEqual(frontmatter["name"], "grill-me")
+        self.assertNotIn("disable-model-invocation", frontmatter)
+        self.assertIs(agent["policy"]["allow_implicit_invocation"], True)
+        for phrase in ("复杂需求", "OpenSpec", "Trellis task", "TDD", "GitNexus"):
+            self.assertIn(phrase, content)
