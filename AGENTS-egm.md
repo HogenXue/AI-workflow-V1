@@ -54,9 +54,10 @@ Controller → Application → Domain → Infrastructure
 
 ## 文档
 
-- 目录：`egm_docs/spec/`
-- 文件名：`文档名-作者-YYYYMMDD.md`
-- 修改须说明原因、影响范围及关联代码。
+- Trellis 已启用：新的需求、设计、实施计划和研究资料写入 `.trellis/tasks/`；长期可复用规则写入 `.trellis/spec/`；跨会话记录写入 `.trellis/workspace/`。
+- `egm_docs/spec/` 与 `docs/superpowers/` 是历史参考目录。除修订历史说明外，不在其中创建新的 OpenSpec/Superpowers 任务产物，也不移动或复制其既有正文。
+- 历史资料的统一入口是 `.trellis/tasks/archive/` 中的相关任务，或迁移任务的 `research/legacy-document-register.md`；新任务按需把原文件作为 research context 链接。
+- 文档修改须说明原因、影响范围及关联代码。
 
 ---
 
@@ -80,21 +81,43 @@ Controller → Application → Domain → Infrastructure
 
 ## Trellis 项目补充
 
-本节来自 `trellis/AGENTS.project.md`，用于 EGM 已启用 Trellis 时的项目级补充；不要编辑 Trellis Managed Block 内的内容。
+- 本节来自 `trellis/AGENTS.project.md`，用于 EGM 已启用 Trellis 时的项目级补充；不要编辑 Trellis Managed Block 内的内容。
+  - 项目特有的构建、测试、部署、数据处理与安全规则维护在本文件。
+  - 长期、可复用的项目标准维护在 `.trellis/spec/`。
+  - 当前任务的 PRD、研究、实现与检查产物维护在 `.trellis/tasks/`。
+  - 跨会话工作记录维护在 `.trellis/workspace/`。
+  - 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 将 `$grill-me` 视为 Phase 1.1 的唯一访谈实现，使用后不要再加载 `trellis-brainstorm`。
+  - Codex 质量阶段使用项目原生 `trellis-check`。
+  - 无 active task 时先遵守 Trellis 的建 task 同意门槛；用户选择不创建 task 后，简单修改才可直接实现并验证。
+  - 不要在本项目同时启动第二套完整工作流。
+  - TDD 是 Trellis 执行阶段的实现方法；Karpathy Guidelines 是横切约束。
+  - 本项目已要求 symbol 修改前使用 GitNexus；Trellis Check 通过后再做提交前范围检查。
+- <!-- TRELLIS:START -->
+# Trellis Instructions
 
-- 项目特有的构建、测试、部署、数据处理与安全规则维护在本文件。
-- 长期、可复用的项目标准维护在 `.trellis/spec/`。
-- 当前任务的 PRD、研究、实现与检查产物维护在 `.trellis/tasks/`。
-- 跨会话工作记录维护在 `.trellis/workspace/`。
-- 新功能、较大重构或需求不明确时，先 Trellis Brainstorm，一问一答澄清后生成 PRD 再实现。
-- 预计少于约 5 分钟的简单修改可直接实现，并运行针对性验证。
-- 不要在本项目同时启动 Superpowers 或 OpenSpec 的完整工作流。
+These instructions are for AI assistants working in this project.
+
+This project is managed by Trellis. The working knowledge you need lives under `.trellis/`:
+
+- `.trellis/workflow.md` — development phases, when to create tasks, skill routing
+- `.trellis/spec/` — package- and layer-scoped coding guidelines (read before writing code in a given layer)
+- `.trellis/workspace/` — per-developer journals and session traces
+- `.trellis/tasks/` — active and archived tasks (PRDs, research, jsonl context)
+
+If a Trellis command is available on your platform (e.g. `/trellis:finish-work`, `/trellis:continue`), prefer it over manual steps. Not every platform exposes every command.
+
+If you're using Codex or another agent-capable tool, additional project-scoped helpers may live in:
+- `.agents/skills/` — reusable Trellis skills
+- `.codex/agents/` — optional custom subagents
+
+Managed by Trellis. Edits outside this block are preserved; edits inside may be overwritten by a future `trellis update`.
+
+<!-- TRELLIS:END -->
 
 <!-- gitnexus:start -->
-
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **EGM** (23611 symbols, 41828 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **EGM** (24006 symbols, 42609 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > Index stale? Run `node .gitnexus/run.cjs analyze` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? `npx gitnexus analyze` (npm 11 crash → `npm i -g gitnexus`; #1939).
 
@@ -116,22 +139,22 @@ This project is indexed by GitNexus as **EGM** (23611 symbols, 41828 relationshi
 
 ## Resources
 
-| Resource                             | Use for                                  |
-| ------------------------------------ | ---------------------------------------- |
-| `gitnexus://repo/EGM/context`        | Codebase overview, check index freshness |
-| `gitnexus://repo/EGM/clusters`       | All functional areas                     |
-| `gitnexus://repo/EGM/processes`      | All execution flows                      |
-| `gitnexus://repo/EGM/process/{name}` | Step-by-step execution trace             |
+| Resource | Use for |
+|----------|---------|
+| `gitnexus://repo/EGM/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/EGM/clusters` | All functional areas |
+| `gitnexus://repo/EGM/processes` | All execution flows |
+| `gitnexus://repo/EGM/process/{name}` | Step-by-step execution trace |
 
 ## CLI
 
-| Task                                         | Read this skill file                                        |
-| -------------------------------------------- | ----------------------------------------------------------- |
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md`       |
-| Blast radius / "What breaks if I change X?"  | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?"             | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md`       |
-| Rename / extract / split / refactor          | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md`     |
-| Tools, resources, schema reference           | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md`           |
-| Index, status, clean, wiki CLI commands      | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md`             |
+| Task | Read this skill file |
+|------|---------------------|
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
+| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
+| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
+| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
+| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
 
 <!-- gitnexus:end -->

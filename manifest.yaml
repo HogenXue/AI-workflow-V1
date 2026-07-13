@@ -2,10 +2,10 @@ version: 3.0.0
 skills:
   - memory
   - gitnexus
-  - openspec
   - release
   - karpathy-guidelines-zh
   - grill-me
+  - tdd
 default_install_mode: copy
 requires:
   python: ">=3.10"

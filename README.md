@@ -6,13 +6,13 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
 ## 包含内容
 
-| 组件 | 说明 |
-| --- | --- |
-| **Skills** | `memory`、`gitnexus`、`openspec`、`release`、`karpathy-guidelines-zh`、`grill-me` |
-| **AGENTS 模板** | [trellis/AGENTS.global.md](trellis/AGENTS.global.md)：跨项目通用规则，兼容 Trellis 路由 |
-| **config/** | 默认工作流配置；项目可用 `hogen-codex.yaml` 覆盖 |
+| 组件            | 说明                                                                         |
+| ------------- | -------------------------------------------------------------------------- |
+| **Skills**    | `memory`、`gitnexus`、`release`、`karpathy-guidelines-zh`、`grill-me`、`tdd` |
+| **AGENTS 模板** | [trellis/AGENTS.global.md](trellis/AGENTS.global.md)：跨项目通用规则与 Skill 路由 |
+| **config/**   | 默认工作流配置；项目可用 `hogen-codex.yaml` 覆盖                                         |
 
-OpenSpec、GitNexus 等流程细节在对应 Skill 中，不在 `AGENTS.md` 重复展开。
+Trellis 是项目工作流；6 个 Skill 按阶段或能力增强它。Codex 用 Grill Me 实现 Phase 1.1、用 TDD 实现行为代码；质量门由原生 `trellis-check` 负责。
 
 ## 前置条件
 
@@ -32,13 +32,13 @@ cd AI-workflow-V1
 
 ## 安装
 
-安装统一入口：`scripts/install.sh <skills|agents|config>`。每个组件独立预览、写入和备份；不会因为安装 Skills 或 AGENTS 而顺带覆盖全局配置。
+安装统一入口：`scripts/install.sh <skills|agents|config>`。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
 
-| 组件 | 写入范围 | 默认行为 |
-| --- | --- | --- |
-| `skills` | manifest 中的 Skill 目录 | dry-run |
+| 组件       | 写入范围                      | 默认行为            |
+| -------- | ------------------------- | --------------- |
+| `skills` | manifest 中的 Skill 目录      | dry-run         |
 | `agents` | `<agents-home>/AGENTS.md` | dry-run；已有文件先备份 |
-| `config` | 指定的配置目录 | dry-run |
+| `config` | 指定的配置目录                   | dry-run         |
 
 `skills` 与 `config` 默认 **copy**（独立副本，不依赖源码目录）；本地开发可用 **link** 实时同步。
 
@@ -48,7 +48,7 @@ cd AI-workflow-V1
 bash scripts/install.sh skills --dry-run --target ~/.agents/skills
 ```
 
-### Codex App
+### Codex App（推荐目录）
 
 ```bash
 bash scripts/install.sh skills --copy --replace --target ~/.agents/skills
@@ -60,10 +60,22 @@ bash scripts/install.sh skills --copy --replace --target ~/.agents/skills
 bash scripts/install.sh skills --copy --replace --target ~/.cursor/skills
 ```
 
-### Codex CLI
+### Codex CLI 独立目录（仅在不使用 App 共享目录时）
 
 ```bash
 bash scripts/install.sh skills --copy --replace --target ~/.codex/skills
+```
+
+Codex 可能同时发现 `~/.agents/skills` 与 `~/.codex/skills`。同一组 Skill 只选择一个目录；本包对 Codex App 默认使用 `~/.agents/skills`，对应配置目录是 `~/.agents/config`。安装器发现另一目录存在同名 Skill 时会警告；只有显式 `--prune-other-root` 才会先备份再移走另一目录中的本包同名 Skill。
+
+旧版本安装的 OpenSpec 与 Review 不在当前 manifest 中，普通更新不会删除它们。先预览，再用显式 `--prune-legacy` 将它们移动到备份目录；若两处都曾安装，需要分别处理：
+
+```bash
+bash scripts/install.sh skills --dry-run --prune-legacy --target ~/.agents/skills
+bash scripts/install.sh skills --copy --replace --prune-legacy --prune-other-root --target ~/.agents/skills
+
+bash scripts/install.sh skills --dry-run --prune-legacy --target ~/.codex/skills
+bash scripts/install.sh skills --copy --replace --prune-legacy --target ~/.codex/skills
 ```
 
 ### 本地开发（link）
@@ -76,7 +88,7 @@ bash scripts/install.sh skills --link --replace --target ~/.agents/skills
 
 ### 安装全局 AGENTS 模板
 
-以下命令仅替换 AI 工具目录中的 `AGENTS.md`；已有文件会先备份，`config.toml`、MCP、插件和 hooks 不会修改：
+以下命令会替换 AI 工具目录中的 `AGENTS.md`；已有文件会先备份。对 Codex 目录执行 `--apply` 时，脚本会增量确保 `config.toml` 中的 `[features].hooks = true`（Codex 0.129+），保留 MCP、插件和其他配置：
 
 ```bash
 bash scripts/install.sh agents --dry-run --agents-home ~/.codex
@@ -88,17 +100,17 @@ bash scripts/install.sh agents --apply --agents-home ~/.codex
 配置独立安装，避免意外修改现有配置。目标已存在时，需同时给出 `--replace`：
 
 ```bash
-bash scripts/install.sh config --dry-run --target ~/.codex/config
-bash scripts/install.sh config --copy --replace --target ~/.codex/config
+bash scripts/install.sh config --dry-run --target ~/.agents/config
+bash scripts/install.sh config --copy --replace --target ~/.agents/config
 ```
 
 ### 脚本参数
 
-| 参数 | 说明 |
-| --- | --- |
-| `skills` | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--target PATH`、`--backup-dir PATH` |
+| 参数       | 说明                                                                                       |
+| -------- | ---------------------------------------------------------------------------------------- |
+| `skills` | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--prune-legacy`、`--prune-other-root`、`--target PATH`、`--backup-dir PATH` |
 | `agents` | 支持 `--dry-run` / `--apply`、`--agents-home PATH`、`--backup-dir PATH`；`--codex-home` 是兼容别名 |
-| `config` | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--target PATH`、`--backup-dir PATH` |
+| `config` | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--target PATH`、`--backup-dir PATH`       |
 
 ## 安装后目录结构
 
@@ -110,9 +122,9 @@ bash scripts/install.sh config --copy --replace --target ~/.codex/config
 └── skills/
     ├── memory/
     ├── gitnexus/
-    ├── openspec/
     ├── release/
     ├── grill-me/
+    ├── tdd/
     └── karpathy-guidelines-zh/
 ```
 
@@ -120,13 +132,12 @@ Skill 内读取默认配置：`../../config/defaults.yaml`（与源码仓库 `Co
 
 ## 更新与重装
 
-在源码目录拉取最新后，对各 agent 重新 copy 安装：
+在源码目录拉取最新后，对实际使用的目标重新 copy 安装。Codex App 只更新 `~/.agents/skills`；不要再把同一组 Skill 复制到 `~/.codex/skills`：
 
 ```bash
 git pull
-bash scripts/install.sh skills --copy --replace --target ~/.agents/skills
 bash scripts/install.sh skills --copy --replace --target ~/.cursor/skills
-bash scripts/install.sh skills --copy --replace --target ~/.codex/skills
+bash scripts/install.sh skills --copy --replace --target ~/.agents/skills
 ```
 
 安装完成后重启 Codex App 或新开 Cursor 会话。
@@ -135,7 +146,7 @@ bash scripts/install.sh skills --copy --replace --target ~/.codex/skills
 
 全局规则模板位于 [trellis/AGENTS.global.md](trellis/AGENTS.global.md)，可通过 `scripts/install.sh agents` 安装到 AI 工具目录。项目根目录的 `AGENTS.md` 由 Trellis 初始化和更新时维护，不应以全局模板直接覆盖。
 
-项目专属规则（如 EGM 的分层、Git 格式、`egm_docs` 等）应在**该项目仓库**内维护 `Agents.md`；Trellis 项目将这些规则追加到 Trellis Managed Block 之外。OpenSpec / GitNexus 流程由对应 Skill 承担，GitNexus 索引块由项目内 GitNexus CLI 注入。
+项目专属规则（如 EGM 的分层、Git 格式、`egm_docs` 等）应在**该项目仓库**内维护 `Agents.md`；Trellis 项目将这些规则追加到 Trellis Managed Block 之外。GitNexus 流程由对应 Skill 承担，索引块由项目内 GitNexus CLI 注入。
 
 ## 项目级配置覆盖
 
@@ -166,9 +177,9 @@ python3 scripts/validate-all-skills.py
 
 本包提供一个可选的 Trellis 兼容迁移包，详情见 [trellis/README.zh-CN.md](trellis/README.zh-CN.md)。
 
-- 存在 `.trellis/` 的项目：复杂需求先由 `grill-me` 澄清，再由 OpenSpec 管理需求、场景和验收 Spec（不维护任务清单）；用户确认 Spec 后，Trellis 管理 task 级 PRD/计划、状态和 Journal，并只引用该 Spec。实施由 TDD 管理，GitNexus 负责影响与 Git 检查；简单小改动可直接实现。
-- 不存在 `.trellis/` 的项目：继续使用 Superpowers 与 OpenSpec。
-- 迁移工具默认仅预览；它不会覆盖 `~/.codex/config.toml`、MCP、插件或 hooks。
+- 存在 `.trellis/` 的项目：Trellis 是唯一工作流。Codex 用 `grill-me` 实现 Phase 1.1，用 TDD 实现需要测试证明的行为变化，由原生 `trellis-check` 负责质量检查。GitNexus 仅在高影响编辑前和提交前做影响/范围检查。
+- 不存在 `.trellis/` 的项目：继续使用该项目既有的实施工作流。
+- 迁移工具默认仅预览；执行 `agents --apply` 时只会增量启用 `~/.codex/config.toml` 的 `[features].hooks`，不会覆盖 MCP、插件或其他配置。
 
 ## MCP 与外部依赖
 
@@ -176,6 +187,6 @@ python3 scripts/validate-all-skills.py
 
 - **memory**：Recallium / Mem0（见 `skills/memory/references/memory-backends.md`）
 - **gitnexus**：GitNexus MCP；EGM 等项目需先索引
-- **openspec / release**：按 Skill 说明使用 CLI 或 Markdown 模板
+- **release**：按 Skill 说明使用 CLI 或 Markdown 模板
 
 Skill 不可用时须明确说明限制，不得虚报已执行工具结果。

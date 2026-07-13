@@ -102,6 +102,14 @@ def _validate_agent_metadata(agent: Any, skill_name: str) -> list[str]:
         if not isinstance(value, str) or not value.strip():
             errors.append(f"agent interface {key} must be a non-empty string")
 
+    short_description = interface.get("short_description")
+    if (
+        isinstance(short_description, str)
+        and short_description.strip()
+        and not 25 <= len(short_description) <= 64
+    ):
+        errors.append("agent short_description must contain 25 to 64 characters")
+
     default_prompt = interface.get("default_prompt")
     if (
         isinstance(default_prompt, str)

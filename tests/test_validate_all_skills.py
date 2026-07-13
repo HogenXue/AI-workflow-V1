@@ -30,7 +30,7 @@ def create_complete_skill(root: Path, name: str) -> Path:
     (skill / "agents" / "openai.yaml").write_text(
         "interface:\n"
         "  display_name: \"Test\"\n"
-        "  short_description: \"Test skill\"\n"
+        "  short_description: \"Test skill description for validation.\"\n"
         f"  default_prompt: \"Use ${name} for this test.\"\n",
         encoding="utf-8",
     )
@@ -49,12 +49,12 @@ class ValidateAllSkillsTests(unittest.TestCase):
         self.validator = load_validator(ROOT / "scripts" / "validate-all-skills.py")
 
     def test_complete_skill_has_no_errors(self) -> None:
-        skill = create_complete_skill(self.root, "review")
+        skill = create_complete_skill(self.root, "sample")
 
         self.assertEqual(self.validator.validate_skill(skill), [])
 
     def test_missing_examples_directory_is_reported(self) -> None:
-        skill = create_complete_skill(self.root, "review")
+        skill = create_complete_skill(self.root, "sample")
         (skill / "examples" / "example.md").unlink()
         (skill / "examples").rmdir()
 
@@ -63,9 +63,9 @@ class ValidateAllSkillsTests(unittest.TestCase):
         self.assertIn("missing required directory: examples", errors)
 
     def test_invalid_frontmatter_yaml_is_reported(self) -> None:
-        skill = create_complete_skill(self.root, "review")
+        skill = create_complete_skill(self.root, "sample")
         (skill / "SKILL.md").write_text(
-            "---\nname: review: broken\ndescription: test skill\n---\n",
+            "---\nname: sample: broken\ndescription: test skill\n---\n",
             encoding="utf-8",
         )
 
@@ -74,9 +74,9 @@ class ValidateAllSkillsTests(unittest.TestCase):
         self.assertIn("invalid YAML", error_text)
 
     def test_broken_relative_link_is_reported(self) -> None:
-        skill = create_complete_skill(self.root, "review")
+        skill = create_complete_skill(self.root, "sample")
         (skill / "SKILL.md").write_text(
-            "---\nname: review\ndescription: review code\n---\n"
+            "---\nname: sample\ndescription: sample code\n---\n"
             "[missing](references/nope.md)\n",
             encoding="utf-8",
         )
@@ -122,7 +122,7 @@ class ValidateAllSkillsTests(unittest.TestCase):
         )
 
     def test_empty_required_resource_directory_is_reported(self) -> None:
-        skill = create_complete_skill(self.root, "review")
+        skill = create_complete_skill(self.root, "sample")
         (skill / "templates" / "report.md").unlink()
 
         errors = self.validator.validate_skill(skill)
@@ -130,7 +130,7 @@ class ValidateAllSkillsTests(unittest.TestCase):
         self.assertIn("required directory is empty: templates", errors)
 
     def test_example_todo_placeholder_is_reported(self) -> None:
-        skill = create_complete_skill(self.root, "review")
+        skill = create_complete_skill(self.root, "sample")
         (skill / "examples" / "example.md").write_text("# TODO: fill this in\n", encoding="utf-8")
 
         errors = self.validator.validate_skill(skill)
@@ -138,7 +138,7 @@ class ValidateAllSkillsTests(unittest.TestCase):
         self.assertIn("placeholder in example: examples/example.md", errors)
 
     def test_agent_default_prompt_must_reference_its_skill(self) -> None:
-        skill = create_complete_skill(self.root, "review")
+        skill = create_complete_skill(self.root, "sample")
         (skill / "agents" / "openai.yaml").write_text(
             "interface:\n"
             "  display_name: \"Test\"\n"
@@ -149,24 +149,24 @@ class ValidateAllSkillsTests(unittest.TestCase):
 
         errors = self.validator.validate_skill(skill)
 
-        self.assertIn("agent default_prompt must reference $review", errors)
+        self.assertIn("agent default_prompt must reference $sample", errors)
 
     def test_agent_default_prompt_requires_an_exact_skill_reference(self) -> None:
-        skill = create_complete_skill(self.root, "review")
+        skill = create_complete_skill(self.root, "sample")
         (skill / "agents" / "openai.yaml").write_text(
             "interface:\n"
             "  display_name: \"Test\"\n"
             "  short_description: \"Test skill\"\n"
-            "  default_prompt: \"Use $reviewing for this test.\"\n",
+            "  default_prompt: \"Use $sampling for this test.\"\n",
             encoding="utf-8",
         )
 
         errors = self.validator.validate_skill(skill)
 
-        self.assertIn("agent default_prompt must reference $review", errors)
+        self.assertIn("agent default_prompt must reference $sample", errors)
 
     def test_agent_interface_requires_nonempty_metadata_fields(self) -> None:
-        skill = create_complete_skill(self.root, "review")
+        skill = create_complete_skill(self.root, "sample")
         (skill / "agents" / "openai.yaml").write_text(
             "interface:\n  display_name: \"\"\n",
             encoding="utf-8",
@@ -178,13 +178,40 @@ class ValidateAllSkillsTests(unittest.TestCase):
         self.assertIn("agent interface short_description must be a non-empty string", errors)
         self.assertIn("agent interface default_prompt must be a non-empty string", errors)
 
+    def test_agent_short_description_must_be_25_to_64_characters(self) -> None:
+        skill = create_complete_skill(self.root, "sample")
+        agent_file = skill / "agents" / "openai.yaml"
+        agent_file.write_text(
+            "interface:\n"
+            "  display_name: \"Test\"\n"
+            "  short_description: \"Too short\"\n"
+            "  default_prompt: \"Use $sample for this test.\"\n",
+            encoding="utf-8",
+        )
+
+        errors = self.validator.validate_skill(skill)
+
+        self.assertIn("agent short_description must contain 25 to 64 characters", errors)
+
+        agent_file.write_text(
+            "interface:\n"
+            "  display_name: \"Test\"\n"
+            f"  short_description: \"{'x' * 65}\"\n"
+            "  default_prompt: \"Use $sample for this test.\"\n",
+            encoding="utf-8",
+        )
+
+        errors = self.validator.validate_skill(skill)
+
+        self.assertIn("agent short_description must contain 25 to 64 characters", errors)
+
     def test_agent_interface_metadata_must_use_quoted_scalars(self) -> None:
-        skill = create_complete_skill(self.root, "review")
+        skill = create_complete_skill(self.root, "sample")
         (skill / "agents" / "openai.yaml").write_text(
             "interface:\n"
             "  display_name: Test\n"
             "  short_description: \"Test skill\"\n"
-            "  default_prompt: \"Use $review for this test.\"\n",
+            "  default_prompt: \"Use $sample for this test.\"\n",
             encoding="utf-8",
         )
 
@@ -339,10 +366,10 @@ class ManifestTests(unittest.TestCase):
             [
                 "memory",
                 "gitnexus",
-                "openspec",
                 "release",
                 "karpathy-guidelines-zh",
                 "grill-me",
+                "tdd",
             ],
         )
 
@@ -365,14 +392,6 @@ class BundledSkillContractTests(unittest.TestCase):
                 "radius, working with Git worktrees, or validating affected flows before a commit."
             ),
         },
-        "openspec": {
-            "name": "openspec",
-            "description": (
-                "Create and maintain requirements, technical designs, RFCs, API "
-                "contracts, and database contracts for medium or large changes. Use before "
-                "architecture-heavy, cross-module, data-model, or interface changes."
-            ),
-        },
         "release": {
             "name": "release",
             "description": (
@@ -384,17 +403,25 @@ class BundledSkillContractTests(unittest.TestCase):
         "karpathy-guidelines-zh": {
             "name": "karpathy-guidelines-zh",
             "description": (
-                "Apply Karpathy-inspired 12-rule behavior contract for coding, review, refactor, "
-                "and multi-step agent work. Use to reduce silent assumptions, over-engineering, "
-                "unrelated edits, weak tests, context drift, and hidden failures."
+                "Apply Karpathy-inspired guardrails as cross-cutting behavior for coding, "
+                "review, refactor, and multi-step agent work. Use to reduce silent assumptions, "
+                "over-engineering, unrelated edits, weak tests, context drift, and hidden failures."
             ),
         },
         "grill-me": {
             "name": "grill-me",
             "description": (
-                "Clarify complex requirements through a repository-aware, "
-                "one-question-at-a-time interview before OpenSpec creates the canonical "
-                "Spec. Use for complex or unclear changes in a Trellis project."
+                "Clarify complex, cross-module, or unclear requirements through a "
+                "repository-aware, one-question-at-a-time interview. Use as the sole Codex "
+                "interviewer for Trellis Phase 1.1; do not combine it with trellis-brainstorm."
+            ),
+        },
+        "tdd": {
+            "name": "tdd",
+            "description": (
+                "Drive feature and bug-fix implementation with a verified "
+                "red-green-refactor cycle. Use before writing production code "
+                "when behavior changes need automated tests."
             ),
         },
     }
@@ -412,24 +439,38 @@ class BundledSkillContractTests(unittest.TestCase):
                 )
                 agent = yaml.safe_load((skill / "agents" / "openai.yaml").read_text(encoding="utf-8"))
                 self.assertIn(f"${name}", agent["interface"]["default_prompt"])
-
-    def test_openspec_workflow_covers_configuration_and_fallbacks(self) -> None:
-        content = (ROOT / "skills" / "openspec" / "SKILL.md").read_text(encoding="utf-8")
-        for phrase in (
-            "config/defaults.yaml",
-            "hogen-codex.yaml",
-            "OpenSpec 不可用时",
-            ".trellis/",
-            "需求、场景和验收",
-            "不维护任务清单",
-            "task 级 PRD/计划",
-        ):
-            self.assertIn(phrase, content)
+                short_description = agent["interface"]["short_description"]
+                self.assertGreaterEqual(len(short_description), 25)
+                self.assertLessEqual(len(short_description), 64)
 
     def test_release_workflow_covers_configuration_and_fallbacks(self) -> None:
         content = (ROOT / "skills" / "release" / "SKILL.md").read_text(encoding="utf-8")
-        for phrase in ("config/defaults.yaml", "hogen-codex.yaml", "发布工具不可用时"):
+        for phrase in (
+            "config/defaults.yaml",
+            "hogen-codex.yaml",
+            "默认配置不存在时",
+            "发布工具不可用时",
+            "不重复 Trellis 的代码质量检查",
+        ):
             self.assertIn(phrase, content)
+
+    def test_gitnexus_honors_the_project_impact_analysis_policy(self) -> None:
+        content = (ROOT / "skills" / "gitnexus" / "SKILL.md").read_text(encoding="utf-8")
+
+        for phrase in (
+            "require_impact_analysis_before_symbol_edit",
+            "为 `true`",
+            "为 `false`",
+            "默认配置不存在时",
+            "提交前",
+        ):
+            self.assertIn(phrase, content)
+
+    def test_memory_can_run_without_the_optional_default_config_install(self) -> None:
+        content = (ROOT / "skills" / "memory" / "SKILL.md").read_text(encoding="utf-8")
+
+        self.assertIn("默认配置不存在时", content)
+        self.assertIn("继续执行", content)
 
     def test_release_template_uses_fixed_evidence_gates(self) -> None:
         content = (ROOT / "skills" / "release" / "templates/release-checklist.md").read_text(
@@ -445,7 +486,7 @@ class BundledSkillContractTests(unittest.TestCase):
         ):
             self.assertIn(f"## {heading}", content)
 
-    def test_grill_me_enables_implicit_invocation_and_openspec_handoff(self) -> None:
+    def test_grill_me_enables_implicit_invocation_and_trellis_handoff(self) -> None:
         skill = ROOT / "skills" / "grill-me"
         content = (skill / "SKILL.md").read_text(encoding="utf-8")
         frontmatter = yaml.safe_load(content.split("---", 2)[1])
@@ -454,5 +495,36 @@ class BundledSkillContractTests(unittest.TestCase):
         self.assertEqual(frontmatter["name"], "grill-me")
         self.assertNotIn("disable-model-invocation", frontmatter)
         self.assertIs(agent["policy"]["allow_implicit_invocation"], True)
-        for phrase in ("复杂需求", "OpenSpec", "Trellis task", "TDD", "GitNexus"):
+        for phrase in (
+            "复杂",
+            "跨模块",
+            "简单且需求完整的任务直接使用 Trellis",
+            "Trellis task",
+            "Trellis PRD",
+            "Phase 1.1",
+            "trellis-brainstorm",
+            "不得串联",
+        ):
+            self.assertIn(phrase, content)
+
+    def test_tdd_skill_defines_red_green_refactor_and_trellis_boundary(self) -> None:
+        content = (ROOT / "skills" / "tdd" / "SKILL.md").read_text(encoding="utf-8")
+
+        for phrase in (
+            "RED",
+            "GREEN",
+            "REFACTOR",
+            "若项目存在 `.trellis/`",
+            "不存在 `.trellis/`",
+            "trellis-check",
+            "GitNexus",
+        ):
+            self.assertIn(phrase, content)
+
+    def test_karpathy_guidelines_are_cross_cutting_not_a_duplicate_stage(self) -> None:
+        content = (ROOT / "skills" / "karpathy-guidelines-zh" / "SKILL.md").read_text(
+            encoding="utf-8"
+        )
+
+        for phrase in ("横切行为约束", "不创建独立阶段", "TDD", "Trellis"):
             self.assertIn(phrase, content)

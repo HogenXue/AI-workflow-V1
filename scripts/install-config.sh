@@ -15,7 +15,7 @@ fail_usage() {
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 root_dir="$(cd "$script_dir/.." && pwd)"
 source_dir="$root_dir/config"
-target="${CODEX_HOME:-"$HOME/.codex"}/config"
+target="$HOME/.agents/config"
 backup_dir=""
 mode="copy"
 mode_selected=""

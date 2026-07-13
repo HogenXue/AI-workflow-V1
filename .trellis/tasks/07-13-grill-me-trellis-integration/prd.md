@@ -2,45 +2,41 @@
 
 ## Goal
 
-将 Grill Me 收编为本仓库维护、可自动调用的 Skill，并按明确职责接入工作流：Grill Me 仅澄清复杂需求，OpenSpec 管理行为 Spec，Trellis 管理 task 级 PRD/计划、状态与 Journal，TDD 管理实现，GitNexus 管理影响分析与 Git 收尾。
+将 Grill Me 与 TDD 收编为本仓库维护、可自动调用的 Skills，同时保持 Trellis 为唯一工作流。Codex 用 Grill Me 替代 Phase 1.1 的原生访谈，质量检查继续由 `trellis-check` 单独负责。
 
 ## Requirements
 
-- 在 `skills/grill-me/` 提供一个仓库内维护的 Skill fork；不再依赖用户机器上手工安装的上游副本作为来源。
-- Skill 的 frontmatter 必须允许 Codex 隐式调用；不得保留上游的 `disable-model-invocation: true`。
-- Grill Me 只在复杂或需求不清的请求中作为可选前置访谈；简单修改不自动触发。
-- Grill Me 每次只提出一个问题；能通过代码库、现有 task 或 project context 回答的问题必须先自行检索，而不是询问用户。
-- Grill Me 的访谈结论交给 OpenSpec 维护为正式 Spec；不写入 Trellis task 的 PRD，也不创建平行的 Spec。
-- OpenSpec Spec 确认后，才取得用户对创建 Trellis task 的同意。Trellis task 维护 task 级 PRD/计划、状态、Journal 和对该 Spec 的引用；不得复制需求、场景或验收文档，也不得维护第二份任务清单。
-- 实施阶段由 TDD 约束测试先行；GitNexus 在修改前用于影响分析、在提交前用于变更范围与 Git 收尾检查。
-- `manifest.yaml` 和现有 skills 安装脚本必须将 `grill-me` 分发到目标的 skills 目录；已有目标副本继续由 `--replace` 的备份/覆盖机制处理。
-- `trellis/AGENTS.global.md` 必须说明上述自动路由和交接边界，供 `scripts/install.sh agents --apply` 覆盖安装到目标 `AGENTS.md`。
-- 新 Skill 必须符合 `scripts/validate-all-skills.py` 的包结构和 metadata contract；安装与路由行为须有自动化测试。
-- 仓库内 `openspec` Skill 在检测到 `.trellis/` 时必须采用 trellis-first 边界：仅维护需求、场景和验收 Spec，不创建 OpenSpec 任务清单，并将 task 级 PRD/计划交给 Trellis。
+- 删除仓库内 OpenSpec 与 Review Skill 及其 manifest 分发项；OpenSpec/Review 只允许保留在遗留迁移说明和安装器测试中。
+- Grill Me 在新功能、复杂或需求不清的请求中作为 Codex 的 Phase 1.1 访谈实现；简单且需求完整的修改不自动触发。
+- Grill Me 的访谈结论写入 Trellis task 的 PRD，包含问题、范围、非目标、验收标准和未决项；不得创建平行 Spec 或任务清单。
+- 用户确认 PRD 并授权实施后，Trellis 才能执行 `task.py start`。
+- 实施阶段由 TDD 约束测试先行；GitNexus 按项目配置或高风险/跨模块变更做前置影响分析，并在提交前用于变更范围与 Git 收尾检查。
+- TDD 相关测试全绿后必须经过原生 `trellis-check` 的质量、架构、安全与可维护性检查；不再安装或调用独立 Review Skill。
+- 同一 Trellis 阶段只能有一个负责人：运行 Grill Me 后不再运行 `trellis-brainstorm`；质量阶段只运行 `trellis-check`。
+- TDD 是 Trellis 执行阶段的实现方法，Karpathy Guidelines 是横切约束；二者都不创建第二套状态机或工件。
+- `manifest.yaml` 和现有 skills 安装脚本必须不再分发 OpenSpec 或 Review；已有目标副本不由本任务直接删除。
+- Codex App 的默认包根为 `~/.agents`：Skills 安装到 `~/.agents/skills`，共享配置安装到 `~/.agents/config`；若 `~/.codex/skills` 有同名副本，只能显式备份后移走。
+- 新增的 TDD Skill 与 Grill Me Skill 必须符合 `scripts/validate-all-skills.py` 的包结构和 metadata contract。
+- 已有用户未提交的 README、agents installer 和 agents installer 测试改动保持其原有语义；本任务的改动只在必要位置更新。
 
 ## Acceptance Criteria
 
-- [ ] `manifest.yaml` 包含 `grill-me`，`scripts/install.sh skills --copy --replace` 将其安装到目标目录。
-- [ ] `skills/grill-me/` 通过 `python3 scripts/validate-all-skills.py --skill grill-me`，并具备完整的 `agents`、`references`、`templates`、`examples`、`scripts` 目录。
-- [ ] `grill-me` 的声明允许隐式调用，描述准确覆盖新功能和需求不清的 planning 场景。
-- [ ] 全局 AGENTS 模板规定“复杂需求时 Grill Me → OpenSpec Spec → Trellis task/Journal → TDD → GitNexus”的职责和顺序；GitNexus 明确为跨执行期能力，而非末尾串行步骤。
-- [ ] 安装测试断言新 Skill 在 manifest 安装集合中；Skill contract 测试断言自动调用设置与 Trellis 交接文本存在。
-- [ ] 现有用户未提交的 README、agents installer 和 agents installer 测试改动保持其原有语义；本任务的改动只在必要位置追加或改用未修改文件。
+- [x] 仓库不存在 `skills/openspec/SKILL.md` 或 `skills/review/SKILL.md`，manifest 与普通安装预览均不包含二者。
+- [x] 全局和项目 Trellis 模板明确“复杂需求时 Grill Me → Trellis PRD/计划 → TDD → Trellis Check → GitNexus”的职责和顺序。
+- [x] 全局和项目模板明确 Codex 的单阶段负责人规则，不会重复运行 Grill Me/`trellis-brainstorm`，也不会加载独立 Review Skill。
+- [x] Grill Me 和 TDD 文档不再要求或引用 OpenSpec。
+- [x] OpenSpec 只允许出现在安装器的遗留迁移说明与测试中，不再作为活动工作流或分发项。
+- [x] Skill validator、相关单元测试、shell 语法检查和临时目录安装预览通过。
+- [x] 安装器默认目标与文档统一为 `~/.agents/skills` / `~/.agents/config`，并支持显式 `--prune-other-root` 解决双目录发现冲突。
+- [x] `agents --apply` 在 `config.toml` 不是普通文件时不写入任何目标文件；配置更新失败时恢复已有 `AGENTS.md`，或移除本次新建的 `AGENTS.md`。
 
 ## Non-goals
 
-- 不在本 task 中运行安装器写入真实的 `~/.codex`，也不删除当前已存在的全局 `grill-me` 副本。
-- 不修改 Trellis managed project block，也不让 Trellis task 重复 OpenSpec 的需求、场景或验收内容。
-- 不自动启动 task 或自动实施代码；仍以用户对最终 PRD 的明确确认作为启动门槛。
-- 不实现对上游 `mattpocock/skills` 的自动同步；本仓库 fork 是后续分发的唯一来源。
+- 不直接删除 `~/.agents/skills` 或 `~/.codex/skills` 下的已安装副本；后续通过显式 `--prune-legacy` / `--prune-other-root` 先备份再清理目标目录。
+- 不自动启动 task、提交、推送或修改 Trellis managed project block。
+- 不替换现有的 Memory、GitNexus、Release 或 Karpathy Skills。
 
 ## Risks and constraints
 
-- `trellis/AGENTS.global.md` 是全局模板，规则必须足够精确，不能让简单修改也进入长访谈。
-- 已有工作区包含未提交的 README、agents installer 和相关测试修改；实现时不得覆盖或回退它们。
-- Skill 验证器要求每个 bundled Skill 都具备完整目录结构、`agents/openai.yaml` 和可用 examples/scripts；最小 fork 也必须遵守该契约。
-
-## Notes
-
-- Keep `prd.md` focused on requirements, constraints, and acceptance criteria.
-- 这是跨 Skill、manifest、全局模板、安装与测试的复杂 task；必须在启动前完成 `design.md` 和 `implement.md`。
+- 仓库存在用户未提交的 README、agents installer 和相关测试改动；实现时不得覆盖或回退它们。
+- Trellis 是唯一持久化工作流；不得通过删除 OpenSpec 引入另一套替代的 Spec 或任务框架。

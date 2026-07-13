@@ -1,4 +1,4 @@
-## OpenSpec 交接记录
+## Trellis PRD 访谈记录
 
 ### 问题与已确认结论
 

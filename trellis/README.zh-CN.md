@@ -1,16 +1,21 @@
 # Trellis 兼容迁移包
 
-本目录为现有 AI-workflow-V1 提供可选的 Trellis 集成。它不会自动安装 Trellis、初始化项目或修改 `~/.codex/config.toml`。
+本目录为现有 AI-workflow-V1 提供可选的 Trellis 集成。它不会自动安装 Trellis 或初始化项目；执行安装脚本的 `--apply` 时，会增量确保 `~/.codex/config.toml` 的 `[features].hooks = true`。
+
+Codex App 的 Skill 统一安装到 `~/.agents/skills`，配置安装到 `~/.agents/config`。不要把同名 Skill 同时安装到 `~/.codex/skills`；Codex 可能发现两处并产生来源歧义。安装器默认只警告，显式 `--prune-other-root` 才会先备份再移走另一目录中的本包 Skill。
+
+旧版 OpenSpec 与 Review 副本不会被普通 `--replace` 删除。使用 `skills --dry-run --prune-legacy` 预览；确认后同时给出 `--copy --replace --prune-legacy`，安装器会先备份再从当前目标移走。该选项只处理命令指定的一个 `--target`。
 
 ## 工作流路由
 
-| 项目状态            | 任务类型            | 工作流                                  |
-| --------------- | --------------- | ------------------------------------ |
-| 存在 `.trellis/`  | 新功能、较大重构或需求不明确  | Trellis Brainstorm，一问一答澄清，生成 PRD 后实现 |
-| 存在 `.trellis/`  | 预计少于约 5 分钟的简单修改 | 直接实现并做针对性验证                          |
-| 不存在 `.trellis/` | 任意任务            | Superpowers 与 OpenSpec               |
+| 项目状态 | 任务类型 | 工作流 |
+| --- | --- | --- |
+| 存在 `.trellis/` | 复杂、跨模块或需求不明确 | Trellis 唯一工作流；Codex 用 Grill Me 单独实现 Phase 1.1 |
+| 存在 `.trellis/` | 行为代码实现 | Trellis 执行阶段内采用 TDD，验证后由原生 `trellis-check` 执行质量检查 |
+| 存在 `.trellis/` | 简单且需求明确 | 直接使用 Trellis 的轻量规划、task 和验证流程，不触发 Grill Me |
+| 不存在 `.trellis/` | 任意任务 | 项目既有的实施工作流 |
 
-Memory、GitNexus、Release 和 Karpathy Guidelines 在两类项目中都可按需使用；它们是能力型 Skill，不接管工作流。
+Memory、GitNexus、Release 和 Karpathy Guidelines 在两类项目中都可按需使用；它们是横切能力，不接管工作流。Grill Me 与 TDD 也只实现各自阶段，不形成第二套状态机；Review 不再作为独立 Skill 分发。
 
 ## 先做只读检查
 
@@ -34,7 +39,7 @@ bash scripts/install.sh agents --dry-run --agents-home ~/.codex
 bash scripts/install.sh agents --apply --agents-home ~/.codex
 ```
 
-只有 `--apply` 会写入目标 AI 目录的 `AGENTS.md`。若原文件存在，脚本会先把它备份到 `<agents-home>/.trellis-template-backups/<UTC 时间戳>/AGENTS.md`，再替换为 `AGENTS.global.md`。`config.toml`、MCP、插件和 hooks 均保持不变。
+只有 `--apply` 会写入目标 AI 目录的 `AGENTS.md`。若原文件存在，脚本会先把它备份到 `<agents-home>/.trellis-template-backups/<UTC 时间戳>/AGENTS.md`，再替换为 `AGENTS.global.md`。随后脚本会在 `config.toml` 中增量确保 `[features].hooks = true`（Codex 0.129+）；配置有变化时会一并备份原文件，MCP、插件和其他配置均保持不变。
 
 `--agents-home` 用于指定任意 AI 工具的规则目录；`--codex-home` 继续作为 Codex 兼容别名。默认目标仍是 `${CODEX_HOME:-~/.codex}`。
 
@@ -54,7 +59,7 @@ cd /path/to/project
 trellis init --codex -u hogenxue
 ```
 
-不要对所有项目批量初始化。初始化后，将项目特有规则追加在 Trellis 管理区外；可从 [AGENTS.project.md](AGENTS.project.md) 复制该补充区。
+不要对所有项目批量初始化。初始化后，将项目特有规则追加在 Trellis 管理区外；应从 [AGENTS.project.md](AGENTS.project.md) 复制 Codex 阶段映射，确保 Grill Me 只替代 `trellis-brainstorm`，质量阶段继续由 `trellis-check` 单独负责。
 
 ## 模板说明
 

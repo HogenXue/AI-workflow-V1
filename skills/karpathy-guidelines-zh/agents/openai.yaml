@@ -1,6 +1,6 @@
 interface:
   display_name: "Karpathy 指南"
-  short_description: "Apply 12-rule behavior contract to reduce common LLM coding failures."
+  short_description: "Apply 12 guardrails to reduce common LLM coding failures."
   default_prompt: "Use $karpathy-guidelines-zh while coding, reviewing, refactoring, or running multi-step agent work."
 policy:
   allow_implicit_invocation: true

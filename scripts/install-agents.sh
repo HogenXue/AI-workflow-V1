@@ -19,6 +19,130 @@ agents_home="${CODEX_HOME:-$HOME/.codex}"
 backup_dir=""
 mode="dry-run"
 mode_selected=""
+backup_root=""
+
+backup_file() {
+  local source_file="$1"
+  local backup_name="$2"
+
+  if [[ -z "$backup_root" ]]; then
+    local timestamp
+    timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
+    backup_root="$backup_dir/$timestamp"
+    if [[ -e "$backup_root" || -L "$backup_root" ]]; then
+      printf 'ERROR: backup destination already exists: %s\n' "$backup_root" >&2
+      return 1
+    fi
+    mkdir -p "$backup_root" || {
+      printf 'ERROR: could not create backup directory: %s\n' "$backup_root" >&2
+      return 1
+    }
+  fi
+
+  cp -p "$source_file" "$backup_root/$backup_name" || {
+    printf 'ERROR: could not back up existing %s\n' "$backup_name" >&2
+    return 1
+  }
+  printf 'BACKUP: %s\n' "$backup_root/$backup_name"
+}
+
+validate_config_file() {
+  local config_file="$agents_home/config.toml"
+
+  if [[ -L "$config_file" || (-e "$config_file" && ! -f "$config_file") ]]; then
+    printf 'ERROR: config.toml is not a regular file: %s\n' "$config_file" >&2
+    return 1
+  fi
+}
+
+enable_hooks_feature() {
+  local config_file="$agents_home/config.toml"
+  local config_tmp
+  local hook_setting='hooks = true   # Codex 0.129+。旧版用 `codex_hooks = true`。'
+
+  validate_config_file || return 1
+
+  config_tmp="$(mktemp "$agents_home/.config.toml.trellis.XXXXXX")" || {
+    printf 'ERROR: could not create a temporary config file\n' >&2
+    return 1
+  }
+
+  if [[ -f "$config_file" ]]; then
+    awk -v hook_setting="$hook_setting" '
+      function is_features_header(line, value) {
+        value = line
+        sub(/^[[:space:]]*/, "", value)
+        return value ~ /^\[features\][[:space:]]*(#.*)?$/
+      }
+      function is_table_header(line, value) {
+        value = line
+        sub(/^[[:space:]]*/, "", value)
+        return value ~ /^\[[^]]+\][[:space:]]*(#.*)?$/
+      }
+      BEGIN {
+        in_features = 0
+        features_found = 0
+        hooks_found = 0
+      }
+      {
+        if (is_table_header($0)) {
+          if (in_features && !hooks_found) {
+            print hook_setting
+            hooks_found = 1
+          }
+          in_features = is_features_header($0)
+          if (in_features) {
+            features_found = 1
+          }
+          print
+          next
+        }
+        if (in_features && $0 ~ /^[[:space:]]*hooks[[:space:]]*=/) {
+          print hook_setting
+          hooks_found = 1
+          next
+        }
+        print
+      }
+      END {
+        if (in_features && !hooks_found) {
+          print hook_setting
+        }
+        if (!features_found) {
+          if (NR > 0) {
+            print ""
+          }
+          print "[features]"
+          print hook_setting
+        }
+      }
+    ' "$config_file" > "$config_tmp" || {
+      rm -f "$config_tmp"
+      printf 'ERROR: could not update config.toml\n' >&2
+      return 1
+    }
+
+    if cmp -s "$config_file" "$config_tmp"; then
+      rm -f "$config_tmp"
+      printf '%s\n' 'UNCHANGED: config.toml already enables hooks'
+      return
+    fi
+
+    if ! backup_file "$config_file" 'config.toml'; then
+      rm -f "$config_tmp"
+      return 1
+    fi
+  else
+    printf '[features]\n%s\n' "$hook_setting" > "$config_tmp"
+  fi
+
+  mv "$config_tmp" "$config_file" || {
+    rm -f "$config_tmp"
+    printf 'ERROR: could not install config.toml update\n' >&2
+    return 1
+  }
+  printf 'UPDATED: config.toml hooks feature enabled\n'
+}
 
 while (($#)); do
   case "$1" in
@@ -68,24 +192,34 @@ if [[ "$mode" == 'dry-run' ]]; then
   if [[ -e "$target_file" || -L "$target_file" ]]; then
     printf 'DRY-RUN: would back up %s under %s\n' "$target_file" "$backup_dir"
   fi
-  printf '%s\n' 'DRY-RUN: config.toml is never modified'
+  printf '%s\n' 'DRY-RUN: would ensure [features].hooks = true in config.toml'
   exit 0
 fi
 
 mkdir -p "$agents_home" || { printf 'ERROR: could not create agents home: %s\n' "$agents_home" >&2; exit 1; }
 
+validate_config_file || exit 1
+
+agents_backup_available=0
 if [[ -e "$target_file" || -L "$target_file" ]]; then
-  timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
-  backup_root="$backup_dir/$timestamp"
-  if [[ -e "$backup_root" || -L "$backup_root" ]]; then
-    printf 'ERROR: backup destination already exists: %s\n' "$backup_root" >&2
-    exit 1
-  fi
-  mkdir -p "$backup_root" || { printf 'ERROR: could not create backup directory: %s\n' "$backup_root" >&2; exit 1; }
-  cp -p "$target_file" "$backup_root/AGENTS.md" || { printf 'ERROR: could not back up existing AGENTS.md\n' >&2; exit 1; }
-  printf 'BACKUP: %s\n' "$backup_root/AGENTS.md"
+  backup_file "$target_file" 'AGENTS.md' || exit 1
+  agents_backup_available=1
 fi
 
 cp "$source_file" "$target_file" || { printf 'ERROR: could not install AGENTS template\n' >&2; exit 1; }
 printf 'INSTALLED: %s\n' "$target_file"
-printf '%s\n' 'UNCHANGED: config.toml'
+if ! enable_hooks_feature; then
+  printf '%s\n' 'ERROR: config.toml update failed; restoring AGENTS.md.' >&2
+  if ((agents_backup_available)); then
+    cp -p "$backup_root/AGENTS.md" "$target_file" || {
+      printf 'ERROR: could not restore AGENTS.md from backup\n' >&2
+      exit 1
+    }
+  else
+    rm -f "$target_file" || {
+      printf 'ERROR: could not remove newly installed AGENTS.md\n' >&2
+      exit 1
+    }
+  fi
+  exit 1
+fi

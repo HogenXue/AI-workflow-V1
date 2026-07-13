@@ -1,16 +1,19 @@
 ---
 name: grill-me
-description: "Clarify complex requirements through a repository-aware, one-question-at-a-time interview before OpenSpec creates the canonical Spec. Use for complex or unclear changes in a Trellis project."
+description: "Clarify complex, cross-module, or unclear requirements through a repository-aware, one-question-at-a-time interview. Use as the sole Codex interviewer for Trellis Phase 1.1; do not combine it with trellis-brainstorm."
 ---
 
 # Grill Me
 
-仅对复杂需求或需求不明确的请求执行本流程；简单修改不自动触发。显式 `$grill-me` 请求也遵循本流程。
+仅用于复杂、跨模块或需求不明确的请求；简单且需求完整的任务直接使用 Trellis，不自动触发本 Skill。显式 `$grill-me` 请求也遵循本流程。
 
-1. 先检索仓库、已有 OpenSpec 变更和项目上下文；能由它们回答的问题不得再问用户。
-2. 每次只问一个必要问题，等待回答后再继续。每轮把确认结论收集到 [OpenSpec 交接模板](templates/prd-requirements.md)。
-3. 决策树收敛后，交给 OpenSpec 创建或更新 canonical Spec，包含需求、场景、验收标准和未决项；不要将这些行为规范复制进 Trellis task 的 PRD。
-4. Spec 经用户确认后，才请求同意创建 Trellis task。Trellis 维护 task 级 PRD/计划、该 Spec 的引用、任务状态和 Journal；不重复需求、场景或验收，也不维护第二份任务清单。
-5. Trellis 执行阶段遵守 TDD；在修改前和提交前分别使用 GitNexus 进行影响分析与 Git 范围检查。只有用户授权实施后才可调用 `task.py start`。
+在 Codex 的 Trellis 项目中，本 Skill 就是 Phase 1.1 的访谈实现，不是 `trellis-brainstorm` 的前置步骤。若本阶段已由其中一个访谈器完成，不得串联或再次加载另一个。
+
+1. 先取得创建或更新 Trellis task 的同意，并解析当前 planning task；能由仓库、已有 task 或项目上下文回答的问题不得再问用户。
+2. 每次只问一个必要问题，等待回答后再继续。每轮把确认结论写入该 task 的 [Trellis PRD 模板](templates/prd-requirements.md)。
+3. 决策树收敛后，确认 PRD 已包含问题、范围、非目标、验收标准和未决项；不得创建第二份 Spec 或任务清单。
+4. PRD 收敛后，将控制权交回 Trellis planning，由 Trellis 维护 Design、Plan、Research、状态和 Journal。只有用户确认规划并授权实施后才可调用 `task.py start`。
+
+Grill Me 不管理 task 生命周期、不写代码、不执行测试、审查或 Git 操作。
 
 详细交接状态见 [工作流交接规则](references/trellis-handoff.md)，示例见 [复杂需求访谈](examples/new-feature-session.md)。

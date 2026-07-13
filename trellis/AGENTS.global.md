@@ -12,21 +12,26 @@
 ## 工作流路由
 
 - 若项目存在 `.trellis/`：Trellis 是该项目的工作流来源。
-  - 复杂需求或需求不明确时，先使用 `$grill-me` 一问一答澄清；简单修改不自动触发它。
-  - 澄清后由 OpenSpec 维护正式 Spec（需求、场景和验收的唯一事实来源），且 OpenSpec 不维护任务清单。用户确认 Spec 后，再取得同意创建 Trellis task；Trellis 维护 task 级 PRD/计划、该 Spec 引用、任务状态和 Journal，不复制需求、场景或验收。
-  - 实施时使用 TDD 管理测试先行；使用 GitNexus 在修改前分析影响、在提交前检查 Git 范围。用户明确授权实施后，才可运行 `task.py start`。
-  - 预计少于约 5 分钟的简单修改可直接实现，但仍需针对性验证。
+  - 简单且需求明确的任务：遵循 Trellis 的轻量流程直接实施并做针对性验证，不自动触发 Grill Me。
+  - 复杂、跨模块或需求不明确的任务：先使用 `$grill-me` 一问一答澄清需求；结论写入当前 Trellis PRD，随后继续 Trellis 的既有规划和执行流程。使用 Grill Me 后不得再运行 `trellis-brainstorm`。
   - 不创建第二套 Task、PRD、Design 或 Spec；不自动创建 `.trellis/`。
-- 若项目不存在 `.trellis/`：使用项目既有的 OpenSpec 与实施工作流。
+- 若项目不存在 `.trellis/`：使用项目既有工作流，不自动引入另一套 Spec 或工作流框架。
 
 ## 能力型 Skill
 
+- 复杂、跨模块或需求不明确：使用 Grill Me；简单且需求明确的任务不自动触发。
 - 历史上下文、长期决策或跨会话延续：使用 Memory。
-- 调用链、影响范围或安全修改，以及提交前 Git 范围检查：使用 GitNexus。
+- 调用链、影响范围或安全修改：使用 GitNexus。
 - Release Note、CHANGELOG 或版本说明：使用 Release。
 - 编码、重构或代码审查：使用 Karpathy Guidelines。
-- 复杂需求的前置访谈：使用 Grill Me；它交接给 OpenSpec，不替代任何正式 Spec。
-- OpenSpec 管理行为 Spec；Trellis 的 task 级 PRD/计划必须引用它，不得复制需求、场景或验收。
+- 行为变化需要自动化证据：使用 TDD。
+
+- Karpathy Guidelines 是横切行为约束，不是独立阶段；它不替代 Trellis、TDD 或项目既有的质量检查。
+- Grill Me 只负责需求澄清，不管理任务生命周期、不写代码、不执行测试、审查或 Git 操作。
+- TDD 是 Trellis 执行阶段的实现方法，不是第二套工作流；仅对需要自动化测试证明的行为变化执行 RED → GREEN → REFACTOR。
+- GitNexus 只负责影响分析与提交安全，不写业务代码。
+- Release 只负责发布说明、版本记录和已获授权的发布准备/执行，不负责开发实现。
+- Memory 只负责长期记忆与跨会话上下文，不替代 Trellis 的 PRD、Task 或 Journal。
 
 Skill 负责增强能力，不替代当前工作流，也不为了调用而调用。
 
