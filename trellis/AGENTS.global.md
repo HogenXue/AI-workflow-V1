@@ -20,17 +20,27 @@
 ## 能力型 Skill
 
 - 复杂、跨模块或需求不明确：使用 Grill Me；简单且需求明确的任务不自动触发。
+
 - 历史上下文、长期决策或跨会话延续：使用 Memory。
-- 调用链、影响范围或安全修改：使用 GitNexus。
+
+- 项目规则明确要求，或涉及跨模块、公共接口/数据契约、删除迁移、高风险或陌生调用链：使用 GitNexus；局部低风险修改不自动调用。
+
 - Release Note、CHANGELOG 或版本说明：使用 Release。
+
 - 编码、重构或代码审查：使用 Karpathy Guidelines。
+
 - 行为变化需要自动化证据：使用 TDD。
 
 - Karpathy Guidelines 是横切行为约束，不是独立阶段；它不替代 Trellis、TDD 或项目既有的质量检查。
+
 - Grill Me 只负责需求澄清，不管理任务生命周期、不写代码、不执行测试、审查或 Git 操作。
+
 - TDD 是 Trellis 执行阶段的实现方法，不是第二套工作流；仅对需要自动化测试证明的行为变化执行 RED → GREEN → REFACTOR。
-- GitNexus 只负责影响分析与提交安全，不写业务代码。
+
+- GitNexus 只负责影响分析与提交安全，不写业务代码。`detect_changes` 仅用于项目规则明确要求、已做图谱分析或高影响变更；低风险提交只做标准 Git 范围检查与相关测试。
+
 - Release 只负责发布说明、版本记录和已获授权的发布准备/执行，不负责开发实现。
+
 - Memory 只负责长期记忆与跨会话上下文，不替代 Trellis 的 PRD、Task 或 Journal。
 
 Skill 负责增强能力，不替代当前工作流，也不为了调用而调用。

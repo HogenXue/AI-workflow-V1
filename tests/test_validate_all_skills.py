@@ -387,9 +387,8 @@ class BundledSkillContractTests(unittest.TestCase):
         "gitnexus": {
             "name": "gitnexus",
             "description": (
-                "Analyze code relationships, change impact, worktrees, commit scope, "
-                "and release branches. Use before changing symbols, reviewing blast "
-                "radius, working with Git worktrees, or validating affected flows before a commit."
+                "Analyze high-risk code impact, worktrees, and commit scope when graph "
+                "evidence is needed."
             ),
         },
         "release": {
@@ -463,6 +462,8 @@ class BundledSkillContractTests(unittest.TestCase):
             "为 `false`",
             "默认配置不存在时",
             "提交前",
+            "`detect_changes` 仅在",
+            "低风险",
         ):
             self.assertIn(phrase, content)
 

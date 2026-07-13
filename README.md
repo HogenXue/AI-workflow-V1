@@ -177,7 +177,7 @@ python3 scripts/validate-all-skills.py
 
 本包提供一个可选的 Trellis 兼容迁移包，详情见 [trellis/README.zh-CN.md](trellis/README.zh-CN.md)。
 
-- 存在 `.trellis/` 的项目：Trellis 是唯一工作流。Codex 用 `grill-me` 实现 Phase 1.1，用 TDD 实现需要测试证明的行为变化，由原生 `trellis-check` 负责质量检查。GitNexus 仅在高影响编辑前和提交前做影响/范围检查。
+- 存在 `.trellis/` 的项目：Trellis 是唯一工作流。Codex 用 `grill-me` 实现 Phase 1.1，用 TDD 实现需要测试证明的行为变化，由原生 `trellis-check` 负责质量检查。GitNexus 仅在项目规则明确要求或高影响变更时做影响/范围检查；局部低风险提交使用标准 Git 检查与相关测试。
 - 不存在 `.trellis/` 的项目：继续使用该项目既有的实施工作流。
 - 迁移工具默认仅预览；执行 `agents --apply` 时只会增量启用 `~/.codex/config.toml` 的 `[features].hooks`，不会覆盖 MCP、插件或其他配置。
 

@@ -10,7 +10,7 @@
 - Grill Me 在新功能、复杂或需求不清的请求中作为 Codex 的 Phase 1.1 访谈实现；简单且需求完整的修改不自动触发。
 - Grill Me 的访谈结论写入 Trellis task 的 PRD，包含问题、范围、非目标、验收标准和未决项；不得创建平行 Spec 或任务清单。
 - 用户确认 PRD 并授权实施后，Trellis 才能执行 `task.py start`。
-- 实施阶段由 TDD 约束测试先行；GitNexus 按项目配置或高风险/跨模块变更做前置影响分析，并在提交前用于变更范围与 Git 收尾检查。
+- 实施阶段由 TDD 约束测试先行；GitNexus 仅按项目配置或高风险/跨模块/公共契约/删除迁移变更做前置影响分析，并仅在这些情形的提交前用于范围检查；低风险提交使用标准 Git 检查与相关测试。
 - TDD 相关测试全绿后必须经过原生 `trellis-check` 的质量、架构、安全与可维护性检查；不再安装或调用独立 Review Skill。
 - 同一 Trellis 阶段只能有一个负责人：运行 Grill Me 后不再运行 `trellis-brainstorm`；质量阶段只运行 `trellis-check`。
 - TDD 是 Trellis 执行阶段的实现方法，Karpathy Guidelines 是横切约束；二者都不创建第二套状态机或工件。
@@ -29,6 +29,7 @@
 - [x] Skill validator、相关单元测试、shell 语法检查和临时目录安装预览通过。
 - [x] 安装器默认目标与文档统一为 `~/.agents/skills` / `~/.agents/config`，并支持显式 `--prune-other-root` 解决双目录发现冲突。
 - [x] `agents --apply` 在 `config.toml` 不是普通文件时不写入任何目标文件；配置更新失败时恢复已有 `AGENTS.md`，或移除本次新建的 `AGENTS.md`。
+- [x] GitNexus 改为风险驱动：项目明确要求或高影响变更才运行图谱/`detect_changes`；低风险提交只运行标准 Git 范围检查与相关测试。
 
 ## Non-goals
 

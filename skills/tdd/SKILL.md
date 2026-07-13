@@ -30,6 +30,6 @@ description: "Drive feature and bug-fix implementation with a verified red-green
 
 - 使用 [TDD 证据模板](templates/tdd-cycle.md) 记录测试、RED 证据、GREEN 证据和相关测试范围。
 - 将精简证据写入当前 Trellis task 的 Journal/执行记录，而不是复制 PRD 内容。
-- 在宣称完成前，运行与改动相称的测试并报告结果；相关测试全绿后交回 Trellis，由项目原生 `trellis-check` 执行质量检查。P0/P1 修复或豁免后再由 GitNexus 核对 Git 范围。
+- 在宣称完成前，运行与改动相称的测试并报告结果；相关测试全绿后交回 Trellis，由项目原生 `trellis-check` 执行质量检查。P0/P1 修复或豁免后，按 GitNexus 的风险路由决定是否需要图谱范围核对；低风险提交只做标准 Git 检查。
 
 复杂场景可参考 [Trellis 协作边界](references/trellis-boundary.md) 与 [功能实现示例](examples/feature-cycle.md)。

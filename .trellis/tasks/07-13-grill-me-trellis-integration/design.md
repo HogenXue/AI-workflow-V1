@@ -9,7 +9,7 @@
 | task 级计划、状态与 Journal | Trellis | `.trellis/tasks/<task>/` 与 workspace |
 | 测试先行的实现循环 | TDD | 代码与测试 |
 | 质量、架构、安全与可维护性检查 | Trellis Check | Trellis task 检查记录与 diff 证据 |
-| 修改前影响分析、提交前范围与 Git 检查 | GitNexus | 代码图谱与 Git 工作区 |
+| 高影响修改前的影响分析、提交前范围检查 | GitNexus | 代码图谱与 Git 工作区 |
 | 安装分发 | `manifest.yaml` + `scripts/install-skills.sh` | 目标 skills 目录 |
 | 全局自动路由 | `trellis/AGENTS.global.md` | 目标 `AGENTS.md` |
 
@@ -31,10 +31,10 @@ complex or unclear requirement
   -> ask one question at a time and persist conclusions in prd.md
   -> user confirms the PRD and authorizes implementation
   -> Trellis enters task.py start
-  -> GitNexus analyzes impact before edits
+  -> GitNexus analyzes impact before high-impact edits
   -> TDD implements from the PRD
   -> trellis-check is the sole quality check after relevant verification passes
-  -> GitNexus validates Git scope before commit
+  -> GitNexus validates Git scope before high-impact commits
 ```
 
 Simple changes skip Grill Me. They still use the existing Trellis task and verification rules when the project requires a task.

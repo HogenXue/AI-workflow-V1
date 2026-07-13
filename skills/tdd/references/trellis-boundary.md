@@ -7,7 +7,7 @@ TDD：RED → GREEN → REFACTOR（测试与实现）
         ↓
 Trellis Check：质量、架构、安全与可维护性检查
         ↓
-GitNexus：提交范围复核
+GitNexus：高影响提交的范围复核（低风险使用标准 Git 检查）
 ```
 
 - TDD 将 Trellis PRD 的验收标准转成可执行测试，不替代需求审查。

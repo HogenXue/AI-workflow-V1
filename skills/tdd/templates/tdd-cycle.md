@@ -26,4 +26,4 @@
 
 - 写入 Trellis Journal 的证据：
 - Trellis Check 结果或未覆盖范围：
-- GitNexus 提交前范围检查：
+- 高影响时的 GitNexus 提交前范围检查（低风险填“标准 Git 检查”）：

@@ -33,7 +33,7 @@ Controller → Application → Domain → Infrastructure
 - 存在 `.trellis/` 时：新功能、较大重构或需求不明确 → Trellis Brainstorm，一问一答澄清并生成 PRD 后再实现；预计少于约 5 分钟的简单修改可直接实现并做针对性验证。
 - 不存在 `.trellis/` 时：规范驱动变更 → `$openspec`。
 - 会话延续与项目记忆 → `$memory`。
-- 探索代码、改 symbol 前、提交前 → `$gitnexus`（项目名 **EGM**）。
+- 跨模块、公共接口/数据契约、删除迁移、高风险或陌生调用链 → `$gitnexus`（项目名 **EGM**）；局部低风险改动和提交不自动调用。
 - Trellis 项目中不启动 Superpowers 或 OpenSpec 的完整工作流，避免重复 Task、PRD、Design 或 Spec。
 
 ---
@@ -91,7 +91,7 @@ Controller → Application → Domain → Infrastructure
   - 无 active task 时先遵守 Trellis 的建 task 同意门槛；用户选择不创建 task 后，简单修改才可直接实现并验证。
   - 不要在本项目同时启动第二套完整工作流。
   - TDD 是 Trellis 执行阶段的实现方法；Karpathy Guidelines 是横切约束。
-  - 本项目已要求 symbol 修改前使用 GitNexus；Trellis Check 通过后再做提交前范围检查。
+  - 项目规则明确要求，或改动涉及高风险、跨模块、公共接口/数据契约、删除迁移或陌生调用链时使用 GitNexus；仅这些情形在提交前做 GitNexus 范围检查，低风险提交使用标准 Git 检查与相关测试。
 - <!-- TRELLIS:START -->
 # Trellis Instructions
 
@@ -121,10 +121,11 @@ This project is indexed by GitNexus as **EGM** (24006 symbols, 42609 relationshi
 
 > Index stale? Run `node .gitnexus/run.cjs analyze` from the project root — it auto-selects an available runner. No `.gitnexus/run.cjs` yet? `npx gitnexus analyze` (npm 11 crash → `npm i -g gitnexus`; #1939).
 
-## Always Do
+## Risk-driven Use
 
-- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
-- **MUST run `detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows. For regression review, compare against the default branch: `detect_changes({scope: "compare", base_ref: "main"})`.
+- 对跨模块、公共接口/数据契约、删除迁移、高风险或陌生调用链，先运行 `impact({target: "symbolName", direction: "upstream"})`，并报告 blast radius（直接调用者、受影响流程、风险等级）。
+- 仅当项目规则明确要求、已做图谱分析，或提交属于上述高影响类别时，才在提交前运行 `detect_changes()`；回归审查可使用 `detect_changes({scope: "compare", base_ref: "main"})`。
+- 局部低风险修改与提交默认使用 `git status`、`git diff --check`、`git diff --stat` 和相关测试，不自动运行 GitNexus 或建立索引。
 - **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
 - When exploring unfamiliar code, use `query({search_query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
 - When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `context({name: "symbolName"})`.
@@ -132,10 +133,10 @@ This project is indexed by GitNexus as **EGM** (24006 symbols, 42609 relationshi
 
 ## Never Do
 
-- NEVER edit a function, class, or method without first running `impact` on it.
+- 不要把 GitNexus 当作每次修改或每次提交的强制步骤。
 - NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
 - NEVER rename symbols with find-and-replace — use `rename` which understands the call graph.
-- NEVER commit changes without running `detect_changes()` to check affected scope.
+- 不要在高影响变更中跳过项目规则要求的 `detect_changes()`。
 
 ## Resources
 
