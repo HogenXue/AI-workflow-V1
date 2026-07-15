@@ -127,8 +127,30 @@ if ((conflict && replace == 0)); then
   fi
 fi
 
+agents_src="$root_dir/trellis/AGENTS.global.md"
+if [[ ! -f "$agents_src" ]]; then
+  printf 'ERROR: template not found: %s\n' "$agents_src" >&2
+  exit 1
+fi
+
+write_rules_mdc_from_agents_global() {
+  local dest="$1"
+  {
+    cat <<'EOF'
+---
+description: AI-workflow global guidance (from AGENTS.global.md)
+alwaysApply: true
+---
+
+EOF
+    cat "$agents_src"
+    printf '\n'
+  } > "$dest"
+}
+
 if ((dry_run)); then
-  printf 'DRY-RUN: would install Cursor rules+hooks under %s/.cursor\n' "$proj"
+  printf 'DRY-RUN: would generate %s from %s and install Cursor hooks under %s/.cursor\n' \
+    "$rules_dest" "$agents_src" "$proj"
   exit 0
 fi
 
@@ -139,9 +161,9 @@ if ((replace)); then
 fi
 
 mkdir -p "$proj/.cursor/rules" "$hooks_dir_dest"
-cp "$templates/rules/ai-workflow-global.mdc" "$rules_dest"
+write_rules_mdc_from_agents_global "$rules_dest"
 cp "$templates/hooks.json" "$hooks_json_dest"
 cp -R "$templates/hooks/." "$hooks_dir_dest/"
-printf 'INSTALLED: %s\n' "$rules_dest"
+printf 'INSTALLED: %s (generated from %s)\n' "$rules_dest" "$agents_src"
 printf 'INSTALLED: %s\n' "$hooks_json_dest"
 printf 'INSTALLED: %s\n' "$hooks_dir_dest"

@@ -62,12 +62,14 @@ scripts/install.sh
 
 scripts/install-skills.sh / install-config.sh / install-agents.sh  # existing
 scripts/install-codex-merge.sh   # MCP toml + optional project .codex hooks
-scripts/install-cursor-merge.sh  # MCP json + optional project hooks/rules
+scripts/install-cursor-merge.sh  # MCP json + optional project hooks; rules mdc from AGENTS.global.md
 scripts/install-lib.sh           # shared prompts, project-root helpers (optional)
 
 trellis/codex/   # MCP toml fragments, hooks templates
-trellis/cursor/  # MCP json fragments, rules mdc template, hooks templates
+trellis/cursor/  # MCP json fragments, hooks templates (rules body is NOT a static copy of AGENTS.global.md)
 ```
+
+**Cursor rules**: `install-cursor-merge.sh` writes frontmatter + `trellis/AGENTS.global.md` into `<project>/.cursor/rules/ai-workflow-global.mdc` at install time.
 
 ## MCP merge contract
 

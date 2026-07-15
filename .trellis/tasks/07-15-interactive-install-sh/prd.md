@@ -15,7 +15,7 @@
 
 1. TTY 无参：选 agent（Codex/Cursor 可多选）→ 推荐全装或单组件；非 TTY 无参 → Usage + exit 2。
 2. **Codex 全装**：skills→`~/.agents/skills`；config→`~/.agents/config`；agents→`~/.codex`+`hooks=true`；MCP 合并进 `config.toml`；项目 `.codex/hooks.json`(+脚本)。
-3. **Cursor 全装**：skills→`~/.cursor/skills`；config→`~/.cursor/config`；MCP 合并进 `~/.cursor/mcp.json`；确保/更新项目 `.cursor/hooks`；`.cursor/rules/` 增量安装由 `AGENTS.global.md` 生成的 `.mdc`；**不改**仓库根 Trellis `AGENTS.md`。
+3. **Cursor 全装**：skills→`~/.cursor/skills`；config→`~/.cursor/config`；MCP 合并进 `~/.cursor/mcp.json`；确保/更新项目 `.cursor/hooks`；`.cursor/rules/ai-workflow-global.mdc` **在安装时从** `trellis/AGENTS.global.md` **动态生成**（frontmatter + 正文）；**不改**仓库根 Trellis `AGENTS.md`。
 4. 冲突（skills/config/MCP/hooks/rules）：TTY 询问；非交互有 flag。
 5. 不整文件覆盖宿主配置；不装全局 `~/.codex/hooks.json`；不删除 `.cursor/` 或 Codex 树；不把 Cursor rules 写入 Codex sandbox `rules`。
 6. 有参 CLI 兼容；新能力可用新组件/flag（如 `codex-merge` / `cursor-merge`）。
@@ -38,7 +38,7 @@
 - [ ] TTY 可多选 Codex/Cursor 并完成全装/单组件
 - [ ] 单选只写对应宿主；多选两边都写；互不删除
 - [ ] Codex：`hooks=true`、MCP、项目 `.codex/hooks`（仅在显式 project-root 下）、skills/config 配对在 `~/.agents`
-- [ ] Cursor：skills/config 配对在 `~/.cursor`、`mcp.json`、项目 hooks/rules（仅在显式 project-root 下）；根 `AGENTS.md` 未被安装器改写
+- [ ] Cursor：skills/config 配对在 `~/.cursor`、`mcp.json`、项目 hooks；rules `.mdc` 正文与 `trellis/AGENTS.global.md` 一致（动态生成）；根 `AGENTS.md` 未被安装器改写
 - [ ] 无显式 project-root 时不写项目级文件，并有清晰提示
 - [ ] 非 TTY 无参 Usage + exit 2
 - [ ] `python -m unittest` 相关安装测试通过，并覆盖 merge/冲突 flag 路径
@@ -54,7 +54,7 @@
 | 5 | 非 TTY 无参 | Usage + exit 2 |
 | 6 | Agent 选择器 | Codex/Cursor 可多选 |
 | 7 | Cursor 配置面 | skills + mcp + 项目 hooks + rules mdc |
-| 8 | Cursor「AGENTS」 | `.cursor/rules/*.mdc` |
+| 8 | Cursor「AGENTS」 | `.cursor/rules/*.mdc`，**安装时从** `AGENTS.global.md` **动态生成** |
 | 9 | config 配对 | 随 skills 根：`~/.agents` vs `~/.cursor` |
 | 10 | 映射原则 | 职责映射，禁止照抄 |
 | 11 | 项目根 | **显式选择**；Git 根仅作候选；非交互需 `--project-root` 否则跳过项目级 |

@@ -114,13 +114,13 @@ install_profile_cursor <project_root_or_empty> <mem0_url_or_empty>
 | Profile | Skills | Config (skill defaults) | Host / rules | MCP | Project-scoped |
 |---------|--------|-------------------------|--------------|-----|----------------|
 | **Codex** | `~/.agents/skills` | `~/.agents/config` (parent of skills root) | `~/.codex` (`AGENTS.md` + hooks feature); **not** root repo `AGENTS.md` for Cursor rules | `~/.codex/config.toml` `[mcp_servers.*]` | `<project>/.codex/hooks.json` + `hooks/` |
-| **Cursor** | `~/.cursor/skills` | `~/.cursor/config` | Project `.cursor/rules/*.mdc` | `~/.cursor/mcp.json` `mcpServers` | `<project>/.cursor/hooks.json` + `hooks/` |
+| **Cursor** | `~/.cursor/skills` | `~/.cursor/config` | Project `.cursor/rules/*.mdc` **generated from** `trellis/AGENTS.global.md` at install | `~/.cursor/mcp.json` `mcpServers` | `<project>/.cursor/hooks.json` + `hooks/` |
 
 **Hard rules**:
 
 - Skills and config share a paired root (`~/.agents` vs `~/.cursor`) because skills resolve `../../config`.
 - Codex MCP = TOML fragments under `trellis/codex/mcp/`; Cursor MCP = JSON under `trellis/cursor/mcp/`.
-- Cursor “AGENTS-like” content → `.cursor/rules/*.mdc` only.
+- Cursor “AGENTS-like” content → `.cursor/rules/*.mdc` only, **dynamically** from `trellis/AGENTS.global.md` (static `trellis/cursor/rules/*.mdc` is not the install source body).
 - Installer **never** rewrites Trellis / project root `AGENTS.md`.
 - Do not install global `~/.codex/hooks.json`; project hooks only under explicit project root.
 - Multi-select runs selected profiles sequentially; never delete the other host’s files.

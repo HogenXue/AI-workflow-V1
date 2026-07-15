@@ -40,7 +40,7 @@ cd AI-workflow-V1
 | `agents`     | `<agents-home>/AGENTS.md`    | dry-run；已有文件先备份 |
 | `config`     | 指定的配置目录                      | dry-run         |
 | `codex-merge` | Codex MCP + 可选项目 `.codex/hooks` | 需显式 project-root 才写项目级 |
-| `cursor-merge` | Cursor MCP + 可选项目 `.cursor` hooks/rules | 需显式 project-root 才写项目级 |
+| `cursor-merge` | Cursor MCP + 可选项目 `.cursor` hooks；rules `.mdc` 由 `AGENTS.global.md` 动态生成 | 需显式 project-root 才写项目级 |
 
 `skills` 与 `config` 默认 **copy**（独立副本，不依赖源码目录）；本地开发可用 **link** 实时同步。
 
@@ -148,7 +148,7 @@ bash scripts/install.sh skills --copy --replace --target ~/.agents/skills
 
 ## AGENTS 规则用法
 
-全局规则模板位于 [trellis/AGENTS.global.md](trellis/AGENTS.global.md)，可通过 `scripts/install.sh agents` 安装到 AI 工具目录。项目根目录的 `AGENTS.md` 由 Trellis 初始化和更新时维护，不应以全局模板直接覆盖。
+全局规则模板位于 [trellis/AGENTS.global.md](trellis/AGENTS.global.md)：`agents --apply` 写入 Codex 的 `AGENTS.md`；`cursor-merge`（含显式 `--project-root`）据此动态生成项目 `.cursor/rules/ai-workflow-global.mdc`。项目根目录的 `AGENTS.md` 由 Trellis 初始化和更新时维护，不应以全局模板直接覆盖。
 
 项目专属规则（如 EGM 的分层、Git 格式、`egm_docs` 等）应在**该项目仓库**内维护 `Agents.md`；Trellis 项目将这些规则追加到 Trellis Managed Block 之外。GitNexus 流程由对应 Skill 承担，索引块由项目内 GitNexus CLI 注入。
 
