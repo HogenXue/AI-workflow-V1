@@ -14,6 +14,8 @@ fail_usage() {
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 root_dir="$(cd "$script_dir/.." && pwd)"
+# shellcheck source=install-lib.sh
+source "$script_dir/install-lib.sh"
 source_dir="$root_dir/config"
 target="$HOME/.agents/config"
 backup_dir=""
@@ -63,6 +65,11 @@ while (($#)); do
   shift
 done
 
+if install_lib_paths_overlap "$source_dir" "$target"; then
+  printf 'ERROR: config target overlaps package source: %s\n' "$target" >&2
+  exit 1
+fi
+
 if ((explicit_dry_run)); then
   dry_run=1
 elif ((execute_requested)); then
@@ -72,7 +79,7 @@ else
 fi
 
 if [[ -z "$backup_dir" ]]; then
-  backup_dir="$(dirname "$target")/.codex-ultimate-v3-backups"
+  backup_dir="$(dirname "$target")/.ai-workflow-backups"
 fi
 
 if [[ ! -d "$source_dir" ]]; then
@@ -89,6 +96,7 @@ if ((dry_run)); then
   if ((conflict)); then
     printf 'CONFLICT: existing config: %s\n' "$target" >&2
     printf '%s\n' 'Use --replace to back up and replace it.' >&2
+    printf 'DRY-RUN: backup would use %s/%s.<UTC timestamp>.bak\n' "$backup_dir" "$(basename "$target")"
   fi
   printf 'DRY-RUN: %s config -> %s\n' "$mode" "$target"
   exit 0
@@ -100,39 +108,49 @@ if ((conflict && replace == 0)); then
   exit 1
 fi
 
-backup_root=""
+backup_path=""
 if ((conflict)); then
-  backup_root="$backup_dir/$(date -u +%Y%m%dT%H%M%SZ)"
-  if [[ -e "$backup_root" || -L "$backup_root" ]]; then
-    printf 'ERROR: backup destination already exists: %s\n' "$backup_root" >&2
+  install_lib_backup_file "$target" "$backup_dir" "$(basename "$target")" || exit 1
+  backup_path="$INSTALL_BACKUP_PATH"
+  if ! rm -rf "$target"; then
+    install_lib_restore_backup "$backup_path" "$target" || true
+    printf 'ERROR: could not replace existing config\n' >&2
     exit 1
   fi
-  mkdir -p "$backup_root" || { printf 'ERROR: could not create backup directory: %s\n' "$backup_root" >&2; exit 1; }
-  mv "$target" "$backup_root/config" || { printf 'ERROR: could not move existing config to backup\n' >&2; exit 1; }
 fi
 
 if ! mkdir -p "$(dirname "$target")"; then
-  if [[ -n "$backup_root" ]]; then mv "$backup_root/config" "$target" || true; fi
+  if [[ -n "$backup_path" ]]; then install_lib_restore_backup "$backup_path" "$target" || true; fi
   printf 'ERROR: could not create config parent directory\n' >&2
   exit 1
 fi
 
+copy_config_tree() {
+  local source name
+
+  mkdir -p "$target" || return 1
+  for source in "$source_dir"/*; do
+    name="${source##*/}"
+    case "$name" in
+      __pycache__|*.pyc|*.pyo) continue ;;
+    esac
+    cp -R "$source" "$target/" || return 1
+  done
+}
+
 if [[ "$mode" == 'link' ]]; then
   if ! ln -s "$source_dir" "$target"; then
-    if [[ -n "$backup_root" ]]; then mv "$backup_root/config" "$target" || true; fi
+    if [[ -n "$backup_path" ]]; then install_lib_restore_backup "$backup_path" "$target" || true; fi
     printf 'ERROR: could not link config\n' >&2
     exit 1
   fi
 else
-  if ! cp -R "$source_dir" "$target"; then
+  if ! copy_config_tree; then
     rm -rf "$target" || true
-    if [[ -n "$backup_root" ]]; then mv "$backup_root/config" "$target" || true; fi
+    if [[ -n "$backup_path" ]]; then install_lib_restore_backup "$backup_path" "$target" || true; fi
     printf 'ERROR: could not copy config\n' >&2
     exit 1
   fi
 fi
 
 printf 'INSTALLED: config -> %s\n' "$target"
-if [[ -n "$backup_root" ]]; then
-  printf 'BACKUP: %s\n' "$backup_root"
-fi

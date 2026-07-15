@@ -239,6 +239,24 @@ class ValidateAllSkillsTests(unittest.TestCase):
         self.assertEqual(status, 1)
         self.assertIn("hogen-codex.yaml: unknown configuration key: unknown", output.getvalue())
 
+    def test_main_validates_configuration_consumer_registry(self) -> None:
+        (self.root / "manifest.yaml").write_text("skills: []\n", encoding="utf-8")
+        config_dir = self.root / "config"
+        config_dir.mkdir()
+        (config_dir / "defaults.yaml").write_text("language: zh-CN\n", encoding="utf-8")
+        (config_dir / "project-config.schema.yaml").write_text(
+            "type: mapping\nallowed_keys:\n  language:\n    type: string\n",
+            encoding="utf-8",
+        )
+        (config_dir / "consumers.yaml").write_text("consumers: {}\n", encoding="utf-8")
+        output = io.StringIO()
+
+        with contextlib.redirect_stdout(output):
+            status = self.validator.main(["--root", str(self.root)])
+
+        self.assertEqual(status, 1)
+        self.assertIn("missing configuration consumer: language", output.getvalue())
+
     def test_external_project_root_merges_nested_override_with_package_defaults(self) -> None:
         package_root = self.root / "package"
         project_root = self.root / "project"
@@ -270,6 +288,13 @@ class ValidateAllSkillsTests(unittest.TestCase):
             "    allowed_keys:\n"
             "      missing_tool_policy:\n"
             "        type: string\n",
+            encoding="utf-8",
+        )
+        (config_dir / "consumers.yaml").write_text(
+            "consumers:\n"
+            "  change_policy.minimal_change: [karpathy-guidelines-zh]\n"
+            "  change_policy.preserve_dirty_worktree: [karpathy-guidelines-zh]\n"
+            "  tools.missing_tool_policy: [memory]\n",
             encoding="utf-8",
         )
         (project_root / "hogen-codex.yaml").write_text(
@@ -373,6 +398,25 @@ class ManifestTests(unittest.TestCase):
             ],
         )
 
+    def test_ci_uses_the_shared_quality_entry_on_linux_and_macos(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+
+        self.assertIn("ubuntu-latest", workflow)
+        self.assertIn("macos-latest", workflow)
+        self.assertIn("config/workflow_check.py", workflow)
+        self.assertIn("quality", workflow)
+
+    def test_readme_describes_packaged_mcp_and_runtime_truthfully(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        self.assertNotIn("CodexTamplate", readme)
+        self.assertNotIn("本包**不包含** MCP", readme)
+        self.assertIn("https://www.59005046.xyz:8102/mcp", readme)
+        self.assertIn("config/effective_config.py", readme)
+        self.assertIn("config/workflow_check.py", readme)
+        self.assertTrue((ROOT / "CHANGELOG.md").is_file())
+        self.assertTrue((ROOT / "THIRD_PARTY_NOTICES.md").is_file())
+
 
 class BundledSkillContractTests(unittest.TestCase):
     EXPECTED_METADATA = {
@@ -472,6 +516,26 @@ class BundledSkillContractTests(unittest.TestCase):
 
         self.assertIn("默认配置不存在时", content)
         self.assertIn("继续执行", content)
+
+    def test_runtime_config_consumers_prefer_the_effective_config_helper(self) -> None:
+        for name in ("memory", "gitnexus", "release"):
+            with self.subTest(skill=name):
+                content = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+                self.assertIn("config/effective_config.py", content)
+                self.assertIn("--project-root", content)
+
+    def test_agents_templates_route_to_the_shared_workflow_checker(self) -> None:
+        for relative in ("trellis/AGENTS.global.md", "trellis/AGENTS.project.md"):
+            with self.subTest(file=relative):
+                content = (ROOT / relative).read_text(encoding="utf-8")
+                for phrase in (
+                    "config/workflow_check.py",
+                    "readiness",
+                    "quality",
+                    "completion",
+                    "不替代 Trellis",
+                ):
+                    self.assertIn(phrase, content)
 
     def test_release_template_uses_fixed_evidence_gates(self) -> None:
         content = (ROOT / "skills" / "release" / "templates/release-checklist.md").read_text(

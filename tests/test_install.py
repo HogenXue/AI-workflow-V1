@@ -73,6 +73,20 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertIn("CONFLICT", result.stderr)
         self.assertEqual(sentinel.read_text(encoding="utf-8"), "keep")
 
+        replace = self.run_component(
+            "skills",
+            "--copy",
+            "--replace",
+            "--target",
+            str(self.skills_target),
+            "--backup-dir",
+            str(self.backup),
+        )
+        self.assertEqual(replace.returncode, 0, replace.stderr)
+        backups = list(self.backup.glob("release.*.bak/sentinel"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(backups[0].read_text(encoding="utf-8"), "keep")
+
     def test_config_is_explicit_and_can_be_copied_separately(self) -> None:
         dry_run = self.run_component("config", "--dry-run", "--target", str(self.config_target))
 
@@ -92,6 +106,10 @@ class ComponentInstallTests(unittest.TestCase):
 
         self.assertEqual(apply.returncode, 0, apply.stderr)
         self.assertTrue((self.config_target / "defaults.yaml").is_file())
+        self.assertTrue((self.config_target / "effective_config.py").is_file())
+        self.assertTrue((self.config_target / "workflow_check.py").is_file())
+        self.assertTrue((self.config_target / "consumers.yaml").is_file())
+        self.assertFalse((self.config_target / "__pycache__").exists())
         self.assertFalse(self.skills_target.exists())
 
     def test_config_replace_backs_up_existing_configuration(self) -> None:
@@ -110,9 +128,49 @@ class ComponentInstallTests(unittest.TestCase):
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        backups = list(self.backup.glob("*/config/sentinel"))
+        backups = list(self.backup.glob("config.*.bak/sentinel"))
         self.assertEqual(len(backups), 1)
         self.assertEqual(backups[0].read_text(encoding="utf-8"), "replace")
+
+    def test_config_rejects_backup_directory_inside_target(self) -> None:
+        self.config_target.mkdir(parents=True)
+        sentinel = self.config_target / "sentinel"
+        sentinel.write_text("keep\n", encoding="utf-8")
+        nested_backup = self.config_target / ".backups"
+
+        result = self.run_component(
+            "config",
+            "--copy",
+            "--replace",
+            "--target",
+            str(self.config_target),
+            "--backup-dir",
+            str(nested_backup),
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(sentinel.read_text(encoding="utf-8"), "keep\n")
+        self.assertFalse(nested_backup.exists())
+
+    def test_config_trailing_slash_uses_parent_backup_root(self) -> None:
+        self.config_target.mkdir(parents=True)
+        sentinel = self.config_target / "sentinel"
+        sentinel.write_text("old config\n", encoding="utf-8")
+
+        result = self.run_component(
+            "config",
+            "--copy",
+            "--replace",
+            "--target",
+            f"{self.config_target}/",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        backups = list(
+            (self.root / ".ai-workflow-backups").glob("config.*.bak/sentinel")
+        )
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(backups[0].read_text(encoding="utf-8"), "old config\n")
 
     def test_unknown_component_is_usage_error_without_writes(self) -> None:
         result = self.run_component("unknown", "--dry-run")
@@ -121,6 +179,169 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertIn("unknown installer component", result.stderr)
         self.assertFalse(self.skills_target.exists())
         self.assertFalse(self.config_target.exists())
+
+    def test_config_rejects_source_directory_as_target(self) -> None:
+        result = self.run_component(
+            "config",
+            "--dry-run",
+            "--target",
+            str(ROOT / "config"),
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("overlaps package source", result.stderr)
+
+    def test_config_rejects_nonexistent_target_inside_source(self) -> None:
+        target = ROOT / "config" / ".test-install-target-does-not-exist"
+        self.assertFalse(target.exists())
+
+        result = self.run_component("config", "--dry-run", "--target", str(target))
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("overlaps package source", result.stderr)
+
+    def test_skills_rejects_source_directory_as_target(self) -> None:
+        result = self.run_component(
+            "skills",
+            "--dry-run",
+            "--target",
+            str(ROOT / "skills"),
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("overlaps package source", result.stderr)
+
+    def test_skills_rejects_nonexistent_target_inside_source(self) -> None:
+        target = ROOT / "skills" / ".test-install-target-does-not-exist"
+        self.assertFalse(target.exists())
+
+        result = self.run_component("skills", "--dry-run", "--target", str(target))
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("overlaps package source", result.stderr)
+
+    def test_parallel_backups_never_overwrite_each_other(self) -> None:
+        source = self.root / "source.txt"
+        source.write_text("original\n", encoding="utf-8")
+        fake_bin = self.root / "fake-bin"
+        fake_bin.mkdir()
+        slow_cp = fake_bin / "cp"
+        slow_cp.write_text(
+            "#!/usr/bin/env bash\nsleep 0.1\nexec /bin/cp \"$@\"\n",
+            encoding="utf-8",
+        )
+        slow_cp.chmod(0o755)
+        backup_dir = self.root / "parallel-backups"
+        command = (
+            'source "$1"; '
+            'install_lib_backup_file "$2" "$3" "source.txt"'
+        )
+        env = {**os.environ, "PATH": f"{fake_bin}:{os.environ['PATH']}"}
+
+        processes = [
+            subprocess.Popen(
+                [
+                    "bash",
+                    "-c",
+                    command,
+                    "backup-test",
+                    str(ROOT / "scripts" / "install-lib.sh"),
+                    str(source),
+                    str(backup_dir),
+                ],
+                cwd=ROOT,
+                env=env,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            for _ in range(2)
+        ]
+        results = [process.communicate() + (process.returncode,) for process in processes]
+
+        for stdout, stderr, returncode in results:
+            self.assertEqual(returncode, 0, stderr + stdout)
+        backups = list(backup_dir.glob("source.txt.*.bak"))
+        self.assertEqual(len(backups), 2)
+        self.assertFalse(list(backup_dir.glob("*.lock")))
+        self.assertEqual(
+            {path.read_text(encoding="utf-8") for path in backups},
+            {"original\n"},
+        )
+
+    def test_unwritable_backup_directory_fails_without_hanging(self) -> None:
+        source = self.root / "source.txt"
+        source.write_text("original\n", encoding="utf-8")
+        backup_dir = self.root / "unwritable-backups"
+        backup_dir.mkdir()
+        backup_dir.chmod(0o555)
+        command = (
+            'source "$1"; '
+            'install_lib_backup_file "$2" "$3" "source.txt"'
+        )
+        try:
+            result = subprocess.run(
+                [
+                    "bash",
+                    "-c",
+                    command,
+                    "backup-test",
+                    str(ROOT / "scripts" / "install-lib.sh"),
+                    str(source),
+                    str(backup_dir),
+                ],
+                cwd=ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+                timeout=2,
+            )
+        finally:
+            backup_dir.chmod(0o755)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("could not reserve backup path", result.stderr)
+        self.assertEqual(source.read_text(encoding="utf-8"), "original\n")
+        self.assertFalse(list(backup_dir.iterdir()))
+
+    def test_failed_backup_copy_never_publishes_partial_bak(self) -> None:
+        source = self.root / "source.txt"
+        source.write_text("original\n", encoding="utf-8")
+        fake_bin = self.root / "failing-bin"
+        fake_bin.mkdir()
+        failing_cp = fake_bin / "cp"
+        failing_cp.write_text(
+            "#!/usr/bin/env bash\ndest=\"${!#}\"\nprintf 'partial\\n' > \"$dest\"\nexit 1\n",
+            encoding="utf-8",
+        )
+        failing_cp.chmod(0o755)
+        backup_dir = self.root / "failed-backups"
+        command = (
+            'source "$1"; '
+            'install_lib_backup_file "$2" "$3" "source.txt"'
+        )
+
+        result = subprocess.run(
+            [
+                "bash",
+                "-c",
+                command,
+                "backup-test",
+                str(ROOT / "scripts" / "install-lib.sh"),
+                str(source),
+                str(backup_dir),
+            ],
+            cwd=ROOT,
+            env={**os.environ, "PATH": f"{fake_bin}:{os.environ['PATH']}"},
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse(list(backup_dir.glob("*.bak")))
+        self.assertFalse(list(backup_dir.glob("*.lock")))
+        self.assertEqual(source.read_text(encoding="utf-8"), "original\n")
 
     def test_default_skills_target_uses_agents_home(self) -> None:
         home = self.root / "home"
@@ -212,7 +433,7 @@ class ComponentInstallTests(unittest.TestCase):
 
         self.assertEqual(apply.returncode, 0, apply.stderr)
         self.assertFalse(duplicate.exists())
-        backups = list(self.backup.glob("*/other-root/memory/sentinel"))
+        backups = list(self.backup.glob("memory.*.bak/sentinel"))
         self.assertEqual(len(backups), 1)
         self.assertEqual(backups[0].read_text(encoding="utf-8"), "duplicate")
         self.assertTrue((target / "memory" / "SKILL.md").is_file())
@@ -231,6 +452,47 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn(f"DRY-RUN: copy config -> {home / '.agents' / 'config'}", result.stdout)
         self.assertFalse(home.exists())
+
+    def test_default_component_backups_share_agents_root(self) -> None:
+        home = self.root / "home"
+        skills_target = home / ".agents" / "skills"
+        release_sentinel = skills_target / "release" / "sentinel"
+        release_sentinel.parent.mkdir(parents=True)
+        release_sentinel.write_text("old release\n", encoding="utf-8")
+
+        skills = subprocess.run(
+            ["bash", str(ROOT / "scripts" / "install.sh"), "skills", "--copy", "--replace"],
+            cwd=ROOT,
+            env={**os.environ, "HOME": str(home)},
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(skills.returncode, 0, skills.stderr)
+
+        config_target = home / ".agents" / "config"
+        config_target.mkdir()
+        config_sentinel = config_target / "sentinel"
+        config_sentinel.write_text("old config\n", encoding="utf-8")
+        config = subprocess.run(
+            ["bash", str(ROOT / "scripts" / "install.sh"), "config", "--copy", "--replace"],
+            cwd=ROOT,
+            env={**os.environ, "HOME": str(home)},
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(config.returncode, 0, config.stderr)
+
+        backup_root = home / ".agents" / ".ai-workflow-backups"
+        self.assertEqual(
+            len(list(backup_root.glob("release.*.bak/sentinel"))),
+            1,
+        )
+        self.assertEqual(
+            len(list(backup_root.glob("config.*.bak/sentinel"))),
+            1,
+        )
 
     def test_legacy_workflow_skills_pruning_is_explicit_and_backed_up(self) -> None:
         sentinels = {}
@@ -269,7 +531,7 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertEqual(apply.returncode, 0, apply.stderr)
         for name in sentinels:
             self.assertFalse((self.skills_target / name).exists())
-            backups = list(self.backup.glob(f"*/legacy/{name}/sentinel"))
+            backups = list(self.backup.glob(f"{name}.*.bak/sentinel"))
             self.assertEqual(len(backups), 1)
             self.assertEqual(backups[0].read_text(encoding="utf-8"), "legacy")
 

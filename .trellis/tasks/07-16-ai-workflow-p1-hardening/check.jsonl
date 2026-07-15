@@ -1,0 +1,4 @@
+{"file":".trellis/spec/scripts/index.md","reason":"安装器和宿主集成修改的质量检查清单。"}
+{"file":".trellis/spec/scripts/installer-contracts.md","reason":"复核安全、备份、回滚和跨宿主兼容性。"}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"复核配置与证据消费者及跨平台一致性。"}
+{"file":".trellis/tasks/07-16-ai-workflow-p1-hardening/research/runtime-hardening.md","reason":"依据已验证问题和图谱限制检查实现。"}

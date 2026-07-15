@@ -14,6 +14,8 @@ fail_usage() {
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 root_dir="$(cd "$script_dir/.." && pwd)"
+# shellcheck source=install-lib.sh
+source "$script_dir/install-lib.sh"
 manifest="$root_dir/manifest.yaml"
 target="$HOME/.agents/skills"
 backup_dir=""
@@ -71,6 +73,11 @@ while (($#)); do
   shift
 done
 
+if install_lib_paths_overlap "$root_dir/skills" "$target"; then
+  printf 'ERROR: skills target overlaps package source: %s\n' "$target" >&2
+  exit 1
+fi
+
 if [[ -z "$mode_selected" ]]; then
   manifest_mode="$(awk -F': ' '/^default_install_mode:/ { gsub(/[[:space:]]+$/, "", $2); print $2; exit }' "$manifest")"
   if [[ -n "$manifest_mode" ]]; then
@@ -87,7 +94,7 @@ else
 fi
 
 if [[ -z "$backup_dir" ]]; then
-  backup_dir="$target/.codex-ultimate-v3-backups"
+  backup_dir="$(dirname "$target")/.ai-workflow-backups"
 fi
 
 if [[ ! -f "$manifest" ]]; then
@@ -203,6 +210,9 @@ if ((dry_run)); then
         "$other_codex_root" "$skill"
     done
   fi
+  if ((${#conflicts[@]} || (prune_legacy && ${#legacy_conflicts[@]}) || (prune_other_root && ${#other_root_conflicts[@]}))); then
+    printf 'DRY-RUN: backups would use %s/<Skill name>.<UTC timestamp>.bak\n' "$backup_dir"
+  fi
   exit 0
 fi
 
@@ -212,15 +222,17 @@ if ((${#conflicts[@]} > 0 && replace == 0)); then
   exit 1
 fi
 
-moved_skills=()
-moved_legacy_skills=()
-moved_other_root_skills=()
+backed_up_skills=()
+skill_backup_paths=()
+backed_up_legacy_skills=()
+legacy_backup_paths=()
+backed_up_other_root_skills=()
+other_root_backup_paths=()
 created_skills=()
-backup_root=""
 
 rollback() {
   local status="$1"
-  local skill
+  local skill backup index
 
   printf '%s\n' 'ERROR: Skills installation failed; rolling back.' >&2
   if ((${#created_skills[@]})); then
@@ -228,92 +240,72 @@ rollback() {
       rm -rf "$target/$skill" || true
     done
   fi
-  if ((${#moved_skills[@]})); then
-    for skill in "${moved_skills[@]}"; do
-      rm -rf "$target/$skill" || true
-      if [[ -e "$backup_root/$skill" || -L "$backup_root/$skill" ]]; then
-        if ! mv "$backup_root/$skill" "$target/$skill"; then
-          printf 'ERROR: could not restore backup for %s\n' "$skill" >&2
-        fi
+  if ((${#backed_up_skills[@]})); then
+    for index in "${!backed_up_skills[@]}"; do
+      skill="${backed_up_skills[$index]}"
+      backup="${skill_backup_paths[$index]}"
+      if ! install_lib_restore_backup "$backup" "$target/$skill"; then
+        printf 'ERROR: could not restore backup for %s\n' "$skill" >&2
       fi
     done
   fi
-  if ((${#moved_legacy_skills[@]})); then
-    for skill in "${moved_legacy_skills[@]}"; do
-      if [[ -e "$backup_root/legacy/$skill" || -L "$backup_root/legacy/$skill" ]]; then
-        if ! mv "$backup_root/legacy/$skill" "$target/$skill"; then
-          printf 'ERROR: could not restore legacy Skill %s\n' "$skill" >&2
-        fi
+  if ((${#backed_up_legacy_skills[@]})); then
+    for index in "${!backed_up_legacy_skills[@]}"; do
+      skill="${backed_up_legacy_skills[$index]}"
+      backup="${legacy_backup_paths[$index]}"
+      if ! install_lib_restore_backup "$backup" "$target/$skill"; then
+        printf 'ERROR: could not restore legacy Skill %s\n' "$skill" >&2
       fi
     done
   fi
-  if ((${#moved_other_root_skills[@]})); then
-    for skill in "${moved_other_root_skills[@]}"; do
-      if [[ -e "$backup_root/other-root/$skill" || -L "$backup_root/other-root/$skill" ]]; then
-        if ! mv "$backup_root/other-root/$skill" "$other_codex_root/$skill"; then
-          printf 'ERROR: could not restore other-root Skill %s\n' "$skill" >&2
-        fi
+  if ((${#backed_up_other_root_skills[@]})); then
+    for index in "${!backed_up_other_root_skills[@]}"; do
+      skill="${backed_up_other_root_skills[$index]}"
+      backup="${other_root_backup_paths[$index]}"
+      if ! install_lib_restore_backup "$backup" "$other_codex_root/$skill"; then
+        printf 'ERROR: could not restore other-root Skill %s\n' "$skill" >&2
       fi
     done
   fi
   exit "$status"
 }
 
-needs_backup=0
 if ((${#conflicts[@]})); then
-  needs_backup=1
+  for skill in "${conflicts[@]}"; do
+    install_lib_backup_file "$target/$skill" "$backup_dir" "$skill" || rollback 1
+    backed_up_skills+=("$skill")
+    skill_backup_paths+=("$INSTALL_BACKUP_PATH")
+    rm -rf "$target/$skill" || rollback 1
+  done
 fi
-if ((prune_legacy && ${#legacy_conflicts[@]})); then
-  needs_backup=1
+if ((prune_legacy)); then
+  for skill in "${legacy_conflicts[@]}"; do
+    install_lib_backup_file "$target/$skill" "$backup_dir" "$skill" || rollback 1
+    backed_up_legacy_skills+=("$skill")
+    legacy_backup_paths+=("$INSTALL_BACKUP_PATH")
+    rm -rf "$target/$skill" || rollback 1
+    printf 'PRUNED: legacy Skill %s\n' "$skill"
+  done
 fi
 if ((prune_other_root && ${#other_root_conflicts[@]})); then
-  needs_backup=1
-fi
-
-if ((needs_backup)); then
-  backup_root="$backup_dir/$(date -u +%Y%m%dT%H%M%SZ)"
-  if [[ -e "$backup_root" || -L "$backup_root" ]]; then
-    printf 'ERROR: backup destination already exists: %s\n' "$backup_root" >&2
-    exit 1
-  fi
-  mkdir -p "$backup_root" || { printf 'ERROR: could not create backup directory: %s\n' "$backup_root" >&2; exit 1; }
-  if ((${#conflicts[@]})); then
-    for skill in "${conflicts[@]}"; do
-      mv "$target/$skill" "$backup_root/$skill" || rollback 1
-      moved_skills+=("$skill")
-    done
-  fi
-  if ((prune_legacy)); then
-    mkdir -p "$backup_root/legacy" || rollback 1
-    for skill in "${legacy_conflicts[@]}"; do
-      mv "$target/$skill" "$backup_root/legacy/$skill" || rollback 1
-      moved_legacy_skills+=("$skill")
-      printf 'PRUNED: legacy Skill %s\n' "$skill"
-    done
-  fi
-  if ((prune_other_root && ${#other_root_conflicts[@]})); then
-    mkdir -p "$backup_root/other-root" || rollback 1
-    for skill in "${other_root_conflicts[@]}"; do
-      mv "$other_codex_root/$skill" "$backup_root/other-root/$skill" || rollback 1
-      moved_other_root_skills+=("$skill")
-      printf 'PRUNED: other-root Skill %s/%s\n' "$other_codex_root" "$skill"
-    done
-  fi
+  for skill in "${other_root_conflicts[@]}"; do
+    install_lib_backup_file "$other_codex_root/$skill" "$backup_dir" "$skill" || rollback 1
+    backed_up_other_root_skills+=("$skill")
+    other_root_backup_paths+=("$INSTALL_BACKUP_PATH")
+    rm -rf "$other_codex_root/$skill" || rollback 1
+    printf 'PRUNED: other-root Skill %s/%s\n' "$other_codex_root" "$skill"
+  done
 fi
 
 mkdir -p "$target" || rollback 1
 for skill in "${skills[@]}"; do
   destination="$target/$skill"
   source="$root_dir/skills/$skill"
+  created_skills+=("$skill")
   if [[ "$mode" == 'link' ]]; then
     ln -s "$source" "$destination" || rollback 1
   else
     cp -R "$source" "$destination" || rollback 1
   fi
-  created_skills+=("$skill")
   printf 'INSTALLED: %s\n' "$skill"
 done
-
-if [[ -n "$backup_root" ]]; then
-  printf 'BACKUP: %s\n' "$backup_root"
-fi

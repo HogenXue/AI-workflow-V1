@@ -5,7 +5,12 @@ description: "Retrieve and record durable project context, decisions, learned co
 
 # Memory
 
-读取 skill 目录上两级的 `config/defaults.yaml`（Codex 安装后为 `~/.agents/config/defaults.yaml`；源码仓库则为包根 `config/defaults.yaml`），再读取目标仓库根目录的 `hogen-codex.yaml`（若存在）；项目值覆盖默认值。默认配置不存在时使用正文中的安全行为继续执行，不把可选 config 组件缺失当成记忆后端故障。
+如果 skill 目录上两级存在 `config/effective_config.py`，优先运行该 helper，并通过
+`--project-root <目标仓库>` 获取已经校验和合并的配置。helper 不存在时，再读取 skill
+目录上两级的 `config/defaults.yaml`（Codex 安装后为 `~/.agents/config/defaults.yaml`；
+源码仓库则为包根 `config/defaults.yaml`），并读取目标仓库根目录的 `hogen-codex.yaml`
+（若存在）；项目值覆盖默认值。默认配置不存在时使用正文中的安全行为继续执行，不把可选
+config 组件缺失当成记忆后端故障。
 
 检测当前会话可用的记忆后端及其检索、写入能力。先检索已有上下文，再回答或记录；不要把 Skill 的存在当作后端可用的证据。仅在用户明确要求保留、已完成重要决策或需要交接时，记录经过验证的稳定结论。
 

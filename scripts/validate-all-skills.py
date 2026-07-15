@@ -15,6 +15,16 @@ try:
 except ImportError:
     yaml = None
 
+PACKAGE_ROOT = Path(__file__).resolve().parents[1]
+if str(PACKAGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(PACKAGE_ROOT))
+
+from config.effective_config import (  # noqa: E402
+    load_effective_config,
+    validate_config,
+    validate_consumers,
+)
+
 
 PYAML_INSTALL_MESSAGE = (
     "PyYAML is required to validate this package. "
@@ -239,133 +249,6 @@ def validate_skill(skill_path: Path) -> list[str]:
     return errors
 
 
-def _validate_schema(schema: Any, location: str = "configuration schema") -> list[str]:
-    """Return contract errors for the small declarative configuration schema."""
-
-    if not isinstance(schema, dict):
-        return [f"{location} must be a mapping"]
-
-    schema_type = schema.get("type")
-    if schema_type not in {"mapping", "string", "boolean"}:
-        return [f"{location} has unsupported type: {schema_type!r}"]
-
-    if schema_type == "mapping":
-        allowed_keys = schema.get("allowed_keys")
-        if not isinstance(allowed_keys, dict):
-            return [f"{location} mapping must define allowed_keys"]
-        errors: list[str] = []
-        for key, nested_schema in allowed_keys.items():
-            if not isinstance(key, str) or not key:
-                errors.append(f"{location} allowed_keys must use non-empty string keys")
-                continue
-            errors.extend(_validate_schema(nested_schema, f"{location}.{key}"))
-        return errors
-
-    return []
-
-
-def _validate_config_value(value: Any, schema: dict[str, Any], location: str) -> list[str]:
-    schema_type = schema["type"]
-    if schema_type == "mapping":
-        if not isinstance(value, dict):
-            return [f"configuration {location} must be a mapping"]
-        errors: list[str] = []
-        allowed_keys = schema["allowed_keys"]
-        for key, nested_value in value.items():
-            nested_location = f"{location}.{key}" if location else str(key)
-            nested_schema = allowed_keys.get(key)
-            if nested_schema is None:
-                errors.append(f"unknown configuration key: {nested_location}")
-                continue
-            errors.extend(_validate_config_value(nested_value, nested_schema, nested_location))
-        return errors
-
-    if schema_type == "string" and not isinstance(value, str):
-        return [f"configuration {location} must be a string"]
-    if schema_type == "boolean" and not isinstance(value, bool):
-        return [f"configuration {location} must be a boolean"]
-    return []
-
-
-def validate_config(path: Path, schema_path: Path | None = None) -> list[str]:
-    """Return parse, schema, and unknown-key errors for one configuration file."""
-
-    path = Path(path)
-    if not path.is_file():
-        return ["missing configuration file"]
-
-    document, error = load_yaml(path)
-    if error:
-        return ["invalid YAML"] if error.startswith("invalid YAML") else [error]
-    if not isinstance(document, dict):
-        return ["configuration must be a mapping"]
-    if schema_path is None:
-        return []
-
-    schema, schema_error = load_yaml(Path(schema_path))
-    if schema_error:
-        return [f"invalid configuration schema: {schema_error}"]
-    schema_errors = _validate_schema(schema)
-    if schema_errors:
-        return schema_errors
-    return _validate_config_value(document, schema, "")
-
-
-def _merge_config(defaults: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
-    """Recursively merge a project override into package defaults."""
-
-    merged = defaults.copy()
-    for key, override_value in override.items():
-        default_value = merged.get(key)
-        if isinstance(default_value, dict) and isinstance(override_value, dict):
-            merged[key] = _merge_config(default_value, override_value)
-        else:
-            merged[key] = override_value
-    return merged
-
-
-def load_effective_config(
-    package_root: Path, project_root: Path
-) -> tuple[dict[str, Any] | None, list[tuple[Path, str]]]:
-    """Validate and merge package defaults with an optional project override."""
-
-    package_root = Path(package_root)
-    project_root = Path(project_root)
-    defaults_path = package_root / "config" / "defaults.yaml"
-    schema_path = package_root / "config" / "project-config.schema.yaml"
-    errors = [(defaults_path, error) for error in validate_config(defaults_path, schema_path)]
-    if errors:
-        return None, errors
-
-    defaults, defaults_error = load_yaml(defaults_path)
-    if defaults_error or not isinstance(defaults, dict):
-        return None, [(defaults_path, defaults_error or "configuration must be a mapping")]
-
-    override_path = project_root / "hogen-codex.yaml"
-    if not override_path.exists():
-        return defaults, []
-
-    errors = [(override_path, error) for error in validate_config(override_path, schema_path)]
-    if errors:
-        return None, errors
-
-    override, override_error = load_yaml(override_path)
-    if override_error or not isinstance(override, dict):
-        return None, [(override_path, override_error or "configuration must be a mapping")]
-
-    merged = _merge_config(defaults, override)
-    schema, schema_error = load_yaml(schema_path)
-    if schema_error:
-        return None, [(schema_path, f"invalid configuration schema: {schema_error}")]
-    schema_errors = _validate_schema(schema)
-    if schema_errors:
-        return None, [(schema_path, error) for error in schema_errors]
-    merge_errors = _validate_config_value(merged, schema, "")
-    if merge_errors:
-        return None, [(override_path, error) for error in merge_errors]
-    return merged, []
-
-
 def _manifest_skills(root: Path) -> tuple[list[str] | None, list[tuple[Path, str]]]:
     manifest_path = root / "manifest.yaml"
     manifest, error = load_yaml(manifest_path)
@@ -415,6 +298,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             skills = []
         _, config_errors = load_effective_config(root, project_root)
         errors.extend(config_errors)
+        errors.extend(
+            (root / "config" / "consumers.yaml", error)
+            for error in validate_consumers(root)
+        )
 
     for name in skills:
         skill_path = root / "skills" / name

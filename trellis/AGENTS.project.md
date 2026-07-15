@@ -8,6 +8,12 @@
 - 将跨会话工作记录维护在 `.trellis/workspace/`。
 - 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 将 `$grill-me` 视为 Phase 1.1 的唯一访谈实现。使用后不要再加载 `trellis-brainstorm`，访谈结论直接写入当前 Trellis PRD。
 - Codex 质量阶段使用项目原生 `trellis-check`；P0/P1 返回 TDD 修复并复验。
+- 配对配置目录存在 `config/workflow_check.py` 时，所有宿主共用该入口：规划确认后、
+  `task.py start` 前运行 `readiness`，原生质量评审后运行 `quality`，归档前运行
+  `completion`。复杂任务给 readiness 传 `--complex`；非 AI-workflow 包项目给 quality
+  重复传入 `--check <名称>=<实际检查命令>`，不得生成没有项目检查支撑的证据。
+- workflow-check 只提供可执行证据，不替代 Trellis 的 task、状态机或原生
+  `trellis-check`；helper 不可用时必须说明降级并执行等价检查。
 - TDD 是 Trellis 执行阶段的实现方法；Karpathy Guidelines 是横切约束，两者都不创建平行工作流或工件。
 - 无 active task 时先遵守 Trellis 的建 task 同意门槛；简单任务也通过 Trellis 的轻量流程执行并运行针对性验证。
 - 不要在本项目同时启动第二套完整工作流。

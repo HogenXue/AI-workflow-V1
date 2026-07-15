@@ -14,37 +14,14 @@ fail_usage() {
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 root_dir="$(cd "$script_dir/.." && pwd)"
+# shellcheck source=install-lib.sh
+source "$script_dir/install-lib.sh"
 source_file="$root_dir/trellis/AGENTS.global.md"
 agents_home="${CODEX_HOME:-$HOME/.codex}"
 backup_dir=""
 mode="dry-run"
 mode_selected=""
-backup_root=""
-
-backup_file() {
-  local source_file="$1"
-  local backup_name="$2"
-
-  if [[ -z "$backup_root" ]]; then
-    local timestamp
-    timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
-    backup_root="$backup_dir/$timestamp"
-    if [[ -e "$backup_root" || -L "$backup_root" ]]; then
-      printf 'ERROR: backup destination already exists: %s\n' "$backup_root" >&2
-      return 1
-    fi
-    mkdir -p "$backup_root" || {
-      printf 'ERROR: could not create backup directory: %s\n' "$backup_root" >&2
-      return 1
-    }
-  fi
-
-  cp -p "$source_file" "$backup_root/$backup_name" || {
-    printf 'ERROR: could not back up existing %s\n' "$backup_name" >&2
-    return 1
-  }
-  printf 'BACKUP: %s\n' "$backup_root/$backup_name"
-}
+agents_backup_path=""
 
 validate_config_file() {
   local config_file="$agents_home/config.toml"
@@ -128,7 +105,7 @@ enable_hooks_feature() {
       return
     fi
 
-    if ! backup_file "$config_file" 'config.toml'; then
+    if ! install_lib_backup_file "$config_file" "$backup_dir" 'config.toml'; then
       rm -f "$config_tmp"
       return 1
     fi
@@ -184,13 +161,13 @@ fi
 
 target_file="$agents_home/AGENTS.md"
 if [[ -z "$backup_dir" ]]; then
-  backup_dir="$agents_home/.trellis-template-backups"
+  backup_dir="$agents_home/.ai-workflow-backups"
 fi
 
 if [[ "$mode" == 'dry-run' ]]; then
   printf 'DRY-RUN: would copy %s -> %s\n' "$source_file" "$target_file"
   if [[ -e "$target_file" || -L "$target_file" ]]; then
-    printf 'DRY-RUN: would back up %s under %s\n' "$target_file" "$backup_dir"
+    printf 'DRY-RUN: would back up %s as %s/AGENTS.md.<UTC timestamp>.bak\n' "$target_file" "$backup_dir"
   fi
   printf '%s\n' 'DRY-RUN: would ensure [features].hooks = true in config.toml'
   exit 0
@@ -202,16 +179,28 @@ validate_config_file || exit 1
 
 agents_backup_available=0
 if [[ -e "$target_file" || -L "$target_file" ]]; then
-  backup_file "$target_file" 'AGENTS.md' || exit 1
+  install_lib_backup_file "$target_file" "$backup_dir" 'AGENTS.md' || exit 1
+  agents_backup_path="$INSTALL_BACKUP_PATH"
   agents_backup_available=1
+  if [[ -L "$target_file" ]]; then
+    rm -f "$target_file" || { printf 'ERROR: could not replace existing AGENTS.md\n' >&2; exit 1; }
+  fi
 fi
 
-cp "$source_file" "$target_file" || { printf 'ERROR: could not install AGENTS template\n' >&2; exit 1; }
+if ! cp "$source_file" "$target_file"; then
+  if ((agents_backup_available)); then
+    install_lib_restore_backup "$agents_backup_path" "$target_file" || true
+  else
+    rm -f "$target_file" || true
+  fi
+  printf 'ERROR: could not install AGENTS template\n' >&2
+  exit 1
+fi
 printf 'INSTALLED: %s\n' "$target_file"
 if ! enable_hooks_feature; then
   printf '%s\n' 'ERROR: config.toml update failed; restoring AGENTS.md.' >&2
   if ((agents_backup_available)); then
-    cp -p "$backup_root/AGENTS.md" "$target_file" || {
+    install_lib_restore_backup "$agents_backup_path" "$target_file" || {
       printf 'ERROR: could not restore AGENTS.md from backup\n' >&2
       exit 1
     }

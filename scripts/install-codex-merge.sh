@@ -68,16 +68,36 @@ while (($#)); do
 done
 
 if [[ -z "$backup_dir" ]]; then
-  backup_dir="$codex_home/.trellis-template-backups"
+  backup_dir="$codex_home/.ai-workflow-backups"
 fi
 
 templates="$root_dir/trellis/codex"
 config_toml="$codex_home/config.toml"
 mkdir -p "$codex_home"
 
-if [[ -f "$config_toml" ]] && ((dry_run == 0)); then
-  install_lib_backup_file "$config_toml" "$backup_dir" "config.toml"
+mcp_original_existed=0
+mcp_backup_path=""
+mcp_mutated=0
+if [[ -e "$config_toml" || -L "$config_toml" ]]; then
+  mcp_original_existed=1
 fi
+if ((mcp_original_existed && dry_run == 0)); then
+  install_lib_backup_file "$config_toml" "$backup_dir" "config.toml" || exit 1
+  mcp_backup_path="$INSTALL_BACKUP_PATH"
+elif ((mcp_original_existed)); then
+  printf 'DRY-RUN: backup would use %s/config.toml.<UTC timestamp>.bak\n' "$backup_dir"
+fi
+
+rollback_mcp() {
+  if ((mcp_mutated == 0)); then
+    return 0
+  fi
+  if ! install_lib_rollback_target "$mcp_original_existed" "$mcp_backup_path" "$config_toml"; then
+    printf 'ERROR: could not roll back Codex MCP configuration\n' >&2
+    return 1
+  fi
+  mcp_mutated=0
+}
 
 mcp_args=(
   python3 "$script_dir/lib/merge_host_mcp.py"
@@ -89,14 +109,20 @@ mcp_args=(
 [[ -n "$mem0_url" ]] && mcp_args+=(--mem0-url "$mem0_url")
 ((dry_run)) && mcp_args+=(--dry-run)
 
-"${mcp_args[@]}"
-mcp_status=$?
-if ((mcp_status != 0)); then
+if "${mcp_args[@]}"; then
+  if ((dry_run == 0)); then
+    mcp_mutated=1
+  fi
+else
+  mcp_status=$?
   exit "$mcp_status"
 fi
 
 INSTALL_PROJECT_ROOT=""
-install_lib_resolve_project_root "$project_root" "$skip_project" "$interactive" || exit 1
+if ! install_lib_resolve_project_root "$project_root" "$skip_project" "$interactive"; then
+  rollback_mcp || true
+  exit 1
+fi
 
 if [[ -z "${INSTALL_PROJECT_ROOT:-}" ]]; then
   exit 0
@@ -106,7 +132,7 @@ proj="$INSTALL_PROJECT_ROOT"
 dest_hooks_json="$proj/.codex/hooks.json"
 dest_hooks_dir="$proj/.codex/hooks"
 
-if [[ -e "$dest_hooks_json" || -e "$dest_hooks_dir" ]] && ((replace == 0)); then
+if [[ -e "$dest_hooks_json" || -L "$dest_hooks_json" || -e "$dest_hooks_dir" || -L "$dest_hooks_dir" ]] && ((replace == 0)); then
   if ((interactive)) && [[ -t 0 ]]; then
     if ! install_lib_prompt_yn "Replace existing .codex hooks in $proj?" n; then
       printf '%s\n' 'SKIP: existing project Codex hooks preserved'
@@ -115,23 +141,57 @@ if [[ -e "$dest_hooks_json" || -e "$dest_hooks_dir" ]] && ((replace == 0)); then
     replace=1
   else
     printf 'CONFLICT: existing project Codex hooks at %s (use --replace)\n' "$proj/.codex" >&2
+    rollback_mcp || true
     exit 1
   fi
 fi
 
 if ((dry_run)); then
+  if [[ -e "$dest_hooks_json" || -L "$dest_hooks_json" || -e "$dest_hooks_dir" || -L "$dest_hooks_dir" ]]; then
+    printf 'DRY-RUN: hook backups would use %s/<name>.<UTC timestamp>.bak\n' "$backup_dir"
+  fi
   printf 'DRY-RUN: would install project Codex hooks under %s/.codex\n' "$proj"
   exit 0
 fi
 
-if ((replace)) && [[ -e "$proj/.codex" ]]; then
-  install_lib_backup_file "$proj/.codex" "$backup_dir" "project-codex"
-  rm -rf "$proj/.codex"
+hooks_json_backup=""
+hooks_dir_backup=""
+if ((replace)); then
+  if [[ -e "$dest_hooks_json" || -L "$dest_hooks_json" ]]; then
+    install_lib_backup_file "$dest_hooks_json" "$backup_dir" "hooks.json" || { rollback_mcp || true; exit 1; }
+    hooks_json_backup="$INSTALL_BACKUP_PATH"
+  fi
+  if [[ -e "$dest_hooks_dir" || -L "$dest_hooks_dir" ]]; then
+    install_lib_backup_file "$dest_hooks_dir" "$backup_dir" "hooks" || { rollback_mcp || true; exit 1; }
+    hooks_dir_backup="$INSTALL_BACKUP_PATH"
+  fi
+  if ! rm -rf "$dest_hooks_json" "$dest_hooks_dir"; then
+    if [[ -n "$hooks_json_backup" ]]; then
+      install_lib_restore_backup "$hooks_json_backup" "$dest_hooks_json" || true
+    fi
+    if [[ -n "$hooks_dir_backup" ]]; then
+      install_lib_restore_backup "$hooks_dir_backup" "$dest_hooks_dir" || true
+    fi
+    printf 'ERROR: could not replace existing project Codex hooks\n' >&2
+    rollback_mcp || true
+    exit 1
+  fi
 fi
 
-mkdir -p "$dest_hooks_dir"
-cp "$templates/hooks.json" "$dest_hooks_json"
-cp -R "$templates/hooks/." "$dest_hooks_dir/"
+if ! mkdir -p "$dest_hooks_dir" \
+  || ! cp "$templates/hooks.json" "$dest_hooks_json" \
+  || ! cp -R "$templates/hooks/." "$dest_hooks_dir/"; then
+  rm -rf "$dest_hooks_json" "$dest_hooks_dir" || true
+  if [[ -n "$hooks_json_backup" ]]; then
+    install_lib_restore_backup "$hooks_json_backup" "$dest_hooks_json" || true
+  fi
+  if [[ -n "$hooks_dir_backup" ]]; then
+    install_lib_restore_backup "$hooks_dir_backup" "$dest_hooks_dir" || true
+  fi
+  printf 'ERROR: could not install project Codex hooks\n' >&2
+  rollback_mcp || true
+  exit 1
+fi
 chmod +x "$dest_hooks_dir"/*.sh 2>/dev/null || true
 printf 'INSTALLED: %s\n' "$dest_hooks_json"
 printf 'INSTALLED: %s\n' "$dest_hooks_dir"

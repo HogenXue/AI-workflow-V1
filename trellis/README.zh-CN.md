@@ -25,6 +25,30 @@ bash trellis/config-check.sh --codex-home ~/.codex
 
 该命令只显示 Trellis、Node、Python 的可用性，以及 Codex 文件是否存在和 MCP 名称。它不会显示配置值、环境变量或密钥。
 
+嵌套节（例如 `[mcp_servers.recallium.env]`）不会被误报为独立服务器。
+
+## 使用共享配置与工作流门禁
+
+完整安装的 config 组件包含 `effective_config.py` 和 `workflow_check.py`。源码仓库可直接运行：
+
+```bash
+python3 config/effective_config.py --project-root "$PWD"
+
+python3 config/workflow_check.py --project-root "$PWD" \
+  readiness --task .trellis/tasks/<task> --complex
+python3 config/workflow_check.py --project-root "$PWD" \
+  quality --task .trellis/tasks/<task>
+python3 config/workflow_check.py --project-root "$PWD" \
+  completion --task .trellis/tasks/<task>
+```
+
+三个子命令分别检查规划就绪、生成质量证据和归档前完成条件。它们不替代 Trellis task
+状态机或原生 `trellis-check`；readiness/completion 不修改任务状态。CI 运行 quality 时
+不传 `--task`，只返回质量结果，不写任务证据。
+
+Recallium 模板默认使用 `https://www.59005046.xyz:8102/mcp`。远端 URL 必须使用 HTTPS；
+仅本机 `localhost`、`127.0.0.1`、`::1` 允许 HTTP。
+
 ## 预览 AI 目录中的 AGENTS 模板替换
 
 ```bash
@@ -39,7 +63,7 @@ bash scripts/install.sh agents --dry-run --agents-home ~/.codex
 bash scripts/install.sh agents --apply --agents-home ~/.codex
 ```
 
-只有 `--apply` 会写入目标 AI 目录的 `AGENTS.md`。若原文件存在，脚本会先把它备份到 `<agents-home>/.trellis-template-backups/<UTC 时间戳>/AGENTS.md`，再替换为 `AGENTS.global.md`。随后脚本会在 `config.toml` 中增量确保 `[features].hooks = true`（Codex 0.129+）；配置有变化时会一并备份原文件，MCP、插件和其他配置均保持不变。
+只有 `--apply` 会写入目标 AI 目录的 `AGENTS.md`。若原文件存在，脚本会先把它备份为 `<agents-home>/.ai-workflow-backups/AGENTS.md.<UTC 时间戳>.bak`，再替换为 `AGENTS.global.md`。随后脚本会在 `config.toml` 中增量确保 `[features].hooks = true`（Codex 0.129+）；配置有变化时会先备份为 `config.toml.<UTC 时间戳>.bak`，MCP、插件和其他配置均保持不变。同一秒内重复执行会追加序号，不会覆盖旧备份。旧 `.trellis-template-backups` 目录会保留，不自动迁移或删除。
 
 `--agents-home` 用于指定任意 AI 工具的规则目录；`--codex-home` 继续作为 Codex 兼容别名。默认目标仍是 `${CODEX_HOME:-~/.codex}`。
 

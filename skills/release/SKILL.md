@@ -5,7 +5,13 @@ description: "Plan, verify, execute, and report releases with versioning, change
 
 # Release
 
-读取 skill 目录上两级的 `config/defaults.yaml`（Codex 安装后为 `~/.agents/config/defaults.yaml`；源码仓库则为包根 `config/defaults.yaml`），再读取目标仓库根目录的 `hogen-codex.yaml`（若存在）；项目值覆盖默认值。默认配置不存在时使用正文中的保守发布门禁继续执行，不把可选 config 组件缺失当成发布授权。发布范围、版本、目标环境、批准状态或回滚路径不明确时，先报告限制，不能将准备工作表述为已发布。
+如果 skill 目录上两级存在 `config/effective_config.py`，优先运行该 helper，并通过
+`--project-root <目标仓库>` 获取已经校验和合并的配置。helper 不存在时，再读取 skill
+目录上两级的 `config/defaults.yaml`（Codex 安装后为 `~/.agents/config/defaults.yaml`；
+源码仓库则为包根 `config/defaults.yaml`），并读取目标仓库根目录的 `hogen-codex.yaml`
+（若存在）；项目值覆盖默认值。默认配置不存在时使用正文中的保守发布门禁继续执行，不把
+可选 config 组件缺失当成发布授权。发布范围、版本、目标环境、批准状态或回滚路径不明确时，
+先报告限制，不能将准备工作表述为已发布。
 
 按[发布门禁](references/release-gates.md)确认范围、版本与变更说明，完成可执行的构建、测试和迁移检查，准备可操作的回滚，再执行已获授权的发布或灰度。发布后记录实际操作与结果，完成健康检查并列出风险、观察窗口和未执行事项。
 

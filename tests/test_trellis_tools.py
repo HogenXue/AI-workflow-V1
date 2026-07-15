@@ -1,3 +1,4 @@
+import re
 import subprocess
 import tempfile
 import unittest
@@ -62,11 +63,19 @@ class TrellisInstallTests(unittest.TestCase):
             "[features]\n"
             "hooks = true   # Codex 0.129+。旧版用 `codex_hooks = true`。\n",
         )
-        backups = list(self.backup_dir.glob("*/AGENTS.md"))
+        backups = list(self.backup_dir.glob("AGENTS.md.*.bak"))
         self.assertEqual(len(backups), 1)
+        self.assertRegex(
+            backups[0].name,
+            r"^AGENTS\.md\.\d{8}T\d{6}Z(?:-\d+)?\.bak$",
+        )
         self.assertEqual(backups[0].read_text(encoding="utf-8"), "existing global instructions\n")
-        config_backups = list(self.backup_dir.glob("*/config.toml"))
+        config_backups = list(self.backup_dir.glob("config.toml.*.bak"))
         self.assertEqual(len(config_backups), 1)
+        self.assertRegex(
+            config_backups[0].name,
+            r"^config\.toml\.\d{8}T\d{6}Z(?:-\d+)?\.bak$",
+        )
         self.assertEqual(
             config_backups[0].read_text(encoding="utf-8"),
             '[mcp_servers.example]\napi_key = "sentinel-secret"\n',
@@ -196,7 +205,9 @@ class TrellisInstallTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("AI 工作原则（Trellis 兼容全局模板）", target_agents.read_text(encoding="utf-8"))
-        backups = list((agents_home / ".trellis-template-backups").glob("*/AGENTS.md"))
+        backups = list(
+            (agents_home / ".ai-workflow-backups").glob("AGENTS.md.*.bak")
+        )
         self.assertEqual(len(backups), 1)
         self.assertEqual(backups[0].read_text(encoding="utf-8"), "existing instructions\n")
 
@@ -232,7 +243,26 @@ class TrellisInstallTests(unittest.TestCase):
             "[features]\n"
             "hooks = true   # Codex 0.129+。旧版用 `codex_hooks = true`。\n",
         )
-        self.assertEqual(len(list(self.backup_dir.glob("*/AGENTS.md"))), 1)
+        self.assertEqual(len(list(self.backup_dir.glob("AGENTS.md.*.bak"))), 1)
+
+    def test_repeated_apply_keeps_unique_timestamped_backups(self) -> None:
+        self.codex_home.mkdir()
+        target_agents = self.codex_home / "AGENTS.md"
+        target_agents.write_text("first version\n", encoding="utf-8")
+
+        first = self.run_install("--apply")
+        self.assertEqual(first.returncode, 0, first.stderr)
+
+        target_agents.write_text("second version\n", encoding="utf-8")
+        second = self.run_install("--apply")
+        self.assertEqual(second.returncode, 0, second.stderr)
+
+        backups = list(self.backup_dir.glob("AGENTS.md.*.bak"))
+        self.assertEqual(len(backups), 2)
+        self.assertEqual(
+            {path.read_text(encoding="utf-8") for path in backups},
+            {"first version\n", "second version\n"},
+        )
 
 
 class TrellisConfigCheckTests(unittest.TestCase):
@@ -241,7 +271,8 @@ class TrellisConfigCheckTests(unittest.TestCase):
             codex_home = Path(temporary_directory) / "codex-home"
             codex_home.mkdir()
             (codex_home / "config.toml").write_text(
-                '[mcp_servers.example]\napi_key = "sentinel-secret"\n',
+                '[mcp_servers.example]\napi_key = "sentinel-secret"\n'
+                '[mcp_servers.example.env]\nTOKEN = "nested-secret"\n',
                 encoding="utf-8",
             )
 
@@ -260,4 +291,6 @@ class TrellisConfigCheckTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("MCP servers: example", result.stdout)
+        self.assertNotIn("example.env", result.stdout)
         self.assertNotIn("sentinel-secret", result.stdout)
+        self.assertNotIn("nested-secret", result.stdout)

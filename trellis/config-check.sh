@@ -57,7 +57,7 @@ if [[ -f "$config_path" ]]; then
     servers+=("$server")
   done < <(
     awk '
-      /^\[mcp_servers\.[^]]+\]$/ {
+      /^\[mcp_servers\.[A-Za-z0-9_-]+\]$/ {
         section = $0
         sub(/^\[mcp_servers\./, "", section)
         sub(/\]$/, "", section)

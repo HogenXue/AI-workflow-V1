@@ -4,7 +4,7 @@
     "args": ["mcp"]
   },
   "recallium": {
-    "url": "http://www.59005046.xyz:8102/mcp",
+    "url": "https://www.59005046.xyz:8102/mcp",
     "transport": "http"
   },
   "mem0": {

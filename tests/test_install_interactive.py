@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -37,6 +38,109 @@ class InteractiveInstallTests(unittest.TestCase):
             env=self.env(),
         )
 
+    def test_codex_merge_rejects_remote_http_before_mutating_target(self) -> None:
+        codex_home = self.home / ".codex"
+        codex_home.mkdir(parents=True)
+        config = codex_home / "config.toml"
+        original = "[features]\nmemories = true\n"
+        config.write_text(original, encoding="utf-8")
+
+        result = self.run_install(
+            "codex-merge",
+            "--mcp-overwrite",
+            "--mem0-url",
+            "http://memory.example.test/mcp",
+            "--skip-project",
+            "--codex-home",
+            str(codex_home),
+            "--backup-dir",
+            str(self.root / "backup"),
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("insecure remote HTTP", result.stderr)
+        self.assertEqual(config.read_text(encoding="utf-8"), original)
+
+    def test_cursor_merge_rejects_remote_http_before_mutating_target(self) -> None:
+        mcp_file = self.home / ".cursor" / "mcp.json"
+        mcp_file.parent.mkdir(parents=True)
+        original = '{"mcpServers":{"existing":{"command":"keep"}}}\n'
+        mcp_file.write_text(original, encoding="utf-8")
+
+        result = self.run_install(
+            "cursor-merge",
+            "--mcp-overwrite",
+            "--mem0-url",
+            "http://memory.example.test/mcp",
+            "--mcp-file",
+            str(mcp_file),
+            "--skip-project",
+            "--backup-dir",
+            str(self.root / "backup"),
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("insecure remote HTTP", result.stderr)
+        self.assertEqual(mcp_file.read_text(encoding="utf-8"), original)
+
+    def test_mcp_merge_allows_loopback_http_for_local_development(self) -> None:
+        codex_home = self.home / ".codex"
+        codex_home.mkdir(parents=True)
+        (codex_home / "config.toml").write_text("", encoding="utf-8")
+
+        for url in (
+            "http://localhost:8102/mcp",
+            "http://127.0.0.1:8102/mcp",
+            "http://[::1]:8102/mcp",
+        ):
+            with self.subTest(url=url):
+                result = self.run_install(
+                    "codex-merge",
+                    "--mcp-overwrite",
+                    "--mem0-url",
+                    url,
+                    "--skip-project",
+                    "--codex-home",
+                    str(codex_home),
+                    "--backup-dir",
+                    str(self.root / "backup"),
+                )
+                self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+
+    def test_codex_merge_validates_single_quoted_toml_url(self) -> None:
+        fragments = self.root / "fragments"
+        fragments.mkdir()
+        (fragments / "recallium.toml").write_text(
+            "[mcp_servers.recallium]\nurl = 'http://memory.example.test/mcp'\n",
+            encoding="utf-8",
+        )
+        target = self.root / "config.toml"
+        original = "[features]\nmemories = true\n"
+        target.write_text(original, encoding="utf-8")
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts" / "lib" / "merge_host_mcp.py"),
+                "--host",
+                "codex",
+                "--target",
+                str(target),
+                "--fragments",
+                str(fragments),
+                "--policy",
+                "overwrite",
+            ],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("insecure remote HTTP", result.stderr)
+        self.assertEqual(target.read_text(encoding="utf-8"), original)
+
     def test_no_args_non_tty_exits_2(self) -> None:
         result = subprocess.run(
             ["bash", str(ROOT / "scripts" / "install.sh")],
@@ -60,7 +164,7 @@ class InteractiveInstallTests(unittest.TestCase):
             "codex-merge",
             "--mcp-overwrite",
             "--mem0-url",
-            "http://example.test/mem0",
+            "https://example.test/mem0",
             "--skip-project",
             "--codex-home",
             str(codex_home),
@@ -74,6 +178,32 @@ class InteractiveInstallTests(unittest.TestCase):
         self.assertFalse((self.project / ".codex").exists())
         self.assertIn("skipping project-scoped", result.stdout + result.stderr)
 
+    def test_codex_merge_backs_up_dangling_config_symlink(self) -> None:
+        codex_home = self.home / ".codex"
+        codex_home.mkdir(parents=True)
+        config = codex_home / "config.toml"
+        missing_target = self.root / "missing-config.toml"
+        config.symlink_to(missing_target)
+        backup_dir = self.root / "backup"
+
+        result = self.run_install(
+            "codex-merge",
+            "--mcp-overwrite",
+            "--skip-project",
+            "--codex-home",
+            str(codex_home),
+            "--backup-dir",
+            str(backup_dir),
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertTrue(config.is_file())
+        self.assertFalse(config.is_symlink())
+        backups = list(backup_dir.glob("config.toml.*.bak"))
+        self.assertEqual(len(backups), 1)
+        self.assertTrue(backups[0].is_symlink())
+        self.assertEqual(os.readlink(backups[0]), str(missing_target))
+
     def test_codex_merge_skips_when_not_in_git_repo(self) -> None:
         orphan = self.root / "orphan"
         orphan.mkdir()
@@ -85,7 +215,7 @@ class InteractiveInstallTests(unittest.TestCase):
             "codex-merge",
             "--mcp-overwrite",
             "--mem0-url",
-            "http://example.test/mem0",
+            "https://example.test/mem0",
             "--codex-home",
             str(codex_home),
             "--backup-dir",
@@ -110,7 +240,7 @@ class InteractiveInstallTests(unittest.TestCase):
             "codex-merge",
             "--mcp-overwrite",
             "--mem0-url",
-            "http://example.test/mem0",
+            "https://example.test/mem0",
             "--codex-home",
             str(codex_home),
             "--backup-dir",
@@ -133,7 +263,7 @@ class InteractiveInstallTests(unittest.TestCase):
             "codex-merge",
             "--mcp-keep",
             "--mem0-url",
-            "http://example.test/mem0",
+            "https://example.test/mem0",
             "--project-root",
             str(self.project),
             "--codex-home",
@@ -157,7 +287,7 @@ class InteractiveInstallTests(unittest.TestCase):
             "cursor-merge",
             "--mcp-keep",
             "--mem0-url",
-            "http://example.test/mem0",
+            "https://example.test/mem0",
             "--mcp-file",
             str(mcp_file),
             "--project-root",
@@ -188,7 +318,8 @@ class InteractiveInstallTests(unittest.TestCase):
     def test_cursor_merge_conflict_without_replace(self) -> None:
         mcp_file = self.home / ".cursor" / "mcp.json"
         mcp_file.parent.mkdir(parents=True)
-        mcp_file.write_text('{"mcpServers":{}}', encoding="utf-8")
+        original_mcp = '{"mcpServers":{}}'
+        mcp_file.write_text(original_mcp, encoding="utf-8")
         cursor_dir = self.project / ".cursor"
         cursor_dir.mkdir()
         (cursor_dir / "hooks.json").write_text("{}", encoding="utf-8")
@@ -197,7 +328,7 @@ class InteractiveInstallTests(unittest.TestCase):
             "cursor-merge",
             "--mcp-keep",
             "--mem0-url",
-            "http://example.test/mem0",
+            "https://example.test/mem0",
             "--mcp-file",
             str(mcp_file),
             "--project-root",
@@ -207,6 +338,74 @@ class InteractiveInstallTests(unittest.TestCase):
         )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("CONFLICT", result.stderr)
+        self.assertEqual(mcp_file.read_text(encoding="utf-8"), original_mcp)
+
+    def test_codex_merge_project_conflict_restores_mcp(self) -> None:
+        codex_home = self.home / ".codex"
+        codex_home.mkdir(parents=True)
+        config = codex_home / "config.toml"
+        original_config = '[mcp_servers.other]\ncommand = "keep"\n'
+        config.write_text(original_config, encoding="utf-8")
+        project_codex = self.project / ".codex"
+        project_codex.mkdir()
+        (project_codex / "hooks.json").write_text("existing\n", encoding="utf-8")
+
+        result = self.run_install(
+            "codex-merge",
+            "--mcp-overwrite",
+            "--codex-home",
+            str(codex_home),
+            "--project-root",
+            str(self.project),
+            "--backup-dir",
+            str(self.root / "backup"),
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("CONFLICT", result.stderr)
+        self.assertEqual(config.read_text(encoding="utf-8"), original_config)
+
+    def test_cursor_merge_backs_up_dangling_mcp_symlink(self) -> None:
+        cursor_home = self.home / ".cursor"
+        cursor_home.mkdir(parents=True)
+        mcp_file = cursor_home / "mcp.json"
+        missing_target = self.root / "missing-mcp.json"
+        mcp_file.symlink_to(missing_target)
+        backup_dir = self.root / "backup"
+
+        result = self.run_install(
+            "cursor-merge",
+            "--mcp-overwrite",
+            "--mcp-file",
+            str(mcp_file),
+            "--skip-project",
+            "--backup-dir",
+            str(backup_dir),
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertTrue(mcp_file.is_file())
+        self.assertFalse(mcp_file.is_symlink())
+        backups = list(backup_dir.glob("mcp.json.*.bak"))
+        self.assertEqual(len(backups), 1)
+        self.assertTrue(backups[0].is_symlink())
+        self.assertEqual(os.readlink(backups[0]), str(missing_target))
+
+    def test_cursor_merge_rejects_packaged_mcp_fragment_as_target(self) -> None:
+        fragment = ROOT / "trellis" / "cursor" / "mcp" / "servers.json"
+        before = fragment.read_text(encoding="utf-8")
+
+        result = self.run_install(
+            "cursor-merge",
+            "--dry-run",
+            "--mcp-file",
+            str(fragment),
+            "--skip-project",
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("package MCP fragment", result.stderr)
+        self.assertEqual(fragment.read_text(encoding="utf-8"), before)
 
     def test_existing_skills_cli_still_works(self) -> None:
         target = self.root / "skills"
@@ -222,27 +421,86 @@ class InteractiveInstallTests(unittest.TestCase):
             '[mcp_servers.other]\ncommand = "keep-me"\n',
             encoding="utf-8",
         )
+        project_codex = self.project / ".codex"
+        old_hooks = project_codex / "hooks"
+        old_hooks.mkdir(parents=True)
+        (project_codex / "hooks.json").write_text("old hooks\n", encoding="utf-8")
+        (old_hooks / "obsolete.sh").write_text("obsolete\n", encoding="utf-8")
+        unrelated = project_codex / "project-owned.txt"
+        unrelated.write_text("keep\n", encoding="utf-8")
+        backup_dir = self.root / "backup"
 
         result = self.run_install(
             "codex-merge",
             "--apply",
             "--mcp-overwrite",
             "--mem0-url",
-            "http://example.test/mem0",
+            "https://example.test/mem0",
             "--project-root",
             str(self.project),
             "--codex-home",
             str(codex_home),
             "--backup-dir",
-            str(self.root / "backup"),
+            str(backup_dir),
             "--replace",
         )
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         text = (codex_home / "config.toml").read_text(encoding="utf-8")
-        self.assertIn("http://www.59005046.xyz:8102/mcp", text)
+        self.assertIn("https://www.59005046.xyz:8102/mcp", text)
         self.assertNotIn("http://old.example/mcp", text)
         self.assertIn("[mcp_servers.other]", text)
         self.assertFalse((codex_home / "hooks.json").exists())
+        self.assertEqual(unrelated.read_text(encoding="utf-8"), "keep\n")
+        self.assertFalse((old_hooks / "obsolete.sh").exists())
+        self.assertEqual(len(list(backup_dir.glob("config.toml.*.bak"))), 1)
+        self.assertEqual(len(list(backup_dir.glob("hooks.json.*.bak"))), 1)
+        self.assertEqual(
+            len([path for path in backup_dir.glob("hooks.*.bak") if path.is_dir()]),
+            1,
+        )
+
+    def test_cursor_replace_removes_obsolete_hooks_and_preserves_unrelated_files(self) -> None:
+        mcp_file = self.home / ".cursor" / "mcp.json"
+        mcp_file.parent.mkdir(parents=True)
+        mcp_file.write_text('{"mcpServers":{}}', encoding="utf-8")
+        cursor_dir = self.project / ".cursor"
+        hooks_dir = cursor_dir / "hooks"
+        hooks_dir.mkdir(parents=True)
+        (cursor_dir / "hooks.json").write_text("old hooks\n", encoding="utf-8")
+        rules = cursor_dir / "rules" / "ai-workflow-global.mdc"
+        rules.parent.mkdir(parents=True)
+        rules.write_text("old rules\n", encoding="utf-8")
+        (hooks_dir / "obsolete.py").write_text("obsolete\n", encoding="utf-8")
+        unrelated = cursor_dir / "project-owned.txt"
+        unrelated.write_text("keep\n", encoding="utf-8")
+        backup_dir = self.root / "backup"
+
+        result = self.run_install(
+            "cursor-merge",
+            "--apply",
+            "--mcp-overwrite",
+            "--mcp-file",
+            str(mcp_file),
+            "--project-root",
+            str(self.project),
+            "--backup-dir",
+            str(backup_dir),
+            "--replace",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertFalse((hooks_dir / "obsolete.py").exists())
+        self.assertEqual(unrelated.read_text(encoding="utf-8"), "keep\n")
+        self.assertEqual(len(list(backup_dir.glob("mcp.json.*.bak"))), 1)
+        self.assertEqual(len(list(backup_dir.glob("hooks.json.*.bak"))), 1)
+        self.assertEqual(
+            len([path for path in backup_dir.glob("hooks.*.bak") if path.is_dir()]),
+            1,
+        )
+        self.assertEqual(
+            len(list(backup_dir.glob("ai-workflow-global.mdc.*.bak"))),
+            1,
+        )
 
     def test_cursor_profile_does_not_write_codex_home(self) -> None:
         sentinel = self.home / ".codex" / "sentinel"
@@ -257,7 +515,7 @@ class InteractiveInstallTests(unittest.TestCase):
             "--apply",
             "--mcp-overwrite",
             "--mem0-url",
-            "http://example.test/mem0",
+            "https://example.test/mem0",
             "--mcp-file",
             str(mcp_file),
             "--project-root",
@@ -282,7 +540,7 @@ class InteractiveInstallTests(unittest.TestCase):
             "cursor-merge",
             "--mcp-overwrite",
             "--mem0-url",
-            "http://example.test/mem0",
+            "https://example.test/mem0",
             "--mcp-file",
             str(mcp_file),
             "--project-root",

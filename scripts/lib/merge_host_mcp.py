@@ -8,9 +8,42 @@ import json
 import re
 import sys
 from pathlib import Path
+from urllib.parse import urlsplit
 
 
 SERVERS = ("gitnexus", "recallium", "mem0")
+LOOPBACK_HOSTS = frozenset(("localhost", "127.0.0.1", "::1"))
+TOML_URL = re.compile(r"^\s*url\s*=\s*([\"'])(.*?)\1\s*(?:#.*)?$", re.M)
+
+
+class McpUrlError(ValueError):
+    """Raised when an MCP URL would use an unsafe transport."""
+
+
+def validate_mcp_url(url: object, location: str) -> None:
+    """Allow HTTPS everywhere and plain HTTP only for loopback development."""
+
+    if not isinstance(url, str) or not url.strip():
+        raise McpUrlError(f"{location} must use a non-empty URL")
+    try:
+        parsed = urlsplit(url)
+        hostname = parsed.hostname
+    except ValueError as error:
+        raise McpUrlError(f"invalid MCP URL for {location}: {url}") from error
+
+    if parsed.scheme == "https" and hostname:
+        return
+    if parsed.scheme == "http" and hostname in LOOPBACK_HOSTS:
+        return
+    if parsed.scheme == "http":
+        raise McpUrlError(
+            f"insecure remote HTTP URL for {location}: {url}; "
+            "use HTTPS or a loopback host"
+        )
+    raise McpUrlError(
+        f"unsupported MCP URL for {location}: {url}; "
+        "use HTTPS or loopback HTTP"
+    )
 
 
 def read_text(path: Path) -> str:
@@ -45,6 +78,8 @@ def load_fragment(path: Path, mem0_url: str | None) -> str | None:
             print("SKIP: mcp_servers.mem0 (pass --mem0-url or answer TTY prompt)")
             return None
         text = text.replace("__MEM0_URL__", mem0_url)
+    for _, url in TOML_URL.findall(text):
+        validate_mcp_url(url, f"mcp_servers.{path.stem}")
     return text.rstrip() + "\n"
 
 
@@ -117,6 +152,8 @@ def merge_cursor_json(
                     print("SKIP: mcpServers.mem0 (pass --mem0-url or answer TTY prompt)")
                     continue
                 entry["url"] = mem0_url
+        if "url" in entry:
+            validate_mcp_url(entry["url"], f"mcpServers.{name}")
         exists = name in data["mcpServers"]
         if exists and policy == "keep":
             print(f"KEEP: mcpServers.{name}")
@@ -149,9 +186,13 @@ def main() -> int:
     args = parser.parse_args()
     target = Path(args.target)
     fragments = Path(args.fragments)
-    if args.host == "codex":
-        return merge_codex_toml(target, fragments, args.policy, args.mem0_url, args.dry_run)
-    return merge_cursor_json(target, fragments, args.policy, args.mem0_url, args.dry_run)
+    try:
+        if args.host == "codex":
+            return merge_codex_toml(target, fragments, args.policy, args.mem0_url, args.dry_run)
+        return merge_cursor_json(target, fragments, args.policy, args.mem0_url, args.dry_run)
+    except McpUrlError as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

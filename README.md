@@ -10,14 +10,14 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 | ------------- | -------------------------------------------------------------------------- |
 | **Skills**    | `memory`、`gitnexus`、`release`、`karpathy-guidelines-zh`、`grill-me`、`tdd` |
 | **AGENTS 模板** | [trellis/AGENTS.global.md](trellis/AGENTS.global.md)：跨项目通用规则与 Skill 路由 |
-| **config/**   | 默认工作流配置；项目可用 `hogen-codex.yaml` 覆盖                                         |
+| **config/**   | 默认配置、有效配置运行时和平台无关工作流门禁；项目可用 `hogen-codex.yaml` 覆盖                         |
 
 Trellis 是项目工作流；6 个 Skill 按阶段或能力增强它。Codex 用 Grill Me 实现 Phase 1.1、用 TDD 实现行为代码；质量门由原生 `trellis-check` 负责。
 
 ## 前置条件
 
 - macOS / Linux，Bash
-- 可选：`python3 >= 3.10` 与 PyYAML（仅校验脚本需要）
+- `python3 >= 3.10` 与 PyYAML（配置合并、工作流门禁和包校验需要）
 
 ```bash
 python3 -m pip install -r requirements-dev.txt
@@ -33,6 +33,12 @@ cd AI-workflow-V1
 ## 安装
 
 安装统一入口：`scripts/install.sh <skills|agents|config|codex-merge|cursor-merge>`。TTY 下无参数运行进入交互向导（可多选 Codex/Cursor）；非 TTY 无参数则打印用法并以 exit 2 退出。项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择）；**不会**静默使用当前 Git 根。非交互缺省 `--project-root` 时跳过项目级写入并提示（全局 skills/MCP/config/agents 仍可装）。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
+
+所有组件在覆盖、删除或迁移现有目标前都会先备份。备份直接写入所选备份目录，命名为 `<原名称>.<UTC 时间戳>.bak`；同一秒内重复执行会追加序号，绝不会覆盖已有备份。目录同样使用 `.bak` 后缀并保留完整内容。备份失败时当前组件立即停止，原目标保持不变。自定义 `--backup-dir` 不能等于正被备份的目标或位于其内部。
+
+默认备份根统一为宿主目录下的 `.ai-workflow-backups`：Skill/config 使用其配对根（如 `~/.agents/.ai-workflow-backups`、`~/.cursor/.ai-workflow-backups`），Codex AGENTS/MCP 使用 `~/.codex/.ai-workflow-backups`。旧版 `.codex-ultimate-v3-backups` 和 `.trellis-template-backups` 不会自动删除或迁移。
+
+完整安装按组件顺序执行：每个组件保证“先备份、失败时局部回滚”，但不是跨组件的全局事务；后续组件失败时，已成功的前序组件不会自动撤销。不要并发运行多个安装器。历史 `.bak` 由使用者按需归档或删除，安装器不会自动清理。
 
 | 组件           | 写入范围                         | 默认行为            |
 | ------------ | ---------------------------- | --------------- |
@@ -132,7 +138,9 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
     └── karpathy-guidelines-zh/
 ```
 
-Skill 内读取默认配置：`../../config/defaults.yaml`（与源码仓库 `CodexTamplate/config/` 路径一致）。
+Skill 优先通过 `../../config/effective_config.py` 读取已校验并合并的有效配置；helper 不存在时
+才按各 Skill 的保守降级规则读取 `../../config/defaults.yaml`。源码仓库对应路径为
+`AI-workflow-V1/config/`。
 
 ## 更新与重装
 
@@ -163,11 +171,41 @@ verification:
   require_spec_for_complex_change: true
 ```
 
-校验合并结果：
+输出合并结果或读取单个配置键：
 
 ```bash
-python3 scripts/validate-all-skills.py --project-root /path/to/your-project
+python3 config/effective_config.py --project-root /path/to/your/project
+python3 config/effective_config.py --project-root /path/to/your/project \
+  --get change_policy.require_impact_analysis_before_symbol_edit
 ```
+
+`config/consumers.yaml` 登记每个公开配置键的实际消费者；包校验会拒绝未登记或未知的键。
+
+## 可执行工作流门禁
+
+`config/workflow_check.py` 是 Codex、Cursor、Claude 共用的确定性入口，不创建第二套 task
+或状态机，也不替代原生 `trellis-check`：
+
+```bash
+# 复杂任务规划确认后、task.py start 前
+python3 config/workflow_check.py --project-root "$PWD" \
+  readiness --task .trellis/tasks/<task> --complex
+
+# 原生 trellis-check 和项目测试完成后，写入当前任务质量证据
+python3 config/workflow_check.py --project-root "$PWD" \
+  quality --task .trellis/tasks/<task>
+
+# 归档前检查验收项和证据是否仍与当前代码一致
+python3 config/workflow_check.py --project-root "$PWD" \
+  completion --task .trellis/tasks/<task>
+```
+
+CI 调用 `quality` 时不传 `--task`，因此不会依赖或写入活动任务目录。带任务运行产生的
+`verification.json` 会绑定 Git HEAD 和工作区指纹；之后任何已跟踪或未忽略的未跟踪文件
+变化都会让 completion 失败，要求重新验证。
+
+内置 quality 配置只对本 AI-workflow 包自动启用。安装到其他项目后，必须按实际技术栈
+重复传入 `--check '<名称>=<命令>'`；没有显式项目检查时命令会失败，不会生成质量证据。
 
 ## 校验 Skill 包
 
@@ -187,10 +225,21 @@ python3 scripts/validate-all-skills.py
 
 ## MCP 与外部依赖
 
-本包**不包含** MCP 服务器配置，需在各 IDE 中单独设置：
+本包包含 Codex TOML 与 Cursor JSON 的 MCP 合并模板；安装器按宿主格式增量合并，不会
+把一套格式复制到另一宿主。Recallium 默认地址为
+`https://www.59005046.xyz:8102/mcp`。
+
+安全策略：远端 MCP URL 必须使用 HTTPS；只有 `localhost`、`127.0.0.1`、`::1` 允许
+明文 HTTP，用于本机开发。不安全 URL 会在目标文件修改前失败。
 
 - **memory**：Recallium / Mem0（见 `skills/memory/references/memory-backends.md`）
 - **gitnexus**：GitNexus MCP；EGM 等项目需先索引
 - **release**：按 Skill 说明使用 CLI 或 Markdown 模板
 
 Skill 不可用时须明确说明限制，不得虚报已执行工具结果。
+
+## 变更与第三方归属
+
+- 未发布变更见 [CHANGELOG.md](CHANGELOG.md)。
+- Karpathy 衍生材料的来源与许可证声明见
+  [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。该说明不为本仓库其他内容指定许可证。

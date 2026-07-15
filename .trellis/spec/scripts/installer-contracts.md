@@ -256,3 +256,66 @@ fi
 **Why**: Host MCP and project hooks must not be silently destroyed.
 
 **Related**: Backup before overwrite via `install_lib_backup_file`; MCP writes are atomic (`merge_host_mcp.py`).
+
+## Convention: Timestamped backup names
+
+**What**: Every existing file, directory, or symlink that an installer will overwrite, delete, or migrate is copied first to `<backup-dir>/<name>.<UTC timestamp>.bak`. A same-second collision appends a numeric suffix before `.bak`; an existing backup is never overwritten. Default roots use `.ai-workflow-backups` under the paired host home; legacy backup directories are preserved but receive no new backups.
+
+**Integrity contract**: The helper reserves each backup name with a lock directory, copies into a staging payload, and publishes with a same-filesystem rename. Parallel invocations cannot select the same backup path, and a partial copy is never exposed as a completed `.bak`.
+
+**Failure contract**: Backup or lock-reservation failure aborts the component before the original target is mutated. Rollback restores from the exact backup path returned by the shared helper without consuming the `.bak` artifact. A host merge that updates MCP and then fails during project-scoped work must restore the original MCP target (including a dangling symlink) or remove a newly created target.
+
+**Transaction boundary**: Each component is transactional within its own write scope, but a multi-component install is not a global transaction. A later component failure does not undo earlier successful components. Multiple installers must not run concurrently; backup-name publication is concurrency-safe, but target mutation is intentionally not serialized. Historical backups are retained until the user removes them.
+
+**Host scope**:
+
+- Codex project replacement backs up and replaces only `.codex/hooks.json` and `.codex/hooks/`; unrelated `.codex` content is preserved.
+- Cursor project replacement backs up rules and hooks, removes the old managed hooks directory, then installs the template so deleted hooks cannot remain active; unrelated `.cursor` content is preserved.
+- Installer targets must not overlap packaged source directories, and Cursor's MCP target must not be the packaged MCP fragment.
+- A backup directory must not be the target itself or a descendant of the target being backed up.
+
+**Tests required**: Assert the filename pattern, preserved backup contents, sequential and parallel collision uniqueness, backup-failure behavior, dangling-symlink handling, MCP rollback after project failure, source/target separation, nested-backup rejection, and unrelated host-directory sentinels.
+
+---
+
+## Convention: MCP URL transport safety
+
+**What**: URL-bearing MCP entries are validated in `scripts/lib/merge_host_mcp.py`
+before the merged host configuration is written. HTTPS is allowed for remote
+servers. Plain HTTP is allowed only for `localhost`, `127.0.0.1`, and `::1`.
+
+**Why**: Project memory and other MCP payloads must not be sent to a remote
+server over a plaintext default. Keeping the policy in the shared merge helper
+prevents Codex TOML and Cursor JSON behavior from drifting.
+
+**Failure contract**: An invalid, unsupported, or remote HTTP URL prints a
+stable `ERROR:` diagnostic and returns non-zero before target mutation. The
+calling shell installer retains its existing timestamped backup and rollback
+contract. Entries preserved by an explicit `keep` policy are not rewritten.
+
+**Tests required**: Cover Codex and Cursor rejection without target mutation,
+the three loopback hosts, the packaged Recallium HTTPS default, and valid remote
+HTTPS input.
+
+---
+
+## Convention: Shared configuration and workflow checks
+
+**What**: `config/effective_config.py` owns defaults/project merge and schema
+validation. `config/workflow_check.py` provides platform-neutral `readiness`,
+`quality`, and `completion` commands. The config installer copies these runtime
+files together with `defaults.yaml`.
+
+**State boundary**: Workflow checks never replace or mutate the Trellis task
+state machine. Readiness and completion are read-only. Quality writes
+`verification.json` only when a task is explicitly supplied; CI omits the task
+and writes no evidence.
+
+**Freshness contract**: Task quality evidence binds Git HEAD and a deterministic
+worktree fingerprint. Completion fails after tracked or unignored untracked
+files change.
+
+**Tests required**: Validate configuration consumer coverage, missing runtime
+dependencies, placeholder planning artifacts, complex-task requirements,
+curated context, unchecked acceptance criteria, fresh/stale evidence, unchanged
+task status, and a temporary planning-to-completion lifecycle.
