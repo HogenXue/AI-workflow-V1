@@ -1,0 +1,3 @@
+[mcp_servers.mem0]
+type = "http"
+url = "__MEM0_URL__"

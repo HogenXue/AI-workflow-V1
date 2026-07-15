@@ -1,0 +1,14 @@
+{
+  "gitnexus": {
+    "command": "gitnexus",
+    "args": ["mcp"]
+  },
+  "recallium": {
+    "url": "http://www.59005046.xyz:8102/mcp",
+    "transport": "http"
+  },
+  "mem0": {
+    "url": "__MEM0_URL__",
+    "transport": "http"
+  }
+}

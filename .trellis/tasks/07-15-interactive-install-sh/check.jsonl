@@ -1,0 +1,4 @@
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "Verify hook placement and cross-platform assumptions"}
+{"file": ".trellis/tasks/07-15-interactive-install-sh/research/codex-install-surface.md", "reason": "Verify MCP/hooks install against researched surface"}
+{"file": "skills/memory/references/memory-backends.md", "reason": "Check MCP merge matches memory skill expectations"}
+{"file": ".trellis/tasks/07-15-interactive-install-sh/research/cursor-codex-mapping.md", "reason": "Reject directory copy anti-patterns in review"}

@@ -32,13 +32,15 @@ cd AI-workflow-V1
 
 ## 安装
 
-安装统一入口：`scripts/install.sh <skills|agents|config>`。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
+安装统一入口：`scripts/install.sh <skills|agents|config|codex-merge|cursor-merge>`。TTY 下无参数运行进入交互向导（可多选 Codex/Cursor）；非 TTY 无参数则打印用法并以 exit 2 退出。项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择）；**不会**静默使用当前 Git 根。非交互缺省 `--project-root` 时跳过项目级写入并提示（全局 skills/MCP/config/agents 仍可装）。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
 
-| 组件       | 写入范围                      | 默认行为            |
-| -------- | ------------------------- | --------------- |
-| `skills` | manifest 中的 Skill 目录      | dry-run         |
-| `agents` | `<agents-home>/AGENTS.md` | dry-run；已有文件先备份 |
-| `config` | 指定的配置目录                   | dry-run         |
+| 组件           | 写入范围                         | 默认行为            |
+| ------------ | ---------------------------- | --------------- |
+| `skills`     | manifest 中的 Skill 目录         | dry-run         |
+| `agents`     | `<agents-home>/AGENTS.md`    | dry-run；已有文件先备份 |
+| `config`     | 指定的配置目录                      | dry-run         |
+| `codex-merge` | Codex MCP + 可选项目 `.codex/hooks` | 需显式 project-root 才写项目级 |
+| `cursor-merge` | Cursor MCP + 可选项目 `.cursor` hooks/rules | 需显式 project-root 才写项目级 |
 
 `skills` 与 `config` 默认 **copy**（独立副本，不依赖源码目录）；本地开发可用 **link** 实时同步。
 
@@ -106,11 +108,13 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
 
 ### 脚本参数
 
-| 参数       | 说明                                                                                       |
-| -------- | ---------------------------------------------------------------------------------------- |
-| `skills` | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--prune-legacy`、`--prune-other-root`、`--target PATH`、`--backup-dir PATH` |
-| `agents` | 支持 `--dry-run` / `--apply`、`--agents-home PATH`、`--backup-dir PATH`；`--codex-home` 是兼容别名 |
-| `config` | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--target PATH`、`--backup-dir PATH`       |
+| 参数             | 说明                                                                                       |
+| -------------- | ---------------------------------------------------------------------------------------- |
+| `skills`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--prune-legacy`、`--prune-other-root`、`--target PATH`、`--backup-dir PATH` |
+| `agents`       | 支持 `--dry-run` / `--apply`、`--agents-home PATH`、`--backup-dir PATH`；`--codex-home` 是兼容别名 |
+| `config`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--target PATH`、`--backup-dir PATH`       |
+| `codex-merge`  | `--mcp-keep` / `--mcp-overwrite`、`--mem0-url`、`--project-root` / `--skip-project`、`--replace` |
+| `cursor-merge` | 同上，另支持 `--mcp-file`；不修改项目根 `AGENTS.md` |
 
 ## 安装后目录结构
 

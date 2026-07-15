@@ -23,6 +23,7 @@ These guides help you **ask the right questions before coding**.
 |-------|---------|-------------|
 | [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md) | Identify patterns and reduce duplication | When you notice repeated patterns |
 | [Cross-Layer Thinking Guide](./cross-layer-thinking-guide.md) | Think through data flow across layers | Features spanning multiple layers |
+| [Installer Contracts](../scripts/installer-contracts.md) | Codex/Cursor install profiles + explicit project-root | Changing `scripts/install*` or host MCP/hooks/rules templates |
 
 ---
 
@@ -50,6 +51,14 @@ These guides help you **ask the right questions before coding**.
 - [ ] Multiple branches update the same derived state from `kind` / `action`
 
 → Read [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md)
+
+### When Changing Installer / Host Profiles
+
+- [ ] Project-scoped hooks/rules — require `--project-root`, TTY choice, or explicit skip (never silent git toplevel)
+- [ ] Codex vs Cursor — map by duty (skills↔config pair, MCP format, rules vs AGENTS); never directory-copy
+- [ ] Interactive `install.sh` — TTY multi-select only; non-TTY no-args must exit 2
+
+→ Read [Installer Contracts](../scripts/installer-contracts.md)
 
 ### When Verifying AI Cross-Review Results
 
