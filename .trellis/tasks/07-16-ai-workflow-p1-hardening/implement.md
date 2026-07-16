@@ -72,3 +72,11 @@
 - [x] 本任务属于跨模块高风险修改且已使用图谱分析，因此最终执行 GitNexus 变更范围复核；
       隐藏 `.trellis/` 行为继续以源码核验。
 - [x] 报告修改文件、验证命令和结果、已知限制、此前脏工作区文件，并明确未 commit/push。
+
+## 阶段七：用 Grill with Docs 替换 Grill Me（TDD）
+
+- [x] RESEARCH：核对 Matt Pocock 上游当前提交、完整 Skill 清单、组合依赖和许可证，记录与 Trellis 的冲突矩阵。
+- [x] RED：把路由测试改为要求 `grill-with-docs`、Trellis PRD 唯一性、`.trellis/spec/domain/` 术语边界和 `.trellis/spec/decisions/` 决策边界，确认旧实现失败。
+- [x] GREEN：用 Trellis 兼容 `grill-with-docs` 替换旧目录，引入适配后的 `diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts`，更新 manifest、安装器期望、AGENTS 模板、README 和归属说明。
+- [x] REFACTOR：删除所有活动配置中的 `grill-me` 路由，保留历史 Trellis task 记录不改写；运行 Skill Creator 校验与针对性测试。
+- [x] VERIFY：运行完整 Skill 校验、单元测试、Shell/Python 语法、`git diff --check`、workflow quality/completion 和 GitNexus 变更范围复核。

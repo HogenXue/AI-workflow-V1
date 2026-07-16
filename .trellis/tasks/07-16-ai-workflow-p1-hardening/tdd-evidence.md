@@ -145,7 +145,84 @@
 
 ## 最终质量证据
 
-- 共享质量入口（带当前任务）通过：六个 Skill 校验、104 个单元测试、10 个 Shell 文件、
-  15 个 Python 文件和 `git diff --check` 全部成功。
+- 共享质量入口（带当前任务）通过：9 个 Skill 校验、107 个单元测试、Shell/Python 语法和
+  `git diff --check` 全部成功。
 - 质量证据写入当前任务 `verification.json`；最终工件更新后再次运行以刷新工作区指纹。
 - completion 门禁在最终质量证据刷新后执行。
+
+## 循环五：Grill with Docs 与精选 Matt Skills
+
+### 行为
+
+- PRD 验收：用 `grill-with-docs` 替换 `grill-me`，但 Trellis 继续独占 PRD、Task、Design、
+  Plan、Check 与 Git 授权；领域术语和持久决定分别写入 `.trellis/spec/domain/`、
+  `.trellis/spec/decisions/`。
+- 精选引入 `diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts`，保留本包已有
+  `tdd`，不安装上游整套工作流。
+
+### RED
+
+- 把路由测试改为要求 `grill-with-docs`、Trellis PRD 唯一性、领域/决定规范分层；旧
+  `grill-me` 实现按预期失败。
+- 新增 legacy 迁移测试，要求 `--prune-legacy` 先生成 UTC 时间戳 `.bak` 再移除
+  `grill-me`；旧 manifest 按预期失败。
+- 新增 Skill 包测试，允许上游标准中的可选资源目录，同时仍强制 `SKILL.md` 与
+  `agents/openai.yaml`；旧校验器按预期失败。
+- 将上游 `CONTEXT.md`/`docs/adr/` 目标改为 Trellis 规范路径后，先更新边界测试并确认旧
+  路径实现失败。
+- 最终完成审计新增 Memory Skill Recallium URL 断言；旧参考文档仍含远端明文 HTTP，
+  针对性测试按预期失败。
+
+### GREEN / REFACTOR
+
+- 基于上游提交 `e9fcdf95b402d360f90f1db8d776d5dd450f9234` 选择并适配四个 Skill；冲突矩阵、
+  精选范围和 MIT 归属已记录。
+- manifest 只发布 9 个精选 Skill；安装器把 `grill-me` 作为显式 legacy 项处理，并复用
+  既有先备份后替换/删除契约。
+- Skill Creator `quick_validate.py`：4/4 通过；本包 `validate-all-skills.py`：9/9 通过；
+  单元测试：107/107 通过；Shell 语法、50 个 Python 文件解析和 `git diff --check` 通过。
+- 本机复制安装完成：9 个 Skill 已安装，`grill-me` 已移除；6 个被覆盖或删除的旧 Skill
+  均已验证存在 `20260716T082611Z.bak` 备份。
+- 最终完成审计发现 `~/.codex/AGENTS.md` 仍保留旧 `$grill-me` 路由；通过统一安装器更新后，
+  当前文件与 `trellis/AGENTS.global.md` 逐字一致，旧文件保存在
+  `~/.codex/.ai-workflow-backups/AGENTS.md.20260716T083116Z.bak`，`config.toml` 因 hooks
+  已启用而保持不变。
+- Memory 参考文档改为 HTTPS 并通过新增回归测试；重新安装 9 个 Skill 时每个原目录均先
+  写入 `20260716T083420Z` 或 `20260716T083421Z` 的 `.bak`。本机 Codex Recallium URL
+  只改动为 HTTPS，原配置备份为
+  `~/.codex/.ai-workflow-backups/config.toml.20260716T083426Z.bak`。
+
+### 交接
+
+- GitNexus `detect_changes(scope=all)` 为 LOW：52 个已索引变更符号、0 条受影响执行流；
+  隐藏 `.trellis/` 和新文件继续以源码、Skill Creator 校验和完整测试复核。
+- 勾选最终 VERIFY 后已重新刷新共享 quality 证据，completion 门禁通过。
+
+## 循环六：Codex hooks 改为用户级安装
+
+### 行为
+
+- 用户确认 Codex 支持全局 hooks，本包一键安装对 Codex 只安装用户级 hooks 和全局 MCP。
+- 项目路径不再是 Codex 安装默认输入；`--project-root`/`--skip-project` 仅兼容接受，不写项目 `.codex/`。
+- 覆盖用户级 hooks 时仍必须先生成 UTC 时间戳 `.bak` 备份，未给 `--replace` 时冲突退出并回滚 MCP。
+
+### RED
+
+- 修改 `tests/test_install_interactive.py`：要求 `codex-merge` 在 `--skip-project`、非 Git 目录、Git 根目录和显式 `--project-root` 场景下都写入 `${CODEX_HOME}/hooks.json` 与 `${CODEX_HOME}/hooks/session-start.sh`，且不创建项目 `.codex/`。
+- 新增/调整冲突测试：已有用户级 hooks 且未给 `--replace` 时失败，并恢复 `config.toml`。
+- 命令：`python3 -m unittest tests.test_install_interactive -v`。
+- 结果：6 个 Codex hooks 新契约测试按预期失败，旧实现仍跳过用户 hooks 或写项目 `.codex/`。
+
+### GREEN / REFACTOR
+
+- `scripts/install-codex-merge.sh` 改为始终安装用户级 hooks；`--project-root`/`--skip-project` 只打印兼容提示。
+- 生成的 `hooks.json` 使用 `bash <CODEX_HOME>/hooks/session-start.sh` 的稳定用户级路径；模板中的 `python3 .codex/hooks/session-start.sh` 修正为 `bash`。
+- `scripts/install.sh` 交互安装只在选择 Cursor 时询问项目路径；Codex 安装计划改为 user hooks + global MCP。
+- README 同步说明 Codex 不需要项目路径，Cursor 才需要项目级 `--project-root`。
+
+### 验证
+
+- `python3 -m unittest tests.test_install_interactive -v`：20/20 通过。
+- `python3 -m unittest tests.test_install tests.test_install_interactive -v`：42/42 通过。
+- `python3 -m unittest discover -s tests -v`：107/107 通过。
+- `git diff --check`：通过。

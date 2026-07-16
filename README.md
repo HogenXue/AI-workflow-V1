@@ -1,6 +1,6 @@
 # AI-workflow-V1
 
-可安装的 AI 协作 Skill 包：6 个独立 Skill、全局 AGENTS 模板，以及共享默认配置（`config/`）。
+可安装的 AI 协作 Skill 包：9 个独立 Skill、全局 AGENTS 模板，以及共享默认配置（`config/`）。
 
 GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
@@ -8,11 +8,11 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
 | 组件            | 说明                                                                         |
 | ------------- | -------------------------------------------------------------------------- |
-| **Skills**    | `memory`、`gitnexus`、`release`、`karpathy-guidelines-zh`、`grill-me`、`tdd` |
+| **Skills**    | `memory`、`gitnexus`、`release`、`karpathy-guidelines-zh`、`grill-with-docs`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` |
 | **AGENTS 模板** | [trellis/AGENTS.global.md](trellis/AGENTS.global.md)：跨项目通用规则与 Skill 路由 |
 | **config/**   | 默认配置、有效配置运行时和平台无关工作流门禁；项目可用 `hogen-codex.yaml` 覆盖                         |
 
-Trellis 是项目工作流；6 个 Skill 按阶段或能力增强它。Codex 用 Grill Me 实现 Phase 1.1、用 TDD 实现行为代码；质量门由原生 `trellis-check` 负责。
+Trellis 是项目唯一工作流；9 个 Skill 按阶段或能力增强它。Codex 用 Grill with Docs 实现 Phase 1.1，用 TDD 实现行为代码，并按需调用诊断、深模块设计和冲突解决能力；质量门由原生 `trellis-check` 负责。
 
 ## 前置条件
 
@@ -32,7 +32,7 @@ cd AI-workflow-V1
 
 ## 安装
 
-安装统一入口：`scripts/install.sh <skills|agents|config|codex-merge|cursor-merge>`。TTY 下无参数运行进入交互向导（可多选 Codex/Cursor）；非 TTY 无参数则打印用法并以 exit 2 退出。项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择）；**不会**静默使用当前 Git 根。非交互缺省 `--project-root` 时跳过项目级写入并提示（全局 skills/MCP/config/agents 仍可装）。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
+安装统一入口：`scripts/install.sh <skills|agents|config|codex-merge|cursor-merge>`。TTY 下无参数运行进入交互向导（可多选 Codex/Cursor）；非 TTY 无参数则打印用法并以 exit 2 退出。Codex hooks 与 MCP 安装到用户级 `~/.codex`；不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
 
 所有组件在覆盖、删除或迁移现有目标前都会先备份。备份直接写入所选备份目录，命名为 `<原名称>.<UTC 时间戳>.bak`；同一秒内重复执行会追加序号，绝不会覆盖已有备份。目录同样使用 `.bak` 后缀并保留完整内容。备份失败时当前组件立即停止，原目标保持不变。自定义 `--backup-dir` 不能等于正被备份的目标或位于其内部。
 
@@ -45,7 +45,7 @@ cd AI-workflow-V1
 | `skills`     | manifest 中的 Skill 目录         | dry-run         |
 | `agents`     | `<agents-home>/AGENTS.md`    | dry-run；已有文件先备份 |
 | `config`     | 指定的配置目录                      | dry-run         |
-| `codex-merge` | Codex MCP + 可选项目 `.codex/hooks` | 需显式 project-root 才写项目级 |
+| `codex-merge` | Codex 全局 MCP + 用户级 `hooks.json` / `hooks/` | 写入 `${CODEX_HOME:-~/.codex}` |
 | `cursor-merge` | Cursor MCP + 可选项目 `.cursor` hooks；rules `.mdc` 由 `AGENTS.global.md` 动态生成 | 需显式 project-root 才写项目级 |
 
 `skills` 与 `config` 默认 **copy**（独立副本，不依赖源码目录）；本地开发可用 **link** 实时同步。
@@ -76,7 +76,7 @@ bash scripts/install.sh skills --copy --replace --target ~/.codex/skills
 
 Codex 可能同时发现 `~/.agents/skills` 与 `~/.codex/skills`。同一组 Skill 只选择一个目录；本包对 Codex App 默认使用 `~/.agents/skills`，对应配置目录是 `~/.agents/config`。安装器发现另一目录存在同名 Skill 时会警告；只有显式 `--prune-other-root` 才会先备份再移走另一目录中的本包同名 Skill。
 
-旧版本安装的 OpenSpec 与 Review 不在当前 manifest 中，普通更新不会删除它们。先预览，再用显式 `--prune-legacy` 将它们移动到备份目录；若两处都曾安装，需要分别处理：
+旧版本安装的 OpenSpec、Review 与已被替换的 Grill Me 不在当前 manifest 中，普通更新不会删除它们。先预览，再用显式 `--prune-legacy` 将它们移动到时间戳 `.bak` 备份目录；若两处都曾安装，需要分别处理：
 
 ```bash
 bash scripts/install.sh skills --dry-run --prune-legacy --target ~/.agents/skills
@@ -119,7 +119,7 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
 | `skills`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--prune-legacy`、`--prune-other-root`、`--target PATH`、`--backup-dir PATH` |
 | `agents`       | 支持 `--dry-run` / `--apply`、`--agents-home PATH`、`--backup-dir PATH`；`--codex-home` 是兼容别名 |
 | `config`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--target PATH`、`--backup-dir PATH`       |
-| `codex-merge`  | `--mcp-keep` / `--mcp-overwrite`、`--mem0-url`、`--project-root` / `--skip-project`、`--replace` |
+| `codex-merge`  | `--mcp-keep` / `--mcp-overwrite`、`--mem0-url`、`--codex-home PATH`、`--replace`；兼容接受但忽略 `--project-root` / `--skip-project` |
 | `cursor-merge` | 同上，另支持 `--mcp-file`；不修改项目根 `AGENTS.md` |
 
 ## 安装后目录结构
@@ -133,8 +133,11 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
     ├── memory/
     ├── gitnexus/
     ├── release/
-    ├── grill-me/
+    ├── grill-with-docs/
     ├── tdd/
+    ├── diagnosing-bugs/
+    ├── codebase-design/
+    ├── resolving-merge-conflicts/
     └── karpathy-guidelines-zh/
 ```
 
@@ -219,7 +222,7 @@ python3 scripts/validate-all-skills.py
 
 本包提供一个可选的 Trellis 兼容迁移包，详情见 [trellis/README.zh-CN.md](trellis/README.zh-CN.md)。
 
-- 存在 `.trellis/` 的项目：Trellis 是唯一工作流。Codex 用 `grill-me` 实现 Phase 1.1，用 TDD 实现需要测试证明的行为变化，由原生 `trellis-check` 负责质量检查。GitNexus 仅在项目规则明确要求或高影响变更时做影响/范围检查；局部低风险提交使用标准 Git 检查与相关测试。
+- 存在 `.trellis/` 的项目：Trellis 是唯一工作流。Codex 用 `grill-with-docs` 实现 Phase 1.1；需求和验收只写当前 PRD，领域术语写入 `.trellis/spec/domain/`，持久且难以逆转的决定写入 `.trellis/spec/decisions/`。TDD 用于需要测试证明的行为变化；Diagnosing Bugs、Codebase Design、Resolving Merge Conflicts 只作为当前 task 内的能力，由原生 `trellis-check` 负责质量检查。GitNexus 仅在项目规则明确要求或高影响变更时做影响/范围检查；局部低风险提交使用标准 Git 检查与相关测试。
 - 不存在 `.trellis/` 的项目：继续使用该项目既有的实施工作流。
 - 迁移工具默认仅预览；执行 `agents --apply` 时只会增量启用 `~/.codex/config.toml` 的 `[features].hooks`，不会覆盖 MCP、插件或其他配置。
 

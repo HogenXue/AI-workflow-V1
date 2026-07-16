@@ -17,7 +17,8 @@
 
 ## Recallium MCP（项目记忆）
 
-Codex MCP 服务名：`recallium`（`http://www.59005046.xyz:8102/mcp`）。
+Codex MCP 服务名：`recallium`（`https://www.59005046.xyz:8102/mcp`）。远端 Recallium
+必须使用 HTTPS；只有本机回环地址可使用明文 HTTP。
 
 ### 何时优先用 Recallium
 

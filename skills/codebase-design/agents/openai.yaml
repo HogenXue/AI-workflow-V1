@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codebase Design"
+  short_description: "Design deep modules at explicit testable seams"
+  default_prompt: "Use $codebase-design to compare module seams and record the accepted design in Trellis."

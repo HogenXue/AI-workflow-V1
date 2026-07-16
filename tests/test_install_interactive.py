@@ -104,6 +104,7 @@ class InteractiveInstallTests(unittest.TestCase):
                     str(codex_home),
                     "--backup-dir",
                     str(self.root / "backup"),
+                    "--replace",
                 )
                 self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
 
@@ -154,8 +155,7 @@ class InteractiveInstallTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("interactive", result.stderr.lower() + result.stdout.lower())
 
-    def test_codex_merge_skips_project_with_skip_flag(self) -> None:
-        # Avoid cwd=ROOT without skip/project-root: that would write real .codex/.
+    def test_codex_merge_installs_user_hooks_with_skip_flag(self) -> None:
         codex_home = self.home / ".codex"
         codex_home.mkdir(parents=True)
         (codex_home / "config.toml").write_text("[features]\nmemories = true\n", encoding="utf-8")
@@ -175,8 +175,9 @@ class InteractiveInstallTests(unittest.TestCase):
         text = (codex_home / "config.toml").read_text(encoding="utf-8")
         self.assertIn("[mcp_servers.recallium]", text)
         self.assertIn("[mcp_servers.mem0]", text)
+        self.assertTrue((codex_home / "hooks.json").is_file())
+        self.assertTrue((codex_home / "hooks" / "session-start.sh").is_file())
         self.assertFalse((self.project / ".codex").exists())
-        self.assertIn("skipping project-scoped", result.stdout + result.stderr)
 
     def test_codex_merge_backs_up_dangling_config_symlink(self) -> None:
         codex_home = self.home / ".codex"
@@ -204,7 +205,7 @@ class InteractiveInstallTests(unittest.TestCase):
         self.assertTrue(backups[0].is_symlink())
         self.assertEqual(os.readlink(backups[0]), str(missing_target))
 
-    def test_codex_merge_skips_when_not_in_git_repo(self) -> None:
+    def test_codex_merge_installs_user_hooks_when_not_in_git_repo(self) -> None:
         orphan = self.root / "orphan"
         orphan.mkdir()
         codex_home = self.home / ".codex"
@@ -223,11 +224,12 @@ class InteractiveInstallTests(unittest.TestCase):
             cwd=orphan,
         )
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-        self.assertIn("skipping project-scoped", result.stdout + result.stderr)
+        self.assertTrue((codex_home / "hooks.json").is_file())
+        self.assertTrue((codex_home / "hooks" / "session-start.sh").is_file())
         self.assertFalse((orphan / ".codex").exists())
 
     def test_codex_merge_cwd_git_repo_is_not_auto_project_root(self) -> None:
-        """Cwd git toplevel alone must not install project hooks (PRD: explicit root)."""
+        """Cwd git toplevel alone must not install project hooks."""
         repo = self.root / "git-repo"
         repo.mkdir()
         subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
@@ -248,13 +250,12 @@ class InteractiveInstallTests(unittest.TestCase):
             cwd=repo,
         )
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-        out = result.stdout + result.stderr
-        self.assertIn("SKIP: skipping project-scoped steps", out)
-        self.assertIn("no --project-root", out)
+        self.assertTrue((codex_home / "hooks.json").is_file())
+        self.assertTrue((codex_home / "hooks" / "session-start.sh").is_file())
         self.assertFalse((repo / ".codex").exists())
         self.assertEqual((repo / "AGENTS.md").read_text(encoding="utf-8"), "owned\n")
 
-    def test_codex_merge_writes_project_hooks_with_explicit_root(self) -> None:
+    def test_codex_merge_ignores_project_root_and_writes_user_hooks(self) -> None:
         codex_home = self.home / ".codex"
         codex_home.mkdir(parents=True)
         (codex_home / "config.toml").write_text("", encoding="utf-8")
@@ -272,7 +273,12 @@ class InteractiveInstallTests(unittest.TestCase):
             str(self.root / "backup"),
         )
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-        self.assertTrue((self.project / ".codex" / "hooks.json").is_file())
+        self.assertFalse((self.project / ".codex").exists())
+        hooks_json = codex_home / "hooks.json"
+        self.assertTrue(hooks_json.is_file())
+        self.assertTrue((codex_home / "hooks" / "session-start.sh").is_file())
+        self.assertIn(str(codex_home / "hooks" / "session-start.sh"), hooks_json.read_text(encoding="utf-8"))
+        self.assertIn("bash ", hooks_json.read_text(encoding="utf-8"))
         self.assertEqual((self.project / "AGENTS.md").read_text(encoding="utf-8"), "project-owned\n")
 
     def test_cursor_merge_mcp_and_project_rules(self) -> None:
@@ -340,23 +346,19 @@ class InteractiveInstallTests(unittest.TestCase):
         self.assertIn("CONFLICT", result.stderr)
         self.assertEqual(mcp_file.read_text(encoding="utf-8"), original_mcp)
 
-    def test_codex_merge_project_conflict_restores_mcp(self) -> None:
+    def test_codex_merge_user_hook_conflict_restores_mcp(self) -> None:
         codex_home = self.home / ".codex"
         codex_home.mkdir(parents=True)
         config = codex_home / "config.toml"
         original_config = '[mcp_servers.other]\ncommand = "keep"\n'
         config.write_text(original_config, encoding="utf-8")
-        project_codex = self.project / ".codex"
-        project_codex.mkdir()
-        (project_codex / "hooks.json").write_text("existing\n", encoding="utf-8")
+        (codex_home / "hooks.json").write_text("existing\n", encoding="utf-8")
 
         result = self.run_install(
             "codex-merge",
             "--mcp-overwrite",
             "--codex-home",
             str(codex_home),
-            "--project-root",
-            str(self.project),
             "--backup-dir",
             str(self.root / "backup"),
         )
@@ -364,6 +366,7 @@ class InteractiveInstallTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("CONFLICT", result.stderr)
         self.assertEqual(config.read_text(encoding="utf-8"), original_config)
+        self.assertEqual((codex_home / "hooks.json").read_text(encoding="utf-8"), "existing\n")
 
     def test_cursor_merge_backs_up_dangling_mcp_symlink(self) -> None:
         cursor_home = self.home / ".cursor"
@@ -413,7 +416,7 @@ class InteractiveInstallTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("DRY-RUN", result.stdout)
 
-    def test_codex_merge_mcp_overwrite_and_no_global_hooks(self) -> None:
+    def test_codex_merge_mcp_overwrite_and_user_hooks_only(self) -> None:
         codex_home = self.home / ".codex"
         codex_home.mkdir(parents=True)
         (codex_home / "config.toml").write_text(
@@ -449,14 +452,15 @@ class InteractiveInstallTests(unittest.TestCase):
         self.assertIn("https://www.59005046.xyz:8102/mcp", text)
         self.assertNotIn("http://old.example/mcp", text)
         self.assertIn("[mcp_servers.other]", text)
-        self.assertFalse((codex_home / "hooks.json").exists())
+        self.assertTrue((codex_home / "hooks.json").is_file())
+        self.assertTrue((codex_home / "hooks" / "session-start.sh").is_file())
         self.assertEqual(unrelated.read_text(encoding="utf-8"), "keep\n")
-        self.assertFalse((old_hooks / "obsolete.sh").exists())
+        self.assertTrue((old_hooks / "obsolete.sh").is_file())
         self.assertEqual(len(list(backup_dir.glob("config.toml.*.bak"))), 1)
-        self.assertEqual(len(list(backup_dir.glob("hooks.json.*.bak"))), 1)
+        self.assertEqual(len(list(backup_dir.glob("hooks.json.*.bak"))), 0)
         self.assertEqual(
             len([path for path in backup_dir.glob("hooks.*.bak") if path.is_dir()]),
-            1,
+            0,
         )
 
     def test_cursor_replace_removes_obsolete_hooks_and_preserves_unrelated_files(self) -> None:

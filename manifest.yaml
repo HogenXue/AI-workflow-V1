@@ -4,8 +4,11 @@ skills:
   - gitnexus
   - release
   - karpathy-guidelines-zh
-  - grill-me
+  - grill-with-docs
   - tdd
+  - diagnosing-bugs
+  - codebase-design
+  - resolving-merge-conflicts
 default_install_mode: copy
 requires:
   python: ">=3.10"

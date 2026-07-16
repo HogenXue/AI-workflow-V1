@@ -181,3 +181,36 @@ AI-workflow 默认质量配置运行：
 | 配置加载器抽取破坏校验器 | 保留导出函数名，先跑针对性测试再跑完整测试 |
 | Codex/Cursor MCP 行为漂移 | 共用一个 URL 校验器，并断言两份模板 |
 | 脏工作区范围混淆 | 不清理现有修改，最终单独列出本任务文件与此前修改 |
+
+## 10. Grill with Docs 与 Trellis 边界
+
+`grill-with-docs` 作为对现有 `grill-me` 的原位能力替换。为避免把上游组合依赖扩散为
+另一条自动工作流，该 Skill 把以下能力限定在 Trellis Phase 1.1：
+
+1. grilling：一次只问一个决策问题，先查事实，并给出推荐答案；
+2. domain modeling：术语确认后即时维护 `.trellis/spec/domain/`，只记录领域词汇；
+3. decision record：仅在决定难以逆转、缺少上下文会令人意外、且存在真实权衡时写入 `.trellis/spec/decisions/`。
+
+持久化所有权固定为：
+
+| 工件 | 唯一用途 | 禁止内容 |
+| --- | --- | --- |
+| `.trellis/tasks/*/prd.md` | 需求、范围、场景、验收和未决项 | 不复制到 issue 或另一份 Spec |
+| `.trellis/spec/domain/*.md` | 领域术语及应避免的同义词 | 不写实现计划、验收或任务状态 |
+| `.trellis/spec/decisions/*.md` | 难以逆转的架构/边界决定及原因 | 不写普通实现细节或会话流水账 |
+| Trellis Design/Plan/Journal | 技术设计、实施步骤、状态和证据 | 不由 Grill with Docs 接管生命周期 |
+
+不引入上游 `setup-matt-pocock-skills`、`ask-matt`、`to-spec`、`to-tickets`、`implement`、
+`code-review` 或 `wayfinder`。这些 Skill 会建立 issue/spec/ticket/执行/审查/提交链，与 Trellis
+的 Phase 1–3 重叠。完整冲突矩阵见
+`research/matt-pocock-skills-conflicts.md`。
+
+额外引入三个能力型 Skill：
+
+| Skill | Trellis 内职责 | 禁止接管 |
+| --- | --- | --- |
+| `diagnosing-bugs` | 复现、最小化、假设、观测和回归测试；陌生调用链先用 GitNexus，行为修复回到本包 TDD | task 状态、独立修复流程、commit/PR |
+| `codebase-design` | 提供深模块、接口、seam、locality 等设计词汇；落地变更先回到 Trellis 规划和 GitNexus 影响分析 | 自动重构、独立 Design/Spec |
+| `resolving-merge-conflicts` | 在用户已启动 merge/rebase 后逐冲突按意图解决并验证 | 自行发起 merge/rebase、abort、commit、push |
+
+本包现有 `tdd` 保持不变，上游同名版本不安装；可选 `prototype` 本次不加入。

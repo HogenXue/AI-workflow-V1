@@ -166,7 +166,7 @@ for skill in "${skills[@]}"; do
   fi
 done
 
-legacy_skills=("openspec" "review")
+legacy_skills=("openspec" "review" "grill-me")
 legacy_conflicts=()
 for skill in "${legacy_skills[@]}"; do
   if [[ -e "$target/$skill" || -L "$target/$skill" ]]; then

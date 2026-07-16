@@ -319,3 +319,21 @@ files change.
 dependencies, placeholder planning artifacts, complex-task requirements,
 curated context, unchecked acceptance criteria, fresh/stale evidence, unchanged
 task status, and a temporary planning-to-completion lifecycle.
+
+---
+
+## Convention: Skill renames and optional resources
+
+**Manifest contract**: `manifest.yaml` lists only currently distributed Skill names. A renamed or removed
+workflow Skill is not silently deleted during an ordinary install. Add it to the installer's legacy list;
+`--prune-legacy` must preview the removal and, on execution, create a unique timestamped `.bak` before
+removing the old directory or symlink. The `grill-me` → `grill-with-docs` migration follows this path.
+
+**Structure contract**: Every Skill requires `SKILL.md` and `agents/openai.yaml`. `references/`,
+`templates/`, `examples/`, `scripts/`, and `assets/` are optional and should exist only when the Skill uses
+them. The validator checks relative links and placeholder examples when those resources exist; it must not
+require empty directories or placeholder files.
+
+**Tests required**: Assert manifest installation includes every current Skill, legacy rename pruning is
+explicit and backed up, a minimal Skill without optional resource directories validates, and existing
+optional resources still receive link/placeholder checks.

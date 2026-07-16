@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagnosing Bugs"
+  short_description: "Build a tight loop and diagnose hard bugs"
+  default_prompt: "Use $diagnosing-bugs to verify the cause of this bug before proposing a repair."

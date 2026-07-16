@@ -53,14 +53,24 @@ class ValidateAllSkillsTests(unittest.TestCase):
 
         self.assertEqual(self.validator.validate_skill(skill), [])
 
-    def test_missing_examples_directory_is_reported(self) -> None:
+    def test_optional_resource_directories_may_be_absent(self) -> None:
         skill = create_complete_skill(self.root, "sample")
-        (skill / "examples" / "example.md").unlink()
-        (skill / "examples").rmdir()
+        (skill / "SKILL.md").write_text(
+            "---\nname: sample\ndescription: test skill\n---\n",
+            encoding="utf-8",
+        )
+        for directory, filename in (
+            ("references", "guide.md"),
+            ("templates", "report.md"),
+            ("examples", "example.md"),
+            ("scripts", "check.sh"),
+        ):
+            (skill / directory / filename).unlink()
+            (skill / directory).rmdir()
 
         errors = self.validator.validate_skill(skill)
 
-        self.assertIn("missing required directory: examples", errors)
+        self.assertEqual(errors, [])
 
     def test_invalid_frontmatter_yaml_is_reported(self) -> None:
         skill = create_complete_skill(self.root, "sample")
@@ -121,13 +131,13 @@ class ValidateAllSkillsTests(unittest.TestCase):
             "configuration change_policy.minimal_change must be a boolean", errors
         )
 
-    def test_empty_required_resource_directory_is_reported(self) -> None:
+    def test_existing_empty_optional_resource_directory_is_allowed(self) -> None:
         skill = create_complete_skill(self.root, "sample")
         (skill / "templates" / "report.md").unlink()
 
         errors = self.validator.validate_skill(skill)
 
-        self.assertIn("required directory is empty: templates", errors)
+        self.assertEqual(errors, [])
 
     def test_example_todo_placeholder_is_reported(self) -> None:
         skill = create_complete_skill(self.root, "sample")
@@ -393,8 +403,11 @@ class ManifestTests(unittest.TestCase):
                 "gitnexus",
                 "release",
                 "karpathy-guidelines-zh",
-                "grill-me",
+                "grill-with-docs",
                 "tdd",
+                "diagnosing-bugs",
+                "codebase-design",
+                "resolving-merge-conflicts",
             ],
         )
 
@@ -451,12 +464,14 @@ class BundledSkillContractTests(unittest.TestCase):
                 "over-engineering, unrelated edits, weak tests, context drift, and hidden failures."
             ),
         },
-        "grill-me": {
-            "name": "grill-me",
+        "grill-with-docs": {
+            "name": "grill-with-docs",
             "description": (
                 "Clarify complex, cross-module, or unclear requirements through a "
-                "repository-aware, one-question-at-a-time interview. Use as the sole Codex "
-                "interviewer for Trellis Phase 1.1; do not combine it with trellis-brainstorm."
+                "repository-aware, one-question-at-a-time interview while maintaining Trellis "
+                "domain and decision specs. Use as the sole Codex interviewer for Trellis "
+                "Phase 1.1; do not combine it with trellis-brainstorm or create a second "
+                "spec/task workflow."
             ),
         },
         "tdd": {
@@ -467,15 +482,40 @@ class BundledSkillContractTests(unittest.TestCase):
                 "when behavior changes need automated tests."
             ),
         },
+        "diagnosing-bugs": {
+            "name": "diagnosing-bugs",
+            "description": (
+                "Diagnosis loop for hard bugs and performance regressions. Use when the user "
+                'says "diagnose"/"debug this", or reports something '
+                "broken/throwing/failing/slow."
+            ),
+        },
+        "codebase-design": {
+            "name": "codebase-design",
+            "description": (
+                "Shared vocabulary for designing deep modules. Use when the user wants to "
+                "design or improve a module's interface, find deepening opportunities, decide "
+                "where a seam goes, make code more testable or AI-navigable, or when another "
+                "skill needs the deep-module vocabulary."
+            ),
+        },
+        "resolving-merge-conflicts": {
+            "name": "resolving-merge-conflicts",
+            "description": (
+                "Resolve an already in-progress Git merge or rebase conflict by tracing both "
+                "sides to their primary intent and verifying the combined result. Use when the "
+                "user explicitly asks to resolve current merge/rebase conflicts; do not start, "
+                "abort, commit, continue, or push the Git operation without matching authorization."
+            ),
+        },
     }
 
     def test_standard_skill_package_contracts(self) -> None:
         for name, expected_metadata in self.EXPECTED_METADATA.items():
             with self.subTest(skill=name):
                 skill = ROOT / "skills" / name
-                for directory in ("agents", "references", "templates", "examples", "scripts"):
-                    self.assertTrue((skill / directory).is_dir(), f"missing {name}/{directory}")
-                self.assertTrue((skill / "scripts" / "validate.sh").is_file())
+                self.assertTrue((skill / "SKILL.md").is_file())
+                self.assertTrue((skill / "agents" / "openai.yaml").is_file())
                 self.assertEqual(
                     yaml.safe_load((skill / "SKILL.md").read_text(encoding="utf-8").split("---", 2)[1]),
                     expected_metadata,
@@ -517,6 +557,14 @@ class BundledSkillContractTests(unittest.TestCase):
         self.assertIn("默认配置不存在时", content)
         self.assertIn("继续执行", content)
 
+    def test_memory_recallium_reference_uses_the_secure_production_url(self) -> None:
+        content = (
+            ROOT / "skills" / "memory" / "references" / "memory-backends.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("https://www.59005046.xyz:8102/mcp", content)
+        self.assertNotIn("http://www.59005046.xyz:8102/mcp", content)
+
     def test_runtime_config_consumers_prefer_the_effective_config_helper(self) -> None:
         for name in ("memory", "gitnexus", "release"):
             with self.subTest(skill=name):
@@ -551,13 +599,13 @@ class BundledSkillContractTests(unittest.TestCase):
         ):
             self.assertIn(f"## {heading}", content)
 
-    def test_grill_me_enables_implicit_invocation_and_trellis_handoff(self) -> None:
-        skill = ROOT / "skills" / "grill-me"
+    def test_grill_with_docs_enables_implicit_invocation_and_trellis_handoff(self) -> None:
+        skill = ROOT / "skills" / "grill-with-docs"
         content = (skill / "SKILL.md").read_text(encoding="utf-8")
         frontmatter = yaml.safe_load(content.split("---", 2)[1])
         agent = yaml.safe_load((skill / "agents" / "openai.yaml").read_text(encoding="utf-8"))
 
-        self.assertEqual(frontmatter["name"], "grill-me")
+        self.assertEqual(frontmatter["name"], "grill-with-docs")
         self.assertNotIn("disable-model-invocation", frontmatter)
         self.assertIs(agent["policy"]["allow_implicit_invocation"], True)
         for phrase in (
@@ -568,9 +616,35 @@ class BundledSkillContractTests(unittest.TestCase):
             "Trellis PRD",
             "Phase 1.1",
             "trellis-brainstorm",
-            "不得串联",
+            ".trellis/spec/domain/",
+            ".trellis/spec/decisions/",
         ):
             self.assertIn(phrase, content)
+
+    def test_selected_matt_capabilities_stay_inside_trellis_and_git_boundaries(self) -> None:
+        expected = {
+            "diagnosing-bugs": (
+                "A request to diagnose authorizes investigation, not a fix",
+                "trellis-check",
+                "Do not commit, push",
+            ),
+            "codebase-design": (
+                "does not create a second Design, Spec, task, or implementation workflow",
+                "GitNexus impact analysis",
+                "local `$tdd` skill",
+            ),
+            "resolving-merge-conflicts": (
+                "does not by itself authorize",
+                "Do not invent new behavior",
+                "only when the user explicitly authorized",
+            ),
+        }
+
+        for name, phrases in expected.items():
+            with self.subTest(skill=name):
+                content = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+                for phrase in phrases:
+                    self.assertIn(phrase, content)
 
     def test_tdd_skill_defines_red_green_refactor_and_trellis_boundary(self) -> None:
         content = (ROOT / "skills" / "tdd" / "SKILL.md").read_text(encoding="utf-8")

@@ -4,18 +4,19 @@
 
 Codex App 的 Skill 统一安装到 `~/.agents/skills`，配置安装到 `~/.agents/config`。不要把同名 Skill 同时安装到 `~/.codex/skills`；Codex 可能发现两处并产生来源歧义。安装器默认只警告，显式 `--prune-other-root` 才会先备份再移走另一目录中的本包 Skill。
 
-旧版 OpenSpec 与 Review 副本不会被普通 `--replace` 删除。使用 `skills --dry-run --prune-legacy` 预览；确认后同时给出 `--copy --replace --prune-legacy`，安装器会先备份再从当前目标移走。该选项只处理命令指定的一个 `--target`。
+旧版 OpenSpec、Review 与已被替换的 Grill Me 副本不会被普通 `--replace` 删除。使用 `skills --dry-run --prune-legacy` 预览；确认后同时给出 `--copy --replace --prune-legacy`，安装器会先写入时间戳 `.bak` 备份再从当前目标移走。该选项只处理命令指定的一个 `--target`。
 
 ## 工作流路由
 
 | 项目状态 | 任务类型 | 工作流 |
 | --- | --- | --- |
-| 存在 `.trellis/` | 复杂、跨模块或需求不明确 | Trellis 唯一工作流；Codex 用 Grill Me 单独实现 Phase 1.1 |
+| 存在 `.trellis/` | 复杂、跨模块或需求不明确 | Trellis 唯一工作流；Codex 用 Grill with Docs 单独实现 Phase 1.1，需求/验收只写 PRD，术语写 `.trellis/spec/domain/`，持久决定写 `.trellis/spec/decisions/` |
 | 存在 `.trellis/` | 行为代码实现 | Trellis 执行阶段内采用 TDD，验证后由原生 `trellis-check` 执行质量检查 |
-| 存在 `.trellis/` | 简单且需求明确 | 直接使用 Trellis 的轻量规划、task 和验证流程，不触发 Grill Me |
+| 存在 `.trellis/` | 复杂 Bug、模块设计、进行中的 Git 冲突 | 在当前 task 内按需使用 Diagnosing Bugs、Codebase Design、Resolving Merge Conflicts，不接管 Trellis/Git 权限 |
+| 存在 `.trellis/` | 简单且需求明确 | 直接使用 Trellis 的轻量规划、task 和验证流程，不触发 Grill with Docs |
 | 不存在 `.trellis/` | 任意任务 | 项目既有的实施工作流 |
 
-Memory、GitNexus、Release 和 Karpathy Guidelines 在两类项目中都可按需使用；它们是横切能力，不接管工作流。Grill Me 与 TDD 也只实现各自阶段，不形成第二套状态机；Review 不再作为独立 Skill 分发。
+Memory、GitNexus、Release 和 Karpathy Guidelines 在两类项目中都可按需使用；它们是横切能力，不接管工作流。Grill with Docs 与 TDD 只实现各自阶段，Diagnosing Bugs、Codebase Design、Resolving Merge Conflicts 只提供专项方法，不形成第二套状态机；Review 不再作为独立 Skill 分发。
 
 ## 先做只读检查
 
@@ -83,7 +84,7 @@ cd /path/to/project
 trellis init --codex -u hogenxue
 ```
 
-不要对所有项目批量初始化。初始化后，将项目特有规则追加在 Trellis 管理区外；应从 [AGENTS.project.md](AGENTS.project.md) 复制 Codex 阶段映射，确保 Grill Me 只替代 `trellis-brainstorm`，质量阶段继续由 `trellis-check` 单独负责。
+不要对所有项目批量初始化。初始化后，将项目特有规则追加在 Trellis 管理区外；应从 [AGENTS.project.md](AGENTS.project.md) 复制 Codex 阶段映射，确保 Grill with Docs 只替代 `trellis-brainstorm`，质量阶段继续由 `trellis-check` 单独负责。
 
 ## 模板说明
 

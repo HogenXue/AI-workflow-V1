@@ -24,15 +24,16 @@ Managed by Trellis. Edits outside this block are preserved; edits inside may be 
 
 ## Codex workflow ownership
 
-- 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 将 `$grill-me` 视为 Trellis Phase 1.1 的唯一访谈实现，使用后不要再加载 `trellis-brainstorm`。
+- 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 将 `$grill-with-docs` 视为 Trellis Phase 1.1 的唯一访谈实现，使用后不要再加载 `trellis-brainstorm`。需求只写 Trellis PRD；领域术语与持久决定分别写 `.trellis/spec/domain/`、`.trellis/spec/decisions/`。
 - Codex 质量阶段使用项目原生 `trellis-check`。
 - `$tdd` 是 Trellis 执行阶段的实现方法，Karpathy Guidelines 是横切约束；两者都不创建平行任务或工作流。
+- `$diagnosing-bugs`、`$codebase-design`、`$resolving-merge-conflicts` 只作为当前 Trellis task 内的专项能力，不接管任务状态、质量审查或 Git 授权。
 - 原生 Trellis helper 未暴露时，手动执行等价的 task/spec 读取、验证或同步步骤，并明确说明降级。
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **AI-workflow-V1** (835 symbols, 1357 relationships, 26 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **AI-workflow-V1** (1063 symbols, 1791 relationships, 49 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

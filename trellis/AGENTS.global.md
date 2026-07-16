@@ -12,11 +12,11 @@
 ## 工作流路由
 
 - 若项目存在 `.trellis/`：Trellis 是该项目的工作流来源。
-  - 简单且需求明确的任务：遵循 Trellis 的轻量流程直接实施并做针对性验证，不自动触发 Grill Me。
-  - 复杂、跨模块或需求不明确的任务：先使用 `$grill-me` 一问一答澄清需求；结论写入当前 Trellis PRD，随后继续 Trellis 的既有规划和执行流程。使用 Grill Me 后不得再运行 `trellis-brainstorm`。
+  - 简单且需求明确的任务：遵循 Trellis 的轻量流程直接实施并做针对性验证，不自动触发 Grill with Docs。
+  - 复杂、跨模块或需求不明确的任务：先使用 `$grill-with-docs` 一问一答澄清需求，并按其边界维护 `.trellis/spec/domain/` 与 `.trellis/spec/decisions/`；需求、范围与验收只写当前 Trellis PRD。使用 Grill with Docs 后不得再运行 `trellis-brainstorm`。
   - 不创建第二套 Task、PRD、Design 或 Spec；不自动创建 `.trellis/`。
 - 若项目不存在 `.trellis/`：使用项目既有工作流，不自动引入另一套 Spec 或工作流框架。
-- Codex 若启用 `multi_agent`：子代理仍服从本文件与项目 `AGENTS.md`；复杂需求澄清仍走 Grill Me → Trellis，不另起一套工作流。
+- Codex 若启用 `multi_agent`：子代理仍服从本文件与项目 `AGENTS.md`；复杂需求澄清仍走 Grill with Docs → Trellis，不另起一套工作流。
 
 ## 记忆分层（Codex 配置对齐）
 
@@ -33,16 +33,20 @@
 
 ## 能力型 Skill
 
-- 复杂、跨模块或需求不明确：使用 Grill Me；简单且需求明确的任务不自动触发。
+- 复杂、跨模块或需求不明确：使用 Grill with Docs；简单且需求明确的任务不自动触发。
 - 历史上下文、长期决策或跨会话延续：使用 Memory（见上节记忆分层）。
 - 项目规则明确要求，或涉及跨模块、公共接口/数据契约、删除迁移、高风险或陌生调用链：使用 GitNexus；局部低风险修改不自动调用。
 - Release Note、CHANGELOG 或版本说明：使用 Release。
 - 编码、重构或代码审查：使用 Karpathy Guidelines（完整十二条在 Skill 内；不在本全局文件展开长文）。
 - 行为变化需要自动化证据：使用 TDD。
+- 复杂 Bug 或性能回归：使用 Diagnosing Bugs 建立可重复反馈循环；仅诊断请求不自动实施修复。
+- 模块接口、seam 或深模块设计：使用 Codebase Design；接受的决定写回当前 Trellis Design，实施前按风险使用 GitNexus。
+- 已经进行中的 merge/rebase 冲突：使用 Resolving Merge Conflicts；不得自行开始、终止、继续、提交或推送未获授权的 Git 操作。
 
 - Karpathy Guidelines 是横切行为约束，不是独立阶段；它不替代 Trellis、TDD 或项目既有的质量检查。
-- Grill Me 只负责需求澄清，不管理任务生命周期、不写代码、不执行测试、审查或 Git 操作。
+- Grill with Docs 只负责 Phase 1.1 需求澄清及 Trellis 领域/决定 spec；不管理任务生命周期、不写代码、不执行测试、审查或 Git 操作。
 - TDD 是 Trellis 执行阶段的实现方法，不是第二套工作流；仅对需要自动化测试证明的行为变化执行 RED → GREEN → REFACTOR。
+- Diagnosing Bugs、Codebase Design 和 Resolving Merge Conflicts 都是当前 Trellis task 内的能力，不创建平行 PRD、Spec、Task、Review 或提交流程。
 - GitNexus 只负责影响分析与提交安全，不写业务代码。`detect_changes` 仅用于项目规则明确要求、已做图谱分析或高影响变更；低风险提交只做标准 Git 范围检查与相关测试。
 - Release 只负责发布说明、版本记录和已获授权的发布准备/执行，不负责开发实现。
 - Memory 只负责长期记忆与跨会话上下文，不替代 Trellis 的 PRD、Task 或 Journal。

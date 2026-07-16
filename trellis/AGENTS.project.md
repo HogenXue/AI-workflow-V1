@@ -6,8 +6,9 @@
 - 将长期、可复用的项目标准维护在 `.trellis/spec/`。
 - 将当前任务的 PRD、研究、实现与检查产物维护在 `.trellis/tasks/`。
 - 将跨会话工作记录维护在 `.trellis/workspace/`。
-- 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 将 `$grill-me` 视为 Phase 1.1 的唯一访谈实现。使用后不要再加载 `trellis-brainstorm`，访谈结论直接写入当前 Trellis PRD。
+- 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 将 `$grill-with-docs` 视为 Phase 1.1 的唯一访谈实现。使用后不要再加载 `trellis-brainstorm`，需求结论直接写入当前 Trellis PRD；领域术语与持久决定分别写 `.trellis/spec/domain/`、`.trellis/spec/decisions/`。
 - Codex 质量阶段使用项目原生 `trellis-check`；P0/P1 返回 TDD 修复并复验。
+- `$diagnosing-bugs`、`$codebase-design`、`$resolving-merge-conflicts` 只作为当前 Trellis task 内的专项能力，不接管任务状态、质量审查或 Git 授权。
 - 配对配置目录存在 `config/workflow_check.py` 时，所有宿主共用该入口：规划确认后、
   `task.py start` 前运行 `readiness`，原生质量评审后运行 `quality`，归档前运行
   `completion`。复杂任务给 readiness 传 `--complex`；非 AI-workflow 包项目给 quality

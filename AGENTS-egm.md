@@ -86,11 +86,12 @@ Controller → Application → Domain → Infrastructure
   - 长期、可复用的项目标准维护在 `.trellis/spec/`。
   - 当前任务的 PRD、研究、实现与检查产物维护在 `.trellis/tasks/`。
   - 跨会话工作记录维护在 `.trellis/workspace/`。
-  - 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 将 `$grill-me` 视为 Phase 1.1 的唯一访谈实现，使用后不要再加载 `trellis-brainstorm`。
+  - 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 将 `$grill-with-docs` 视为 Phase 1.1 的唯一访谈实现，使用后不要再加载 `trellis-brainstorm`。需求只写 Trellis PRD；领域术语与持久决定分别写 `.trellis/spec/domain/`、`.trellis/spec/decisions/`。
   - Codex 质量阶段使用项目原生 `trellis-check`。
   - 无 active task 时先遵守 Trellis 的建 task 同意门槛；用户选择不创建 task 后，简单修改才可直接实现并验证。
   - 不要在本项目同时启动第二套完整工作流。
   - TDD 是 Trellis 执行阶段的实现方法；Karpathy Guidelines 是横切约束。
+  - Diagnosing Bugs、Codebase Design、Resolving Merge Conflicts 只作为当前 Trellis task 内的专项能力，不接管任务状态、质量审查或 Git 授权。
   - 项目规则明确要求，或改动涉及高风险、跨模块、公共接口/数据契约、删除迁移或陌生调用链时使用 GitNexus；仅这些情形在提交前做 GitNexus 范围检查，低风险提交使用标准 Git 检查与相关测试。
 - <!-- TRELLIS:START -->
 # Trellis Instructions

@@ -32,7 +32,6 @@ PYAML_INSTALL_MESSAGE = (
 )
 
 
-REQUIRED_DIRECTORIES = ("agents", "references", "templates", "examples", "scripts")
 MARKDOWN_LINK = re.compile(r"!?\[[^\]]*\]\(\s*(?:<([^>]+)>|([^\s)]+))(?:\s+[^)]*)?\)")
 
 
@@ -85,15 +84,6 @@ def load_skill_metadata(path: Path) -> tuple[dict[str, Any] | None, str | None]:
             return None, f"frontmatter {key} must be a non-empty scalar"
 
     return metadata, None
-
-
-def _directory_has_file(path: Path) -> bool:
-    return any(
-        candidate.is_file()
-        and candidate.stat().st_size > 0
-        and not any(part.startswith(".") for part in candidate.relative_to(path).parts)
-        for candidate in path.rglob("*")
-    )
 
 
 def _validate_agent_metadata(agent: Any, skill_name: str) -> list[str]:
@@ -197,13 +187,6 @@ def validate_skill(skill_path: Path) -> list[str]:
 
     if not skill_path.is_dir():
         return ["missing skill directory"]
-
-    for directory in REQUIRED_DIRECTORIES:
-        directory_path = skill_path / directory
-        if not directory_path.is_dir():
-            errors.append(f"missing required directory: {directory}")
-        elif directory in {"templates", "examples", "scripts"} and not _directory_has_file(directory_path):
-            errors.append(f"required directory is empty: {directory}")
 
     skill_file = skill_path / "SKILL.md"
     if not skill_file.is_file():

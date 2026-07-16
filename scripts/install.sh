@@ -82,11 +82,7 @@ install_profile_codex() {
 
   local merge_args=(--interactive)
   [[ -n "$mem0_url" ]] && merge_args+=(--mem0-url "$mem0_url")
-  if [[ -n "$project_root" ]]; then
-    merge_args+=(--project-root "$project_root")
-  else
-    merge_args+=(--skip-project)
-  fi
+  [[ -n "$project_root" ]] && merge_args+=(--project-root "$project_root")
   if [[ -t 0 ]]; then
     if install_lib_prompt_yn "Overwrite existing Codex MCP entries that conflict?" n; then
       merge_args+=(--mcp-overwrite)
@@ -177,10 +173,13 @@ interactive_main() {
   local mode_choice
   read -r mode_choice || mode_choice="1"
 
-  INSTALL_PROJECT_ROOT=""
-  printf '%s\n' 'Select project root for hooks/rules (explicit choice required; git root is only a candidate)...'
-  install_lib_resolve_project_root "" 0 1 || exit 1
-  local project_root="${INSTALL_PROJECT_ROOT:-}"
+  local project_root=""
+  if ((want_cursor)); then
+    INSTALL_PROJECT_ROOT=""
+    printf '%s\n' 'Select project root for Cursor hooks/rules (explicit choice required; git root is only a candidate)...'
+    install_lib_resolve_project_root "" 0 1 || exit 1
+    project_root="${INSTALL_PROJECT_ROOT:-}"
+  fi
 
   local mem0_url=""
   if install_lib_prompt_yn "Provide mem0 MCP URL now? (needed to add mem0)" n; then
@@ -213,7 +212,7 @@ interactive_main() {
   fi
 
   printf '%s\n' '--- Recommended full install plan ---'
-  ((want_codex)) && printf '%s\n' '- Codex: ~/.agents/skills + ~/.agents/config + ~/.codex AGENTS/hooks + MCP'
+  ((want_codex)) && printf '%s\n' '- Codex: ~/.agents/skills + ~/.agents/config + ~/.codex AGENTS/user hooks + global MCP'
   ((want_cursor)) && printf '%s\n' '- Cursor: ~/.cursor/skills + ~/.cursor/config + mcp.json + project rules/hooks'
   if [[ -n "$project_root" ]]; then
     printf '%s\n' "- Project root: $project_root"

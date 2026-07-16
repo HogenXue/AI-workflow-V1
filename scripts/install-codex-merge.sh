@@ -3,7 +3,8 @@
 set -euo pipefail
 
 usage() {
-  printf '%s\n' 'Usage: install-codex-merge.sh [--dry-run|--apply] [--mcp-keep|--mcp-overwrite] [--mem0-url URL] [--codex-home PATH] [--project-root PATH] [--skip-project] [--replace] [--backup-dir PATH] [--interactive]' >&2
+  printf '%s\n' 'Usage: install-codex-merge.sh [--dry-run|--apply] [--mcp-keep|--mcp-overwrite] [--mem0-url URL] [--codex-home PATH] [--replace] [--backup-dir PATH] [--interactive]' >&2
+  printf '%s\n' '       --project-root and --skip-project are accepted for backward compatibility but ignored; Codex hooks install at user scope.' >&2
 }
 
 fail_usage() {
@@ -118,29 +119,24 @@ else
   exit "$mcp_status"
 fi
 
-INSTALL_PROJECT_ROOT=""
-if ! install_lib_resolve_project_root "$project_root" "$skip_project" "$interactive"; then
-  rollback_mcp || true
-  exit 1
+if [[ -n "$project_root" ]]; then
+  printf 'INFO: ignoring --project-root for Codex hooks; installing user-level hooks under %s\n' "$codex_home"
+elif ((skip_project)); then
+  printf 'INFO: ignoring --skip-project for Codex hooks; installing user-level hooks under %s\n' "$codex_home"
 fi
 
-if [[ -z "${INSTALL_PROJECT_ROOT:-}" ]]; then
-  exit 0
-fi
-
-proj="$INSTALL_PROJECT_ROOT"
-dest_hooks_json="$proj/.codex/hooks.json"
-dest_hooks_dir="$proj/.codex/hooks"
+dest_hooks_json="$codex_home/hooks.json"
+dest_hooks_dir="$codex_home/hooks"
 
 if [[ -e "$dest_hooks_json" || -L "$dest_hooks_json" || -e "$dest_hooks_dir" || -L "$dest_hooks_dir" ]] && ((replace == 0)); then
   if ((interactive)) && [[ -t 0 ]]; then
-    if ! install_lib_prompt_yn "Replace existing .codex hooks in $proj?" n; then
-      printf '%s\n' 'SKIP: existing project Codex hooks preserved'
+    if ! install_lib_prompt_yn "Replace existing Codex user hooks in $codex_home?" n; then
+      printf '%s\n' 'SKIP: existing Codex user hooks preserved'
       exit 0
     fi
     replace=1
   else
-    printf 'CONFLICT: existing project Codex hooks at %s (use --replace)\n' "$proj/.codex" >&2
+    printf 'CONFLICT: existing Codex user hooks at %s (use --replace)\n' "$codex_home" >&2
     rollback_mcp || true
     exit 1
   fi
@@ -150,7 +146,7 @@ if ((dry_run)); then
   if [[ -e "$dest_hooks_json" || -L "$dest_hooks_json" || -e "$dest_hooks_dir" || -L "$dest_hooks_dir" ]]; then
     printf 'DRY-RUN: hook backups would use %s/<name>.<UTC timestamp>.bak\n' "$backup_dir"
   fi
-  printf 'DRY-RUN: would install project Codex hooks under %s/.codex\n' "$proj"
+  printf 'DRY-RUN: would install user Codex hooks under %s\n' "$codex_home"
   exit 0
 fi
 
@@ -172,14 +168,13 @@ if ((replace)); then
     if [[ -n "$hooks_dir_backup" ]]; then
       install_lib_restore_backup "$hooks_dir_backup" "$dest_hooks_dir" || true
     fi
-    printf 'ERROR: could not replace existing project Codex hooks\n' >&2
+    printf 'ERROR: could not replace existing Codex user hooks\n' >&2
     rollback_mcp || true
     exit 1
   fi
 fi
 
 if ! mkdir -p "$dest_hooks_dir" \
-  || ! cp "$templates/hooks.json" "$dest_hooks_json" \
   || ! cp -R "$templates/hooks/." "$dest_hooks_dir/"; then
   rm -rf "$dest_hooks_json" "$dest_hooks_dir" || true
   if [[ -n "$hooks_json_backup" ]]; then
@@ -188,7 +183,31 @@ if ! mkdir -p "$dest_hooks_dir" \
   if [[ -n "$hooks_dir_backup" ]]; then
     install_lib_restore_backup "$hooks_dir_backup" "$dest_hooks_dir" || true
   fi
-  printf 'ERROR: could not install project Codex hooks\n' >&2
+  printf 'ERROR: could not install Codex user hooks\n' >&2
+  rollback_mcp || true
+  exit 1
+fi
+
+if ! python3 - "$templates/hooks.json" "$dest_hooks_json" "$dest_hooks_dir/session-start.sh" <<'PY'
+import json
+import shlex
+import sys
+from pathlib import Path
+
+template, target, hook_script = map(Path, sys.argv[1:])
+data = json.loads(template.read_text(encoding="utf-8"))
+data["hooks"]["SessionStart"][0]["hooks"][0]["command"] = f"bash {shlex.quote(str(hook_script))}"
+target.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+then
+  rm -rf "$dest_hooks_json" "$dest_hooks_dir" || true
+  if [[ -n "$hooks_json_backup" ]]; then
+    install_lib_restore_backup "$hooks_json_backup" "$dest_hooks_json" || true
+  fi
+  if [[ -n "$hooks_dir_backup" ]]; then
+    install_lib_restore_backup "$hooks_dir_backup" "$dest_hooks_dir" || true
+  fi
+  printf 'ERROR: could not install Codex user hook config\n' >&2
   rollback_mcp || true
   exit 1
 fi
