@@ -204,6 +204,35 @@ class WorkflowCheckE2ETests(unittest.TestCase):
             {item["code"] for item in json.loads(tracked_stale.stdout)["issues"]},
         )
 
+    def test_completion_reuses_evidence_after_committing_the_same_content(self) -> None:
+        """A commit boundary must not rerun checks when verified content is unchanged."""
+
+        self.write_task(status="in_progress", checked=True)
+        quality = self.run_cli(
+            "quality",
+            "--task",
+            self.task_argument(),
+            "--check",
+            "smoke=true",
+        )
+        self.assertEqual(quality.returncode, 0, quality.stderr + quality.stdout)
+        evidence = json.loads((self.task / "verification.json").read_text(encoding="utf-8"))
+
+        subprocess.run(["git", "add", "."], cwd=self.project, check=True)
+        subprocess.run(["git", "commit", "-qm", "verified content"], cwd=self.project, check=True)
+        current_head = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=self.project,
+            text=True,
+            capture_output=True,
+            check=True,
+        ).stdout.strip()
+        self.assertNotEqual(current_head, evidence["git_head"])
+
+        completion = self.run_cli("completion", "--task", self.task_argument())
+
+        self.assertEqual(completion.returncode, 0, completion.stderr + completion.stdout)
+
     def test_completion_rejects_unchecked_acceptance_criteria(self) -> None:
         self.write_task(status="in_progress", checked=False)
         quality = self.run_cli(

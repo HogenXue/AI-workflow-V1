@@ -1,10 +1,10 @@
 consumers:
   language:
-    - trellis/AGENTS.global.md
+    - AGENTS.global.md
   change_policy.minimal_change:
     - skills/karpathy-guidelines-zh/SKILL.md
   change_policy.preserve_dirty_worktree:
-    - trellis/AGENTS.global.md
+    - AGENTS.global.md
     - skills/karpathy-guidelines-zh/SKILL.md
   change_policy.require_impact_analysis_before_symbol_edit:
     - skills/gitnexus/SKILL.md

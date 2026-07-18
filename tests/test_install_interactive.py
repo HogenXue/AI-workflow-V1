@@ -309,7 +309,7 @@ class InteractiveInstallTests(unittest.TestCase):
         rules = self.project / ".cursor" / "rules" / "ai-workflow-global.mdc"
         self.assertTrue(rules.is_file())
         rules_text = rules.read_text(encoding="utf-8")
-        agents_body = (ROOT / "trellis" / "AGENTS.global.md").read_text(encoding="utf-8")
+        agents_body = (ROOT / "AGENTS.global.md").read_text(encoding="utf-8")
         self.assertTrue(rules_text.startswith("---\n"))
         self.assertIn("alwaysApply: true", rules_text)
         # Body after frontmatter must match AGENTS.global.md (dynamic generation).

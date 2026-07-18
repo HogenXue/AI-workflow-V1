@@ -573,7 +573,7 @@ class BundledSkillContractTests(unittest.TestCase):
                 self.assertIn("--project-root", content)
 
     def test_agents_templates_route_to_the_shared_workflow_checker(self) -> None:
-        for relative in ("trellis/AGENTS.global.md", "trellis/AGENTS.project.md"):
+        for relative in ("AGENTS.global.md", "AGENTS.project.md"):
             with self.subTest(file=relative):
                 content = (ROOT / relative).read_text(encoding="utf-8")
                 for phrase in (
@@ -582,8 +582,34 @@ class BundledSkillContractTests(unittest.TestCase):
                     "quality",
                     "completion",
                     "不替代 Trellis",
+                    "不按 commit 次数",
                 ):
                     self.assertIn(phrase, content)
+
+    def test_egm_agents_template_is_current_and_discoverable(self) -> None:
+        content = (ROOT / "AGENTS-egm.md").read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+        for phrase in (
+            "版本：V8-EGM",
+            "`egm_wechat`：微信小程序",
+            "`egm_wechat_backend`：微信小程序后端",
+            "访谈结论写入当前 Trellis PRD",
+            "除当前 PRD 外，只可维护",
+            "cd egm_backend && mvn test",
+            "cd egm_vue && pnpm test",
+            "cd egm_vue && pnpm build:prod",
+            "cd egm_wechat && npm test",
+            "不按 commit 次数重复",
+            "直接提出修改、修复或实施",
+            "先更新 `egm_docs/RELEASE_NOTE.md`",
+            "逐字复用该条目的版本号、日期和变更列表",
+        ):
+            self.assertIn(phrase, content)
+
+        self.assertNotIn("uni-app：移动端", content)
+        self.assertIn("[AGENTS-egm.md](AGENTS-egm.md)", readme)
+        self.assertIn("不会由全局 `agents` 安装器自动写入", readme)
 
     def test_release_template_uses_fixed_evidence_gates(self) -> None:
         content = (ROOT / "skills" / "release" / "templates/release-checklist.md").read_text(

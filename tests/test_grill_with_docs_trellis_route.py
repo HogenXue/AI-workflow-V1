@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class GrillWithDocsTrellisRouteTests(unittest.TestCase):
     def test_global_template_routes_simple_and_complex_trellis_work(self) -> None:
-        content = (ROOT / "trellis" / "AGENTS.global.md").read_text(encoding="utf-8")
+        content = (ROOT / "AGENTS.global.md").read_text(encoding="utf-8")
 
         markers = (
             "Trellis 是该项目的工作流来源",
@@ -22,7 +22,7 @@ class GrillWithDocsTrellisRouteTests(unittest.TestCase):
         self.assertIn("不得再运行 `trellis-brainstorm`", content)
 
     def test_global_template_keeps_capability_boundaries_explicit(self) -> None:
-        content = (ROOT / "trellis" / "AGENTS.global.md").read_text(encoding="utf-8")
+        content = (ROOT / "AGENTS.global.md").read_text(encoding="utf-8")
 
         for phrase in (
             "TDD 是 Trellis 执行阶段的实现方法，不是第二套工作流",
@@ -34,7 +34,7 @@ class GrillWithDocsTrellisRouteTests(unittest.TestCase):
             self.assertIn(phrase, content)
 
     def test_project_override_resolves_native_trellis_skill_aliases(self) -> None:
-        content = (ROOT / "trellis" / "AGENTS.project.md").read_text(encoding="utf-8")
+        content = (ROOT / "AGENTS.project.md").read_text(encoding="utf-8")
 
         for phrase in (
             "$grill-with-docs` 视为 Phase 1.1",

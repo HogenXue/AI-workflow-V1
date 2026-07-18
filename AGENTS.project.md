@@ -10,9 +10,11 @@
 - Codex 质量阶段使用项目原生 `trellis-check`；P0/P1 返回 TDD 修复并复验。
 - `$diagnosing-bugs`、`$codebase-design`、`$resolving-merge-conflicts` 只作为当前 Trellis task 内的专项能力，不接管任务状态、质量审查或 Git 授权。
 - 配对配置目录存在 `config/workflow_check.py` 时，所有宿主共用该入口：规划确认后、
-  `task.py start` 前运行 `readiness`，原生质量评审后运行 `quality`，归档前运行
-  `completion`。复杂任务给 readiness 传 `--complex`；非 AI-workflow 包项目给 quality
-  重复传入 `--check <名称>=<实际检查命令>`，不得生成没有项目检查支撑的证据。
+  `task.py start` 前运行 `readiness`；实现期间先做针对性检查，当前 task 的最终原生质量
+  评审后只运行一次 `quality`，归档前运行 `completion`。同一提交批次不按 commit 次数
+  重复完整验证；仅当证据覆盖的仓库内容变化时才重新运行。复杂任务给 readiness 传
+  `--complex`；非 AI-workflow 包项目给 quality 重复传入
+  `--check <名称>=<实际检查命令>`，不得生成没有项目检查支撑的证据。
 - workflow-check 只提供可执行证据，不替代 Trellis 的 task、状态机或原生
   `trellis-check`；helper 不可用时必须说明降级并执行等价检查。
 - TDD 是 Trellis 执行阶段的实现方法；Karpathy Guidelines 是横切约束，两者都不创建平行工作流或工件。

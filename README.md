@@ -9,7 +9,7 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 | 组件            | 说明                                                                         |
 | ------------- | -------------------------------------------------------------------------- |
 | **Skills**    | `memory`、`gitnexus`、`release`、`karpathy-guidelines-zh`、`grill-with-docs`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` |
-| **AGENTS 模板** | [trellis/AGENTS.global.md](trellis/AGENTS.global.md)：跨项目通用规则与 Skill 路由 |
+| **AGENTS 模板** | [AGENTS.global.md](AGENTS.global.md)：跨项目通用规则；[AGENTS-egm.md](AGENTS-egm.md)：EGM 项目补充规则 |
 | **config/**   | 默认配置、有效配置运行时和平台无关工作流门禁；项目可用 `hogen-codex.yaml` 覆盖                         |
 
 Trellis 是项目唯一工作流；9 个 Skill 按阶段或能力增强它。Codex 用 Grill with Docs 实现 Phase 1.1，用 TDD 实现行为代码，并按需调用诊断、深模块设计和冲突解决能力；质量门由原生 `trellis-check` 负责。
@@ -159,9 +159,11 @@ bash scripts/install.sh skills --copy --replace --target ~/.agents/skills
 
 ## AGENTS 规则用法
 
-全局规则模板位于 [trellis/AGENTS.global.md](trellis/AGENTS.global.md)：`agents --apply` 写入 Codex 的 `AGENTS.md`；`cursor-merge`（含显式 `--project-root`）据此动态生成项目 `.cursor/rules/ai-workflow-global.mdc`。项目根目录的 `AGENTS.md` 由 Trellis 初始化和更新时维护，不应以全局模板直接覆盖。
+全局规则模板位于根目录的 [AGENTS.global.md](AGENTS.global.md)：`agents --apply` 写入 Codex 的 `AGENTS.md`；`cursor-merge`（含显式 `--project-root`）据此动态生成项目 `.cursor/rules/ai-workflow-global.mdc`。项目根目录的 `AGENTS.md` 由 Trellis 初始化和更新时维护，不应以全局模板直接覆盖。
 
-项目专属规则（如 EGM 的分层、Git 格式、`egm_docs` 等）应在**该项目仓库**内维护 `Agents.md`；Trellis 项目将这些规则追加到 Trellis Managed Block 之外。GitNexus 流程由对应 Skill 承担，索引块由项目内 GitNexus CLI 注入。
+项目专属规则（如 EGM 的分层、Git 格式、`egm_docs` 等）应在**该项目仓库**内维护 `AGENTS.md`；Trellis 项目将这些规则追加到 Trellis Managed Block 之外。GitNexus 流程由对应 Skill 承担，索引块由项目内 GitNexus CLI 注入。
+
+[AGENTS-egm.md](AGENTS-egm.md) 位于根目录，是 EGM 项目补充规则的参考模板；它不会由全局 `agents` 安装器自动写入，避免把 EGM 约束注入其他项目。同步时只更新目标 EGM 根 `AGENTS.md` 中 Trellis Managed Block 之外的项目补充内容；覆盖既有内容前必须先备份为 `AGENTS.md.<UTC 时间戳>.bak`。目标项目中的项目规则仍是运行时事实来源，本仓库模板不会自动覆盖它。
 
 ## 项目级配置覆盖
 
@@ -194,7 +196,7 @@ python3 config/effective_config.py --project-root /path/to/your/project \
 python3 config/workflow_check.py --project-root "$PWD" \
   readiness --task .trellis/tasks/<task> --complex
 
-# 原生 trellis-check 和项目测试完成后，写入当前任务质量证据
+# 当前 task 的最终 trellis-check 和针对性测试完成后，写入一次质量证据
 python3 config/workflow_check.py --project-root "$PWD" \
   quality --task .trellis/tasks/<task>
 
@@ -204,8 +206,10 @@ python3 config/workflow_check.py --project-root "$PWD" \
 ```
 
 CI 调用 `quality` 时不传 `--task`，因此不会依赖或写入活动任务目录。带任务运行产生的
-`verification.json` 会绑定 Git HEAD 和工作区指纹；之后任何已跟踪或未忽略的未跟踪文件
-变化都会让 completion 失败，要求重新验证。
+`verification.json` 会记录 Git HEAD 作为审计元数据，并以工作区内容指纹判断新鲜度。
+同一提交批次不按 commit 次数重复完整验证：提交已验证的相同内容只改变 HEAD，不会让
+completion 失败；之后任何已跟踪或未忽略的未跟踪内容变化仍会要求重新验证。实现过程中
+应先运行受影响范围的针对性检查，最终完整质量入口每个 task 只运行一次，除非内容变化。
 
 内置 quality 配置只对本 AI-workflow 包自动启用。安装到其他项目后，必须按实际技术栈
 重复传入 `--check '<名称>=<命令>'`；没有显式项目检查时命令会失败，不会生成质量证据。

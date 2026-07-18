@@ -226,3 +226,51 @@
 - `python3 -m unittest tests.test_install tests.test_install_interactive -v`：42/42 通过。
 - `python3 -m unittest discover -s tests -v`：107/107 通过。
 - `git diff --check`：通过。
+
+## 循环七：EGM 项目规则模板可发现性与执行契约
+
+### 行为
+
+- `AGENTS-egm.md` 作为 EGM 项目补充模板在 README 中可发现，但不会由全局安装器注入其他项目。
+- 模板反映 EGM 当前交付端，提供真实的 Maven、pnpm、npm 检查命令，并明确授权、Grill with Docs 和 Release Note/commit 边界。
+
+### RED
+
+- 新增 `test_egm_agents_template_is_current_and_discoverable`，要求 V8-EGM、当前微信小程序目录、质量命令、明确授权语义、Release Note 先行及 README 入口。
+- 命令：`python3 -m unittest tests.test_validate_all_skills.BundledSkillContractTests.test_egm_agents_template_is_current_and_discoverable -v`。
+- 结果：旧模板首先因仍为 `V7-EGM` 而按预期失败；同时源码核对确认旧 `uni-app` 已退役。
+
+### GREEN / REFACTOR
+
+- 模板升级为 V8-EGM，改用 `egm_wechat` / `egm_wechat_backend`，补入后端、管理端和微信小程序的真实检查命令。
+- 明确用户直接要求实施即构成当前范围授权；Grill with Docs 访谈结论写 PRD，只有领域术语和持久决定进入对应 spec。
+- EGM 提交前先更新 Release Note，commit message 逐字复用对应版本、日期和变更列表。
+- README 将模板标记为需在目标项目手动同步的项目补充，并要求覆盖前备份；全局安装器仍不写入 EGM 规则。
+- 针对性模块：`python3 -m unittest tests.test_validate_all_skills -v`，35/35 通过；`git diff --check` 通过。
+
+## 循环八：提交边界复用质量证据
+
+### 行为
+
+- 完整质量检查按 Trellis task 和仓库内容变化执行，不按同一批次的 Git commit 数量执行。
+- `git_head` 保留为质量证据的审计元数据；completion 只用确定性内容指纹判断新鲜度。
+
+### RED
+
+- 新增 `test_completion_reuses_evidence_after_committing_the_same_content`：先生成质量证据，
+  再提交完全相同的已验证内容，要求 completion 继续通过。
+- 命令：`python3 -m unittest tests.test_workflow_check.WorkflowCheckE2ETests.test_completion_reuses_evidence_after_committing_the_same_content`。
+- 结果：旧实现按预期失败，唯一错误为 `stale_head`；内容指纹保持一致。
+
+### GREEN / REFACTOR
+
+- completion 移除 Git HEAD 相等判断，继续校验 schema、检查结果和工作区内容指纹。
+- 保留既有已跟踪、未跟踪和修改后产生 `stale_worktree` 的回归覆盖。
+- 共享 AGENTS 模板、EGM 模板、README、Trellis README 与脚本契约统一说明：开发期先做
+  针对性检查，每个 task 最终完整质量检查只运行一次，内容变化后才重跑。
+
+### 针对性验证
+
+- `python3 -m unittest tests.test_workflow_check`：10/10 通过。
+- 两个 AGENTS/EGM 规则契约测试：2/2 通过。
+- `git diff --check`：通过。

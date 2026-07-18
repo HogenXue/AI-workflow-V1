@@ -311,14 +311,18 @@ state machine. Readiness and completion are read-only. Quality writes
 `verification.json` only when a task is explicitly supplied; CI omits the task
 and writes no evidence.
 
-**Freshness contract**: Task quality evidence binds Git HEAD and a deterministic
-worktree fingerprint. Completion fails after tracked or unignored untracked
-files change.
+**Freshness contract**: Task quality evidence records Git HEAD as audit metadata
+and uses a deterministic worktree content fingerprint for freshness. Committing
+the same verified content does not invalidate evidence merely because HEAD
+changes. Completion still fails after tracked or unignored untracked content
+changes. Run targeted checks during implementation and one final quality check
+per task, not once per commit; rerun only after covered content changes.
 
 **Tests required**: Validate configuration consumer coverage, missing runtime
 dependencies, placeholder planning artifacts, complex-task requirements,
-curated context, unchecked acceptance criteria, fresh/stale evidence, unchanged
-task status, and a temporary planning-to-completion lifecycle.
+curated context, unchecked acceptance criteria, fresh/stale evidence, evidence
+reuse across a commit boundary, unchanged task status, and a temporary
+planning-to-completion lifecycle.
 
 ---
 

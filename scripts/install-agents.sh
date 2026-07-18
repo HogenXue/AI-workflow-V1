@@ -16,7 +16,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 root_dir="$(cd "$script_dir/.." && pwd)"
 # shellcheck source=install-lib.sh
 source "$script_dir/install-lib.sh"
-source_file="$root_dir/trellis/AGENTS.global.md"
+source_file="$root_dir/AGENTS.global.md"
 agents_home="${CODEX_HOME:-$HOME/.codex}"
 backup_dir=""
 mode="dry-run"

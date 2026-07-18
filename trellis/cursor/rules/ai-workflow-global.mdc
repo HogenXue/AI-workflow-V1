@@ -1,10 +1,10 @@
 ---
 # This file is NOT the install source of truth.
 # `scripts/install-cursor-merge.sh` generates `.cursor/rules/ai-workflow-global.mdc`
-# from `trellis/AGENTS.global.md` at install time (frontmatter + that body).
+# from the root `AGENTS.global.md` at install time (frontmatter + that body).
 # Kept only as a package placeholder so the `trellis/cursor/rules/` path exists.
 description: placeholder — generated from AGENTS.global.md at install
 alwaysApply: false
 ---
 
-See `trellis/AGENTS.global.md`.
+See the root `AGENTS.global.md`.

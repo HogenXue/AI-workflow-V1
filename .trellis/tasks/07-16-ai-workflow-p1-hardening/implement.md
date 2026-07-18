@@ -80,3 +80,11 @@
 - [x] GREEN：用 Trellis 兼容 `grill-with-docs` 替换旧目录，引入适配后的 `diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts`，更新 manifest、安装器期望、AGENTS 模板、README 和归属说明。
 - [x] REFACTOR：删除所有活动配置中的 `grill-me` 路由，保留历史 Trellis task 记录不改写；运行 Skill Creator 校验与针对性测试。
 - [x] VERIFY：运行完整 Skill 校验、单元测试、Shell/Python 语法、`git diff --check`、workflow quality/completion 和 GitNexus 变更范围复核。
+
+## 阶段八：按 task 复用质量证据（TDD）
+
+- [x] RED：增加质量验证后提交相同内容的回归测试，确认旧实现因 `stale_head` 失败。
+- [x] GREEN：completion 仅以确定性内容指纹判断证据新鲜度，保留 `git_head` 作为审计元数据。
+- [x] 回归：验证质量检查后的已跟踪或未跟踪内容变化仍产生 `stale_worktree`。
+- [x] 更新共享 AGENTS 模板、项目模板、README 和脚本契约，明确针对性检查与 task 级最终检查的边界。
+- [x] 运行 workflow-check 针对性测试、Skill 契约测试、`git diff --check` 和 GitNexus 变更范围复核；不因 commit 数量重复运行完整质量套件。

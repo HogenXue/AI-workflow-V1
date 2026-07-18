@@ -47,6 +47,11 @@ python3 config/workflow_check.py --project-root "$PWD" \
 状态机或原生 `trellis-check`；readiness/completion 不修改任务状态。CI 运行 quality 时
 不传 `--task`，只返回质量结果，不写任务证据。
 
+实现过程中先运行受影响范围的针对性检查；当前 task 的最终 `trellis-check` 后只运行一次
+quality。同一提交批次不按 commit 次数重复完整验证，提交已验证的相同内容不会因 HEAD
+变化使证据失效；只有证据覆盖的仓库内容随后变化才重新运行。completion 只校验并复用
+已有证据，不重新执行质量命令。
+
 Recallium 模板默认使用 `https://www.59005046.xyz:8102/mcp`。远端 URL 必须使用 HTTPS；
 仅本机 `localhost`、`127.0.0.1`、`::1` 允许 HTTP。
 
@@ -84,11 +89,11 @@ cd /path/to/project
 trellis init --codex -u hogenxue
 ```
 
-不要对所有项目批量初始化。初始化后，将项目特有规则追加在 Trellis 管理区外；应从 [AGENTS.project.md](AGENTS.project.md) 复制 Codex 阶段映射，确保 Grill with Docs 只替代 `trellis-brainstorm`，质量阶段继续由 `trellis-check` 单独负责。
+不要对所有项目批量初始化。初始化后，将项目特有规则追加在 Trellis 管理区外；应从根目录的 [AGENTS.project.md](../AGENTS.project.md) 复制 Codex 阶段映射，确保 Grill with Docs 只替代 `trellis-brainstorm`，质量阶段继续由 `trellis-check` 单独负责。
 
 ## 模板说明
 
-- [AGENTS.global.md](AGENTS.global.md)：供全局 Codex 使用的可复制模板。
-- [AGENTS.project.md](AGENTS.project.md)：供 Trellis 项目追加项目特有规则的补充模板。
+- [AGENTS.global.md](../AGENTS.global.md)：供全局 Codex 使用的可复制模板，存放在仓库根目录。
+- [AGENTS.project.md](../AGENTS.project.md)：供 Trellis 项目追加项目特有规则的补充模板，存放在仓库根目录。
 - `config-check.sh`：只读诊断。
 - `install.sh`：旧版兼容入口；等价于统一入口的 `scripts/install.sh agents`。

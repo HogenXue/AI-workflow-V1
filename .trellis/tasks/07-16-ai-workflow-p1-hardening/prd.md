@@ -16,6 +16,7 @@
 8. 用 Trellis 兼容的 `grill-with-docs` 替换 `grill-me`：继续作为 Codex Phase 1.1 的唯一访谈器，同时仅把领域术语写入 `.trellis/spec/domain/`、把难以逆转且存在真实权衡的决定写入 `.trellis/spec/decisions/`；需求与验收仍只写当前 Trellis PRD。
 9. 选择性引入并适配 `diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts`；保留本包现有 `tdd`，不安装上游同名版本。所有新增能力必须归属于当前 Trellis task，不能接管 task 状态、质量阶段或 Git 授权。
 10. 评估 Matt Pocock 当前整套 Skills 与 Trellis 的冲突，形成可执行的保留、适配和禁止清单；未经单独确认不得安装整套 Skills，也不得引入 `to-spec`、`to-tickets`、`implement`、`code-review` 或第二套 issue/task 状态机。
+11. 完整质量验证按 Trellis task 和内容变化执行，而不是按 Git commit 次数执行；同一批提交仅改变 HEAD 时不得使已通过的内容证据失效，验证后代码、配置或测试内容变化仍必须使 completion 失败。
 
 ## Non-goals
 
@@ -41,6 +42,8 @@
 - [x] Matt Pocock 40 个上游 Skill 的冲突评估已记录，整套安装被明确判定为不适合直接叠加到 Trellis。
 - [x] 本机实际生效的 `~/.codex/AGENTS.md` 与 `~/.agents/skills` 已切换到 `grill-with-docs`；被覆盖或删除的旧文件均保留 UTC 时间戳 `.bak` 备份。
 - [x] Memory Skill、MCP 模板和本机 `~/.codex/config.toml` 均使用 Recallium HTTPS 地址；本机配置修改前已生成 UTC 时间戳 `.bak` 备份。
+- [x] 同一内容在质量验证后提交，即使 Git HEAD 改变，completion 仍通过；验证后的仓库内容变化仍使证据过期。
+- [x] 工作流规则明确：开发中运行针对性检查，每个 task 的最终完整质量检查只运行一次，除非验证覆盖的内容随后变化。
 
 ## Confirmed Decisions
 
@@ -50,6 +53,7 @@
 - `grill-with-docs` 采用 Matt Pocock 上游 `e9fcdf95b402d360f90f1db8d776d5dd450f9234` 的 grilling/domain-modeling 语义，并增加 Trellis 持久化边界。
 - 精选能力集为本包既有能力加 `grill-with-docs`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts`；上游 `tdd` 因同名和流程语义冲突不安装。
 - `.trellis/spec/domain/` 只保存项目领域词汇，`.trellis/spec/decisions/` 只保存满足难以逆转、缺少上下文会令人意外、且经过真实权衡三个条件的决定；Trellis PRD 仍是需求和验收的唯一来源。
+- 质量证据以确定性的仓库内容指纹判定新鲜度；`git_head` 仅保留为审计元数据，不再作为 completion 的失效条件。
 
 ## Notes
 

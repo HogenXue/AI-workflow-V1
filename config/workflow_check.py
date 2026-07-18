@@ -489,8 +489,6 @@ def completion(project_root: Path, task_dir: Path) -> dict[str, Any]:
                 )
             )
         else:
-            if evidence.get("git_head") != git_head(project_root):
-                issues.append(_issue("stale_head", "质量证据对应的 Git HEAD 已过期"))
             current_fingerprint = worktree_fingerprint(project_root, evidence_path)
             if evidence.get("worktree_fingerprint") != current_fingerprint:
                 issues.append(_issue("stale_worktree", "质量证据对应的工作区已经变化"))

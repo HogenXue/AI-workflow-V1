@@ -133,7 +133,7 @@ if [[ -z "${INSTALL_PROJECT_ROOT:-}" ]]; then
 fi
 
 proj="$INSTALL_PROJECT_ROOT"
-agents_src="$root_dir/trellis/AGENTS.global.md"
+agents_src="$root_dir/AGENTS.global.md"
 if [[ ! -f "$agents_src" || ! -f "$templates/hooks.json" || ! -d "$templates/hooks" ]]; then
   printf 'ERROR: incomplete Cursor rules/hooks templates under %s\n' "$root_dir/trellis" >&2
   rollback_mcp || true
