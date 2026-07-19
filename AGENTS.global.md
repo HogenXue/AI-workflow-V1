@@ -35,6 +35,8 @@
 
 - 复杂、跨模块或需求不明确：使用 Grill with Docs；简单且需求明确的任务不自动触发。
 - 历史上下文、长期决策或跨会话延续：使用 Memory（见上节记忆分层）。
+- Graphify（已安装且仓库已有可用图谱时）：用于代码库概览、关系与路径检索；将
+  `INFERRED` 或 `AMBIGUOUS` 结果视为待核实线索，编辑前回到源文件确认。
 - 项目规则明确要求，或涉及跨模块、公共接口/数据契约、删除迁移、高风险或陌生调用链：使用 GitNexus；局部低风险修改不自动调用。
 - Release Note、CHANGELOG 或版本说明：使用 Release。
 - 编码、重构或代码审查：使用 Karpathy Guidelines（完整十二条在 Skill 内；不在本全局文件展开长文）。
@@ -47,6 +49,9 @@
 - Grill with Docs 只负责 Phase 1.1 需求澄清及 Trellis 领域/决定 spec；不管理任务生命周期、不写代码、不执行测试、审查或 Git 操作。
 - TDD 是 Trellis 执行阶段的实现方法，不是第二套工作流；仅对需要自动化测试证明的行为变化执行 RED → GREEN → REFACTOR。
 - Diagnosing Bugs、Codebase Design 和 Resolving Merge Conflicts 都是当前 Trellis task 内的能力，不创建平行 PRD、Spec、Task、Review 或提交流程。
+- Graphify 只提供可选的本地图谱探索，不替代 GitNexus 的正式影响分析、Trellis 的质量证据或
+  Memory 的长期记忆；Graphify 的图谱/查询结果不是长期项目记忆。除非用户或项目规则明确授权，
+  不自动生成/更新图谱、安装其配置或 hook，或提交 `graphify-out/` 产物。
 - GitNexus 只负责影响分析与提交安全，不写业务代码。`detect_changes` 仅用于项目规则明确要求、已做图谱分析或高影响变更；低风险提交只做标准 Git 范围检查与相关测试。
 - Release 只负责发布说明、版本记录和已获授权的发布准备/执行，不负责开发实现。
 - Memory 只负责长期记忆与跨会话上下文，不替代 Trellis 的 PRD、Task 或 Journal。

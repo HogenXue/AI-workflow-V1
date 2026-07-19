@@ -367,6 +367,107 @@ class ComponentInstallTests(unittest.TestCase):
         )
         self.assertFalse(home.exists())
 
+    def test_graphify_component_installs_global_agents_skill(self) -> None:
+        home = self.root / "home"
+        fake_bin = self.root / "fake-bin"
+        fake_bin.mkdir()
+        args_file = self.root / "graphify-args.txt"
+        fake_graphify = fake_bin / "graphify"
+        fake_graphify.write_text(
+            "#!/usr/bin/env bash\n"
+            "set -euo pipefail\n"
+            "printf '%s\\n' \"$*\" > \"$GRAPHIFY_ARGS_FILE\"\n"
+            "[[ \"$1\" == install && \"$2\" == --platform && \"$3\" == agents ]]\n"
+            "mkdir -p \"$HOME/.agents/skills/graphify\"\n"
+            "printf '%s\\n' '---' 'name: graphify' '---' > \"$HOME/.agents/skills/graphify/SKILL.md\"\n",
+            encoding="utf-8",
+        )
+        fake_graphify.chmod(0o755)
+
+        dry_run = subprocess.run(
+            ["bash", str(ROOT / "scripts" / "install.sh"), "graphify", "--dry-run"],
+            cwd=ROOT,
+            env={**os.environ, "HOME": str(home), "PATH": f"{fake_bin}:{os.environ['PATH']}"},
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(dry_run.returncode, 0, dry_run.stderr)
+        self.assertIn("DRY-RUN: Graphify global Skill", dry_run.stdout)
+        self.assertFalse(home.exists())
+
+        apply = subprocess.run(
+            ["bash", str(ROOT / "scripts" / "install.sh"), "graphify", "--apply"],
+            cwd=ROOT,
+            env={
+                **os.environ,
+                "HOME": str(home),
+                "PATH": f"{fake_bin}:{os.environ['PATH']}",
+                "GRAPHIFY_ARGS_FILE": str(args_file),
+            },
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(apply.returncode, 0, apply.stderr + apply.stdout)
+        self.assertEqual(args_file.read_text(encoding="utf-8"), "install --platform agents\n")
+        self.assertTrue((home / ".agents" / "skills" / "graphify" / "SKILL.md").is_file())
+        self.assertIn('run_component graphify "${graphify_args[@]}"', (ROOT / "scripts" / "install.sh").read_text(encoding="utf-8"))
+
+    def test_graphify_component_requires_replace_and_backs_up_existing_skill(self) -> None:
+        home = self.root / "home"
+        target = home / ".agents" / "skills" / "graphify"
+        sentinel = target / "sentinel"
+        sentinel.parent.mkdir(parents=True)
+        sentinel.write_text("keep\n", encoding="utf-8")
+        fake_bin = self.root / "fake-bin"
+        fake_bin.mkdir()
+        fake_graphify = fake_bin / "graphify"
+        fake_graphify.write_text(
+            "#!/usr/bin/env bash\n"
+            "set -euo pipefail\n"
+            "mkdir -p \"$HOME/.agents/skills/graphify\"\n"
+            "printf '%s\\n' '---' 'name: graphify' '---' > \"$HOME/.agents/skills/graphify/SKILL.md\"\n",
+            encoding="utf-8",
+        )
+        fake_graphify.chmod(0o755)
+        env = {**os.environ, "HOME": str(home), "PATH": f"{fake_bin}:{os.environ['PATH']}"}
+
+        conflict = subprocess.run(
+            ["bash", str(ROOT / "scripts" / "install.sh"), "graphify", "--apply"],
+            cwd=ROOT,
+            env=env,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertNotEqual(conflict.returncode, 0)
+        self.assertIn("CONFLICT", conflict.stderr)
+        self.assertEqual(sentinel.read_text(encoding="utf-8"), "keep\n")
+
+        backup_dir = self.root / "backup"
+        replace = subprocess.run(
+            [
+                "bash",
+                str(ROOT / "scripts" / "install.sh"),
+                "graphify",
+                "--apply",
+                "--replace",
+                "--backup-dir",
+                str(backup_dir),
+            ],
+            cwd=ROOT,
+            env=env,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(replace.returncode, 0, replace.stderr + replace.stdout)
+        backups = list(backup_dir.glob("graphify.*.bak/sentinel"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(backups[0].read_text(encoding="utf-8"), "keep\n")
+        self.assertTrue((target / "SKILL.md").is_file())
+
     def test_agents_target_warns_about_duplicate_codex_skill_names(self) -> None:
         home = self.root / "home"
         codex_home = home / ".codex"

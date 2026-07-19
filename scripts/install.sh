@@ -4,7 +4,7 @@ set -euo pipefail
 
 usage() {
   cat >&2 <<'EOF'
-Usage: install.sh <skills|agents|config|codex-merge|cursor-merge> [component options]
+Usage: install.sh <skills|graphify|agents|config|codex-merge|cursor-merge> [component options]
        install.sh   # interactive (TTY only)
 
 Run "install.sh <component> --help" for component-specific options.
@@ -21,6 +21,7 @@ run_component() {
   shift
   case "$component" in
     skills) bash "$script_dir/install-skills.sh" "$@" ;;
+    graphify) bash "$script_dir/install-graphify.sh" "$@" ;;
     agents) bash "$script_dir/install-agents.sh" "$@" ;;
     config) bash "$script_dir/install-config.sh" "$@" ;;
     codex-merge) bash "$script_dir/install-codex-merge.sh" "$@" ;;
@@ -63,6 +64,20 @@ install_profile_codex() {
   fi
   if ((${#skill_args[@]})); then
     run_component skills "${skill_args[@]}"
+  fi
+
+  local graphify_target="$skills_target/graphify"
+  local graphify_args=(--apply)
+  if [[ -e "$graphify_target" || -L "$graphify_target" ]]; then
+    if prompt_replace_if_needed "Graphify Skill" "$graphify_target"; then
+      graphify_args+=(--replace)
+    else
+      printf '%s\n' 'SKIP: Graphify global Skill'
+      graphify_args=()
+    fi
+  fi
+  if ((${#graphify_args[@]})); then
+    run_component graphify "${graphify_args[@]}"
   fi
 
   local config_args=(--copy --target "$config_target")
@@ -188,12 +203,12 @@ interactive_main() {
   fi
 
   if [[ "$mode_choice" == "2" ]]; then
-    printf '%s\n' 'Component: skills | agents | config | codex-merge | cursor-merge'
+    printf '%s\n' 'Component: skills | graphify | agents | config | codex-merge | cursor-merge'
     printf 'Component: '
     local comp
     read -r comp || comp=""
     case "$comp" in
-      skills|agents|config|codex-merge|cursor-merge)
+      skills|graphify|agents|config|codex-merge|cursor-merge)
         local extra=()
         if [[ "$comp" == *-merge && -n "$project_root" ]]; then
           extra+=(--project-root "$project_root" --interactive)
@@ -212,7 +227,7 @@ interactive_main() {
   fi
 
   printf '%s\n' '--- Recommended full install plan ---'
-  ((want_codex)) && printf '%s\n' '- Codex: ~/.agents/skills + ~/.agents/config + ~/.codex AGENTS/user hooks + global MCP'
+  ((want_codex)) && printf '%s\n' '- Codex: ~/.agents/skills (including Graphify) + ~/.agents/config + ~/.codex AGENTS/user hooks + global MCP'
   ((want_cursor)) && printf '%s\n' '- Cursor: ~/.cursor/skills + ~/.cursor/config + mcp.json + project rules/hooks'
   if [[ -n "$project_root" ]]; then
     printf '%s\n' "- Project root: $project_root"
@@ -248,7 +263,7 @@ component="$1"
 shift
 
 case "$component" in
-  skills|agents|config|codex-merge|cursor-merge)
+  skills|graphify|agents|config|codex-merge|cursor-merge)
     run_component "$component" "$@"
     ;;
   --help|-h|help)

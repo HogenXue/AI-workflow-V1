@@ -586,6 +586,18 @@ class BundledSkillContractTests(unittest.TestCase):
                 ):
                     self.assertIn(phrase, content)
 
+    def test_agents_templates_keep_graphify_optional_and_gitnexus_authoritative(self) -> None:
+        global_template = (ROOT / "AGENTS.global.md").read_text(encoding="utf-8")
+        project_template = (ROOT / "AGENTS.project.md").read_text(encoding="utf-8")
+
+        self.assertIn("Graphify（已安装且仓库已有可用图谱时）", global_template)
+        self.assertIn("不替代 GitNexus 的正式影响分析", global_template)
+        self.assertIn("Graphify 的图谱/查询结果不是长期项目记忆", global_template)
+
+        self.assertIn("Graphify 可用且仓库已有图谱时", project_template)
+        self.assertIn("不替代 GitNexus 的正式影响分析", project_template)
+        self.assertIn("不得自动生成或更新图谱", project_template)
+
     def test_egm_agents_template_is_current_and_discoverable(self) -> None:
         content = (ROOT / "AGENTS-egm.md").read_text(encoding="utf-8")
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

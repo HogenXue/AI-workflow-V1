@@ -21,4 +21,8 @@
 - 无 active task 时先遵守 Trellis 的建 task 同意门槛；简单任务也通过 Trellis 的轻量流程执行并运行针对性验证。
 - 不要在本项目同时启动第二套完整工作流。
 - 原生 Trellis helper 不可用时执行其等价的读取、验证或 Spec 同步步骤，并明确降级；不得声称已加载不存在的 Skill。
+- Graphify 可用且仓库已有图谱时，可用于概览、关系和路径检索；图谱中的 `INFERRED` / `AMBIGUOUS`
+  结论须回到源文件核实。它不替代 GitNexus 的正式影响分析、Trellis 的质量证据或 Recallium /
+  Memory 的长期项目记忆；除当前任务或项目规则明确授权外，不得自动生成或更新图谱、安装配置或
+  hook，或提交 `graphify-out/` 产物。
 - 项目配置明确要求，或改动涉及高风险、跨模块、公共接口/数据契约、删除迁移或陌生调用链时先用 GitNexus；仅这些情形在提交前运行 GitNexus 范围检查。局部低风险提交使用标准 Git 范围检查与相关测试。

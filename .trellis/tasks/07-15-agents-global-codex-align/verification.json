@@ -1,0 +1,44 @@
+{
+  "checks": [
+    {
+      "command": "/opt/anaconda3/bin/python3 /Users/hogen/Projects/AI-workflow/AI-workflow-V1/scripts/validate-all-skills.py",
+      "duration_ms": 126,
+      "exit_code": 0,
+      "name": "skill-validation",
+      "status": "passed"
+    },
+    {
+      "command": "/opt/anaconda3/bin/python3 -m unittest discover -s tests",
+      "duration_ms": 22327,
+      "exit_code": 0,
+      "name": "unit-tests",
+      "status": "passed"
+    },
+    {
+      "command": "bash -n scripts/**/*.sh trellis/**/*.sh",
+      "duration_ms": 160,
+      "exit_code": 0,
+      "name": "bash-syntax",
+      "status": "passed"
+    },
+    {
+      "command": "AST parse config scripts tests trellis",
+      "duration_ms": 43,
+      "exit_code": 0,
+      "name": "python-syntax",
+      "status": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "duration_ms": 37,
+      "exit_code": 0,
+      "name": "git-diff-check",
+      "status": "passed"
+    }
+  ],
+  "generated_at": "2026-07-19T09:37:55.804706+00:00",
+  "git_head": "fe465bb442ba7615fe7910a80612d6bb795a5cc0",
+  "schema_version": 1,
+  "status": "passed",
+  "worktree_fingerprint": "d3fa9d5ea46f211c8df8b793d8a7ae3680adbad630eb49782dab73f2e8a3a246"
+}

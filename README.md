@@ -32,7 +32,7 @@ cd AI-workflow-V1
 
 ## 安装
 
-安装统一入口：`scripts/install.sh <skills|agents|config|codex-merge|cursor-merge>`。TTY 下无参数运行进入交互向导（可多选 Codex/Cursor）；非 TTY 无参数则打印用法并以 exit 2 退出。Codex hooks 与 MCP 安装到用户级 `~/.codex`；不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
+安装统一入口：`scripts/install.sh <skills|graphify|agents|config|codex-merge|cursor-merge>`。TTY 下无参数运行进入交互向导（可多选 Codex/Cursor）；非 TTY 无参数则打印用法并以 exit 2 退出。Codex hooks 与 MCP 安装到用户级 `~/.codex`；不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
 
 所有组件在覆盖、删除或迁移现有目标前都会先备份。备份直接写入所选备份目录，命名为 `<原名称>.<UTC 时间戳>.bak`；同一秒内重复执行会追加序号，绝不会覆盖已有备份。目录同样使用 `.bak` 后缀并保留完整内容。备份失败时当前组件立即停止，原目标保持不变。自定义 `--backup-dir` 不能等于正被备份的目标或位于其内部。
 
@@ -43,6 +43,7 @@ cd AI-workflow-V1
 | 组件           | 写入范围                         | 默认行为            |
 | ------------ | ---------------------------- | --------------- |
 | `skills`     | manifest 中的 Skill 目录         | dry-run         |
+| `graphify`   | `~/.agents/skills/graphify`（第三方 Graphify Skill） | dry-run；需已安装 Graphify CLI |
 | `agents`     | `<agents-home>/AGENTS.md`    | dry-run；已有文件先备份 |
 | `config`     | 指定的配置目录                      | dry-run         |
 | `codex-merge` | Codex 全局 MCP + 用户级 `hooks.json` / `hooks/` | 写入 `${CODEX_HOME:-~/.codex}` |
@@ -61,6 +62,18 @@ bash scripts/install.sh skills --dry-run --target ~/.agents/skills
 ```bash
 bash scripts/install.sh skills --copy --replace --target ~/.agents/skills
 ```
+
+### 全局 Graphify Skill
+
+Graphify CLI 已安装时，可将其 Skill 安装到共享的 `~/.agents/skills/graphify`；不会写入任何项目目录：
+
+```bash
+bash scripts/install.sh graphify --dry-run
+bash scripts/install.sh graphify --apply
+```
+
+Codex 的“Recommended full install”同样会执行该全局安装。若目标已存在，需显式传入
+`--replace`，安装器会先创建时间戳备份；Graphify 仍是外部依赖，不纳入本包的 `manifest.yaml`。
 
 ### Cursor
 
@@ -117,6 +130,7 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
 | 参数             | 说明                                                                                       |
 | -------------- | ---------------------------------------------------------------------------------------- |
 | `skills`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--prune-legacy`、`--prune-other-root`、`--target PATH`、`--backup-dir PATH` |
+| `graphify`     | 支持 `--dry-run` / `--apply`、`--replace`、`--backup-dir PATH`；只写 `~/.agents/skills/graphify` |
 | `agents`       | 支持 `--dry-run` / `--apply`、`--agents-home PATH`、`--backup-dir PATH`；`--codex-home` 是兼容别名 |
 | `config`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--target PATH`、`--backup-dir PATH`       |
 | `codex-merge`  | `--mcp-keep` / `--mcp-overwrite`、`--mem0-url`、`--codex-home PATH`、`--replace`；兼容接受但忽略 `--project-root` / `--skip-project` |
@@ -138,7 +152,8 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
     ├── diagnosing-bugs/
     ├── codebase-design/
     ├── resolving-merge-conflicts/
-    └── karpathy-guidelines-zh/
+    ├── karpathy-guidelines-zh/
+    └── graphify/              # 仅执行 graphify 组件后存在
 ```
 
 Skill 优先通过 `../../config/effective_config.py` 读取已校验并合并的有效配置；helper 不存在时

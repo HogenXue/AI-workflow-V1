@@ -44,6 +44,43 @@
 
 无阻塞项（Recallium 吸收强度：短协议，非旧文全文）。
 
+## Addendum — Graphify integration (2026-07-19)
+
+用户已在本机安装 Graphify。优化两个根目录模板，使其在不改变 GitNexus、Memory 或 Trellis
+职责的前提下，提供一致的图谱使用边界。
+
+### Requirements
+
+1. `AGENTS.global.md` 将 Graphify 定义为已有本地图谱时的可选概览与关系检索能力；要求回到源文件核实
+   `INFERRED` / `AMBIGUOUS` 结论。
+2. `AGENTS.project.md` 说明 Graphify 不替代 GitNexus 的正式影响分析，也不替代 Trellis 质量证据或
+   Recallium / Memory 的长期项目记忆。
+3. 两个模板都禁止在未获当前任务或项目规则授权时自动生成/更新图谱、安装 Graphify 配置或 hook、提交
+   `graphify-out/` 产物。
+
+### Acceptance criteria
+
+- [x] 两个模板有一致的 Graphify 职责和边界，且 GitNexus 仍是正式影响分析入口。
+- [x] 回归测试覆盖上述边界。
+
+## Addendum — Global Graphify installation (2026-07-19)
+
+用户要求将 Graphify Skill 写入全局 `~/.agents/skills/`，并将安装行为纳入统一一键安装入口。
+
+### Requirements
+
+1. 新增显式 `graphify` 安装组件：默认 dry-run，`--apply` 仅调用已安装的 Graphify CLI，将 Skill
+   安装到用户级 Agent Skills 根目录。
+2. Codex 的推荐完整安装应包含该组件；不把第三方 Graphify Skill 纳入本包 `manifest.yaml`，也不把它
+   写入项目目录。
+3. 若 Graphify CLI 缺失或外部安装失败，清晰报错，不静默跳过。
+4. `graphify-out/` 是本地图谱生成物，默认忽略；显式 `git add -f` 才允许作为项目产物提交。
+
+### Acceptance criteria
+
+- [x] `graphify --apply` 路由到 `graphify install --platform agents`，并有回归测试。
+- [x] Codex 一键完整安装与 README 明确包含全局 Graphify Skill。
+
 ## Notes
 
 - Lightweight：PRD-only 即可；用户审阅后 `task.py start`
