@@ -1,0 +1,32 @@
+{
+  "id": "windows-ps-installers",
+  "name": "windows-ps-installers",
+  "title": "Windows PowerShell install scripts",
+  "description": "",
+  "status": "completed",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "hogen",
+  "assignee": "hogen",
+  "createdAt": "2026-07-27",
+  "completedAt": "2026-07-27",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "07-27-ps-install-lib",
+    "07-27-ps-install-components",
+    "07-27-ps-install-merge",
+    "07-27-ps-install-entry",
+    "07-27-ps-install-ci-docs"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}
