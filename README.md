@@ -16,7 +16,8 @@ Trellis 是项目唯一工作流；9 个 Skill 按阶段或能力增强它。Cod
 
 ## 前置条件
 
-- macOS / Linux，Bash
+- macOS / Linux：Bash
+- Windows：PowerShell 7+（`pwsh`）；可用 `winget install Microsoft.PowerShell` 安装
 - `python3 >= 3.10` 与 PyYAML（配置合并、工作流门禁和包校验需要）
 
 ```bash
@@ -31,6 +32,8 @@ cd AI-workflow-V1
 ```
 
 ## 安装
+
+### macOS / Linux（bash）
 
 安装统一入口：`scripts/install.sh <skills|graphify|agents|config|codex-merge|cursor-merge>`。TTY 下无参数运行进入交互向导（可多选 Codex/Cursor）；非 TTY 无参数则打印用法并以 exit 2 退出。Codex hooks 与 MCP 安装到用户级 `~/.codex`；不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
 
@@ -50,6 +53,33 @@ cd AI-workflow-V1
 | `cursor-merge` | Cursor MCP + 可选项目 `.cursor` hooks；rules `.mdc` 由 `AGENTS.global.md` 动态生成 | 需显式 project-root 才写项目级 |
 
 `skills` 与 `config` 默认 **copy**（独立副本，不依赖源码目录）；本地开发可用 **link** 实时同步。
+
+### Windows（PowerShell 7+）
+
+Windows 使用与 bash **行为对等** 的 PowerShell 实现（仅 `pwsh` 7+，不支持 Windows PowerShell 5.1）。入口：
+
+- `scripts\install.cmd` — cmd 启动器，转发到 `pwsh -File scripts\install.ps1`
+- `pwsh -File scripts\install.ps1` — 直接调用
+
+组件名、标志与诊断前缀（`ERROR:` / `SKIP:` / `BACKUP:` / `INSTALLED:` / `CONFLICT:` 等）与 bash 对齐。Cursor 项目级 hooks/rules 同样必须显式 `--project-root`（或交互菜单选择），不会静默使用 Git 根。`--link` 失败时回滚并非零退出（不静默降级为 copy）；若无符号链接权限，请开启 [Developer Mode](https://learn.microsoft.com/windows/apps/get-started/enable-your-device-for-development) 或具备 `SeCreateSymbolicLinkPrivilege`。
+
+```powershell
+winget install Microsoft.PowerShell
+```
+
+```bat
+scripts\install.cmd skills --dry-run --target %USERPROFILE%\.agents\skills
+scripts\install.cmd skills --copy --replace --target %USERPROFILE%\.agents\skills
+scripts\install.cmd cursor-merge --mcp-overwrite --project-root C:\path\to\repo
+```
+
+```powershell
+pwsh -File scripts\install.ps1 skills --dry-run --target "$env:USERPROFILE\.agents\skills"
+pwsh -File scripts\install.ps1 skills --copy --replace --target "$env:USERPROFILE\.agents\skills"
+pwsh -File scripts\install.ps1 --help
+```
+
+TTY 下无参数进入交互向导；非 TTY 无参数打印用法并以 exit 2 退出（与 bash 一致）。
 
 ### 预览（不写文件）
 
