@@ -1,0 +1,51 @@
+{
+  "checks": [
+    {
+      "command": "cd /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmp.0hvI7o7r0S/repo && /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmp.0hvI7o7r0S/venv/bin/python -m unittest discover -s tests -p 'test_*.py'",
+      "duration_ms": 8263,
+      "exit_code": 0,
+      "name": "full-unit-tests",
+      "status": "passed"
+    },
+    {
+      "command": "/var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmp.0hvI7o7r0S/venv/bin/python scripts/validate-all-skills.py",
+      "duration_ms": 72,
+      "exit_code": 0,
+      "name": "skill-validation",
+      "status": "passed"
+    },
+    {
+      "command": "/var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmp.0hvI7o7r0S/venv/bin/python -m unittest tests.test_install_interactive",
+      "duration_ms": 2151,
+      "exit_code": 0,
+      "name": "installer-tests",
+      "status": "passed"
+    },
+    {
+      "command": "bash -n scripts/install.sh scripts/install-codex-merge.sh scripts/install-cursor-merge.sh",
+      "duration_ms": 6,
+      "exit_code": 0,
+      "name": "bash-syntax",
+      "status": "passed"
+    },
+    {
+      "command": "/var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmp.0hvI7o7r0S/venv/bin/python -m py_compile scripts/lib/merge_host_mcp.py",
+      "duration_ms": 38,
+      "exit_code": 0,
+      "name": "python-syntax",
+      "status": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "duration_ms": 18,
+      "exit_code": 0,
+      "name": "git-diff-check",
+      "status": "passed"
+    }
+  ],
+  "generated_at": "2026-07-22T08:55:06.351298+00:00",
+  "git_head": "3bc7af23029a772d3da9672411b30e3d500e98b0",
+  "schema_version": 1,
+  "status": "passed",
+  "worktree_fingerprint": "1c153dc48973bb034a726b3ed7ef70539cd3de05a034ce40ec48adbddaeba623"
+}

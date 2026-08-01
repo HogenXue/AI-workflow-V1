@@ -99,7 +99,7 @@ install_profile_codex() {
   [[ -n "$mem0_url" ]] && merge_args+=(--mem0-url "$mem0_url")
   [[ -n "$project_root" ]] && merge_args+=(--project-root "$project_root")
   if [[ -t 0 ]]; then
-    if install_lib_prompt_yn "Overwrite existing Codex MCP entries that conflict?" n; then
+    if install_lib_prompt_yn "Overwrite existing non-URL Codex MCP entries that conflict?" n; then
       merge_args+=(--mcp-overwrite)
     else
       merge_args+=(--mcp-keep)
@@ -150,7 +150,7 @@ install_profile_cursor() {
     merge_args+=(--skip-project)
   fi
   if [[ -t 0 ]]; then
-    if install_lib_prompt_yn "Overwrite existing Cursor MCP entries that conflict?" n; then
+    if install_lib_prompt_yn "Overwrite existing non-URL Cursor MCP entries that conflict?" n; then
       merge_args+=(--mcp-overwrite)
     else
       merge_args+=(--mcp-keep)
@@ -197,10 +197,6 @@ interactive_main() {
   fi
 
   local mem0_url=""
-  if install_lib_prompt_yn "Provide mem0 MCP URL now? (needed to add mem0)" n; then
-    printf 'mem0 URL: '
-    read -r mem0_url || mem0_url=""
-  fi
 
   if [[ "$mode_choice" == "2" ]]; then
     printf '%s\n' 'Component: skills | graphify | agents | config | codex-merge | cursor-merge'

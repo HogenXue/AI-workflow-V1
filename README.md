@@ -32,7 +32,7 @@ cd AI-workflow-V1
 
 ## 安装
 
-安装统一入口：`scripts/install.sh <skills|graphify|agents|config|codex-merge|cursor-merge>`。TTY 下无参数运行进入交互向导（可多选 Codex/Cursor）；非 TTY 无参数则打印用法并以 exit 2 退出。Codex hooks 与 MCP 安装到用户级 `~/.codex`；不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
+安装统一入口：`scripts/install.sh <skills|graphify|agents|config|codex-merge|cursor-merge>`。TTY 下无参数运行进入交互向导（可多选 Codex/Cursor）；非 TTY 无参数则打印用法并以 exit 2 退出。交互向导会按宿主逐项检测已有的 URL 型 MCP：显示当前 URL，并默认沿用；只有用户明确选择替换时才写入模板 URL 或要求输入新的 Mem0 URL。Codex hooks 与 MCP 安装到用户级 `~/.codex`；不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
 
 所有组件在覆盖、删除或迁移现有目标前都会先备份。备份直接写入所选备份目录，命名为 `<原名称>.<UTC 时间戳>.bak`；同一秒内重复执行会追加序号，绝不会覆盖已有备份。目录同样使用 `.bak` 后缀并保留完整内容。备份失败时当前组件立即停止，原目标保持不变。自定义 `--backup-dir` 不能等于正被备份的目标或位于其内部。
 
@@ -250,6 +250,10 @@ python3 scripts/validate-all-skills.py
 本包包含 Codex TOML 与 Cursor JSON 的 MCP 合并模板；安装器按宿主格式增量合并，不会
 把一套格式复制到另一宿主。Recallium 默认地址为
 `https://www.59005046.xyz:8102/mcp`。
+
+TTY 一键安装会分别读取 Codex 与 Cursor 的现有 MCP 配置。对本包管理且已有 URL 的 MCP，
+安装器逐项询问沿用或替换；直接回车默认沿用。缺少 Mem0 配置时才询问是否新增 URL。
+非交互组件调用不读取输入，继续由 `--mcp-keep`、`--mcp-overwrite` 和 `--mem0-url` 明确控制。
 
 安全策略：远端 MCP URL 必须使用 HTTPS；只有 `localhost`、`127.0.0.1`、`::1` 允许
 明文 HTTP，用于本机开发。不安全 URL 会在目标文件修改前失败。

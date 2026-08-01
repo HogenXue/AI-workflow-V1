@@ -257,6 +257,80 @@ fi
 
 **Related**: Backup before overwrite via `install_lib_backup_file`; MCP writes are atomic (`merge_host_mcp.py`).
 
+## Scenario: Per-server URL conflict prompts
+
+### 1. Scope / Trigger
+
+- Trigger: the no-argument TTY wizard merges managed MCP entries into an existing Codex or Cursor host configuration.
+- Safety goal: an existing URL is user-owned and must not be replaced by a package default or newly entered Mem0 URL without per-server confirmation.
+
+### 2. Signatures
+
+```text
+install.sh                         # TTY wizard
+  -> install-<host>-merge.sh --interactive
+  -> merge_host_mcp.py --interactive --host <codex|cursor> ...
+
+merge_host_mcp.py --interactive
+  # Internal flag. The shell entrypoint passes it only when stdin is a TTY.
+```
+
+### 3. Contracts
+
+- Show each existing managed URL and default to keeping it.
+- Replace only after explicit confirmation. Packaged URL entries show the replacement URL; Mem0 asks for a new URL when no `--mem0-url` value exists.
+- A missing Mem0 entry may be added interactively, but remains optional.
+- Resolve Codex and Cursor independently when both profiles are selected.
+- Existing command/args entries continue to use the host's ordinary `--mcp-keep` / `--mcp-overwrite` policy.
+- Component and non-TTY calls never read stdin unless their shell entrypoint has confirmed an interactive TTY.
+
+### 4. Validation & Error Matrix
+
+| Condition | Result |
+|-----------|--------|
+| Existing URL + default/No | Print `KEEP`; preserve the complete existing entry |
+| Existing packaged URL + Yes | Replace with the packaged URL after transport validation |
+| Existing Mem0 URL + Yes | Require a non-empty replacement URL; validate it before write |
+| Missing Mem0 + default/No | Print `SKIP`; do not add Mem0 |
+| Missing Mem0 + Yes | Require and validate a URL, then add Mem0 |
+| Non-TTY component invocation | Do not prompt; use existing policy flags |
+| Remote plaintext HTTP replacement | Print `ERROR:` and leave the target unmodified |
+
+### 5. Good / Base / Bad Cases
+
+- **Good**: keep an existing Recallium URL and replace only Mem0 in the same run.
+- **Base**: press Enter for every existing URL; all existing URL entries remain unchanged.
+- **Bad**: pass a single global overwrite answer through to every URL-bearing MCP without showing the current value.
+
+### 6. Tests Required
+
+- Codex TOML: independent keep/replace decisions; assert old Recallium remains and Mem0 changes.
+- Cursor JSON: inverse decisions; assert packaged Recallium replaces old value and Mem0 remains.
+- Missing Mem0: opt in with a URL; assert the entry is added.
+- Regression suite: component CLI, non-TTY no-args, URL transport validation, backup, and rollback behavior remain green.
+- TTY smoke test: verify the shell entrypoint propagates interactivity and the resulting host config matches the selected decisions.
+
+### 7. Wrong vs Correct
+
+#### Wrong
+
+```text
+Overwrite existing MCP entries that conflict? Yes
+-> silently replace recallium, mem0, and every other URL entry
+```
+
+#### Correct
+
+```text
+Existing Codex recallium URL: https://old.example/recallium
+Replace ... with https://packaged.example/mcp? [y/N]: n
+KEEP: mcp_servers.recallium
+
+Existing Codex mem0 URL: https://old.example/mem0
+Replace ...? [y/N]: y
+New Codex mem0 URL: https://new.example/mem0
+```
+
 ## Convention: Timestamped backup names
 
 **What**: Every existing file, directory, or symlink that an installer will overwrite, delete, or migrate is copied first to `<backup-dir>/<name>.<UTC timestamp>.bak`. A same-second collision appends a numeric suffix before `.bak`; an existing backup is never overwritten. Default roots use `.ai-workflow-backups` under the paired host home; legacy backup directories are preserved but receive no new backups.

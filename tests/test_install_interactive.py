@@ -38,6 +38,104 @@ class InteractiveInstallTests(unittest.TestCase):
             env=self.env(),
         )
 
+    def run_mcp_merge(
+        self,
+        *args: str,
+        input_text: str = "",
+    ) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "lib" / "merge_host_mcp.py"), *args],
+            cwd=ROOT,
+            text=True,
+            input=input_text,
+            capture_output=True,
+            check=False,
+        )
+
+    def test_codex_interactive_mcp_urls_can_be_kept_or_replaced_independently(self) -> None:
+        target = self.root / "config.toml"
+        target.write_text(
+            '[mcp_servers.recallium]\ntype = "http"\nurl = "https://old.example/recallium"\n\n'
+            '[mcp_servers.mem0]\ntype = "http"\nurl = "https://old.example/mem0"\n',
+            encoding="utf-8",
+        )
+
+        result = self.run_mcp_merge(
+            "--host",
+            "codex",
+            "--target",
+            str(target),
+            "--fragments",
+            str(ROOT / "trellis" / "codex" / "mcp"),
+            "--policy",
+            "overwrite",
+            "--interactive",
+            input_text="n\ny\nhttps://new.example/mem0\n",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        text = target.read_text(encoding="utf-8")
+        self.assertIn('url = "https://old.example/recallium"', text)
+        self.assertIn('url = "https://new.example/mem0"', text)
+        self.assertNotIn("https://old.example/mem0", text)
+        self.assertIn("Existing Codex recallium URL: https://old.example/recallium", result.stderr)
+        self.assertIn("Existing Codex mem0 URL: https://old.example/mem0", result.stderr)
+
+    def test_cursor_interactive_mcp_urls_can_be_replaced_or_kept_independently(self) -> None:
+        target = self.root / "mcp.json"
+        target.write_text(
+            json.dumps(
+                {
+                    "mcpServers": {
+                        "recallium": {"url": "https://old.example/recallium", "transport": "http"},
+                        "mem0": {"url": "https://old.example/mem0", "transport": "http"},
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
+
+        result = self.run_mcp_merge(
+            "--host",
+            "cursor",
+            "--target",
+            str(target),
+            "--fragments",
+            str(ROOT / "trellis" / "cursor" / "mcp" / "servers.json"),
+            "--policy",
+            "keep",
+            "--interactive",
+            input_text="y\nn\n",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        data = json.loads(target.read_text(encoding="utf-8"))
+        self.assertEqual(data["mcpServers"]["recallium"]["url"], "https://www.59005046.xyz:8102/mcp")
+        self.assertEqual(data["mcpServers"]["mem0"]["url"], "https://old.example/mem0")
+        self.assertIn("Existing Cursor recallium URL: https://old.example/recallium", result.stderr)
+        self.assertIn("Existing Cursor mem0 URL: https://old.example/mem0", result.stderr)
+
+    def test_interactive_merge_can_add_missing_mem0_url(self) -> None:
+        target = self.root / "config.toml"
+        target.write_text("", encoding="utf-8")
+
+        result = self.run_mcp_merge(
+            "--host",
+            "codex",
+            "--target",
+            str(target),
+            "--fragments",
+            str(ROOT / "trellis" / "codex" / "mcp"),
+            "--policy",
+            "keep",
+            "--interactive",
+            input_text="y\nhttps://new.example/mem0\n",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertIn('url = "https://new.example/mem0"', target.read_text(encoding="utf-8"))
+        self.assertIn("Add Codex mem0 URL now?", result.stderr)
+
     def test_codex_merge_rejects_remote_http_before_mutating_target(self) -> None:
         codex_home = self.home / ".codex"
         codex_home.mkdir(parents=True)

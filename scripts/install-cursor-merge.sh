@@ -111,6 +111,9 @@ mcp_args=(
   --policy "$mcp_policy"
 )
 [[ -n "$mem0_url" ]] && mcp_args+=(--mem0-url "$mem0_url")
+if ((interactive)) && [[ -t 0 ]]; then
+  mcp_args+=(--interactive)
+fi
 ((dry_run)) && mcp_args+=(--dry-run)
 
 if "${mcp_args[@]}"; then

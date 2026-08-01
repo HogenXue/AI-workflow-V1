@@ -63,12 +63,58 @@ def section_exists_toml(text: str, server: str) -> bool:
     return bool(re.search(rf"^\[mcp_servers\.{re.escape(server)}\]\s*$", text, re.M))
 
 
+def section_url_toml(text: str, server: str) -> str | None:
+    header = re.search(rf"^\[mcp_servers\.{re.escape(server)}\]\s*$", text, re.M)
+    if not header:
+        return None
+    remainder = text[header.end() :]
+    next_section = re.search(r"^\[", remainder, re.M)
+    body = remainder[: next_section.start()] if next_section else remainder
+    match = TOML_URL.search(body)
+    return match.group(2) if match else None
+
+
 def remove_toml_section(text: str, server: str) -> str:
     pattern = re.compile(
         rf"^\[mcp_servers\.{re.escape(server)}\][^\n]*\n(?:(?!^\[).*\n)*",
         re.M,
     )
     return pattern.sub("", text)
+
+
+def prompt_yes_no(question: str, default: bool = False) -> bool:
+    suffix = " [Y/n]: " if default else " [y/N]: "
+    print(question + suffix, end="", file=sys.stderr, flush=True)
+    reply = sys.stdin.readline().strip()
+    if not reply:
+        return default
+    return reply.lower().startswith("y")
+
+
+def prompt_mcp_url(host: str, server: str) -> str:
+    print(f"New {host} {server} URL: ", end="", file=sys.stderr, flush=True)
+    url = sys.stdin.readline().strip()
+    if not url:
+        raise McpUrlError(f"{host} {server} replacement URL must not be empty")
+    return url
+
+
+def choose_existing_url(
+    host: str,
+    server: str,
+    current_url: str,
+    replacement_url: str | None,
+) -> tuple[bool, str | None]:
+    print(f"Existing {host} {server} URL: {current_url}", file=sys.stderr)
+    if replacement_url:
+        question = f"Replace {host} {server} URL with {replacement_url}?"
+    else:
+        question = f"Replace {host} {server} URL?"
+    if not prompt_yes_no(question):
+        return False, replacement_url
+    if replacement_url is None:
+        replacement_url = prompt_mcp_url(host, server)
+    return True, replacement_url
 
 
 def load_fragment(path: Path, mem0_url: str | None) -> str | None:
@@ -88,6 +134,7 @@ def merge_codex_toml(
     fragments_dir: Path,
     policy: str,
     mem0_url: str | None,
+    interactive: bool,
     dry_run: bool,
 ) -> int:
     text = read_text(target)
@@ -97,12 +144,26 @@ def merge_codex_toml(
         if not frag_path.exists():
             continue
         exists = section_exists_toml(text, server)
-        if exists and policy == "keep":
+        current_url = section_url_toml(text, server) if exists else None
+        replacement_url = mem0_url if server == "mem0" else section_url_toml(read_text(frag_path), server)
+        if exists and current_url and interactive:
+            replace, replacement_url = choose_existing_url(
+                "Codex", server, current_url, replacement_url
+            )
+            if not replace:
+                print(f"KEEP: mcp_servers.{server}")
+                continue
+            if server == "mem0":
+                mem0_url = replacement_url
+        elif exists and policy == "keep":
             print(f"KEEP: mcp_servers.{server}")
             continue
-        if exists and policy == "ask":
+        elif exists and policy == "ask":
             print(f"CONFLICT: mcp_servers.{server} (use --mcp-keep or --mcp-overwrite)", file=sys.stderr)
             return 2
+        if not exists and server == "mem0" and not mem0_url and interactive:
+            if prompt_yes_no("Add Codex mem0 URL now?"):
+                mem0_url = prompt_mcp_url("Codex", server)
         fragment = load_fragment(frag_path, mem0_url if server == "mem0" else None)
         if fragment is None:
             continue
@@ -133,6 +194,7 @@ def merge_cursor_json(
     fragment_file: Path,
     policy: str,
     mem0_url: str | None,
+    interactive: bool,
     dry_run: bool,
 ) -> int:
     raw = read_text(target).strip()
@@ -145,9 +207,28 @@ def merge_cursor_json(
         if name not in servers:
             continue
         entry = dict(servers[name])
+        existing_entry = data["mcpServers"].get(name)
+        current_url = existing_entry.get("url") if isinstance(existing_entry, dict) else None
+        replacement_url = entry.get("url")
+        interactive_url_replaced = False
+        if replacement_url == "__MEM0_URL__":
+            replacement_url = mem0_url
+        if isinstance(current_url, str) and current_url and interactive:
+            replace, replacement_url = choose_existing_url(
+                "Cursor", name, current_url, replacement_url
+            )
+            if not replace:
+                print(f"KEEP: mcpServers.{name}")
+                continue
+            interactive_url_replaced = True
+            if name == "mem0":
+                mem0_url = replacement_url
         if name == "mem0":
             url = entry.get("url", "")
             if url == "__MEM0_URL__":
+                if not mem0_url and interactive and not current_url:
+                    if prompt_yes_no("Add Cursor mem0 URL now?"):
+                        mem0_url = prompt_mcp_url("Cursor", name)
                 if not mem0_url:
                     print("SKIP: mcpServers.mem0 (pass --mem0-url or answer TTY prompt)")
                     continue
@@ -155,10 +236,10 @@ def merge_cursor_json(
         if "url" in entry:
             validate_mcp_url(entry["url"], f"mcpServers.{name}")
         exists = name in data["mcpServers"]
-        if exists and policy == "keep":
+        if exists and not interactive_url_replaced and policy == "keep":
             print(f"KEEP: mcpServers.{name}")
             continue
-        if exists and policy == "ask":
+        elif exists and not interactive_url_replaced and policy == "ask":
             print(f"CONFLICT: mcpServers.{name} (use --mcp-keep or --mcp-overwrite)", file=sys.stderr)
             return 2
         data["mcpServers"][name] = entry
@@ -182,14 +263,19 @@ def main() -> int:
     parser.add_argument("--fragments", required=True)
     parser.add_argument("--policy", choices=("keep", "overwrite", "ask"), default="ask")
     parser.add_argument("--mem0-url", default=None)
+    parser.add_argument("--interactive", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     target = Path(args.target)
     fragments = Path(args.fragments)
     try:
         if args.host == "codex":
-            return merge_codex_toml(target, fragments, args.policy, args.mem0_url, args.dry_run)
-        return merge_cursor_json(target, fragments, args.policy, args.mem0_url, args.dry_run)
+            return merge_codex_toml(
+                target, fragments, args.policy, args.mem0_url, args.interactive, args.dry_run
+            )
+        return merge_cursor_json(
+            target, fragments, args.policy, args.mem0_url, args.interactive, args.dry_run
+        )
     except McpUrlError as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
