@@ -186,6 +186,9 @@ $mcpArgs = @(
 if (-not [string]::IsNullOrEmpty($mem0Url)) {
     $mcpArgs += @('--mem0-url', $mem0Url)
 }
+if (($interactive -eq 1) -and (Test-InstallLibStdinTty)) {
+    $mcpArgs += '--interactive'
+}
 if ($dryRun -eq 1) {
     $mcpArgs += '--dry-run'
 }

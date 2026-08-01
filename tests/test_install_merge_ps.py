@@ -53,6 +53,32 @@ def _run_ps(
     )
 
 
+def _forwards_interactive_to_merge_host_mcp(script: Path) -> bool:
+    """True when the PS merge script mirrors bash: TTY + --interactive → merge_host_mcp.py."""
+    text = script.read_text(encoding="utf-8")
+    needle = (
+        "if (($interactive -eq 1) -and (Test-InstallLibStdinTty)) {\n"
+        "    $mcpArgs += '--interactive'\n"
+        "}"
+    )
+    return needle in text
+
+
+class InstallMergePsInteractiveWiringTests(unittest.TestCase):
+    def test_merge_scripts_forward_interactive_to_merge_host_mcp(self) -> None:
+        # Why: per-server URL prompts live in merge_host_mcp.py; without this
+        # hand-off, Windows TTY installs silently skip keep/replace prompts.
+        # Source assertion (no pwsh required) guards the bash/PS drift contract.
+        self.assertTrue(
+            _forwards_interactive_to_merge_host_mcp(CODEX_MERGE_PS1),
+            "install-codex-merge.ps1 must pass --interactive to merge_host_mcp.py on TTY",
+        )
+        self.assertTrue(
+            _forwards_interactive_to_merge_host_mcp(CURSOR_MERGE_PS1),
+            "install-cursor-merge.ps1 must pass --interactive to merge_host_mcp.py on TTY",
+        )
+
+
 @unittest.skipUnless(_find_pwsh(), "pwsh (PowerShell 7+) is required")
 class InstallMergePsSmokeTests(unittest.TestCase):
     def setUp(self) -> None:

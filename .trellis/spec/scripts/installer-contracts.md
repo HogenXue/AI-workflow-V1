@@ -304,12 +304,12 @@ fi
 ### 2. Signatures
 
 ```text
-install.sh                         # TTY wizard
-  -> install-<host>-merge.sh --interactive
+install.sh / install.ps1           # TTY wizard
+  -> install-<host>-merge.sh|.ps1 --interactive
   -> merge_host_mcp.py --interactive --host <codex|cursor> ...
 
 merge_host_mcp.py --interactive
-  # Internal flag. The shell entrypoint passes it only when stdin is a TTY.
+  # Internal flag. Bash and PowerShell entrypoints pass it only when stdin is a TTY.
 ```
 
 ### 3. Contracts
@@ -346,6 +346,7 @@ merge_host_mcp.py --interactive
 - Missing Mem0: opt in with a URL; assert the entry is added.
 - Regression suite: component CLI, non-TTY no-args, URL transport validation, backup, and rollback behavior remain green.
 - TTY smoke test: verify the shell entrypoint propagates interactivity and the resulting host config matches the selected decisions.
+- PowerShell: `install-*-merge.ps1` must forward `--interactive` to `merge_host_mcp.py` under TTY (wiring asserted in `tests/test_install_merge_ps.py`).
 
 ### 7. Wrong vs Correct
 
