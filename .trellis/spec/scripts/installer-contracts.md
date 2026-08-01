@@ -1,7 +1,36 @@
 # Installer Contracts
 
 > Executable contracts for interactive multi-agent install and host-specific merge.
-> Source of truth verified by `tests/test_install_interactive.py` and related install tests.
+> Source of truth verified by `tests/test_install_interactive.py`, `tests/test_install_*_ps.py`,
+> and related install tests.
+
+---
+
+## Design Decision: Dual bash / PowerShell implementation
+
+**Context**: macOS/Linux users run bash installers; Windows users need a native peer without
+requiring Git Bash.
+
+**Decision**: Maintain **behaviorally equivalent** ports:
+
+| Surface | Entry | Runtime |
+|---------|-------|---------|
+| Unix | `scripts/install.sh` + `install-*.sh` | Bash |
+| Windows | `scripts/install.ps1` + `install-*.ps1`; launcher `scripts/install.cmd` | **PowerShell 7+ only** (`pwsh`) |
+
+- `install.cmd` forwards to `pwsh -File scripts\install.ps1` (not Windows PowerShell 5.1).
+- Shared MCP merge logic stays in `scripts/lib/merge_host_mcp.py` for both hosts.
+- CLI component names, flags, exit codes, and stable diagnostic prefixes
+  (`ERROR:` / `SKIP:` / `BACKUP:` / `INSTALLED:` / `CONFLICT:` / `DRY-RUN:`) must stay aligned.
+- **Drift rule**: when an installer contract changes, update bash **and** PowerShell in the same
+  change set, or document an explicit exemption in the PR / task notes.
+- CI: ubuntu/macos run bash install suites via quality/`workflow_check`; `windows-latest` runs
+  `tests/test_install_*_ps.py` with `pwsh` verified on the runner.
+
+**Symlinks / `--link`**: creating or preserving dangling reparse points on Windows requires
+Developer Mode or `SeCreateSymbolicLinkPrivilege`. PS tests that need file symlinks probe privilege
+first and **skip with an explicit reason** when unavailable (last resort; CI attempts to enable
+Developer Mode). `--link` failure must still rollback and exit non-zero (never silent copy).
 
 ---
 
@@ -20,7 +49,7 @@
 ### 1. Scope / Trigger
 
 - Trigger: Any write under a **project** `.codex/` or `.cursor/` (hooks, Cursor rules).
-- Infra contract: new/changed flags `--project-root`, `--skip-project`, and shared resolver in `scripts/install-lib.sh`.
+- Infra contract: new/changed flags `--project-root`, `--skip-project`, and shared resolver in `scripts/install-lib.sh` / `scripts/install-lib.ps1`.
 
 ### 2. Signatures
 
@@ -29,9 +58,14 @@ install_lib_resolve_project_root <provided_path> <skip_flag:0|1> <interactive:0|
   → sets INSTALL_PROJECT_ROOT to absolute path, or "" if skipped
   → exit 1 on invalid path / invalid menu choice
 
+Install-LibResolveProjectRoot -Provided <path> -SkipFlag 0|1 -Interactive 0|1
+  → sets $script:InstallProjectRoot (PowerShell peer)
+
 install.sh <codex-merge|cursor-merge> --project-root PATH ...
 install.sh <codex-merge|cursor-merge> --skip-project ...
 install.sh   # TTY only: menu includes project-root pick (git root = candidate only)
+
+install.ps1 / install.cmd  # same flags and TTY / non-TTY rules
 ```
 
 ### 3. Contracts
@@ -67,6 +101,7 @@ install.sh   # TTY only: menu includes project-root pick (git root = candidate o
 - Assert `--project-root` installs under the given path only
 - Assert resolver never treats detected git root as applied unless choice/`--project-root` selects it
 - Assertion points: no project files under wrong root; stdout contains `SKIP` / `PROJECT-ROOT` as expected
+- PowerShell: covered by `tests/test_install_lib_ps.py` and merge/entry `*_ps.py` modules
 
 ### 7. Wrong vs Correct
 
@@ -103,6 +138,8 @@ fi
 ```text
 install.sh                          # TTY: multi-select agents → full or single component
 install.sh skills|agents|config|codex-merge|cursor-merge [options]
+
+install.ps1 / install.cmd           # same interactive + component dispatch (pwsh 7+)
 
 # Profile entrypoints (interactive full install)
 install_profile_codex  <project_root_or_empty> <mem0_url_or_empty>
@@ -169,17 +206,17 @@ Cursor: skills→~/.cursor/skills  config→~/.cursor/config  MCP→mcp.json    
 
 ---
 
-## Scenario: Interactive `install.sh` multi-select
+## Scenario: Interactive `install.sh` / `install.ps1` multi-select
 
 ### 1. Scope / Trigger
 
-- Trigger: `bash scripts/install.sh` with **no args**.
+- Trigger: `bash scripts/install.sh` or `pwsh -File scripts/install.ps1` with **no args**.
 - UX contract: TTY wizard vs non-TTY hard fail.
 
 ### 2. Signatures
 
 ```text
-install.sh                 # no args
+install.sh / install.ps1 / install.cmd   # no args
   TTY:     interactive_main → exit 0 (or 2 on invalid choice)
   non-TTY: usage on stderr → exit 2
 
@@ -209,12 +246,12 @@ Interactive choices:
 ### 5. Good / Base / Bad Cases
 
 - **Good**: TTY choice `3` runs Codex then Cursor profiles once project root is resolved/skipped
-- **Base**: piped/non-TTY `install.sh` with no args → exit `2` (CI-safe)
+- **Base**: piped/non-TTY install with no args → exit `2` (CI-safe)
 - **Bad**: Treating non-TTY empty args as “default full install” or auto-picking git root
 
 ### 6. Tests Required
 
-- `install.sh` with stdin not a TTY and no args → exit code `2` and usage text
+- `install.sh` / `install.ps1` with stdin not a TTY and no args → exit code `2` and usage text
 - Interactive paths covered via scripted input or component-level flags (`--project-root` / `--skip-project`)
 - Assertion points: exit code, stderr usage, no unintended project writes
 
@@ -245,7 +282,7 @@ fi
 
 **Cause**: Using `git rev-parse --show-toplevel` as an implicit default.
 
-**Fix / Prevention**: Always go through `install_lib_resolve_project_root` or require `--project-root` / explicit skip.
+**Fix / Prevention**: Always go through `install_lib_resolve_project_root` / `Install-LibResolveProjectRoot` or require `--project-root` / explicit skip.
 
 ---
 
@@ -255,7 +292,7 @@ fi
 
 **Why**: Host MCP and project hooks must not be silently destroyed.
 
-**Related**: Backup before overwrite via `install_lib_backup_file`; MCP writes are atomic (`merge_host_mcp.py`).
+**Related**: Backup before overwrite via `install_lib_backup_file` / `Install-LibBackupFile`; MCP writes are atomic (`merge_host_mcp.py`).
 
 ## Scenario: Per-server URL conflict prompts
 
@@ -350,6 +387,8 @@ New Codex mem0 URL: https://new.example/mem0
 
 **Tests required**: Assert the filename pattern, preserved backup contents, sequential and parallel collision uniqueness, backup-failure behavior, dangling-symlink handling, MCP rollback after project failure, source/target separation, nested-backup rejection, and unrelated host-directory sentinels.
 
+**Windows note**: Dangling-symlink backup parity depends on symlink create privilege. When privilege is missing, PS tests skip with an explicit reason rather than asserting a false pass.
+
 ---
 
 ## Convention: MCP URL transport safety
@@ -369,7 +408,8 @@ contract. Entries preserved by an explicit `keep` policy are not rewritten.
 
 **Tests required**: Cover Codex and Cursor rejection without target mutation,
 the three loopback hosts, the packaged Recallium HTTPS default, and valid remote
-HTTPS input.
+HTTPS input. PowerShell peers assert the same reject-before-mutate behavior in
+`tests/test_install_merge_ps.py`.
 
 ---
 

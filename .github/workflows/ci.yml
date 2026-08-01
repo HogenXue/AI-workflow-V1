@@ -26,3 +26,44 @@ jobs:
         run: python -m pip install -r requirements-dev.txt
       - name: Run shared quality entry
         run: python config/workflow_check.py --project-root "$GITHUB_WORKSPACE" quality
+
+  windows-ps-install:
+    name: Windows PowerShell installers
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install development dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Verify pwsh (PowerShell 7+)
+        shell: pwsh
+        run: |
+          if (-not $PSVersionTable.PSVersion -or $PSVersionTable.PSVersion.Major -lt 7) {
+            throw "pwsh 7+ is required on windows-latest"
+          }
+          Write-Host "pwsh $($PSVersionTable.PSVersion)"
+      - name: Enable Developer Mode for symlink tests
+        shell: pwsh
+        run: |
+          # Prefer enabling symlink creation so dangling-symlink backup tests can run.
+          # If this fails (policy), those tests skip with an explicit privilege reason.
+          $key = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock"
+          try {
+            if (-not (Test-Path $key)) {
+              New-Item -Path $key -Force | Out-Null
+            }
+            New-ItemProperty -Path $key -Name AllowDevelopmentWithoutDevLicense `
+              -Value 1 -PropertyType DWORD -Force | Out-Null
+            Write-Host "Developer Mode registry key set for symlink privilege"
+          } catch {
+            Write-Warning "Could not enable Developer Mode: $($_.Exception.Message)"
+          }
+      - name: Run PowerShell installer tests
+        shell: pwsh
+        run: |
+          python -m unittest discover -s tests -p "test_install_*_ps.py" -v
