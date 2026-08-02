@@ -39,3 +39,36 @@ Delivered interactive install.sh with Codex/Cursor multi-select, explicit projec
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: Add Claude Code app support
+
+**Date**: 2026-08-02
+**Task**: Add Claude Code app support
+**Branch**: `main`
+
+### Summary
+
+Planned and shipped Claude Code user-level install profile: claude-merge into ~/.claude.json, skills/config/CLAUDE.md pairing, multi-select wizard (Codex/Cursor/Claude), bash/PS parity, docs and tests; archived task 08-01-claude-code-app-support.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `258df7a` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
