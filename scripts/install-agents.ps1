@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 function Show-Usage {
     [Console]::Error.WriteLine(
-        'Usage: install-agents.ps1 [--dry-run|--apply] [--agents-home PATH] [--backup-dir PATH]'
+        'Usage: install-agents.ps1 [--dry-run|--apply] [--agents-home PATH] [--document-name NAME] [--no-hooks-feature] [--backup-dir PATH]'
     )
 }
 
@@ -170,6 +170,8 @@ $agentsHome = if (-not [string]::IsNullOrEmpty($env:CODEX_HOME)) {
 } else {
     Join-Path $installHome '.codex'
 }
+$documentName = 'AGENTS.md'
+$noHooksFeature = 0
 $backupDir = ''
 $mode = 'dry-run'
 $modeSelected = ''
@@ -210,6 +212,18 @@ while ($i -lt $argv.Count) {
             }
             $i++
         }
+        '--document-name' {
+            if (($i + 1) -ge $argv.Count) {
+                Fail-Usage '--document-name requires a name'
+            }
+            $value = $argv[$i + 1]
+            if ([string]::IsNullOrEmpty($value) -or $value.StartsWith('--')) {
+                Fail-Usage '--document-name requires a name'
+            }
+            $documentName = $value
+            $i++
+        }
+        '--no-hooks-feature' { $noHooksFeature = 1 }
         { $_ -in '--help', '-h' } {
             Show-Usage
             exit 0
@@ -226,7 +240,12 @@ if (-not (Test-Path -LiteralPath $sourceFile -PathType Leaf)) {
     exit 1
 }
 
-$targetFile = Join-Path $agentsHome 'AGENTS.md'
+if ($documentName.Contains('/') -or $documentName.Contains('\')) {
+    [Console]::Error.WriteLine("ERROR: --document-name must be a bare filename, got: $documentName")
+    exit 2
+}
+
+$targetFile = Join-Path $agentsHome $documentName
 if ([string]::IsNullOrEmpty($backupDir)) {
     $backupDir = Join-Path $agentsHome '.ai-workflow-backups'
 }
@@ -235,10 +254,14 @@ if ($mode -eq 'dry-run') {
     [Console]::Out.WriteLine("DRY-RUN: would copy $sourceFile -> $targetFile")
     if (Test-InstallLibExistsOrLink -Path $targetFile) {
         [Console]::Out.WriteLine(
-            "DRY-RUN: would back up $targetFile as $backupDir/AGENTS.md.<UTC timestamp>.bak"
+            "DRY-RUN: would back up $targetFile as $backupDir/$documentName.<UTC timestamp>.bak"
         )
     }
-    [Console]::Out.WriteLine('DRY-RUN: would ensure [features].hooks = true in config.toml')
+    if ($noHooksFeature -eq 0) {
+        [Console]::Out.WriteLine('DRY-RUN: would ensure [features].hooks = true in config.toml')
+    } else {
+        [Console]::Out.WriteLine('DRY-RUN: skipping config.toml hooks feature (--no-hooks-feature)')
+    }
     exit 0
 }
 
@@ -249,13 +272,15 @@ try {
     exit 1
 }
 
-if (-not (Test-ConfigFileValid -AgentsHome $agentsHome)) {
-    exit 1
+if ($noHooksFeature -eq 0) {
+    if (-not (Test-ConfigFileValid -AgentsHome $agentsHome)) {
+        exit 1
+    }
 }
 
 $agentsBackupAvailable = $false
 if (Test-InstallLibExistsOrLink -Path $targetFile) {
-    if (-not (Install-LibBackupFile -Source $targetFile -BackupDir $backupDir -Name 'AGENTS.md')) {
+    if (-not (Install-LibBackupFile -Source $targetFile -BackupDir $backupDir -Name $documentName)) {
         exit 1
     }
     $agentsBackupPath = $script:InstallBackupPath
@@ -265,7 +290,7 @@ if (Test-InstallLibExistsOrLink -Path $targetFile) {
         try {
             Remove-Item -LiteralPath $targetFile -Force -ErrorAction Stop
         } catch {
-            [Console]::Error.WriteLine('ERROR: could not replace existing AGENTS.md')
+            [Console]::Error.WriteLine("ERROR: could not replace existing $documentName")
             exit 1
         }
     }
@@ -279,23 +304,27 @@ try {
     } else {
         Remove-Item -LiteralPath $targetFile -Force -ErrorAction SilentlyContinue
     }
-    [Console]::Error.WriteLine('ERROR: could not install AGENTS template')
+    [Console]::Error.WriteLine('ERROR: could not install agents document template')
     exit 1
 }
 [Console]::Out.WriteLine("INSTALLED: $targetFile")
 
+if ($noHooksFeature -eq 1) {
+    exit 0
+}
+
 if (-not (Enable-HooksFeature -AgentsHome $agentsHome -BackupDir $backupDir)) {
-    [Console]::Error.WriteLine('ERROR: config.toml update failed; restoring AGENTS.md.')
+    [Console]::Error.WriteLine("ERROR: config.toml update failed; restoring $documentName.")
     if ($agentsBackupAvailable) {
         if (-not (Install-LibRestoreBackup -Backup $agentsBackupPath -Destination $targetFile)) {
-            [Console]::Error.WriteLine('ERROR: could not restore AGENTS.md from backup')
+            [Console]::Error.WriteLine("ERROR: could not restore $documentName from backup")
             exit 1
         }
     } else {
         try {
             Remove-Item -LiteralPath $targetFile -Force -ErrorAction Stop
         } catch {
-            [Console]::Error.WriteLine('ERROR: could not remove newly installed AGENTS.md')
+            [Console]::Error.WriteLine("ERROR: could not remove newly installed $documentName")
             exit 1
         }
     }

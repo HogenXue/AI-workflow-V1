@@ -35,11 +35,11 @@ cd AI-workflow-V1
 
 ### macOS / Linux（bash）
 
-安装统一入口：`scripts/install.sh <skills|graphify|agents|config|codex-merge|cursor-merge>`。TTY 下无参数运行进入交互向导（可多选 Codex/Cursor）；非 TTY 无参数则打印用法并以 exit 2 退出。交互向导会按宿主逐项检测已有的 URL 型 MCP：显示当前 URL，并默认沿用；只有用户明确选择替换时才写入模板 URL 或要求输入新的 Mem0 URL。Codex hooks 与 MCP 安装到用户级 `~/.codex`；不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置。
+安装统一入口：`scripts/install.sh <skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge>`。TTY 下无参数运行进入交互向导（多选编号：`1` Codex、`2` Cursor、`3` Claude，如 `1 3` / `1,2,3`）；非 TTY 无参数则打印用法并以 exit 2 退出。交互向导会按宿主逐项检测已有的 URL 型 MCP：显示当前 URL，并默认沿用；只有用户明确选择替换时才写入模板 URL 或要求输入新的 Mem0 URL。Codex hooks 与 MCP 安装到用户级 `~/.codex`；Claude MCP 合并到用户级 `~/.claude.json`，全局规则写入 `~/.claude/CLAUDE.md`；两者都不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择，且仅当选中 Cursor）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置；Claude 使用 `agents --document-name CLAUDE.md --no-hooks-feature`，不写 `config.toml`。
 
 所有组件在覆盖、删除或迁移现有目标前都会先备份。备份直接写入所选备份目录，命名为 `<原名称>.<UTC 时间戳>.bak`；同一秒内重复执行会追加序号，绝不会覆盖已有备份。目录同样使用 `.bak` 后缀并保留完整内容。备份失败时当前组件立即停止，原目标保持不变。自定义 `--backup-dir` 不能等于正被备份的目标或位于其内部。
 
-默认备份根统一为宿主目录下的 `.ai-workflow-backups`：Skill/config 使用其配对根（如 `~/.agents/.ai-workflow-backups`、`~/.cursor/.ai-workflow-backups`），Codex AGENTS/MCP 使用 `~/.codex/.ai-workflow-backups`。旧版 `.codex-ultimate-v3-backups` 和 `.trellis-template-backups` 不会自动删除或迁移。
+默认备份根统一为宿主目录下的 `.ai-workflow-backups`：Skill/config 使用其配对根（如 `~/.agents/.ai-workflow-backups`、`~/.cursor/.ai-workflow-backups`、`~/.claude/.ai-workflow-backups`），Codex AGENTS/MCP 使用 `~/.codex/.ai-workflow-backups`，Claude MCP（`~/.claude.json`）默认也写入 `~/.claude/.ai-workflow-backups`。旧版 `.codex-ultimate-v3-backups` 和 `.trellis-template-backups` 不会自动删除或迁移。
 
 完整安装按组件顺序执行：每个组件保证“先备份、失败时局部回滚”，但不是跨组件的全局事务；后续组件失败时，已成功的前序组件不会自动撤销。不要并发运行多个安装器。历史 `.bak` 由使用者按需归档或删除，安装器不会自动清理。
 
@@ -47,10 +47,11 @@ cd AI-workflow-V1
 | ------------ | ---------------------------- | --------------- |
 | `skills`     | manifest 中的 Skill 目录         | dry-run         |
 | `graphify`   | `~/.agents/skills/graphify`（第三方 Graphify Skill） | dry-run；需已安装 Graphify CLI |
-| `agents`     | `<agents-home>/AGENTS.md`    | dry-run；已有文件先备份 |
+| `agents`     | `<agents-home>/<document>`（默认 `AGENTS.md`；Claude 用 `CLAUDE.md` + `--no-hooks-feature`） | dry-run；已有文件先备份 |
 | `config`     | 指定的配置目录                      | dry-run         |
 | `codex-merge` | Codex 全局 MCP + 用户级 `hooks.json` / `hooks/` | 写入 `${CODEX_HOME:-~/.codex}` |
 | `cursor-merge` | Cursor MCP + 可选项目 `.cursor` hooks；rules `.mdc` 由 `AGENTS.global.md` 动态生成 | 需显式 project-root 才写项目级 |
+| `claude-merge` | Claude 用户级 MCP（`~/.claude.json` 的 `mcpServers`） | 不写项目 `.claude/` / `.mcp.json` |
 
 `skills` 与 `config` 默认 **copy**（独立副本，不依赖源码目录）；本地开发可用 **link** 实时同步。
 
@@ -71,11 +72,13 @@ winget install Microsoft.PowerShell
 scripts\install.cmd skills --dry-run --target %USERPROFILE%\.agents\skills
 scripts\install.cmd skills --copy --replace --target %USERPROFILE%\.agents\skills
 scripts\install.cmd cursor-merge --mcp-overwrite --project-root C:\path\to\repo
+scripts\install.cmd claude-merge --mcp-overwrite --mem0-url https://example.test/mem0
 ```
 
 ```powershell
 pwsh -File scripts\install.ps1 skills --dry-run --target "$env:USERPROFILE\.agents\skills"
 pwsh -File scripts\install.ps1 skills --copy --replace --target "$env:USERPROFILE\.agents\skills"
+pwsh -File scripts\install.ps1 claude-merge --mcp-overwrite --mem0-url https://example.test/mem0
 pwsh -File scripts\install.ps1 --help
 ```
 
@@ -110,6 +113,19 @@ Codex 的“Recommended full install”同样会执行该全局安装。若目�
 ```bash
 bash scripts/install.sh skills --copy --replace --target ~/.cursor/skills
 ```
+
+### Claude Code App（推荐目录）
+
+完整用户级 profile（Skills、配对 config、`CLAUDE.md`、MCP），不写项目 `.claude/`，也不安装 Graphify：
+
+```bash
+bash scripts/install.sh skills --copy --replace --target ~/.claude/skills
+bash scripts/install.sh config --copy --replace --target ~/.claude/config
+bash scripts/install.sh agents --apply --agents-home ~/.claude --document-name CLAUDE.md --no-hooks-feature
+bash scripts/install.sh claude-merge --mcp-overwrite --mem0-url https://example.test/mem0
+```
+
+TTY 交互向导选择 `3`（或与其它宿主组合，如 `1 3`）即可一次完成推荐安装。Windows 对等：`scripts\install.cmd` / `pwsh -File scripts\install.ps1`（同一组件序列与标志）。更新时对上述目标重新 copy/merge；重启 Claude Code 会话后生效。
 
 ### Codex CLI 独立目录（仅在不使用 App 共享目录时）
 
@@ -204,7 +220,7 @@ bash scripts/install.sh skills --copy --replace --target ~/.agents/skills
 
 ## AGENTS 规则用法
 
-全局规则模板位于根目录的 [AGENTS.global.md](AGENTS.global.md)：`agents --apply` 写入 Codex 的 `AGENTS.md`；`cursor-merge`（含显式 `--project-root`）据此动态生成项目 `.cursor/rules/ai-workflow-global.mdc`。项目根目录的 `AGENTS.md` 由 Trellis 初始化和更新时维护，不应以全局模板直接覆盖。
+全局规则模板位于根目录的 [AGENTS.global.md](AGENTS.global.md)：`agents --apply` 写入 Codex 的 `AGENTS.md`；`agents --apply --document-name CLAUDE.md --no-hooks-feature` 写入 Claude 的 `CLAUDE.md`；`cursor-merge`（含显式 `--project-root`）据此动态生成项目 `.cursor/rules/ai-workflow-global.mdc`。项目根目录的 `AGENTS.md` / `CLAUDE.md` 由 Trellis 初始化和更新时维护，不应以全局模板直接覆盖。
 
 项目专属规则（如 EGM 的分层、Git 格式、`egm_docs` 等）应在**该项目仓库**内维护 `AGENTS.md`；Trellis 项目将这些规则追加到 Trellis Managed Block 之外。GitNexus 流程由对应 Skill 承担，索引块由项目内 GitNexus CLI 注入。
 
@@ -277,11 +293,11 @@ python3 scripts/validate-all-skills.py
 
 ## MCP 与外部依赖
 
-本包包含 Codex TOML 与 Cursor JSON 的 MCP 合并模板；安装器按宿主格式增量合并，不会
-把一套格式复制到另一宿主。Recallium 默认地址为
-`https://www.59005046.xyz:8102/mcp`。
+本包包含 Codex TOML 与 Cursor/Claude JSON 的 MCP 合并模板；安装器按宿主格式增量合并，不会
+把一套格式复制到另一宿主。Claude 只改 `~/.claude.json` 的 `mcpServers`，保留其它用户状态字段。
+Recallium 默认地址为 `https://www.59005046.xyz:8102/mcp`。
 
-TTY 一键安装会分别读取 Codex 与 Cursor 的现有 MCP 配置。对本包管理且已有 URL 的 MCP，
+TTY 一键安装会分别读取 Codex、Cursor 与 Claude 的现有 MCP 配置。对本包管理且已有 URL 的 MCP，
 安装器逐项询问沿用或替换；直接回车默认沿用。缺少 Mem0 配置时才询问是否新增 URL。
 非交互组件调用不读取输入，继续由 `--mcp-keep`、`--mcp-overwrite` 和 `--mem0-url` 明确控制。
 

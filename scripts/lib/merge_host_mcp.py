@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Merge host MCP server definitions into Codex TOML or Cursor JSON configs."""
+"""Merge host MCP server definitions into Codex TOML or Cursor/Claude JSON configs."""
 
 from __future__ import annotations
 
@@ -189,14 +189,16 @@ def merge_codex_toml(
     return 0
 
 
-def merge_cursor_json(
+def merge_json_mcp_servers(
     target: Path,
     fragment_file: Path,
     policy: str,
     mem0_url: str | None,
     interactive: bool,
     dry_run: bool,
+    host_label: str,
 ) -> int:
+    """Merge managed servers into a JSON document's mcpServers object (Cursor/Claude)."""
     raw = read_text(target).strip()
     data = json.loads(raw) if raw else {"mcpServers": {}}
     if "mcpServers" not in data or not isinstance(data["mcpServers"], dict):
@@ -215,7 +217,7 @@ def merge_cursor_json(
             replacement_url = mem0_url
         if isinstance(current_url, str) and current_url and interactive:
             replace, replacement_url = choose_existing_url(
-                "Cursor", name, current_url, replacement_url
+                host_label, name, current_url, replacement_url
             )
             if not replace:
                 print(f"KEEP: mcpServers.{name}")
@@ -227,8 +229,8 @@ def merge_cursor_json(
             url = entry.get("url", "")
             if url == "__MEM0_URL__":
                 if not mem0_url and interactive and not current_url:
-                    if prompt_yes_no("Add Cursor mem0 URL now?"):
-                        mem0_url = prompt_mcp_url("Cursor", name)
+                    if prompt_yes_no(f"Add {host_label} mem0 URL now?"):
+                        mem0_url = prompt_mcp_url(host_label, name)
                 if not mem0_url:
                     print("SKIP: mcpServers.mem0 (pass --mem0-url or answer TTY prompt)")
                     continue
@@ -256,9 +258,22 @@ def merge_cursor_json(
     return 0
 
 
+def merge_cursor_json(
+    target: Path,
+    fragment_file: Path,
+    policy: str,
+    mem0_url: str | None,
+    interactive: bool,
+    dry_run: bool,
+) -> int:
+    return merge_json_mcp_servers(
+        target, fragment_file, policy, mem0_url, interactive, dry_run, "Cursor"
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--host", choices=("codex", "cursor"), required=True)
+    parser.add_argument("--host", choices=("codex", "cursor", "claude"), required=True)
     parser.add_argument("--target", required=True)
     parser.add_argument("--fragments", required=True)
     parser.add_argument("--policy", choices=("keep", "overwrite", "ask"), default="ask")
@@ -273,8 +288,15 @@ def main() -> int:
             return merge_codex_toml(
                 target, fragments, args.policy, args.mem0_url, args.interactive, args.dry_run
             )
-        return merge_cursor_json(
-            target, fragments, args.policy, args.mem0_url, args.interactive, args.dry_run
+        host_label = "Cursor" if args.host == "cursor" else "Claude"
+        return merge_json_mcp_servers(
+            target,
+            fragments,
+            args.policy,
+            args.mem0_url,
+            args.interactive,
+            args.dry_run,
+            host_label,
         )
     except McpUrlError as error:
         print(f"ERROR: {error}", file=sys.stderr)

@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 function Show-Usage {
     [Console]::Error.WriteLine(
-        'Usage: install.ps1 <skills|graphify|agents|config|codex-merge|cursor-merge> [component options]'
+        'Usage: install.ps1 <skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge> [component options]'
     )
     [Console]::Error.WriteLine('       install.ps1   # interactive (TTY only)')
     [Console]::Error.WriteLine('')
@@ -36,6 +36,7 @@ function Invoke-InstallComponent {
         'config'       = 'install-config.ps1'
         'codex-merge'  = 'install-codex-merge.ps1'
         'cursor-merge' = 'install-cursor-merge.ps1'
+        'claude-merge' = 'install-claude-merge.ps1'
     }
 
     if (-not $scriptMap.ContainsKey($Component)) {
@@ -61,6 +62,35 @@ function Test-PromptReplaceIfNeeded {
         return $true
     }
     return (Install-LibPromptYn -Question "Existing $Kind at $Target — backup and replace?" -Default 'n')
+}
+
+function Parse-AgentSelection {
+    param([AllowEmptyString()][string]$Raw = '')
+    $normalized = ($Raw -replace ',', ' ').Trim()
+    $wantCodex = $false
+    $wantCursor = $false
+    $wantClaude = $false
+    $found = $false
+    if ([string]::IsNullOrEmpty($normalized)) {
+        return $null
+    }
+    foreach ($token in ($normalized -split '\s+')) {
+        if ([string]::IsNullOrEmpty($token)) { continue }
+        switch ($token) {
+            '1' { $wantCodex = $true; $found = $true }
+            '2' { $wantCursor = $true; $found = $true }
+            '3' { $wantClaude = $true; $found = $true }
+            default { return $null }
+        }
+    }
+    if (-not $found) {
+        return $null
+    }
+    return @{
+        WantCodex  = $wantCodex
+        WantCursor = $wantCursor
+        WantClaude = $wantClaude
+    }
 }
 
 function Install-ProfileCodex {
@@ -202,27 +232,85 @@ function Install-ProfileCursor {
     Invoke-InstallComponent cursor-merge @($mergeArgs.ToArray())
 }
 
+function Install-ProfileClaude {
+    param(
+        [AllowEmptyString()][string]$Mem0Url = ''
+    )
+
+    $homeDir = Get-InstallHome
+    $skillsTarget = Join-Path $homeDir '.claude/skills'
+    $configTarget = Join-Path $homeDir '.claude/config'
+    $agentsHome = Join-Path $homeDir '.claude'
+
+    $skillArgs = @('--copy', '--target', $skillsTarget)
+    if (Test-Path -LiteralPath $skillsTarget) {
+        if (Test-PromptReplaceIfNeeded -Kind 'skills' -Target $skillsTarget) {
+            $skillArgs += '--replace'
+        } else {
+            [Console]::Out.WriteLine('SKIP: Claude skills')
+            $skillArgs = @()
+        }
+    }
+    if ($skillArgs.Count -gt 0) {
+        Invoke-InstallComponent skills @skillArgs
+    }
+
+    $configArgs = @('--copy', '--target', $configTarget)
+    if (Test-Path -LiteralPath $configTarget) {
+        if (Test-PromptReplaceIfNeeded -Kind 'config' -Target $configTarget) {
+            $configArgs += '--replace'
+        } else {
+            [Console]::Out.WriteLine('SKIP: Claude config')
+            $configArgs = @()
+        }
+    }
+    if ($configArgs.Count -gt 0) {
+        Invoke-InstallComponent config @configArgs
+    }
+
+    Invoke-InstallComponent agents @(
+        '--apply',
+        '--agents-home', $agentsHome,
+        '--document-name', 'CLAUDE.md',
+        '--no-hooks-feature'
+    )
+
+    $mergeArgs = [System.Collections.Generic.List[string]]::new()
+    $mergeArgs.Add('--interactive') | Out-Null
+    if (-not [string]::IsNullOrEmpty($Mem0Url)) {
+        $mergeArgs.Add('--mem0-url') | Out-Null
+        $mergeArgs.Add($Mem0Url) | Out-Null
+    }
+    if (Test-InstallLibStdinTty) {
+        if (Install-LibPromptYn -Question 'Overwrite existing non-URL Claude MCP entries that conflict?' -Default 'n') {
+            $mergeArgs.Add('--mcp-overwrite') | Out-Null
+        } else {
+            $mergeArgs.Add('--mcp-keep') | Out-Null
+        }
+    } else {
+        $mergeArgs.Add('--mcp-keep') | Out-Null
+    }
+    Invoke-InstallComponent claude-merge @($mergeArgs.ToArray())
+}
+
 function Invoke-InteractiveMain {
     [Console]::Out.WriteLine('AI-workflow installer')
     [Console]::Out.WriteLine('Select target agent(s):')
     [Console]::Out.WriteLine('  1) Codex')
     [Console]::Out.WriteLine('  2) Cursor')
-    [Console]::Out.WriteLine('  3) Codex + Cursor')
-    [Console]::Out.Write('Choice [1-3]: ')
+    [Console]::Out.WriteLine('  3) Claude')
+    [Console]::Out.Write('Select agents (e.g. 1, 1 3, 1,2,3): ')
     $agentChoice = [Console]::In.ReadLine()
     if ($null -eq $agentChoice) { $agentChoice = '' }
 
-    $wantCodex = $false
-    $wantCursor = $false
-    switch ($agentChoice) {
-        '1' { $wantCodex = $true }
-        '2' { $wantCursor = $true }
-        '3' { $wantCodex = $true; $wantCursor = $true }
-        default {
-            [Console]::Error.WriteLine('ERROR: invalid agent choice')
-            exit 2
-        }
+    $selection = Parse-AgentSelection -Raw $agentChoice
+    if ($null -eq $selection) {
+        [Console]::Error.WriteLine('ERROR: invalid agent choice')
+        exit 2
     }
+    $wantCodex = [bool]$selection.WantCodex
+    $wantCursor = [bool]$selection.WantCursor
+    $wantClaude = [bool]$selection.WantClaude
 
     [Console]::Out.WriteLine('Install mode:')
     [Console]::Out.WriteLine('  1) Recommended full install')
@@ -243,20 +331,16 @@ function Invoke-InteractiveMain {
         $projectRoot = if ($null -eq $script:InstallProjectRoot) { '' } else { "$($script:InstallProjectRoot)" }
     }
 
+    # Mem0 URL is collected during interactive MCP merge (merge_host_mcp.py), not here.
     $mem0Url = ''
-    if (Install-LibPromptYn -Question 'Provide mem0 MCP URL now? (needed to add mem0)' -Default 'n') {
-        [Console]::Out.Write('mem0 URL: ')
-        $mem0Url = [Console]::In.ReadLine()
-        if ($null -eq $mem0Url) { $mem0Url = '' }
-    }
 
     if ($modeChoice -eq '2') {
-        [Console]::Out.WriteLine('Component: skills | graphify | agents | config | codex-merge | cursor-merge')
+        [Console]::Out.WriteLine('Component: skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge')
         [Console]::Out.Write('Component: ')
         $comp = [Console]::In.ReadLine()
         if ($null -eq $comp) { $comp = '' }
         switch ($comp) {
-            { $_ -in @('skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge') } {
+            { $_ -in @('skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge') } {
                 $extra = [System.Collections.Generic.List[string]]::new()
                 if ($comp -like '*-merge') {
                     if (-not [string]::IsNullOrEmpty($projectRoot)) {
@@ -293,6 +377,11 @@ function Invoke-InteractiveMain {
             '- Cursor: ~/.cursor/skills + ~/.cursor/config + mcp.json + project rules/hooks'
         )
     }
+    if ($wantClaude) {
+        [Console]::Out.WriteLine(
+            '- Claude: ~/.claude/skills + ~/.claude/config + CLAUDE.md + ~/.claude.json MCP (no Graphify, no project .claude/)'
+        )
+    }
     if (-not [string]::IsNullOrEmpty($projectRoot)) {
         [Console]::Out.WriteLine("- Project root: $projectRoot")
     } else {
@@ -310,6 +399,10 @@ function Invoke-InteractiveMain {
     if ($wantCursor) {
         [Console]::Out.WriteLine('=== Installing Cursor profile ===')
         Install-ProfileCursor -ProjectRoot $projectRoot -Mem0Url $mem0Url
+    }
+    if ($wantClaude) {
+        [Console]::Out.WriteLine('=== Installing Claude profile ===')
+        Install-ProfileClaude -Mem0Url $mem0Url
     }
     [Console]::Out.WriteLine('Done.')
 }
@@ -333,7 +426,7 @@ if ($argv.Count -gt 1) {
 }
 
 switch ($component) {
-    { $_ -in @('skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge') } {
+    { $_ -in @('skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge') } {
         Invoke-InstallComponent $component @rest
     }
     { $_ -in @('--help', '-h', 'help') } {

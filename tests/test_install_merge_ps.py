@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CODEX_MERGE_PS1 = ROOT / "scripts" / "install-codex-merge.ps1"
 CURSOR_MERGE_PS1 = ROOT / "scripts" / "install-cursor-merge.ps1"
+CLAUDE_MERGE_PS1 = ROOT / "scripts" / "install-claude-merge.ps1"
 
 
 def _find_pwsh() -> str | None:
@@ -76,6 +77,10 @@ class InstallMergePsInteractiveWiringTests(unittest.TestCase):
         self.assertTrue(
             _forwards_interactive_to_merge_host_mcp(CURSOR_MERGE_PS1),
             "install-cursor-merge.ps1 must pass --interactive to merge_host_mcp.py on TTY",
+        )
+        self.assertTrue(
+            _forwards_interactive_to_merge_host_mcp(CLAUDE_MERGE_PS1),
+            "install-claude-merge.ps1 must pass --interactive to merge_host_mcp.py on TTY",
         )
 
 
@@ -348,6 +353,53 @@ class InstallMergePsSmokeTests(unittest.TestCase):
         self.assertEqual(len(backups), 1)
         self.assertTrue(backups[0].is_symlink())
         self.assertEqual(os.readlink(backups[0]), str(missing_target))
+
+    def test_claude_merge_mcp_overwrite_preserves_other_keys(self) -> None:
+        mcp_file = self.home / ".claude.json"
+        mcp_file.write_text(
+            json.dumps({"theme": "keep", "mcpServers": {}}),
+            encoding="utf-8",
+        )
+        result = _run_ps(
+            CLAUDE_MERGE_PS1,
+            "--mcp-overwrite",
+            "--mem0-url",
+            "https://example.test/mem0",
+            "--mcp-file",
+            str(mcp_file),
+            "--project-root",
+            str(self.project),
+            env=self.env(),
+        )
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertIn("SKIP: Claude merge has no project-scoped steps", result.stdout)
+        data = json.loads(mcp_file.read_text(encoding="utf-8"))
+        self.assertEqual(data["theme"], "keep")
+        self.assertIn("gitnexus", data["mcpServers"])
+        self.assertEqual(data["mcpServers"]["mem0"]["url"], "https://example.test/mem0")
+        self.assertFalse((self.project / ".claude").exists())
+        self.assertFalse((self.project / ".mcp.json").exists())
+        backups = list((self.home / ".claude" / ".ai-workflow-backups").glob("claude.json.*.bak"))
+        self.assertEqual(len(backups), 1)
+
+    def test_claude_merge_rejects_remote_http_before_mutating(self) -> None:
+        mcp_file = self.home / ".claude.json"
+        original = json.dumps({"mcpServers": {"existing": {"command": "keep"}}}) + "\n"
+        mcp_file.write_text(original, encoding="utf-8")
+        result = _run_ps(
+            CLAUDE_MERGE_PS1,
+            "--mcp-overwrite",
+            "--mem0-url",
+            "http://memory.example.test/mcp",
+            "--mcp-file",
+            str(mcp_file),
+            "--backup-dir",
+            str(self.root / "backup"),
+            env=self.env(),
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("insecure remote HTTP", result.stderr)
+        self.assertEqual(mcp_file.read_text(encoding="utf-8"), original)
 
 
 if __name__ == "__main__":

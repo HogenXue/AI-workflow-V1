@@ -3,7 +3,7 @@
 set -euo pipefail
 
 usage() {
-  printf '%s\n' 'Usage: install-agents.sh [--dry-run|--apply] [--agents-home PATH] [--backup-dir PATH]' >&2
+  printf '%s\n' 'Usage: install-agents.sh [--dry-run|--apply] [--agents-home PATH] [--document-name NAME] [--no-hooks-feature] [--backup-dir PATH]' >&2
 }
 
 fail_usage() {
@@ -18,6 +18,8 @@ root_dir="$(cd "$script_dir/.." && pwd)"
 source "$script_dir/install-lib.sh"
 source_file="$root_dir/AGENTS.global.md"
 agents_home="${CODEX_HOME:-$HOME/.codex}"
+document_name="AGENTS.md"
+no_hooks_feature=0
 backup_dir=""
 mode="dry-run"
 mode_selected=""
@@ -143,6 +145,14 @@ while (($#)); do
       fi
       shift
       ;;
+    --document-name)
+      if (($# < 2)) || [[ -z "$2" || "$2" == --* ]]; then
+        fail_usage '--document-name requires a name'
+      fi
+      document_name="$2"
+      shift
+      ;;
+    --no-hooks-feature) no_hooks_feature=1 ;;
     --help|-h)
       usage
       exit 0
@@ -159,7 +169,13 @@ if [[ ! -f "$source_file" ]]; then
   exit 1
 fi
 
-target_file="$agents_home/AGENTS.md"
+# Reject path separators so document stays under agents-home.
+if [[ "$document_name" == *"/"* || "$document_name" == *"\\"* ]]; then
+  printf 'ERROR: --document-name must be a bare filename, got: %s\n' "$document_name" >&2
+  exit 2
+fi
+
+target_file="$agents_home/$document_name"
 if [[ -z "$backup_dir" ]]; then
   backup_dir="$agents_home/.ai-workflow-backups"
 fi
@@ -167,23 +183,29 @@ fi
 if [[ "$mode" == 'dry-run' ]]; then
   printf 'DRY-RUN: would copy %s -> %s\n' "$source_file" "$target_file"
   if [[ -e "$target_file" || -L "$target_file" ]]; then
-    printf 'DRY-RUN: would back up %s as %s/AGENTS.md.<UTC timestamp>.bak\n' "$target_file" "$backup_dir"
+    printf 'DRY-RUN: would back up %s as %s/%s.<UTC timestamp>.bak\n' "$target_file" "$backup_dir" "$document_name"
   fi
-  printf '%s\n' 'DRY-RUN: would ensure [features].hooks = true in config.toml'
+  if ((no_hooks_feature == 0)); then
+    printf '%s\n' 'DRY-RUN: would ensure [features].hooks = true in config.toml'
+  else
+    printf '%s\n' 'DRY-RUN: skipping config.toml hooks feature (--no-hooks-feature)'
+  fi
   exit 0
 fi
 
 mkdir -p "$agents_home" || { printf 'ERROR: could not create agents home: %s\n' "$agents_home" >&2; exit 1; }
 
-validate_config_file || exit 1
+if ((no_hooks_feature == 0)); then
+  validate_config_file || exit 1
+fi
 
 agents_backup_available=0
 if [[ -e "$target_file" || -L "$target_file" ]]; then
-  install_lib_backup_file "$target_file" "$backup_dir" 'AGENTS.md' || exit 1
+  install_lib_backup_file "$target_file" "$backup_dir" "$document_name" || exit 1
   agents_backup_path="$INSTALL_BACKUP_PATH"
   agents_backup_available=1
   if [[ -L "$target_file" ]]; then
-    rm -f "$target_file" || { printf 'ERROR: could not replace existing AGENTS.md\n' >&2; exit 1; }
+    rm -f "$target_file" || { printf 'ERROR: could not replace existing %s\n' "$document_name" >&2; exit 1; }
   fi
 fi
 
@@ -193,20 +215,23 @@ if ! cp "$source_file" "$target_file"; then
   else
     rm -f "$target_file" || true
   fi
-  printf 'ERROR: could not install AGENTS template\n' >&2
+  printf 'ERROR: could not install agents document template\n' >&2
   exit 1
 fi
 printf 'INSTALLED: %s\n' "$target_file"
+if ((no_hooks_feature)); then
+  exit 0
+fi
 if ! enable_hooks_feature; then
-  printf '%s\n' 'ERROR: config.toml update failed; restoring AGENTS.md.' >&2
+  printf '%s\n' "ERROR: config.toml update failed; restoring $document_name." >&2
   if ((agents_backup_available)); then
     install_lib_restore_backup "$agents_backup_path" "$target_file" || {
-      printf 'ERROR: could not restore AGENTS.md from backup\n' >&2
+      printf 'ERROR: could not restore %s from backup\n' "$document_name" >&2
       exit 1
     }
   else
     rm -f "$target_file" || {
-      printf 'ERROR: could not remove newly installed AGENTS.md\n' >&2
+      printf 'ERROR: could not remove newly installed %s\n' "$document_name" >&2
       exit 1
     }
   fi

@@ -655,6 +655,275 @@ class InteractiveInstallTests(unittest.TestCase):
         if before is not None:
             self.assertEqual(agents.read_text(encoding="utf-8"), before)
 
+    def test_claude_interactive_mcp_urls_can_be_kept_or_replaced_independently(self) -> None:
+        # Why: Claude shares JSON mcpServers merge with Cursor but must label prompts
+        # as Claude and preserve unrelated host-state keys in ~/.claude.json.
+        target = self.root / "claude.json"
+        target.write_text(
+            json.dumps(
+                {
+                    "theme": "keep-me",
+                    "mcpServers": {
+                        "recallium": {"url": "https://old.example/recallium", "transport": "http"},
+                        "mem0": {"url": "https://old.example/mem0", "transport": "http"},
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
+
+        result = self.run_mcp_merge(
+            "--host",
+            "claude",
+            "--target",
+            str(target),
+            "--fragments",
+            str(ROOT / "trellis" / "claude" / "mcp" / "servers.json"),
+            "--policy",
+            "keep",
+            "--interactive",
+            input_text="n\ny\nhttps://new.example/mem0\n",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        data = json.loads(target.read_text(encoding="utf-8"))
+        self.assertEqual(data["theme"], "keep-me")
+        self.assertEqual(data["mcpServers"]["recallium"]["url"], "https://old.example/recallium")
+        self.assertEqual(data["mcpServers"]["mem0"]["url"], "https://new.example/mem0")
+        self.assertIn("Existing Claude recallium URL: https://old.example/recallium", result.stderr)
+        self.assertIn("Existing Claude mem0 URL: https://old.example/mem0", result.stderr)
+
+    def test_claude_merge_rejects_remote_http_before_mutating_target(self) -> None:
+        mcp_file = self.home / ".claude.json"
+        original = json.dumps({"numStartups": 7, "mcpServers": {"existing": {"command": "keep"}}}) + "\n"
+        mcp_file.write_text(original, encoding="utf-8")
+
+        result = self.run_install(
+            "claude-merge",
+            "--mcp-overwrite",
+            "--mem0-url",
+            "http://memory.example.test/mcp",
+            "--mcp-file",
+            str(mcp_file),
+            "--backup-dir",
+            str(self.root / "backup"),
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("insecure remote HTTP", result.stderr)
+        self.assertEqual(mcp_file.read_text(encoding="utf-8"), original)
+
+    def test_claude_merge_preserves_non_mcp_keys_and_default_backup_root(self) -> None:
+        mcp_file = self.home / ".claude.json"
+        mcp_file.write_text(
+            json.dumps({"theme": "dark", "mcpServers": {}}),
+            encoding="utf-8",
+        )
+        project_claude = self.project / ".claude"
+        project_mcp = self.project / ".mcp.json"
+        (self.project / "CLAUDE.md").write_text("project-owned-claude\n", encoding="utf-8")
+        cursor_sentinel = self.home / ".cursor" / "sentinel"
+        cursor_sentinel.parent.mkdir(parents=True)
+        cursor_sentinel.write_text("keep-cursor\n", encoding="utf-8")
+        codex_sentinel = self.home / ".codex" / "sentinel"
+        codex_sentinel.parent.mkdir(parents=True)
+        codex_sentinel.write_text("keep-codex\n", encoding="utf-8")
+
+        result = self.run_install(
+            "claude-merge",
+            "--mcp-overwrite",
+            "--mem0-url",
+            "https://example.test/mem0",
+            "--mcp-file",
+            str(mcp_file),
+            "--project-root",
+            str(self.project),
+        )
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertIn("SKIP: Claude merge has no project-scoped steps", result.stdout)
+        data = json.loads(mcp_file.read_text(encoding="utf-8"))
+        self.assertEqual(data["theme"], "dark")
+        self.assertIn("gitnexus", data["mcpServers"])
+        self.assertEqual(data["mcpServers"]["mem0"]["url"], "https://example.test/mem0")
+        backups = list((self.home / ".claude" / ".ai-workflow-backups").glob("claude.json.*.bak"))
+        self.assertEqual(len(backups), 1)
+        self.assertFalse(project_claude.exists())
+        self.assertFalse(project_mcp.exists())
+        self.assertEqual((self.project / "CLAUDE.md").read_text(encoding="utf-8"), "project-owned-claude\n")
+        self.assertEqual((self.project / "AGENTS.md").read_text(encoding="utf-8"), "project-owned\n")
+        self.assertEqual(cursor_sentinel.read_text(encoding="utf-8"), "keep-cursor\n")
+        self.assertEqual(codex_sentinel.read_text(encoding="utf-8"), "keep-codex\n")
+
+    def test_claude_only_components_do_not_touch_other_hosts_or_project(self) -> None:
+        # Why: Claude recommended path is user-level only — opposite host trees,
+        # project .claude/, .mcp.json, and Graphify must remain untouched.
+        (self.project / "CLAUDE.md").write_text("project-owned\n", encoding="utf-8")
+        cursor_sentinel = self.home / ".cursor" / "keep"
+        cursor_sentinel.parent.mkdir(parents=True)
+        cursor_sentinel.write_text("cursor\n", encoding="utf-8")
+        agents_sentinel = self.home / ".agents" / "keep"
+        agents_sentinel.parent.mkdir(parents=True)
+        agents_sentinel.write_text("agents\n", encoding="utf-8")
+        mcp_file = self.home / ".claude.json"
+        mcp_file.write_text(json.dumps({"theme": "dark", "mcpServers": {}}), encoding="utf-8")
+
+        skills = self.run_install(
+            "skills",
+            "--copy",
+            "--target",
+            str(self.home / ".claude" / "skills"),
+        )
+        self.assertEqual(skills.returncode, 0, skills.stderr + skills.stdout)
+        config = self.run_install(
+            "config",
+            "--copy",
+            "--target",
+            str(self.home / ".claude" / "config"),
+        )
+        self.assertEqual(config.returncode, 0, config.stderr + config.stdout)
+        agents = self.run_install(
+            "agents",
+            "--apply",
+            "--agents-home",
+            str(self.home / ".claude"),
+            "--document-name",
+            "CLAUDE.md",
+            "--no-hooks-feature",
+        )
+        self.assertEqual(agents.returncode, 0, agents.stderr + agents.stdout)
+        merge = self.run_install(
+            "claude-merge",
+            "--mcp-overwrite",
+            "--mem0-url",
+            "https://example.test/mem0",
+            "--mcp-file",
+            str(mcp_file),
+        )
+        self.assertEqual(merge.returncode, 0, merge.stderr + merge.stdout)
+
+        self.assertTrue((self.home / ".claude" / "skills" / "memory" / "SKILL.md").is_file())
+        self.assertTrue((self.home / ".claude" / "config").is_dir())
+        self.assertTrue((self.home / ".claude" / "CLAUDE.md").is_file())
+        self.assertFalse((self.home / ".claude" / "skills" / "graphify").exists())
+        data = json.loads(mcp_file.read_text(encoding="utf-8"))
+        self.assertEqual(data["theme"], "dark")
+        self.assertIn("recallium", data["mcpServers"])
+        self.assertFalse((self.project / ".claude").exists())
+        self.assertFalse((self.project / ".mcp.json").exists())
+        self.assertEqual((self.project / "CLAUDE.md").read_text(encoding="utf-8"), "project-owned\n")
+        self.assertEqual(cursor_sentinel.read_text(encoding="utf-8"), "cursor\n")
+        self.assertEqual(agents_sentinel.read_text(encoding="utf-8"), "agents\n")
+        profile_src = (ROOT / "scripts" / "install.sh").read_text(encoding="utf-8")
+        # install_profile_claude body must not invoke graphify
+        start = profile_src.index("install_profile_claude()")
+        end = profile_src.index("interactive_main()")
+        self.assertNotIn("graphify", profile_src[start:end])
+
+    def test_agents_document_name_and_no_hooks_for_claude(self) -> None:
+        agents_home = self.home / ".claude"
+        agents_home.mkdir(parents=True)
+        (self.project / "CLAUDE.md").write_text("project-owned\n", encoding="utf-8")
+
+        result = self.run_install(
+            "agents",
+            "--apply",
+            "--agents-home",
+            str(agents_home),
+            "--document-name",
+            "CLAUDE.md",
+            "--no-hooks-feature",
+            "--backup-dir",
+            str(self.root / "backup"),
+        )
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        installed = agents_home / "CLAUDE.md"
+        self.assertTrue(installed.is_file())
+        self.assertIn("AI 工作原则", installed.read_text(encoding="utf-8"))
+        self.assertFalse((agents_home / "config.toml").exists())
+        self.assertFalse((agents_home / "AGENTS.md").exists())
+        self.assertEqual((self.project / "CLAUDE.md").read_text(encoding="utf-8"), "project-owned\n")
+        self.assertNotIn("UPDATED: config.toml", result.stdout)
+
+    def test_no_args_with_piped_input_still_exits_2_before_agent_menu(self) -> None:
+        # Why: non-TTY no-args must fail closed with usage (exit 2) even when stdin
+        # has agent tokens — otherwise CI/pipes could accidentally enter the wizard.
+        for choice in ("", "4", "1 9", "abc", "3"):
+            with self.subTest(choice=choice):
+                result = subprocess.run(
+                    ["bash", str(ROOT / "scripts" / "install.sh")],
+                    cwd=ROOT,
+                    text=True,
+                    input=f"{choice}\n",
+                    capture_output=True,
+                    check=False,
+                    env=self.env(),
+                )
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("Usage:", result.stderr)
+
+    def test_install_sh_exposes_claude_merge_and_multi_select_help(self) -> None:
+        text = (ROOT / "scripts" / "install.sh").read_text(encoding="utf-8")
+        self.assertIn("claude-merge", text)
+        self.assertIn("parse_agent_selection", text)
+        self.assertIn("install_profile_claude", text)
+        self.assertIn("Select agents (e.g. 1, 1 3, 1,2,3)", text)
+        self.assertNotIn("3) Codex + Cursor", text)
+        # Wizard must not reintroduce a pre-merge mem0 URL prompt; merge_host_mcp
+        # owns interactive Mem0 collection (bash/PS parity).
+        self.assertNotIn("Provide mem0 MCP URL now?", text)
+
+    def test_parse_agent_selection_function(self) -> None:
+        # Why: menu contract is whitespace/comma multi-select; exercise the real
+        # parse_agent_selection from install.sh so harness copies cannot drift.
+        install_sh = (ROOT / "scripts" / "install.sh").read_text(encoding="utf-8")
+        start = install_sh.index("parse_agent_selection() {")
+        end = install_sh.index("\n}", start) + 2
+        parser_fn = install_sh[start:end]
+        harness = self.root / "parse_harness.sh"
+        harness.write_text(
+            "#!/usr/bin/env bash\n"
+            "set -euo pipefail\n"
+            f"{parser_fn}\n"
+            'case "$1" in\n'
+            "  ok)\n"
+            '    parse_agent_selection "$2"\n'
+            '    printf \'codex=%s cursor=%s claude=%s\\n\' "$want_codex" "$want_cursor" "$want_claude"\n'
+            "    ;;\n"
+            "  bad)\n"
+            '    if parse_agent_selection "$2"; then\n'
+            "      exit 0\n"
+            "    fi\n"
+            "    exit 2\n"
+            "    ;;\n"
+            "esac\n",
+            encoding="utf-8",
+        )
+        cases = [
+            ("1", "codex=1 cursor=0 claude=0"),
+            ("1 3", "codex=1 cursor=0 claude=1"),
+            ("1,2,3", "codex=1 cursor=1 claude=1"),
+            ("2,2", "codex=0 cursor=1 claude=0"),
+        ]
+        for raw, expected in cases:
+            with self.subTest(raw=raw):
+                result = subprocess.run(
+                    ["bash", str(harness), "ok", raw],
+                    text=True,
+                    capture_output=True,
+                    check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(result.stdout.strip(), expected)
+        for raw in ("", "4", "1 9", "x"):
+            with self.subTest(bad=raw):
+                result = subprocess.run(
+                    ["bash", str(harness), "bad", raw],
+                    text=True,
+                    capture_output=True,
+                    check=False,
+                )
+                self.assertEqual(result.returncode, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

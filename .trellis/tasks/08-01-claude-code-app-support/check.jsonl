@@ -1,0 +1,4 @@
+{"file": ".trellis/spec/scripts/installer-contracts.md", "reason": "Verify installer contracts and dual bash/ps drift rule"}
+{"file": ".trellis/spec/scripts/index.md", "reason": "Scripts quality checklist"}
+{"file": ".trellis/spec/decisions/0001-claude-mcp-user-claude-json.md", "reason": "Ensure MCP target decision not violated"}
+{"file": ".trellis/tasks/08-01-claude-code-app-support/research/claude-code-paths.md", "reason": "Verify merge preserves non-MCP keys"}

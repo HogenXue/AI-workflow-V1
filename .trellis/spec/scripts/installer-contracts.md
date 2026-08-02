@@ -36,9 +36,9 @@ Developer Mode). `--link` failure must still rollback and exit non-zero (never s
 
 ## Design Decision: Duty mapping, never directory copy
 
-**Context**: Codex and Cursor use similarly named concepts (skills, rules, hooks, MCP) with different roots and formats.
+**Context**: Codex, Cursor, and Claude Code use similarly named concepts (skills, rules, hooks, MCP) with different roots and formats.
 
-**Decision**: Install by **profile duty mapping**. Never copy a Cursor tree into a Codex tree (or the reverse). Never delete the other host’s directory as part of install.
+**Decision**: Install by **profile duty mapping**. Never copy one host’s tree into another host’s tree. Never delete the other host’s directory as part of install.
 
 **Why**: Same names ≠ same runtime contracts. Silent path guesswork installs into the wrong project or breaks Trellis-managed root `AGENTS.md`.
 
@@ -61,9 +61,9 @@ install_lib_resolve_project_root <provided_path> <skip_flag:0|1> <interactive:0|
 Install-LibResolveProjectRoot -Provided <path> -SkipFlag 0|1 -Interactive 0|1
   → sets $script:InstallProjectRoot (PowerShell peer)
 
-install.sh <codex-merge|cursor-merge> --project-root PATH ...
-install.sh <codex-merge|cursor-merge> --skip-project ...
-install.sh   # TTY only: menu includes project-root pick (git root = candidate only)
+install.sh <codex-merge|cursor-merge|claude-merge> --project-root PATH ...
+install.sh <codex-merge|cursor-merge|claude-merge> --skip-project ...
+install.sh   # TTY only: menu includes project-root pick (git root = candidate only; Cursor only)
 
 install.ps1 / install.cmd  # same flags and TTY / non-TTY rules
 ```
@@ -74,9 +74,10 @@ install.ps1 / install.cmd  # same flags and TTY / non-TTY rules
 |-------|----------|
 | `--project-root PATH` | Use absolute path; must be an existing directory |
 | `--skip-project` | Skip project-scoped steps; print `SKIP: ...` |
-| TTY interactive, no path | Menu: select git root **as option**, custom path, or skip |
+| TTY interactive, no path | Menu: select git root **as option**, custom path, or skip (**only when Cursor is selected**) |
 | Non-interactive, no path, no skip | Skip project-scoped steps; print clear `SKIP` + hint to pass `--project-root` |
-| Global-only steps (skills, paired config, host MCP, Codex `~/.codex` AGENTS/hooks feature) | Do **not** require a project root |
+| Global-only steps (skills, paired config, host MCP, Codex `~/.codex` AGENTS/hooks feature, Claude `~/.claude/CLAUDE.md`) | Do **not** require a project root |
+| `claude-merge` | Accepts `--project-root` / `--skip-project` for wizard compatibility but ignores them (user-level MCP only) |
 
 **Forbidden**: applying `git rev-parse --show-toplevel` (or cwd) without an **explicit** user choice / `--project-root`.
 
@@ -126,40 +127,45 @@ fi
 
 ---
 
-## Scenario: Codex vs Cursor profile pairing
+## Scenario: Codex / Cursor / Claude profile pairing
 
 ### 1. Scope / Trigger
 
-- Trigger: Full-profile or component install for one or both agents.
-- Cross-host contract: skills root ↔ config root pairing; MCP format; rules vs AGENTS placement.
+- Trigger: Full-profile or component install for one or more agents.
+- Cross-host contract: skills root ↔ config root pairing; MCP format; rules vs AGENTS/CLAUDE placement.
 
 ### 2. Signatures
 
 ```text
 install.sh                          # TTY: multi-select agents → full or single component
-install.sh skills|agents|config|codex-merge|cursor-merge [options]
+install.sh skills|agents|config|codex-merge|cursor-merge|claude-merge [options]
 
 install.ps1 / install.cmd           # same interactive + component dispatch (pwsh 7+)
 
 # Profile entrypoints (interactive full install)
 install_profile_codex  <project_root_or_empty> <mem0_url_or_empty>
 install_profile_cursor <project_root_or_empty> <mem0_url_or_empty>
+install_profile_claude <mem0_url_or_empty>
 ```
 
 ### 3. Contracts — profile map
 
 | Profile | Skills | Config (skill defaults) | Host / rules | MCP | Project-scoped |
 |---------|--------|-------------------------|--------------|-----|----------------|
-| **Codex** | `~/.agents/skills` | `~/.agents/config` (parent of skills root) | `~/.codex` (`AGENTS.md` + hooks feature); **not** root repo `AGENTS.md` for Cursor rules | `~/.codex/config.toml` `[mcp_servers.*]` | `<project>/.codex/hooks.json` + `hooks/` |
-| **Cursor** | `~/.cursor/skills` | `~/.cursor/config` | Project `.cursor/rules/*.mdc` **generated from** `trellis/AGENTS.global.md` at install | `~/.cursor/mcp.json` `mcpServers` | `<project>/.cursor/hooks.json` + `hooks/` |
+| **Codex** | `~/.agents/skills` | `~/.agents/config` (parent of skills root) | `~/.codex` (`AGENTS.md` + hooks feature); **not** root repo `AGENTS.md` for Cursor rules | `~/.codex/config.toml` `[mcp_servers.*]` | User-level hooks under `~/.codex` via `codex-merge` (not silent git-root project install) |
+| **Cursor** | `~/.cursor/skills` | `~/.cursor/config` | Project `.cursor/rules/*.mdc` **generated from** `AGENTS.global.md` at install | `~/.cursor/mcp.json` `mcpServers` | `<project>/.cursor/hooks.json` + `hooks/` (requires `--project-root`) |
+| **Claude** | `~/.claude/skills` | `~/.claude/config` | User `~/.claude/CLAUDE.md` from `AGENTS.global.md` (`agents --document-name CLAUDE.md --no-hooks-feature`) | `~/.claude.json` `mcpServers` | **None** — installer never writes project `.claude/` or `.mcp.json` |
 
 **Hard rules**:
 
-- Skills and config share a paired root (`~/.agents` vs `~/.cursor`) because skills resolve `../../config`.
-- Codex MCP = TOML fragments under `trellis/codex/mcp/`; Cursor MCP = JSON under `trellis/cursor/mcp/`.
-- Cursor “AGENTS-like” content → `.cursor/rules/*.mdc` only, **dynamically** from `trellis/AGENTS.global.md` (static `trellis/cursor/rules/*.mdc` is not the install source body).
+- Skills and config share a paired root (`~/.agents` / `~/.cursor` / `~/.claude`) because skills resolve `../../config`.
+- Codex MCP = TOML fragments under `trellis/codex/mcp/`; Cursor/Claude MCP = JSON under `trellis/cursor/mcp/` and `trellis/claude/mcp/` respectively (duty mapping: no directory-copy between hosts).
+- Cursor “AGENTS-like” content → `.cursor/rules/*.mdc` only, **dynamically** from `AGENTS.global.md`.
+- Claude global rules → `~/.claude/CLAUDE.md` only; never rewrite project-root `CLAUDE.md` / `AGENTS.md`.
 - Installer **never** rewrites Trellis / project root `AGENTS.md`.
-- Do not install global `~/.codex/hooks.json`; project hooks only under explicit project root.
+- Do not install global `~/.codex/hooks.json` as a mistaken project path; Codex hooks install at user scope under `~/.codex` per `codex-merge`.
+- Claude recommended full install does **not** install Graphify (same as Cursor).
+- Claude MCP default backup-dir is `~/.claude/.ai-workflow-backups` even when the MCP file is `~/.claude.json`.
 - Multi-select runs selected profiles sequentially; never delete the other host’s files.
 
 ### 4. Validation & Error Matrix
@@ -173,17 +179,18 @@ install_profile_cursor <project_root_or_empty> <mem0_url_or_empty>
 
 ### 5. Good / Base / Bad Cases
 
-- **Good**: Codex-only full install writes `~/.agents/*` + `~/.codex` MCP; leaves `~/.cursor` untouched
-- **Base**: Codex+Cursor multi-select writes both profiles under their own trees
-- **Bad**: Copying `.cursor/rules` into Codex sandbox `rules`, or overwriting repo-root `AGENTS.md`
+- **Good**: Codex-only full install writes `~/.agents/*` + `~/.codex` MCP; leaves `~/.cursor` / `~/.claude` untouched
+- **Good**: Claude-only writes `~/.claude/{skills,config,CLAUDE.md}` + `~/.claude.json`; no project `.claude/` / `.mcp.json`; no Graphify
+- **Base**: multi-select writes each selected profile under its own tree
+- **Bad**: Copying `.cursor/rules` into Claude/Codex, or overwriting repo-root `AGENTS.md` / `CLAUDE.md`
 
 ### 6. Tests Required
 
-- Single-profile install: assert opposite host tree unchanged
-- Multi-select: assert both profiles receive expected markers
-- Cursor merge with existing `AGENTS.md`: assert file content unchanged
-- MCP: Codex path contains `[mcp_servers.]`; Cursor path is JSON `mcpServers`
-- Assertion points: path presence/absence, `AGENTS.md` hash/content, conflict exit codes
+- Single-profile install: assert opposite host trees unchanged
+- Multi-select: assert selected profiles receive expected markers
+- Cursor/Claude merge with existing project `AGENTS.md` / `CLAUDE.md`: assert file content unchanged
+- MCP: Codex path contains `[mcp_servers.]`; Cursor/Claude path is JSON `mcpServers` (Claude preserves non-MCP keys in `~/.claude.json`)
+- Assertion points: path presence/absence, document hash/content, conflict exit codes
 
 ### 7. Wrong vs Correct
 
@@ -191,7 +198,7 @@ install_profile_cursor <project_root_or_empty> <mem0_url_or_empty>
 
 ```text
 # Directory copy anti-pattern
-cp -R ~/.cursor/skills ~/.agents/skills
+cp -R ~/.cursor/skills ~/.claude/skills
 # Cursor rules dumped into Codex / root AGENTS
 cp .cursor/rules/* ~/.codex/rules/
 echo "..." >> "$PROJECT/AGENTS.md"   # installer must not do this
@@ -200,8 +207,9 @@ echo "..." >> "$PROJECT/AGENTS.md"   # installer must not do this
 #### Correct
 
 ```text
-Codex:  skills→~/.agents/skills  config→~/.agents/config  MCP→config.toml  project→.codex/hooks*
+Codex:  skills→~/.agents/skills  config→~/.agents/config  MCP→config.toml  docs→~/.codex/AGENTS.md
 Cursor: skills→~/.cursor/skills  config→~/.cursor/config  MCP→mcp.json     project→.cursor/{rules/*.mdc,hooks*}
+Claude: skills→~/.claude/skills  config→~/.claude/config  MCP→~/.claude.json  docs→~/.claude/CLAUDE.md
 ```
 
 ---
@@ -221,9 +229,10 @@ install.sh / install.ps1 / install.cmd   # no args
   non-TTY: usage on stderr → exit 2
 
 Interactive choices:
-  agents: 1=Codex | 2=Cursor | 3=Codex+Cursor
+  agents: multi-select numbers — 1=Codex | 2=Cursor | 3=Claude
+          (e.g. `1`, `1 3`, `1,2,3`; whitespace or comma separated; duplicates ignored)
   mode:   1=recommended full | 2=single component
-  then:   explicit project-root menu (shared resolver)
+  then:   explicit project-root menu only when Cursor is selected
 ```
 
 ### 3. Contracts
@@ -231,7 +240,7 @@ Interactive choices:
 | Mode | Behavior |
 |------|----------|
 | Full install | Confirmation summary → `install_profile_*` for each selected agent |
-| Single component | One of `skills\|agents\|config\|codex-merge\|cursor-merge`; merge components get `--project-root` or `--skip-project` + `--interactive` |
+| Single component | One of `skills\|graphify\|agents\|config\|codex-merge\|cursor-merge\|claude-merge`; merge components get `--project-root` or `--skip-project` + `--interactive` |
 | Component CLI (args present) | Unchanged dispatch; still compatible with existing flags |
 
 ### 4. Validation & Error Matrix
@@ -245,9 +254,10 @@ Interactive choices:
 
 ### 5. Good / Base / Bad Cases
 
-- **Good**: TTY choice `3` runs Codex then Cursor profiles once project root is resolved/skipped
+- **Good**: TTY choice `1 3` runs Codex then Claude profiles; project-root asked only if Cursor is selected
 - **Base**: piped/non-TTY install with no args → exit `2` (CI-safe)
 - **Bad**: Treating non-TTY empty args as “default full install” or auto-picking git root
+- **Bad**: Old fixed menu `3 = Codex+Cursor` without multi-select / Claude
 
 ### 6. Tests Required
 
@@ -306,7 +316,7 @@ fi
 ```text
 install.sh / install.ps1           # TTY wizard
   -> install-<host>-merge.sh|.ps1 --interactive
-  -> merge_host_mcp.py --interactive --host <codex|cursor> ...
+  -> merge_host_mcp.py --interactive --host <codex|cursor|claude> ...
 
 merge_host_mcp.py --interactive
   # Internal flag. Bash and PowerShell entrypoints pass it only when stdin is a TTY.
@@ -317,7 +327,7 @@ merge_host_mcp.py --interactive
 - Show each existing managed URL and default to keeping it.
 - Replace only after explicit confirmation. Packaged URL entries show the replacement URL; Mem0 asks for a new URL when no `--mem0-url` value exists.
 - A missing Mem0 entry may be added interactively, but remains optional.
-- Resolve Codex and Cursor independently when both profiles are selected.
+- Resolve Codex, Cursor, and Claude independently when multiple profiles are selected.
 - Existing command/args entries continue to use the host's ordinary `--mcp-keep` / `--mcp-overwrite` policy.
 - Component and non-TTY calls never read stdin unless their shell entrypoint has confirmed an interactive TTY.
 
@@ -342,8 +352,9 @@ merge_host_mcp.py --interactive
 ### 6. Tests Required
 
 - Codex TOML: independent keep/replace decisions; assert old Recallium remains and Mem0 changes.
-- Cursor JSON: inverse decisions; assert packaged Recallium replaces old value and Mem0 remains.
+- Cursor JSON / Claude JSON: inverse or independent decisions; assert packaged Recallium replaces old value and Mem0 remains when kept.
 - Missing Mem0: opt in with a URL; assert the entry is added.
+- Claude: assert non-`mcpServers` keys in `~/.claude.json` are preserved.
 - Regression suite: component CLI, non-TTY no-args, URL transport validation, backup, and rollback behavior remain green.
 - TTY smoke test: verify the shell entrypoint propagates interactivity and the resulting host config matches the selected decisions.
 - PowerShell: `install-*-merge.ps1` must forward `--interactive` to `merge_host_mcp.py` under TTY (wiring asserted in `tests/test_install_merge_ps.py`).
@@ -383,7 +394,8 @@ New Codex mem0 URL: https://new.example/mem0
 
 - Codex project replacement backs up and replaces only `.codex/hooks.json` and `.codex/hooks/`; unrelated `.codex` content is preserved.
 - Cursor project replacement backs up rules and hooks, removes the old managed hooks directory, then installs the template so deleted hooks cannot remain active; unrelated `.cursor` content is preserved.
-- Installer targets must not overlap packaged source directories, and Cursor's MCP target must not be the packaged MCP fragment.
+- Claude merge backs up and updates only the MCP target file (default `~/.claude.json`); non-`mcpServers` keys are preserved; default backup-dir is `~/.claude/.ai-workflow-backups`.
+- Installer targets must not overlap packaged source directories, and Cursor/Claude MCP targets must not be the packaged MCP fragment.
 - A backup directory must not be the target itself or a descendant of the target being backed up.
 
 **Tests required**: Assert the filename pattern, preserved backup contents, sequential and parallel collision uniqueness, backup-failure behavior, dangling-symlink handling, MCP rollback after project failure, source/target separation, nested-backup rejection, and unrelated host-directory sentinels.
@@ -400,7 +412,7 @@ servers. Plain HTTP is allowed only for `localhost`, `127.0.0.1`, and `::1`.
 
 **Why**: Project memory and other MCP payloads must not be sent to a remote
 server over a plaintext default. Keeping the policy in the shared merge helper
-prevents Codex TOML and Cursor JSON behavior from drifting.
+prevents Codex TOML and Cursor/Claude JSON behavior from drifting.
 
 **Failure contract**: An invalid, unsupported, or remote HTTP URL prints a
 stable `ERROR:` diagnostic and returns non-zero before target mutation. The

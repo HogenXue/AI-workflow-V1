@@ -136,3 +136,24 @@ class InstallComponentsPsTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         expected = home / ".agents" / "skills" / "release"
         self.assertIn(f"DRY-RUN: copy release -> {expected}", result.stdout)
+
+    def test_agents_document_name_no_hooks_feature(self) -> None:
+        # Why: Claude profile needs CLAUDE.md without creating/updating config.toml hooks.
+        agents_home = self.root / "claude-home"
+        agents_home.mkdir()
+        result = self.run_ps(
+            "install-agents.ps1",
+            "--apply",
+            "--agents-home",
+            str(agents_home),
+            "--document-name",
+            "CLAUDE.md",
+            "--no-hooks-feature",
+            "--backup-dir",
+            str(self.backup),
+        )
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertTrue((agents_home / "CLAUDE.md").is_file())
+        self.assertFalse((agents_home / "config.toml").exists())
+        self.assertFalse((agents_home / "AGENTS.md").exists())
+        self.assertNotIn("UPDATED: config.toml", result.stdout)

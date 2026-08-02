@@ -1,0 +1,5 @@
+{"file": ".trellis/spec/scripts/installer-contracts.md", "reason": "Installer duty mapping, backup, MCP, interactive contracts"}
+{"file": ".trellis/spec/scripts/index.md", "reason": "Scripts layer entry and checklist"}
+{"file": ".trellis/spec/domain/index.md", "reason": "Claude Code profile / claude-merge domain terms"}
+{"file": ".trellis/spec/decisions/0001-claude-mcp-user-claude-json.md", "reason": "ADR: MCP target is user ~/.claude.json"}
+{"file": ".trellis/tasks/08-01-claude-code-app-support/research/claude-code-paths.md", "reason": "Claude path and JSON merge constraints"}
