@@ -50,22 +50,22 @@ A 30-second flaky loop is barely better than no loop; a 2-second deterministic o
 
 ### Non-deterministic bugs
 
-The goal is not a clean repro but a **higher reproduction rate**. Loop the trigger 100×, parallelise, add stress, narrow timing windows, inject sleeps. A 50%-flake bug is debuggable; 1% is not — keep raising the rate until it's debuggable.
+The goal is not a clean repro but a **higher reproduction rate**. Choose a bounded number of attempts based on cost, safety, and observed frequency. Increase stress or instrumentation only when it answers a specific uncertainty; do not default to 100 runs or injected sleeps.
 
 ### When you genuinely cannot build a loop
 
-Stop and say so explicitly. List what you tried. Ask the user for: (a) access to whatever environment reproduces it, (b) a captured artifact (HAR file, log dump, core dump, screen recording with timestamps), or (c) permission to add temporary production instrumentation. Do **not** proceed to hypothesise without a loop.
+State what could not be reproduced and what evidence is available. Continue read-only investigation using source, logs, and existing failures; label hypotheses and the limits of the evidence. Ask for input only when required evidence is inaccessible.
 
-### Completion criterion — a tight loop that goes red
+### When a runnable reproduction is feasible
 
-Phase 1 is done when the loop is **tight** and **red-capable**: you can name **one command** — a script path, a test invocation, a curl — that you have **already run at least once** (paste the invocation and its output), and that is:
+Prefer a command that has actually demonstrated the symptom, with these properties where practical:
 
 - [ ] **Red-capable** — it drives the actual bug code path and asserts the **user's exact symptom**, so it can go red on this bug and green once fixed. Not "runs without erroring" — it must be able to _catch this specific bug_.
 - [ ] **Deterministic** — same verdict every run (flaky bugs: a pinned, high reproduction rate, per above).
 - [ ] **Fast** — seconds, not minutes.
 - [ ] **Agent-runnable** — you can run it unattended; a human in the loop only via `scripts/hitl-loop.template.sh`.
 
-If you catch yourself reading code to build a theory before this command exists, **stop — jumping straight to a hypothesis is the exact failure this skill prevents.** No red-capable command, no Phase 2.
+Source reading, logs, and existing failure evidence may precede a runnable reproduction. Prefer a reproducer when practical; its absence limits claims, not read-only investigation.
 
 ## Phase 2 — Reproduce + minimise
 
@@ -83,13 +83,13 @@ Once it's red, shrink the repro to the **smallest scenario that still goes red**
 
 Why bother: a minimal repro shrinks the hypothesis space in Phase 3 (fewer moving parts left to suspect) and becomes the clean regression test in Phase 5.
 
-Done when **every remaining element is load-bearing** — removing any one of them makes the loop go green.
+Stop minimising once the evidence distinguishes the relevant causes; do not pursue a perfect minimal case without a concrete benefit.
 
-Do not proceed until you have reproduced **and** minimised.
+Reproduce and minimise when feasible; otherwise continue with explicit evidence limits.
 
 ## Phase 3 — Hypothesise
 
-Generate **3–5 ranked hypotheses** before testing any of them. Single-hypothesis generation anchors on the first plausible idea.
+Generate only hypotheses supported by the evidence. Rank competing explanations when useful; no fixed count is required.
 
 Each hypothesis must be **falsifiable**: state the prediction it makes.
 

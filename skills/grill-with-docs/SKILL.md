@@ -1,6 +1,6 @@
 ---
 name: grill-with-docs
-description: "Clarify complex, cross-module, or unclear requirements through a repository-aware, one-question-at-a-time interview while maintaining Trellis domain and decision specs. Use as the sole Codex interviewer for Trellis Phase 1.1; do not combine it with trellis-brainstorm or create a second spec/task workflow."
+description: "Review requirements in Trellis Phase 1.1 for complex changes; interview only for unresolved user decisions."
 ---
 
 # Grill with Docs
@@ -11,10 +11,10 @@ description: "Clarify complex, cross-module, or unclear requirements through a r
 
 ## 访谈流程
 
-1. 先取得创建或更新 Trellis task 的同意并解析当前 planning task。读取当前 Trellis PRD、
+1. 按项目授权规则解析当前 Trellis task；已有建任务、更新或实施授权不重复询问。读取当前 Trellis PRD、
    `.trellis/spec/domain/` 和相关 `.trellis/spec/decisions/`；能从仓库、任务工件或工具查到的
    事实不得再问用户。
-2. 沿决策依赖一次只问一个必要问题，并给出推荐答案和简短理由。等待用户回答后再进入下一个
+2. 先审查需求完整性；无未决项时记录可继续的结论并返回 Trellis，不启动访谈。有需要用户决策的未决项时，沿决策依赖一次只问一个必要问题，并给出推荐答案和简短理由。等待用户回答后再进入下一个
    分支，不把多个决策打包提问。
 3. 每轮把确认的需求、范围、场景、验收和未决项立即写入当前 Trellis PRD。Trellis PRD 是
    这些内容的唯一来源，不另建 Spec、issue 或任务清单。
@@ -22,7 +22,7 @@ description: "Clarify complex, cross-module, or unclear requirements through a r
    `.trellis/spec/domain/`；只把难以逆转、缺少上下文会令人意外、且经过真实权衡的决定写入
    `.trellis/spec/decisions/`。具体格式见
    [领域文档规则](references/domain-docs.md)。
-5. 决策树收敛后，确认 PRD 已覆盖问题、目标、非目标、验收标准和未决项，并请求用户确认。
+5. 决策树收敛后，确认 PRD 已覆盖问题、目标、非目标、验收标准和未决项，仅在存在尚未批准的决策或项目明确要求的门禁时请求用户确认。
    随后把控制权交回 Trellis，由其维护 Design、Plan、Research、状态、执行和 Journal。
 
 ## 边界

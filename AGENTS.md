@@ -24,8 +24,8 @@ Managed by Trellis. Edits outside this block are preserved; edits inside may be 
 
 ## Codex workflow ownership
 
-- 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 将 `$grill-with-docs` 视为 Trellis Phase 1.1 的唯一访谈实现，使用后不要再加载 `trellis-brainstorm`。需求只写 Trellis PRD；领域术语与持久决定分别写 `.trellis/spec/domain/`、`.trellis/spec/decisions/`。
-- Codex 质量阶段使用项目原生 `trellis-check`。
+- 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 主动使用 `$grill-with-docs` 完成 Trellis Phase 1.1 需求审查，仅对需要用户决策的未决项访谈。使用后不要再加载 `trellis-brainstorm`。需求只写 Trellis PRD；领域术语与持久决定分别写 `.trellis/spec/domain/`、`.trellis/spec/decisions/`。
+- 实现稳定后，按当前 Task 要求使用项目原生 `trellis-check`。
 - `$tdd` 是 Trellis 执行阶段的实现方法，Karpathy Guidelines 是横切约束；两者都不创建平行任务或工作流。
 - `$diagnosing-bugs`、`$codebase-design`、`$resolving-merge-conflicts` 只作为当前 Trellis task 内的专项能力，不接管任务状态、质量审查或 Git 授权。
 - 原生 Trellis helper 未暴露时，手动执行等价的 task/spec 读取、验证或同步步骤，并明确说明降级。
@@ -35,20 +35,20 @@ Managed by Trellis. Edits outside this block are preserved; edits inside may be 
 
 This project is indexed by GitNexus as **AI-workflow-V1** (1063 symbols, 1791 relationships, 49 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
-> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
+> If the index is stale, rebuild only when the current task requires graph evidence and updating is authorized. Otherwise inspect source and report the limitation.
 
 ## Always Do
 
 - Follow the project's risk-driven policy: run impact analysis before cross-module, public contract/data contract, deletion/migration, high-risk, or unfamiliar call-chain changes. Local low-risk edits may use ordinary source reading and targeted tests.
 - Run `gitnexus_detect_changes()` before committing only when project rules require it, graph impact analysis was used, or the change is cross-module/high-risk. Otherwise use standard Git scope checks and relevant tests.
 - **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
-- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
-- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
+- For unfamiliar high-risk execution flows, prefer `gitnexus_query({query: "concept"})` when available. Ordinary local navigation may use source search; unavailable graph tools must not block source-based analysis.
+- When high-risk work needs full graph context on a specific symbol, prefer `gitnexus_context({name: "symbolName"})` when available; otherwise use source and language tooling with targeted verification.
 
 ## Never Do
 
 - NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
-- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
+- For cross-file or high-impact symbol renames, prefer `gitnexus_rename` when available. Otherwise use language-aware rename tooling or verified source edits; never use blind find-and-replace.
 
 ## Resources
 

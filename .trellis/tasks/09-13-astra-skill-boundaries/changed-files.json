@@ -1,0 +1,21 @@
+{
+  "backup": "/Users/hogenxue/.codex/.ai-workflow-backups/astra-rules-20260912T220618Z",
+  "files": [
+    "/Users/hogenxue/.codex/superpowers/skills/using-superpowers/SKILL.md",
+    "/Users/hogenxue/.codex/superpowers/skills/brainstorming/SKILL.md",
+    "/Users/hogenxue/.codex/superpowers/skills/verification-before-completion/SKILL.md",
+    "/Users/hogenxue/Projects/CodexTamplate/skills/grill-with-docs/SKILL.md",
+    "/Users/hogenxue/Projects/CodexTamplate/skills/grill-with-docs/references/trellis-boundary.md",
+    "/Users/hogenxue/Projects/CodexTamplate/skills/diagnosing-bugs/SKILL.md",
+    "/Users/hogenxue/.agents/skills/grill-with-docs/SKILL.md",
+    "/Users/hogenxue/.agents/skills/grill-with-docs/references/trellis-boundary.md",
+    "/Users/hogenxue/.agents/skills/diagnosing-bugs/SKILL.md",
+    "/Users/hogenxue/.codex/skills/graphify/SKILL.md",
+    "/Users/hogenxue/.agents/skills/openspec/SKILL.md",
+    "/Users/hogenxue/Projects/CodexTamplate/AGENTS.global.md",
+    "/Users/hogenxue/.codex/AGENTS.md",
+    "/Users/hogenxue/Projects/CodexTamplate/AGENTS.md",
+    "/Users/hogenxue/Projects/CodexTamplate/.trellis/workflow.md",
+    "/Users/hogenxue/.codex/superpowers/skills/writing-plans/SKILL.md"
+  ]
+}

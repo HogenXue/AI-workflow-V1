@@ -1,0 +1,16 @@
+{
+  "checks": [
+    {
+      "command": "/tmp/astra-rules-validation-venv/bin/python .trellis/tasks/09-13-astra-skill-boundaries/verify_scope.py",
+      "duration_ms": 93,
+      "exit_code": 0,
+      "name": "astra-rules",
+      "status": "passed"
+    }
+  ],
+  "generated_at": "2026-09-12T22:29:44.514868+00:00",
+  "git_head": "372b0531d40ef01b572e2ed73875959dbddcc50d",
+  "schema_version": 1,
+  "status": "passed",
+  "worktree_fingerprint": "38ec817614de3c04546a6272d61da26ceb06e1eddd61da4ffe3c556c49910bca"
+}
