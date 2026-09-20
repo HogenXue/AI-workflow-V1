@@ -1,0 +1,16 @@
+{
+  "checks": [
+    {
+      "command": "python3 .trellis/tasks/07-13-grill-me-trellis-integration/verify_new_grill.py",
+      "duration_ms": 6435,
+      "exit_code": 0,
+      "name": "single-grill",
+      "status": "passed"
+    }
+  ],
+  "generated_at": "2026-09-20T01:57:44.619979+00:00",
+  "git_head": "6d92808ba9b5710de4ea108fc41c62efb7d24e86",
+  "schema_version": 1,
+  "status": "passed",
+  "worktree_fingerprint": "c3ff1261431f926ac6efab249119d8c94d9052db1587b2e6d0360875818dbd35"
+}

@@ -229,7 +229,7 @@ foreach ($skill in $skills) {
     }
 }
 
-$legacySkills = @('openspec', 'review', 'grill-me')
+$legacySkills = @('openspec', 'review', 'grill-with-docs', 'grilling', 'domain-modeling')
 $legacyConflicts = [System.Collections.Generic.List[string]]::new()
 foreach ($skill in $legacySkills) {
     $legacyPath = Join-Path $target $skill

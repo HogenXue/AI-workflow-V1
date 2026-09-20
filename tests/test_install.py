@@ -11,7 +11,7 @@ SKILLS = (
     "gitnexus",
     "release",
     "karpathy-guidelines-zh",
-    "grill-with-docs",
+    "grill-me",
     "tdd",
     "diagnosing-bugs",
     "codebase-design",
@@ -43,7 +43,7 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn(f"DRY-RUN: copy memory -> {self.skills_target / 'memory'}", result.stdout)
         self.assertIn(
-            f"DRY-RUN: copy grill-with-docs -> {self.skills_target / 'grill-with-docs'}",
+            f"DRY-RUN: copy grill-me -> {self.skills_target / 'grill-me'}",
             result.stdout,
         )
         self.assertIn(f"DRY-RUN: copy tdd -> {self.skills_target / 'tdd'}", result.stdout)
@@ -603,7 +603,7 @@ class ComponentInstallTests(unittest.TestCase):
 
     def test_legacy_workflow_skills_pruning_is_explicit_and_backed_up(self) -> None:
         sentinels = {}
-        for name in ("openspec", "review", "grill-me"):
+        for name in ("openspec", "review"):
             sentinel = self.skills_target / name / "sentinel"
             sentinel.parent.mkdir(parents=True)
             sentinel.write_text("legacy", encoding="utf-8")

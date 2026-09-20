@@ -1,0 +1,6 @@
+interface:
+  display_name: "Grill Me"
+  short_description: "Align on an idea before committing to it"
+  default_prompt: "Use $grill-me to pressure-test this idea in a stateless conversation before planning or implementation."
+policy:
+  allow_implicit_invocation: false

@@ -1,1 +1,2 @@
-{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file":".trellis/spec/domain/index.md","reason":"Trellis domain documentation remains the canonical location for domain terms and invariants."}
+{"file":".trellis/tasks/07-13-grill-me-trellis-integration/research/new-grill-integration.md","reason":"Approved upstream baseline and Trellis adaptation boundaries for the new Grill architecture."}

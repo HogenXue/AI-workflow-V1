@@ -466,6 +466,49 @@ class InteractiveInstallTests(unittest.TestCase):
         self.assertEqual(config.read_text(encoding="utf-8"), original_config)
         self.assertEqual((codex_home / "hooks.json").read_text(encoding="utf-8"), "existing\n")
 
+    def test_codex_merge_preserves_existing_hooks_and_idempotently_adds_session_start(self) -> None:
+        codex_home = self.home / ".codex"
+        hooks_dir = codex_home / "hooks"
+        hooks_dir.mkdir(parents=True)
+        (codex_home / "config.toml").write_text("", encoding="utf-8")
+        existing = {
+            "hooks": {
+                "PermissionRequest": [
+                    {
+                        "matcher": "",
+                        "hooks": [{"type": "command", "command": "keep-permission-hook"}],
+                    }
+                ]
+            }
+        }
+        (codex_home / "hooks.json").write_text(
+            json.dumps(existing, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        custom_hook = hooks_dir / "custom.sh"
+        custom_hook.write_text("#!/usr/bin/env bash\n", encoding="utf-8")
+
+        args = (
+            "codex-merge",
+            "--mcp-keep",
+            "--codex-home",
+            str(codex_home),
+            "--backup-dir",
+            str(self.root / "backup"),
+        )
+        first = self.run_install(*args)
+        self.assertEqual(first.returncode, 0, first.stderr + first.stdout)
+        second = self.run_install(*args)
+        self.assertEqual(second.returncode, 0, second.stderr + second.stdout)
+
+        data = json.loads((codex_home / "hooks.json").read_text(encoding="utf-8"))
+        self.assertEqual(data["hooks"]["PermissionRequest"], existing["hooks"]["PermissionRequest"])
+        self.assertEqual(len(data["hooks"]["SessionStart"]), 1)
+        command = data["hooks"]["SessionStart"][0]["hooks"][0]["command"]
+        self.assertIn(str(hooks_dir / "session-start.sh"), command)
+        self.assertTrue(custom_hook.is_file())
+        self.assertTrue((hooks_dir / "session-start.sh").is_file())
+
     def test_cursor_merge_backs_up_dangling_mcp_symlink(self) -> None:
         cursor_home = self.home / ".cursor"
         cursor_home.mkdir(parents=True)

@@ -29,3 +29,11 @@
 - [x] 检查 diff，确保未回退用户已有的 hooks 相关修改。
 - [x] 补齐 `agents --apply` 的异常路径：拒绝非普通 `config.toml`，并在 hooks 配置写入失败时回滚本次 AGENTS 安装。
 - [x] 将 GitNexus 从每次提交的强制步骤改为高影响变更或项目明确要求时的按需检查，并同步模板、示例和 TDD 交接记录。
+
+## Task 4: Adopt the new Grill architecture
+
+- [x] 先为 hooks 保留与幂等合并行为添加失败测试，再实现事件级合并。
+- [x] 将最新版 Grill Me 的分轮访谈方法内置到单一 `grill-me` Skill，并加入 Trellis 交接边界。
+- [x] 更新 manifest、模板、安装测试和验证器断言。
+- [x] 补齐 PyYAML 与 `~/.agents/config`，再通过安装器同步 Skills、AGENTS 和 hooks。
+- [x] 运行最小相关测试、Skill validator、安装 dry-run 和实际安装后回读检查。

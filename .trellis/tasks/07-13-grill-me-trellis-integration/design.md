@@ -4,7 +4,7 @@
 
 | Concern | Owner | Persisted location |
 | --- | --- | --- |
-| 复杂需求的一问一答澄清 | `grill-me` Skill | Trellis task 的 `prd.md` |
+| 用户显式发起的想法澄清 | `grill-me` Skill | 无状态；不直接持久化 |
 | 需求、场景、验收与未决项 | Trellis | `.trellis/tasks/<task>/prd.md` |
 | task 级计划、状态与 Journal | Trellis | `.trellis/tasks/<task>/` 与 workspace |
 | 测试先行的实现循环 | TDD | 代码与测试 |
@@ -12,6 +12,7 @@
 | 高影响修改前的影响分析、提交前范围检查 | GitNexus | 代码图谱与 Git 工作区 |
 | 安装分发 | `manifest.yaml` + `scripts/install-skills.sh` | 目标 skills 目录 |
 | 全局自动路由 | `trellis/AGENTS.global.md` | 目标 `AGENTS.md` |
+| 显式访谈入口 | `grill-me` | 无状态对话；不直接持久化 |
 
 ## Conflict resolution
 
@@ -21,15 +22,18 @@
 - 质量检查只由原生 `trellis-check` 负责；不再安装独立 Review Skill。
 - Karpathy Guidelines、Memory、GitNexus 与 Release 是横切能力，不拥有 Trellis 阶段。
 - Codex App 的 canonical package root 是 `~/.agents`；另一发现根中的本包同名 Skill 只能通过显式、可回滚的安装选项迁移。
+- Codex hooks 采用事件级合并：只管理 Trellis `SessionStart` 条目和对应脚本，保留其他事件及处理器。
+- 上游最新 Grill Me 提供行为基线；本包把底层提问方法内置进单一 Skill，并只加入 Trellis 交接和宿主适配。
 
 ## Routing state machine
 
 ```text
-complex or unclear requirement
-  -> obtain consent to create or update a Trellis task
-  -> load grill-me as the sole Phase 1.1 interviewer and inspect repository facts
-  -> ask one question at a time and persist conclusions in prd.md
-  -> user confirms the PRD and authorizes implementation
+user explicitly invokes grill-me for a loose idea
+  -> inspect available facts without creating or changing task state
+  -> ask the current decision frontier in dependency-aware rounds
+  -> stop branches that require a prototype or external evidence
+  -> user confirms the shared-understanding summary
+  -> Trellis creates or updates the task and persists confirmed conclusions when authorized
   -> Trellis enters task.py start
   -> GitNexus analyzes impact before high-impact edits
   -> TDD implements from the PRD
@@ -37,7 +41,7 @@ complex or unclear requirement
   -> GitNexus validates Git scope before high-impact commits
 ```
 
-Simple changes skip Grill Me. They still use the existing Trellis task and verification rules when the project requires a task.
+Simple changes skip Grill Me. `$grill-me` 仅在用户显式调用时启动；会话保持无状态，确认共同理解后再由 Trellis 持久化结论并继续现有 task 和验证规则。
 
 ## Removal boundary
 

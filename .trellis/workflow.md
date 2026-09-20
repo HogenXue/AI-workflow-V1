@@ -190,7 +190,7 @@ Explicit complex implementation request: create a planning task and review requi
 <!-- Per-turn breadcrumb: shown throughout Phase 1 (status='planning') -->
 
 [workflow-state:planning]
-Use the project planning route: Codex uses Grill with Docs for requirement review; other hosts use their native planning skill when needed. Reuse approved conclusions; do not run both interviewers.
+Use the project planning route. `$grill-me` is an explicit, stateless conversation used only when the user invokes it; after shared understanding is confirmed, Trellis persists the conclusions and resumes planning. Reuse approved conclusions and do not run `trellis-brainstorm` after Grill Me.
 Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; request review before `task.py start` only for outstanding decisions or an unsatisfied project gate.
 Multi-deliverable scope: consider a parent task plus independently verifiable child tasks; dependencies must be written in child artifacts, not implied by tree position.
 Sub-agent mode: curate `implement.jsonl` and `check.jsonl` as spec/research manifests before start.
@@ -203,7 +203,7 @@ Sub-agent mode: curate `implement.jsonl` and `check.jsonl` as spec/research mani
      into a sub-agent. -->
 
 [workflow-state:planning-inline]
-Use the project planning route: Codex uses Grill with Docs for requirement review; other hosts use their native planning skill when needed. Reuse approved conclusions; do not run both interviewers.
+Use the project planning route. `$grill-me` is an explicit, stateless conversation used only when the user invokes it; after shared understanding is confirmed, Trellis persists the conclusions and resumes planning. Reuse approved conclusions and do not run `trellis-brainstorm` after Grill Me.
 Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; request review before `task.py start` only for outstanding decisions or an unsatisfied project gate.
 Multi-deliverable scope: consider a parent task plus independently verifiable child tasks; dependencies must be written in child artifacts, not implied by tree position.
 Inline mode: skip jsonl curation; Phase 2 reads artifacts/specs via `trellis-before-dev`.

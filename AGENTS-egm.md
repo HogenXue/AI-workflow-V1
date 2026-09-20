@@ -21,7 +21,7 @@
 
 - EGM 已启用 `.trellis/` 时，Trellis 是唯一的任务、PRD、Design、Spec 与工作日志来源。
 - Skill 路由、风险分级及最终门禁遵循全局 `AGENTS.md`，不额外增加完整工作流。工程数量或跨工程修改本身不构成强制访谈、全量测试或启动完整服务的理由。
-- 复杂、跨工程、数据契约或需求不明确的任务，按全局规则主动使用 `$grill-with-docs` 审查需求完整性；只有需要用户决策的未决项才访谈。需求与设计已经明确时记录审查结论并继续当前 Trellis Task。
+- `$grill-me` 是唯一 Grill Skill，仅在用户显式调用时进行无状态澄清。结束后由 Trellis 将确认结论维护在当前 Task 和 `.trellis/spec/`；需求已经明确时不启动 Grill。
 - OpenSpec、Superpowers 等能力只能作为当前 Trellis Task 内的方法，不创建第二套 Task、PRD、Design、Spec 或审批流程。
 
 ## 文档与质量证据

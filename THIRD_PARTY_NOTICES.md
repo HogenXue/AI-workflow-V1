@@ -16,9 +16,9 @@
 ## Matt Pocock Skills
 
 本仓库以下内容基于或改编自 `mattpocock/skills` 提交
-`e9fcdf95b402d360f90f1db8d776d5dd450f9234`：
+`c55ee46073ed923f86ce59a5eb3b6d895095d1b7`：
 
-- `skills/grill-with-docs/`
+- `skills/grill-me/`
 - `skills/diagnosing-bugs/`
 - `skills/codebase-design/`
 - `skills/resolving-merge-conflicts/`

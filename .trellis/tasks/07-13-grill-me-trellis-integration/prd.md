@@ -4,6 +4,8 @@
 
 将 Grill Me 与 TDD 收编为本仓库维护、可自动调用的 Skills，同时保持 Trellis 为唯一工作流。Codex 用 Grill Me 替代 Phase 1.1 的原生访谈，质量检查继续由 `trellis-check` 单独负责。
 
+2026-09-20 更新：按用户决定收敛为最新版单一 `grill-me`。它保留上游的显式调用、无状态、决策树与分轮 frontier 方法；不再分发旧 `grill-with-docs` 或单独暴露底层能力。Trellis 在 Grill 结束后继续拥有任务和文档位置。
+
 ## Requirements
 
 - 删除仓库内 OpenSpec 与 Review Skill 及其 manifest 分发项；OpenSpec/Review 只允许保留在遗留迁移说明和安装器测试中。
@@ -18,6 +20,11 @@
 - Codex App 的默认包根为 `~/.agents`：Skills 安装到 `~/.agents/skills`，共享配置安装到 `~/.agents/config`；若 `~/.codex/skills` 有同名副本，只能显式备份后移走。
 - 新增的 TDD Skill 与 Grill Me Skill 必须符合 `scripts/validate-all-skills.py` 的包结构和 metadata contract。
 - 已有用户未提交的 README、agents installer 和 agents installer 测试改动保持其原有语义；本任务的改动只在必要位置更新。
+- 最新 `grill-me` 必须作为唯一 Grill Skill 纳入 manifest、安装验证和 `~/.agents/skills`，并禁止模型隐式调用。
+- Grill Me 期间不写文件或修改任务；对话结束后由 Trellis 将确认结论写入当前 PRD 和既有 `.trellis/spec/`。
+- 旧 `grill-with-docs`、`grilling`、`domain-modeling` 必须通过可恢复的 legacy pruning 从发现目录移除。
+- 修复 Codex 配置运行时：补齐 `~/.agents/config`、默认 Python 的 PyYAML，并保留现有 hooks 的同时合并 Trellis `SessionStart`。
+- 安装器的 Codex hooks 更新必须幂等，且不得覆盖无关的 PermissionRequest、PreToolUse、PostToolUse 或 Stop hooks。
 
 ## Acceptance Criteria
 
@@ -30,6 +37,12 @@
 - [x] 安装器默认目标与文档统一为 `~/.agents/skills` / `~/.agents/config`，并支持显式 `--prune-other-root` 解决双目录发现冲突。
 - [x] `agents --apply` 在 `config.toml` 不是普通文件时不写入任何目标文件；配置更新失败时恢复已有 `AGENTS.md`，或移除本次新建的 `AGENTS.md`。
 - [x] GitNexus 改为风险驱动：项目明确要求或高影响变更才运行图谱/`detect_changes`；低风险提交只运行标准 Git 范围检查与相关测试。
+
+- [x] manifest 和安装器只分发最新版 `grill-me`，Skill 通过结构验证。
+- [x] 全局、项目和 EGM 模板只暴露 `$grill-me`，Trellis 文档位置保持唯一。
+- [x] Codex hooks 安装保留既有事件并幂等合并 `SessionStart`，相关回归测试通过。
+- [x] `~/.agents/config` 完整、PyYAML 可用、全局 AGENTS 与 Skills 安装副本同步。
+- [x] 实际 Codex hooks 与 MCP 配置保留用户已有内容；未配置 Mem0 不被误报为失败。
 
 ## Non-goals
 

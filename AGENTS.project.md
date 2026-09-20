@@ -7,7 +7,7 @@
 - 将当前任务的 PRD、研究、实现与检查产物维护在 `.trellis/tasks/`。
 - 将跨会话工作记录维护在 `.trellis/workspace/`。
 - 通用 Skill 路由、风险分级、验证范围和最终门禁遵循全局 `AGENTS.md`；本节只补充项目差异，不另设全量复测流程。
-- 简单且需求明确的任务直接走 Trellis。复杂、跨模块或需求不明确时，Codex 主动使用 `$grill-with-docs` 完成 Phase 1.1 需求审查，仅对需要用户决策的未决项访谈；不要再加载 `trellis-brainstorm`。需求结论写入当前 Trellis PRD；领域术语与持久决定分别写 `.trellis/spec/domain/`、`.trellis/spec/decisions/`。
+- 简单且需求明确的任务直接走 Trellis。`$grill-me` 是唯一 Grill Skill，仅在用户显式调用时进行无状态澄清；结束后由 Trellis 将确认结论写入当前 PRD 和既有 `.trellis/spec/` 位置，且不再加载 `trellis-brainstorm`。
 - 实现稳定后，按当前 Task 要求使用项目原生 `trellis-check`；发现 P0/P1 时集中修复、针对性复验，再统一执行必要的最终门禁。
 - `$diagnosing-bugs`、`$codebase-design`、`$resolving-merge-conflicts` 只作为当前 Trellis task 内的专项能力，不接管任务状态、质量审查或 Git 授权。
 - 配对配置目录存在 `config/workflow_check.py` 时，按全局规则使用 `readiness`、`quality` 与 `completion`。质量检查命令写入当前任务，说明覆盖范围；可用命令清单不是默认必跑清单。非 AI-workflow 包项目必须传入真实的 `--check <名称>=<实际检查命令>`。

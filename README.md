@@ -8,11 +8,11 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
 | 组件            | 说明                                                                         |
 | ------------- | -------------------------------------------------------------------------- |
-| **Skills**    | `memory`、`gitnexus`、`release`、`karpathy-guidelines-zh`、`grill-with-docs`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` |
+| **Skills**    | `memory`、`gitnexus`、`release`、`karpathy-guidelines-zh`、`grill-me`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` |
 | **AGENTS 模板** | [AGENTS.global.md](AGENTS.global.md)：跨项目通用规则；[AGENTS-egm.md](AGENTS-egm.md)：EGM 项目补充规则 |
 | **config/**   | 默认配置、有效配置运行时和平台无关工作流门禁；项目可用 `hogen-codex.yaml` 覆盖                         |
 
-Trellis 是项目唯一工作流；9 个 Skill 按阶段或能力增强它。Codex 用 Grill with Docs 实现 Phase 1.1，用 TDD 实现行为代码，并按需调用诊断、深模块设计和冲突解决能力；质量门由原生 `trellis-check` 负责。
+Trellis 是项目唯一工作流；9 个 Skill 按阶段或能力增强它。`grill-me` 是唯一、手动调用、无状态的 Grill 入口，结束后由 Trellis 接管落盘和实施；TDD 实现行为代码，质量门由原生 `trellis-check` 负责。
 
 ## 前置条件
 
@@ -135,7 +135,7 @@ bash scripts/install.sh skills --copy --replace --target ~/.codex/skills
 
 Codex 可能同时发现 `~/.agents/skills` 与 `~/.codex/skills`。同一组 Skill 只选择一个目录；本包对 Codex App 默认使用 `~/.agents/skills`，对应配置目录是 `~/.agents/config`。安装器发现另一目录存在同名 Skill 时会警告；只有显式 `--prune-other-root` 才会先备份再移走另一目录中的本包同名 Skill。
 
-旧版本安装的 OpenSpec、Review 与已被替换的 Grill Me 不在当前 manifest 中，普通更新不会删除它们。先预览，再用显式 `--prune-legacy` 将它们移动到时间戳 `.bak` 备份目录；若两处都曾安装，需要分别处理：
+旧版本安装的 OpenSpec 与 Review 不在当前 manifest 中，普通更新不会删除它们。先预览，再用显式 `--prune-legacy` 将它们移动到时间戳 `.bak` 备份目录；若两处都曾安装，需要分别处理：
 
 ```bash
 bash scripts/install.sh skills --dry-run --prune-legacy --target ~/.agents/skills
@@ -193,7 +193,7 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
     ├── memory/
     ├── gitnexus/
     ├── release/
-    ├── grill-with-docs/
+    ├── grill-me/
     ├── tdd/
     ├── diagnosing-bugs/
     ├── codebase-design/
@@ -287,7 +287,7 @@ python3 scripts/validate-all-skills.py
 
 本包提供一个可选的 Trellis 兼容迁移包，详情见 [trellis/README.zh-CN.md](trellis/README.zh-CN.md)。
 
-- 存在 `.trellis/` 的项目：Trellis 是唯一工作流。Codex 用 `grill-with-docs` 实现 Phase 1.1；需求和验收只写当前 PRD，领域术语写入 `.trellis/spec/domain/`，持久且难以逆转的决定写入 `.trellis/spec/decisions/`。TDD 用于需要测试证明的行为变化；Diagnosing Bugs、Codebase Design、Resolving Merge Conflicts 只作为当前 task 内的能力，由原生 `trellis-check` 负责质量检查。GitNexus 仅在项目规则明确要求或高影响变更时做影响/范围检查；局部低风险提交使用标准 Git 检查与相关测试。
+- 存在 `.trellis/` 的项目：Trellis 是唯一工作流。`grill-me` 只在用户显式调用时进行无状态澄清，结束后由 Trellis 把确认结论写回当前 PRD 和既有 `.trellis/spec/`。TDD 用于需要测试证明的行为变化；Diagnosing Bugs、Codebase Design、Resolving Merge Conflicts 只作为当前 task 内的能力，由原生 `trellis-check` 负责质量检查。GitNexus 仅在项目规则明确要求或高影响变更时做影响/范围检查；局部低风险提交使用标准 Git 检查与相关测试。
 - 不存在 `.trellis/` 的项目：继续使用该项目既有的实施工作流。
 - 迁移工具默认仅预览；执行 `agents --apply` 时只会增量启用 `~/.codex/config.toml` 的 `[features].hooks`，不会覆盖 MCP、插件或其他配置。
 

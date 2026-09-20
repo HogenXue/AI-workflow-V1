@@ -131,63 +131,39 @@ fi
 dest_hooks_json="$codex_home/hooks.json"
 dest_hooks_dir="$codex_home/hooks"
 
-if [[ -e "$dest_hooks_json" || -L "$dest_hooks_json" || -e "$dest_hooks_dir" || -L "$dest_hooks_dir" ]] && ((replace == 0)); then
-  if ((interactive)) && [[ -t 0 ]]; then
-    if ! install_lib_prompt_yn "Replace existing Codex user hooks in $codex_home?" n; then
-      printf '%s\n' 'SKIP: existing Codex user hooks preserved'
-      exit 0
-    fi
-    replace=1
-  else
-    printf 'CONFLICT: existing Codex user hooks at %s (use --replace)\n' "$codex_home" >&2
-    rollback_mcp || true
-    exit 1
-  fi
-fi
-
 if ((dry_run)); then
   if [[ -e "$dest_hooks_json" || -L "$dest_hooks_json" || -e "$dest_hooks_dir" || -L "$dest_hooks_dir" ]]; then
     printf 'DRY-RUN: hook backups would use %s/<name>.<UTC timestamp>.bak\n' "$backup_dir"
   fi
-  printf 'DRY-RUN: would install user Codex hooks under %s\n' "$codex_home"
+  printf 'DRY-RUN: would merge Trellis SessionStart hook under %s and preserve other hooks\n' "$codex_home"
   exit 0
 fi
 
 hooks_json_backup=""
 hooks_dir_backup=""
-if ((replace)); then
-  if [[ -e "$dest_hooks_json" || -L "$dest_hooks_json" ]]; then
-    install_lib_backup_file "$dest_hooks_json" "$backup_dir" "hooks.json" || { rollback_mcp || true; exit 1; }
-    hooks_json_backup="$INSTALL_BACKUP_PATH"
-  fi
-  if [[ -e "$dest_hooks_dir" || -L "$dest_hooks_dir" ]]; then
-    install_lib_backup_file "$dest_hooks_dir" "$backup_dir" "hooks" || { rollback_mcp || true; exit 1; }
-    hooks_dir_backup="$INSTALL_BACKUP_PATH"
-  fi
-  if ! rm -rf "$dest_hooks_json" "$dest_hooks_dir"; then
-    if [[ -n "$hooks_json_backup" ]]; then
-      install_lib_restore_backup "$hooks_json_backup" "$dest_hooks_json" || true
-    fi
-    if [[ -n "$hooks_dir_backup" ]]; then
-      install_lib_restore_backup "$hooks_dir_backup" "$dest_hooks_dir" || true
-    fi
-    printf 'ERROR: could not replace existing Codex user hooks\n' >&2
-    rollback_mcp || true
-    exit 1
-  fi
+hooks_json_original_existed=0
+hooks_dir_original_existed=0
+if [[ -e "$dest_hooks_json" || -L "$dest_hooks_json" ]]; then
+  hooks_json_original_existed=1
+  install_lib_backup_file "$dest_hooks_json" "$backup_dir" "hooks.json" || { rollback_mcp || true; exit 1; }
+  hooks_json_backup="$INSTALL_BACKUP_PATH"
+fi
+if [[ -e "$dest_hooks_dir" || -L "$dest_hooks_dir" ]]; then
+  hooks_dir_original_existed=1
+  install_lib_backup_file "$dest_hooks_dir" "$backup_dir" "hooks" || { rollback_mcp || true; exit 1; }
+  hooks_dir_backup="$INSTALL_BACKUP_PATH"
 fi
 
-if ! mkdir -p "$dest_hooks_dir" \
-  || ! cp -R "$templates/hooks/." "$dest_hooks_dir/"; then
-  rm -rf "$dest_hooks_json" "$dest_hooks_dir" || true
-  if [[ -n "$hooks_json_backup" ]]; then
-    install_lib_restore_backup "$hooks_json_backup" "$dest_hooks_json" || true
-  fi
-  if [[ -n "$hooks_dir_backup" ]]; then
-    install_lib_restore_backup "$hooks_dir_backup" "$dest_hooks_dir" || true
-  fi
-  printf 'ERROR: could not install Codex user hooks\n' >&2
+rollback_hooks() {
+  install_lib_rollback_target "$hooks_json_original_existed" "$hooks_json_backup" "$dest_hooks_json" || true
+  install_lib_rollback_target "$hooks_dir_original_existed" "$hooks_dir_backup" "$dest_hooks_dir" || true
   rollback_mcp || true
+}
+
+if ! mkdir -p "$dest_hooks_dir" \
+  || ! cp "$templates/hooks/session-start.sh" "$dest_hooks_dir/session-start.sh"; then
+  printf 'ERROR: could not install Codex SessionStart hook\n' >&2
+  rollback_hooks
   exit 1
 fi
 
@@ -198,22 +174,41 @@ import sys
 from pathlib import Path
 
 template, target, hook_script = map(Path, sys.argv[1:])
-data = json.loads(template.read_text(encoding="utf-8"))
-data["hooks"]["SessionStart"][0]["hooks"][0]["command"] = f"bash {shlex.quote(str(hook_script))}"
+template_data = json.loads(template.read_text(encoding="utf-8"))
+managed = template_data["hooks"]["SessionStart"]
+managed[0]["hooks"][0]["command"] = f"bash {shlex.quote(str(hook_script))}"
+
+if target.exists():
+    data = json.loads(target.read_text(encoding="utf-8"))
+else:
+    data = {"hooks": {}}
+if not isinstance(data, dict) or not isinstance(data.get("hooks"), dict):
+    raise ValueError("existing hooks.json must contain a hooks object")
+
+existing = data["hooks"].get("SessionStart", [])
+if not isinstance(existing, list):
+    raise ValueError("existing SessionStart hook must be a list")
+
+def is_managed(entry: object) -> bool:
+    if not isinstance(entry, dict) or not isinstance(entry.get("hooks"), list):
+        return False
+    return any(
+        isinstance(hook, dict) and hook.get("statusMessage") == "Trellis/Codex session context"
+        for hook in entry["hooks"]
+    )
+
+data["hooks"]["SessionStart"] = [
+    entry
+    for entry in existing
+    if not is_managed(entry)
+] + managed
 target.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 PY
 then
-  rm -rf "$dest_hooks_json" "$dest_hooks_dir" || true
-  if [[ -n "$hooks_json_backup" ]]; then
-    install_lib_restore_backup "$hooks_json_backup" "$dest_hooks_json" || true
-  fi
-  if [[ -n "$hooks_dir_backup" ]]; then
-    install_lib_restore_backup "$hooks_dir_backup" "$dest_hooks_dir" || true
-  fi
-  printf 'ERROR: could not install Codex user hook config\n' >&2
-  rollback_mcp || true
+  printf 'CONFLICT: could not merge Codex user hook config\n' >&2
+  rollback_hooks
   exit 1
 fi
-chmod +x "$dest_hooks_dir"/*.sh 2>/dev/null || true
+chmod +x "$dest_hooks_dir/session-start.sh" 2>/dev/null || true
 printf 'INSTALLED: %s\n' "$dest_hooks_json"
-printf 'INSTALLED: %s\n' "$dest_hooks_dir"
+printf 'INSTALLED: %s\n' "$dest_hooks_dir/session-start.sh"

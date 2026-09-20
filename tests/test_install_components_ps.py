@@ -16,7 +16,7 @@ SKILLS = (
     "gitnexus",
     "release",
     "karpathy-guidelines-zh",
-    "grill-with-docs",
+    "grill-me",
     "tdd",
     "diagnosing-bugs",
     "codebase-design",

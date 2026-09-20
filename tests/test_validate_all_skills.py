@@ -403,7 +403,7 @@ class ManifestTests(unittest.TestCase):
                 "gitnexus",
                 "release",
                 "karpathy-guidelines-zh",
-                "grill-with-docs",
+                "grill-me",
                 "tdd",
                 "diagnosing-bugs",
                 "codebase-design",
@@ -464,15 +464,10 @@ class BundledSkillContractTests(unittest.TestCase):
                 "over-engineering, unrelated edits, weak tests, context drift, and hidden failures."
             ),
         },
-        "grill-with-docs": {
-            "name": "grill-with-docs",
-            "description": (
-                "Clarify complex, cross-module, or unclear requirements through a "
-                "repository-aware, one-question-at-a-time interview while maintaining Trellis "
-                "domain and decision specs. Use as the sole Codex interviewer for Trellis "
-                "Phase 1.1; do not combine it with trellis-brainstorm or create a second "
-                "spec/task workflow."
-            ),
+        "grill-me": {
+            "name": "grill-me",
+            "description": "Align on a loose idea through a user-invoked, stateless conversation before committing to a plan or implementation.",
+            "disable-model-invocation": True,
         },
         "tdd": {
             "name": "tdd",
@@ -582,7 +577,6 @@ class BundledSkillContractTests(unittest.TestCase):
                     "quality",
                     "completion",
                     "不替代 Trellis",
-                    "不按 commit 次数",
                 ):
                     self.assertIn(phrase, content)
 
@@ -590,32 +584,32 @@ class BundledSkillContractTests(unittest.TestCase):
         global_template = (ROOT / "AGENTS.global.md").read_text(encoding="utf-8")
         project_template = (ROOT / "AGENTS.project.md").read_text(encoding="utf-8")
 
-        self.assertIn("Graphify（已安装且仓库已有可用图谱时）", global_template)
-        self.assertIn("不替代 GitNexus 的正式影响分析", global_template)
-        self.assertIn("Graphify 的图谱/查询结果不是长期项目记忆", global_template)
+        self.assertIn("已有可用图谱时", global_template)
+        self.assertIn("简单源码定位或局部修改不要求使用", global_template)
+        self.assertIn("不得为了任务自动生成/更新图谱", global_template)
 
-        self.assertIn("Graphify 可用且仓库已有图谱时", project_template)
-        self.assertIn("不替代 GitNexus 的正式影响分析", project_template)
-        self.assertIn("不得自动生成或更新图谱", project_template)
+        self.assertIn("Graphify 与 GitNexus 按全局风险规则按需使用", project_template)
+        self.assertIn("图谱推断必须回到源文件核实", project_template)
+        self.assertIn("不得为了任务自动生成或更新图谱", project_template)
 
     def test_egm_agents_template_is_current_and_discoverable(self) -> None:
         content = (ROOT / "AGENTS-egm.md").read_text(encoding="utf-8")
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
         for phrase in (
-            "版本：V8-EGM",
+            "版本：V9-EGM",
             "`egm_wechat`：微信小程序",
             "`egm_wechat_backend`：微信小程序后端",
-            "访谈结论写入当前 Trellis PRD",
-            "除当前 PRD 外，只可维护",
+            "`$grill-me` 是唯一 Grill Skill",
+            "仅在用户显式调用时进行无状态澄清",
             "cd egm_backend && mvn test",
             "cd egm_vue && pnpm test",
             "cd egm_vue && pnpm build:prod",
             "cd egm_wechat && npm test",
-            "不按 commit 次数重复",
+            "可用命令清单，不是默认必跑清单",
             "直接提出修改、修复或实施",
             "先更新 `egm_docs/RELEASE_NOTE.md`",
-            "逐字复用该条目的版本号、日期和变更列表",
+            "Release Note 与 commit message 必须描述同一组变更",
         ):
             self.assertIn(phrase, content)
 
@@ -637,27 +631,17 @@ class BundledSkillContractTests(unittest.TestCase):
         ):
             self.assertIn(f"## {heading}", content)
 
-    def test_grill_with_docs_enables_implicit_invocation_and_trellis_handoff(self) -> None:
-        skill = ROOT / "skills" / "grill-with-docs"
+    def test_grill_me_is_the_single_explicit_stateless_skill(self) -> None:
+        skill = ROOT / "skills" / "grill-me"
         content = (skill / "SKILL.md").read_text(encoding="utf-8")
         frontmatter = yaml.safe_load(content.split("---", 2)[1])
         agent = yaml.safe_load((skill / "agents" / "openai.yaml").read_text(encoding="utf-8"))
-
-        self.assertEqual(frontmatter["name"], "grill-with-docs")
-        self.assertNotIn("disable-model-invocation", frontmatter)
-        self.assertIs(agent["policy"]["allow_implicit_invocation"], True)
-        for phrase in (
-            "复杂",
-            "跨模块",
-            "简单且需求完整的任务直接使用 Trellis",
-            "Trellis task",
-            "Trellis PRD",
-            "Phase 1.1",
-            "trellis-brainstorm",
-            ".trellis/spec/domain/",
-            ".trellis/spec/decisions/",
-        ):
+        self.assertIs(frontmatter["disable-model-invocation"], True)
+        self.assertIs(agent["policy"]["allow_implicit_invocation"], False)
+        for phrase in ("stateless", "decision tree", "frontier", "do not write files"):
             self.assertIn(phrase, content)
+        for removed in ("grill-with-docs", "grilling", "domain-modeling"):
+            self.assertFalse((ROOT / "skills" / removed / "SKILL.md").exists())
 
     def test_selected_matt_capabilities_stay_inside_trellis_and_git_boundaries(self) -> None:
         expected = {
