@@ -28,29 +28,17 @@ bash trellis/config-check.sh --codex-home ~/.codex
 
 嵌套节（例如 `[mcp_servers.recallium.env]`）不会被误报为独立服务器。
 
-## 使用共享配置与工作流门禁
+## 使用共享配置与 Trellis 原生检查
 
-完整安装的 config 组件包含 `effective_config.py` 和 `workflow_check.py`。源码仓库可直接运行：
+完整安装的 config 组件包含 `effective_config.py`；源码仓库可直接读取有效配置：
 
 ```bash
 python3 config/effective_config.py --project-root "$PWD"
-
-python3 config/workflow_check.py --project-root "$PWD" \
-  readiness --task .trellis/tasks/<task> --complex
-python3 config/workflow_check.py --project-root "$PWD" \
-  quality --task .trellis/tasks/<task>
-python3 config/workflow_check.py --project-root "$PWD" \
-  completion --task .trellis/tasks/<task>
 ```
 
-三个子命令分别检查规划就绪、生成质量证据和归档前完成条件。它们不替代 Trellis task
-状态机或原生 `trellis-check`；readiness/completion 不修改任务状态。CI 运行 quality 时
-不传 `--task`，只返回质量结果，不写任务证据。
-
-实现过程中先运行受影响范围的针对性检查；当前 task 的最终 `trellis-check` 后只运行一次
-quality。同一提交批次不按 commit 次数重复完整验证，提交已验证的相同内容不会因 HEAD
-变化使证据失效；只有证据覆盖的仓库内容随后变化才重新运行。completion 只校验并复用
-已有证据，不重新执行质量命令。
+规划时用项目 `.trellis/scripts/task.py validate <任务目录>` 检查上下文引用。实现过程中
+运行受影响范围的针对性检查；实现稳定后执行项目原生 `trellis-check` 并记录真实结果，
+归档前逐项核对验收与证据。CI 直接运行仓库配置的检查命令。
 
 Recallium 模板默认使用 `https://www.59005046.xyz:8102/mcp`。远端 URL 必须使用 HTTPS；
 仅本机 `localhost`、`127.0.0.1`、`::1` 允许 HTTP。

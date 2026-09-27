@@ -8,10 +8,6 @@ consumers:
     - skills/karpathy-guidelines-zh/SKILL.md
   change_policy.require_impact_analysis_before_symbol_edit:
     - skills/gitnexus/SKILL.md
-  verification.report_unexecuted_steps:
-    - config/workflow_check.py
-  verification.require_spec_for_complex_change:
-    - config/workflow_check.py
   tools.missing_tool_policy:
     - skills/memory/SKILL.md
     - skills/gitnexus/SKILL.md

@@ -411,13 +411,14 @@ class ManifestTests(unittest.TestCase):
             ],
         )
 
-    def test_ci_uses_the_shared_quality_entry_on_linux_and_macos(self) -> None:
+    def test_ci_runs_direct_checks_on_linux_and_macos(self) -> None:
         workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
 
         self.assertIn("ubuntu-latest", workflow)
         self.assertIn("macos-latest", workflow)
-        self.assertIn("config/workflow_check.py", workflow)
-        self.assertIn("quality", workflow)
+        self.assertIn("scripts/validate-all-skills.py", workflow)
+        self.assertIn("unittest discover -s tests", workflow)
+        self.assertNotIn("workflow_check.py", workflow)
 
     def test_readme_describes_packaged_mcp_and_runtime_truthfully(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -426,7 +427,7 @@ class ManifestTests(unittest.TestCase):
         self.assertNotIn("本包**不包含** MCP", readme)
         self.assertIn("https://www.59005046.xyz:8102/mcp", readme)
         self.assertIn("config/effective_config.py", readme)
-        self.assertIn("config/workflow_check.py", readme)
+        self.assertNotIn("workflow_check.py", readme)
         self.assertTrue((ROOT / "CHANGELOG.md").is_file())
         self.assertTrue((ROOT / "THIRD_PARTY_NOTICES.md").is_file())
 
@@ -567,18 +568,24 @@ class BundledSkillContractTests(unittest.TestCase):
                 self.assertIn("config/effective_config.py", content)
                 self.assertIn("--project-root", content)
 
-    def test_agents_templates_route_to_the_shared_workflow_checker(self) -> None:
-        for relative in ("AGENTS.global.md", "AGENTS.project.md"):
+    def test_agents_templates_use_native_trellis_checks(self) -> None:
+        for relative in ("AGENTS.global.md", "AGENTS.project.md", "AGENTS-egm.md"):
             with self.subTest(file=relative):
                 content = (ROOT / relative).read_text(encoding="utf-8")
-                for phrase in (
-                    "config/workflow_check.py",
-                    "readiness",
-                    "quality",
-                    "completion",
-                    "不替代 Trellis",
-                ):
-                    self.assertIn(phrase, content)
+                self.assertNotIn("workflow_check.py", content)
+                self.assertIn("trellis-check", content)
+
+    def test_packaged_config_does_not_advertise_removed_checker(self) -> None:
+        for relative in (
+            "config/defaults.yaml",
+            "config/project-config.schema.yaml",
+            "config/consumers.yaml",
+        ):
+            with self.subTest(file=relative):
+                content = (ROOT / relative).read_text(encoding="utf-8")
+                self.assertNotIn("report_unexecuted_steps", content)
+                self.assertNotIn("require_spec_for_complex_change", content)
+                self.assertNotIn("workflow_check.py", content)
 
     def test_agents_templates_keep_graphify_optional_and_gitnexus_authoritative(self) -> None:
         global_template = (ROOT / "AGENTS.global.md").read_text(encoding="utf-8")

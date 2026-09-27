@@ -24,7 +24,7 @@ requiring Git Bash.
   (`ERROR:` / `SKIP:` / `BACKUP:` / `INSTALLED:` / `CONFLICT:` / `DRY-RUN:`) must stay aligned.
 - **Drift rule**: when an installer contract changes, update bash **and** PowerShell in the same
   change set, or document an explicit exemption in the PR / task notes.
-- CI: ubuntu/macos run bash install suites via quality/`workflow_check`; `windows-latest` runs
+- CI: ubuntu/macos run Skill validation and the unittest suite directly; `windows-latest` runs
   `tests/test_install_*_ps.py` with `pwsh` verified on the runner.
 
 **Symlinks / `--link`**: creating or preserving dangling reparse points on Windows requires
@@ -426,30 +426,20 @@ HTTPS input. PowerShell peers assert the same reject-before-mutate behavior in
 
 ---
 
-## Convention: Shared configuration and workflow checks
+## Convention: Shared configuration and native task checks
 
 **What**: `config/effective_config.py` owns defaults/project merge and schema
-validation. `config/workflow_check.py` provides platform-neutral `readiness`,
-`quality`, and `completion` commands. The config installer copies these runtime
-files together with `defaults.yaml`.
+validation. The config installer copies this runtime file with `defaults.yaml`.
+Trellis projects use their local `task.py` for task state and context validation,
+then run project-specific checks and record their actual results in the task.
 
-**State boundary**: Workflow checks never replace or mutate the Trellis task
-state machine. Readiness and completion are read-only. Quality writes
-`verification.json` only when a task is explicitly supplied; CI omits the task
-and writes no evidence.
+**CI contract**: Ubuntu and macOS run `scripts/validate-all-skills.py` and
+`python -m unittest discover -s tests` directly. Windows keeps the dedicated
+PowerShell installer suite.
 
-**Freshness contract**: Task quality evidence records Git HEAD as audit metadata
-and uses a deterministic worktree content fingerprint for freshness. Committing
-the same verified content does not invalidate evidence merely because HEAD
-changes. Completion still fails after tracked or unignored untracked content
-changes. Run targeted checks during implementation and one final quality check
-per task, not once per commit; rerun only after covered content changes.
-
-**Tests required**: Validate configuration consumer coverage, missing runtime
-dependencies, placeholder planning artifacts, complex-task requirements,
-curated context, unchecked acceptance criteria, fresh/stale evidence, evidence
-reuse across a commit boundary, unchanged task status, and a temporary
-planning-to-completion lifecycle.
+**Tests required**: Validate configuration consumer coverage, config component
+installation without the removed helper, native task context validation, and
+the direct CI command references.
 
 ---
 

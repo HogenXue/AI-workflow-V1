@@ -233,8 +233,6 @@ bash scripts/install.sh skills --copy --replace --target ~/.agents/skills
 ```yaml
 change_policy:
   require_impact_analysis_before_symbol_edit: true
-verification:
-  require_spec_for_complex_change: true
 ```
 
 输出合并结果或读取单个配置键：
@@ -247,33 +245,12 @@ python3 config/effective_config.py --project-root /path/to/your/project \
 
 `config/consumers.yaml` 登记每个公开配置键的实际消费者；包校验会拒绝未登记或未知的键。
 
-## 可执行工作流门禁
+## Trellis 任务与质量检查
 
-`config/workflow_check.py` 是 Codex、Cursor、Claude 共用的确定性入口，不创建第二套 task
-或状态机，也不替代原生 `trellis-check`：
-
-```bash
-# 复杂任务规划确认后、task.py start 前
-python3 config/workflow_check.py --project-root "$PWD" \
-  readiness --task .trellis/tasks/<task> --complex
-
-# 当前 task 的最终 trellis-check 和针对性测试完成后，写入一次质量证据
-python3 config/workflow_check.py --project-root "$PWD" \
-  quality --task .trellis/tasks/<task>
-
-# 归档前检查验收项和证据是否仍与当前代码一致
-python3 config/workflow_check.py --project-root "$PWD" \
-  completion --task .trellis/tasks/<task>
-```
-
-CI 调用 `quality` 时不传 `--task`，因此不会依赖或写入活动任务目录。带任务运行产生的
-`verification.json` 会记录 Git HEAD 作为审计元数据，并以工作区内容指纹判断新鲜度。
-同一提交批次不按 commit 次数重复完整验证：提交已验证的相同内容只改变 HEAD，不会让
-completion 失败；之后任何已跟踪或未忽略的未跟踪内容变化仍会要求重新验证。实现过程中
-应先运行受影响范围的针对性检查，最终完整质量入口每个 task 只运行一次，除非内容变化。
-
-内置 quality 配置只对本 AI-workflow 包自动启用。安装到其他项目后，必须按实际技术栈
-重复传入 `--check '<名称>=<命令>'`；没有显式项目检查时命令会失败，不会生成质量证据。
+Trellis 项目使用本项目的 `.trellis/scripts/task.py` 管理任务；规划完成时用
+`task.py validate <任务目录>` 检查上下文引用。实现稳定后运行项目原生
+`trellis-check` 和受影响范围的真实检查命令，在当前任务中记录命令、结果与未覆盖范围。
+归档前逐项核对验收标准和证据。CI 直接运行本包 Skill 校验与单元测试。
 
 ## 校验 Skill 包
 

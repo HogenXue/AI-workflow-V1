@@ -113,15 +113,17 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertEqual(apply.returncode, 0, apply.stderr)
         self.assertTrue((self.config_target / "defaults.yaml").is_file())
         self.assertTrue((self.config_target / "effective_config.py").is_file())
-        self.assertTrue((self.config_target / "workflow_check.py").is_file())
+        self.assertFalse((self.config_target / "workflow_check.py").exists())
         self.assertTrue((self.config_target / "consumers.yaml").is_file())
         self.assertFalse((self.config_target / "__pycache__").exists())
         self.assertFalse(self.skills_target.exists())
 
-    def test_config_replace_backs_up_existing_configuration(self) -> None:
+    def test_config_replace_backs_up_existing_configuration_and_removes_retired_checker(self) -> None:
         self.config_target.mkdir(parents=True)
         sentinel = self.config_target / "sentinel"
         sentinel.write_text("replace", encoding="utf-8")
+        retired_checker = self.config_target / "workflow_check.py"
+        retired_checker.write_text("old checker\n", encoding="utf-8")
 
         result = self.run_component(
             "config",
@@ -137,6 +139,11 @@ class ComponentInstallTests(unittest.TestCase):
         backups = list(self.backup.glob("config.*.bak/sentinel"))
         self.assertEqual(len(backups), 1)
         self.assertEqual(backups[0].read_text(encoding="utf-8"), "replace")
+        self.assertFalse(retired_checker.exists())
+        self.assertEqual(
+            list(self.backup.glob("config.*.bak/workflow_check.py"))[0].read_text(encoding="utf-8"),
+            "old checker\n",
+        )
 
     def test_config_rejects_backup_directory_inside_target(self) -> None:
         self.config_target.mkdir(parents=True)
