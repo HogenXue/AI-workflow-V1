@@ -49,13 +49,21 @@ if [[ "$mode" == "dry-run" ]]; then
   exit 0
 fi
 
-if ! command -v graphify >/dev/null 2>&1; then
-  printf '%s\n' 'ERROR: Graphify CLI is unavailable; install graphifyy before running this component.' >&2
+graphify_cmd="$(command -v graphify || true)"
+if [[ -z "$graphify_cmd" ]]; then
+  for managed in "$HOME/.agents/tools/graphify/bin/graphify" "$HOME/.agents/tools/graphify/Scripts/graphify.exe"; do
+    if [[ -x "$managed" ]]; then graphify_cmd="$managed"; break; fi
+  done
+fi
+if [[ -z "$graphify_cmd" ]]; then
+  printf '%s\n' 'ERROR: Graphify CLI is unavailable; run install.sh deps --apply first.' >&2
   exit 1
 fi
 
 backup_path=""
+original_existed=0
 if [[ -e "$target" || -L "$target" ]]; then
+  original_existed=1
   if ((replace == 0)); then
     printf 'CONFLICT: existing Graphify Skill at %s\n' "$target" >&2
     printf '%s\n' 'Use --replace to back up and replace it.' >&2
@@ -69,20 +77,15 @@ if [[ -e "$target" || -L "$target" ]]; then
   }
 fi
 
-if ! graphify install --platform agents; then
+if ! "$graphify_cmd" install --platform agents; then
   printf '%s\n' 'ERROR: Graphify global Skill installation failed.' >&2
-  if [[ -n "$backup_path" ]]; then
-    install_lib_restore_backup "$backup_path" "$target" || true
-  fi
+  install_lib_rollback_target "$original_existed" "$backup_path" "$target" || true
   exit 1
 fi
 
 if [[ ! -f "$target/SKILL.md" ]]; then
   printf 'ERROR: Graphify CLI completed without creating %s\n' "$target/SKILL.md" >&2
-  if [[ -n "$backup_path" ]]; then
-    rm -rf "$target" || true
-    install_lib_restore_backup "$backup_path" "$target" || true
-  fi
+  install_lib_rollback_target "$original_existed" "$backup_path" "$target" || true
   exit 1
 fi
 

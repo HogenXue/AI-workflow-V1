@@ -1,0 +1,48 @@
+{
+  "source_alias_overlap_ps1": {
+    "exit": 1,
+    "stdout": "",
+    "stderr": "ERROR: config target overlaps package source: C:/Users/hogen/AppData/Local/Temp/installer-final-review-u0ksx_dd/alias-ps1/config\r\n",
+    "source_marker_survives": true,
+    "source_children_after": [
+      "must-preserve.txt"
+    ]
+  },
+  "source_alias_overlap_sh": {
+    "exit": 1,
+    "stdout": "BACKUP: C:/Users/hogen/AppData/Local/Temp/installer-final-review-u0ksx_dd/backup-sh/config.20261002T214503Z.bak\n",
+    "stderr": "cp: cannot stat '/tmp/installer-final-review-u0ksx_dd/package-sh/config/*': No such file or directory\nERROR: could not copy config\n",
+    "source_marker_survives": true,
+    "source_children_after": [
+      "must-preserve.txt"
+    ]
+  },
+  "graphify_fresh_failure_ps1": {
+    "first": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "ERROR: Graphify global Skill installation failed.\r\n",
+      "partial_target_remains": false,
+      "skill_exists": false
+    },
+    "retry": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "ERROR: Graphify global Skill installation failed.\r\n"
+    }
+  },
+  "graphify_fresh_failure_sh": {
+    "first": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "ERROR: Graphify global Skill installation failed.\n",
+      "partial_target_remains": false,
+      "skill_exists": false
+    },
+    "retry": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "ERROR: Graphify global Skill installation failed.\n"
+    }
+  }
+}

@@ -153,14 +153,14 @@ install_profile_claude <mem0_url_or_empty>
 | Profile | Skills | Config (skill defaults) | Host / rules | MCP | Project-scoped |
 |---------|--------|-------------------------|--------------|-----|----------------|
 | **Codex** | `~/.agents/skills` | `~/.agents/config` (parent of skills root) | `~/.codex` (`AGENTS.md` + hooks feature); **not** root repo `AGENTS.md` for Cursor rules | `~/.codex/config.toml` `[mcp_servers.*]` | User-level hooks under `~/.codex` via `codex-merge` (not silent git-root project install) |
-| **Cursor** | `~/.cursor/skills` | `~/.cursor/config` | Project `.cursor/rules/*.mdc` **generated from** `AGENTS.global.md` at install | `~/.cursor/mcp.json` `mcpServers` | `<project>/.cursor/hooks.json` + `hooks/` (requires `--project-root`) |
-| **Claude** | `~/.claude/skills` | `~/.claude/config` | User `~/.claude/CLAUDE.md` from `AGENTS.global.md` (`agents --document-name CLAUDE.md --no-hooks-feature`) | `~/.claude.json` `mcpServers` | **None** — installer never writes project `.claude/` or `.mcp.json` |
+| **Cursor** | `~/.cursor/skills` | `~/.cursor/config` | Project `.cursor/rules/*.mdc` **generated from** `agents/AGENTS.global.md` at install | `~/.cursor/mcp.json` `mcpServers` | `<project>/.cursor/hooks.json` + `hooks/` (requires `--project-root`) |
+| **Claude** | `~/.claude/skills` | `~/.claude/config` | User `~/.claude/CLAUDE.md` from `agents/AGENTS.global.md` (`agents --document-name CLAUDE.md --no-hooks-feature`) | `~/.claude.json` `mcpServers` | **None** — installer never writes project `.claude/` or `.mcp.json` |
 
 **Hard rules**:
 
 - Skills and config share a paired root (`~/.agents` / `~/.cursor` / `~/.claude`) because skills resolve `../../config`.
 - Codex MCP = TOML fragments under `trellis/codex/mcp/`; Cursor/Claude MCP = JSON under `trellis/cursor/mcp/` and `trellis/claude/mcp/` respectively (duty mapping: no directory-copy between hosts).
-- Cursor “AGENTS-like” content → `.cursor/rules/*.mdc` only, **dynamically** from `AGENTS.global.md`.
+- Cursor “AGENTS-like” content → `.cursor/rules/*.mdc` only, **dynamically** from `agents/AGENTS.global.md`.
 - Claude global rules → `~/.claude/CLAUDE.md` only; never rewrite project-root `CLAUDE.md` / `AGENTS.md`.
 - Installer **never** rewrites Trellis / project root `AGENTS.md`.
 - Do not install global `~/.codex/hooks.json` as a mistaken project path; Codex hooks install at user scope under `~/.codex` per `codex-merge`.
@@ -239,8 +239,8 @@ Interactive choices:
 
 | Mode | Behavior |
 |------|----------|
-| Full install | Confirmation summary → `install_profile_*` for each selected agent |
-| Single component | One of `skills\|graphify\|agents\|config\|codex-merge\|cursor-merge\|claude-merge`; merge components get `--project-root` or `--skip-project` + `--interactive` |
+| Full install | Confirmation summary → dependency bootstrap → `install_profile_*` for each selected agent |
+| Single component | One of `deps\|skills\|graphify\|agents\|config\|codex-merge\|cursor-merge\|claude-merge`; merge components get `--project-root` or `--skip-project` + `--interactive` |
 | Component CLI (args present) | Unchanged dispatch; still compatible with existing flags |
 
 ### 4. Validation & Error Matrix
@@ -303,6 +303,90 @@ fi
 **Why**: Host MCP and project hooks must not be silently destroyed.
 
 **Related**: Backup before overwrite via `install_lib_backup_file` / `Install-LibBackupFile`; MCP writes are atomic (`merge_host_mcp.py`).
+
+## Convention: Wizard input and component failure boundaries
+
+- The mode menu accepts `1`, `2`, or an empty line (default `1`). Invalid input and EOF
+  exit `2` before project-root selection or component execution.
+- Bash and PowerShell run components in separate processes. PowerShell launches its current
+  `pwsh` executable under `$PSHOME` with `-NoProfile -File`, then checks the exit code immediately.
+  Avoid .NET 6-only APIs such as `Environment.ProcessPath` or `FileSystemInfo.ResolveLinkTarget`
+  while the declared minimum remains PowerShell 7.0. A nonzero component
+  status stops all subsequent components/profiles, suppresses `Done.`, and propagates unchanged
+  through the entrypoint and CMD launcher. Completed earlier components keep their existing backups;
+  the wizard does not promise rollback of an entire multi-component installation.
+- Skills/config replacement checks include dangling links, using `-e || -L` in Bash and
+  `Test-InstallLibExistsOrLink` in PowerShell. Declining replacement skips that component.
+- Windows backup tests compare link targets allowing the equivalent `\\?\` namespace prefix,
+  while still requiring the backup to be a symlink pointing to the expected target.
+
+**Verification**: `tests/test_install_wizard.py` executes actual wizard functions with isolated
+component fixtures. Windows CI runs it alongside `test_install_*_ps.py`.
+
+## Convention: Canonical agents template directory
+
+`agents/` is the sole package source for `AGENTS.global.md`, `AGENTS.project.md`, and `AGENTS-egm.md`.
+The identical old root templates are removed. Do not confuse them with the repository's active
+root `AGENTS.md`, which remains project-owned.
+
+Both `install-agents` implementations read `agents/AGENTS.global.md`; both Cursor merge implementations
+generate rule bodies from that same file. Configuration consumers and documentation use these paths.
+The project and EGM templates remain reference supplements for deliberate merging outside Trellis
+managed blocks, and are never implicitly applied by a global install. Do not fall back to root copies.
+
+## Convention: Missing CLI bootstrap
+
+Full-profile installs run `deps --apply` after the existing confirmation, before profile writes.
+The dual wrappers delegate to `scripts/lib/install_dependencies.py`; `deps` defaults to preview.
+Preview performs no package-manager call, installation, path-report write, or environment creation.
+
+- Detect and verify existing GitNexus/Trellis/Graphify commands before installing anything. Keep
+  usable versions and fail explicitly on broken commands; do not silently upgrade or repair them.
+- Missing npm tools use the official `gitnexus@latest` and `@mindfoldhq/trellis@latest` packages with
+  `npm install --global --engine-strict`. Node/npm are prerequisites; no sudo or automatic OS/runtime
+  installation. npm's current engine constraints remain authoritative.
+- Missing Graphify uses Python 3.10+ with `venv`/pip and the official `graphifyy` package inside
+  `~/.agents/tools/graphify`. Reject an arbitrary existing managed directory; preserve partial
+  environments for retry. Never install into or modify system Python with global pip.
+- A temporary, newline-delimited path report lets the wizard pass npm/Graphify executable paths
+  to later component subprocesses. Only the current process PATH changes. Standalone dependency
+  execution prints directories for optional persistent PATH setup; shell profiles stay user-owned.
+- Append discovered directories after existing PATH entries so Graphify's private Python cannot
+  replace the interpreter used by the user's configuration and subsequent components.
+- Graphify's separate skill installer also checks the managed environment when PATH lacks its CLI.
+- Propagate dependency command failures; do not report success until each CLI probe passes. Global
+  dependency installs are retained on failure, and no project init/setup/index command runs here.
+
+**Verification**: Simulate subprocesses in `tests/test_install_dependencies.py`; execute actual
+wizard functions and dual entry previews in `tests/test_install_wizard.py` / `test_install_entry_ps.py`.
+Tests never download dependencies. Review source/bootstrap calls separately from real network install
+acceptance, which remains unrun unless expressly executed.
+
+## Convention: Physical path and Graphify rollback protection
+
+PowerShell backup reservations use a `FileMode.CreateNew` lock file, not `New-Item` directory
+creation: a raced directory creator can return an already-created directory to two contenders.
+Copy into a unique staging payload, publish only after the copy completes, and remove the lock
+and any uncommitted payload in `finally`. Keep timestamp/sequence backup naming and never overwrite
+another process's backup. A controlled concurrent regression checks two distinct source contents
+produce two distinct backups. Bash retains its atomic `mkdir` reservation.
+
+PowerShell resolves each existing path component with `LinkType`/`Target` metadata before comparing
+source/target overlap or backup containment. This includes parent symlinks, relative link targets,
+and Windows junctions; missing suffixes are appended after the physical ancestor is resolved.
+Follow links with a bounded depth. Cycles, inaccessible metadata, and unsupported extended device
+namespaces are refused before mutation, rather than being treated as disjoint paths. DOS and UNC
+extended prefixes are normalized consistently. Bash's native Unix normalizer already uses `pwd -P`;
+the PowerShell-only path fix aligns with that contract without changing Bash path handling.
+
+For Graphify, record whether the Skill target existed before install. On CLI failure or missing
+`SKILL.md`, restore a pre-existing backup or clear a newly created target, including dangling links.
+Use the shared rollback helper in both ports so an unsuccessful fresh install can be retried without
+`--replace`. Replacement failure must preserve the original Skill body.
+
+**Regression evidence**: `tests/test_install_review_ps.py` verifies source aliases/junctions,
+relative targets, nonexistent suffixes, backup containment, cycles/device paths, positive copies
+through unrelated aliases, and both Graphify failure modes with retry/original restoration.
 
 ## Scenario: Per-server URL conflict prompts
 

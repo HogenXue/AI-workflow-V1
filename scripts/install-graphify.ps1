@@ -70,15 +70,23 @@ if ($mode -eq 'dry-run') {
 }
 
 $graphifyCmd = Get-Command -Name graphify -ErrorAction SilentlyContinue
-if (-not $graphifyCmd) {
+$graphifyExecutable = if ($graphifyCmd) { $graphifyCmd.Source } else { '' }
+if (-not $graphifyExecutable) {
+    $managedBin = if ($IsWindows) { 'Scripts/graphify.exe' } else { 'bin/graphify' }
+    $managedGraphify = Join-Path $installHome ".agents/tools/graphify/$managedBin"
+    if (Test-Path -LiteralPath $managedGraphify -PathType Leaf) { $graphifyExecutable = $managedGraphify }
+}
+if (-not $graphifyExecutable) {
     [Console]::Error.WriteLine(
-        'ERROR: Graphify CLI is unavailable; install graphifyy before running this component.'
+        'ERROR: Graphify CLI is unavailable; run install.ps1 deps --apply first.'
     )
     exit 1
 }
 
 $backupPath = ''
+$originalExisted = '0'
 if (Test-InstallLibExistsOrLink -Path $target) {
+    $originalExisted = '1'
     if (-not $replace) {
         [Console]::Error.WriteLine("CONFLICT: existing Graphify Skill at $target")
         [Console]::Error.WriteLine('Use --replace to back up and replace it.')
@@ -99,25 +107,20 @@ if (Test-InstallLibExistsOrLink -Path $target) {
 }
 
 try {
-    & graphify install --platform agents
+    & $graphifyExecutable install --platform agents
     if ($LASTEXITCODE -ne 0) {
         throw "graphify exited with $LASTEXITCODE"
     }
 } catch {
     [Console]::Error.WriteLine('ERROR: Graphify global Skill installation failed.')
-    if (-not [string]::IsNullOrEmpty($backupPath)) {
-        $null = Install-LibRestoreBackup -Backup $backupPath -Destination $target
-    }
+    $null = Install-LibRollbackTarget -OriginalExisted $originalExisted -Backup $backupPath -Destination $target
     exit 1
 }
 
 $skillMd = Join-Path $target 'SKILL.md'
 if (-not (Test-Path -LiteralPath $skillMd -PathType Leaf)) {
     [Console]::Error.WriteLine("ERROR: Graphify CLI completed without creating $skillMd")
-    if (-not [string]::IsNullOrEmpty($backupPath)) {
-        Remove-Item -LiteralPath $target -Recurse -Force -ErrorAction SilentlyContinue
-        $null = Install-LibRestoreBackup -Backup $backupPath -Destination $target
-    }
+    $null = Install-LibRollbackTarget -OriginalExisted $originalExisted -Backup $backupPath -Destination $target
     exit 1
 }
 

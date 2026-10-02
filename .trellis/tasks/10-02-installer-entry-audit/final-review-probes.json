@@ -1,0 +1,46 @@
+{
+  "source_alias_overlap_ps1": {
+    "exit": 0,
+    "stdout": "BACKUP: C:\\Users\\hogen\\AppData\\Local\\Temp\\installer-final-review-pdq_kjkq\\backup-ps1\\config.20261002T211543Z.bak\r\nINSTALLED: config -> C:/Users/hogen/AppData/Local/Temp/installer-final-review-pdq_kjkq/alias-ps1/config\r\n",
+    "stderr": "",
+    "source_marker_survives": false,
+    "source_children_after": []
+  },
+  "source_alias_overlap_sh": {
+    "exit": 1,
+    "stdout": "BACKUP: C:/Users/hogen/AppData/Local/Temp/installer-final-review-pdq_kjkq/backup-sh/config.20261002T211545Z.bak\n",
+    "stderr": "cp: cannot stat '/tmp/installer-final-review-pdq_kjkq/package-sh/config/*': No such file or directory\nERROR: could not copy config\n",
+    "source_marker_survives": true,
+    "source_children_after": [
+      "must-preserve.txt"
+    ]
+  },
+  "graphify_fresh_failure_ps1": {
+    "first": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "ERROR: Graphify global Skill installation failed.\r\n",
+      "partial_target_remains": true,
+      "skill_exists": false
+    },
+    "retry": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CONFLICT: existing Graphify Skill at C:\\Users\\hogen\\AppData\\Local\\Temp\\installer-final-review-pdq_kjkq\\home-ps1\\.agents\\skills\\graphify\r\nUse --replace to back up and replace it.\r\n"
+    }
+  },
+  "graphify_fresh_failure_sh": {
+    "first": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "ERROR: Graphify global Skill installation failed.\n",
+      "partial_target_remains": true,
+      "skill_exists": false
+    },
+    "retry": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "CONFLICT: existing Graphify Skill at /tmp/installer-final-review-pdq_kjkq/home-sh/.agents/skills/graphify\nUse --replace to back up and replace it.\n"
+    }
+  }
+}

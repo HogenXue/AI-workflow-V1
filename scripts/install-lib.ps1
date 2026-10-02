@@ -272,9 +272,21 @@ function Install-LibResolveProjectRoot {
 }
 
 function Install-LibNormalizePath {
-    param([Parameter(Mandatory)][string]$RawPath)
+    param(
+        [Parameter(Mandatory)][string]$RawPath,
+        [int]$LinkDepth = 0
+    )
+
+    if ($LinkDepth -ge 40) { return $null }
 
     $resolved = $RawPath
+    # Normalize only namespaces we can compare safely with DOS/UNC source paths.
+    if ($IsWindows -and $resolved.StartsWith('\\?\UNC\', [System.StringComparison]::OrdinalIgnoreCase)) {
+        $resolved = '\\' + $resolved.Substring(8)
+    } elseif ($IsWindows -and $resolved.StartsWith('\\?\')) {
+        $resolved = $resolved.Substring(4)
+        if ($resolved -notmatch '^[A-Za-z]:[\\/]') { return $null }
+    }
     if (-not [System.IO.Path]::IsPathRooted($resolved)) {
         $resolved = Join-Path (Get-Location).Path $resolved
     }
@@ -285,41 +297,33 @@ function Install-LibNormalizePath {
         return $null
     }
 
-    $probe = $resolved
-    $suffix = New-Object System.Collections.Generic.List[string]
-    while (-not (Test-Path -LiteralPath $probe -PathType Container)) {
-        # Split-Path -LiteralPath cannot combine with -Parent/-Leaf on all pwsh builds;
-        # use .NET for literal path decomposition.
-        $parent = [System.IO.Path]::GetDirectoryName($probe)
-        if ([string]::IsNullOrEmpty($parent) -or $parent -eq $probe) {
-            return $null
-        }
-        $component = [System.IO.Path]::GetFileName($probe)
-        $suffix.Insert(0, $component)
-        $probe = $parent
-    }
-
-    try {
-        $normalized = (Resolve-Path -LiteralPath $probe).ProviderPath
-    } catch {
-        return $null
-    }
-
-    foreach ($component in $suffix) {
-        switch ($component) {
-            '.' { }
-            '' { }
-            '..' {
-                $parent = [System.IO.Path]::GetDirectoryName($normalized)
-                if ([string]::IsNullOrEmpty($parent)) {
-                    return $null
-                }
-                $normalized = $parent
+    $normalized = [System.IO.Path]::GetPathRoot($resolved)
+    $relative = $resolved.Substring($normalized.Length)
+    $separators = [char[]]@([System.IO.Path]::DirectorySeparatorChar, [System.IO.Path]::AltDirectorySeparatorChar)
+    foreach ($component in $relative.Split($separators, [System.StringSplitOptions]::RemoveEmptyEntries)) {
+        $candidate = Join-Path $normalized $component
+        try {
+            $item = Get-Item -LiteralPath $candidate -Force -ErrorAction Stop
+        } catch {
+            if ($_.CategoryInfo.Category -ne [System.Management.Automation.ErrorCategory]::ObjectNotFound) {
+                return $null
             }
-            default {
-                $normalized = Join-Path $normalized $component
-            }
+            # Preserve nonexistent suffixes after resolving their physical ancestors.
+            $normalized = $candidate
+            continue
         }
+        if (-not [string]::IsNullOrEmpty($item.LinkType)) {
+            $linkTarget = $item.Target
+            if ($linkTarget -is [System.Array]) { $linkTarget = $linkTarget[0] }
+            $linkTarget = [string]$linkTarget
+            if ([string]::IsNullOrEmpty($linkTarget)) { return $null }
+            if (-not [System.IO.Path]::IsPathRooted($linkTarget)) {
+                $linkTarget = Join-Path $normalized $linkTarget
+            }
+            $candidate = Install-LibNormalizePath -RawPath $linkTarget -LinkDepth ($LinkDepth + 1)
+            if ($null -eq $candidate) { return $null }
+        }
+        $normalized = $candidate
     }
     return $normalized
 }
@@ -331,11 +335,13 @@ function Install-LibPathsOverlap {
     )
     $sourceReal = Install-LibNormalizePath -RawPath $Source
     if ($null -eq $sourceReal) {
-        return $false
+        [Console]::Error.WriteLine("ERROR: could not safely resolve source path: $Source")
+        return $true
     }
     $targetReal = Install-LibNormalizePath -RawPath $Target
     if ($null -eq $targetReal) {
-        return $false
+        [Console]::Error.WriteLine("ERROR: could not safely resolve target path: $Target")
+        return $true
     }
     if (
         (Test-InstallLibIsFilesystemRoot -Path $sourceReal) -or
@@ -355,11 +361,13 @@ function Install-LibPathIsWithin {
     )
     $candidateReal = Install-LibNormalizePath -RawPath $Candidate
     if ($null -eq $candidateReal) {
-        return $false
+        [Console]::Error.WriteLine("ERROR: could not safely resolve backup path: $Candidate")
+        return $true
     }
     $parentReal = Install-LibNormalizePath -RawPath $Parent
     if ($null -eq $parentReal) {
-        return $false
+        [Console]::Error.WriteLine("ERROR: could not safely resolve backup source: $Parent")
+        return $true
     }
     return (Test-InstallLibPathPrefix -Path $candidateReal -Parent $parentReal)
 }
@@ -412,7 +420,13 @@ function Install-LibBackupFile {
 
         $reserved = $false
         try {
-            New-Item -ItemType Directory -Path $lock -ErrorAction Stop | Out-Null
+            # Directory creation is idempotent and cannot reserve atomically.
+            # CreateNew guarantees that only one contender owns this name.
+            $reservation = [System.IO.File]::Open(
+                $lock, [System.IO.FileMode]::CreateNew,
+                [System.IO.FileAccess]::Write, [System.IO.FileShare]::None
+            )
+            $reservation.Dispose()
             $reserved = $true
         } catch {
             if (
@@ -435,27 +449,25 @@ function Install-LibBackupFile {
         $sequence++
     }
 
-    $staging = Join-Path $lock 'payload'
+    $staging = "$lock.$([Guid]::NewGuid().ToString('N')).payload"
     try {
-        Install-LibInternalCopy -Source $Source -Destination $staging -Recurse
-    } catch {
-        Remove-Item -LiteralPath $lock -Recurse -Force -ErrorAction SilentlyContinue
-        [Console]::Error.WriteLine("ERROR: could not back up existing target: $Source")
-        return $false
-    }
-
-    try {
-        Move-Item -LiteralPath $staging -Destination $candidate -ErrorAction Stop
-    } catch {
-        Remove-Item -LiteralPath $lock -Recurse -Force -ErrorAction SilentlyContinue
-        [Console]::Error.WriteLine("ERROR: could not finalize backup for: $Source")
-        return $false
-    }
-
-    try {
-        Remove-Item -LiteralPath $lock -Force -ErrorAction Stop
-    } catch {
-        Remove-Item -LiteralPath $lock -Recurse -Force -ErrorAction SilentlyContinue
+        try {
+            Install-LibInternalCopy -Source $Source -Destination $staging -Recurse
+        } catch {
+            [Console]::Error.WriteLine("ERROR: could not back up existing target: $Source")
+            return $false
+        }
+        try {
+            Move-Item -LiteralPath $staging -Destination $candidate -ErrorAction Stop
+        } catch {
+            [Console]::Error.WriteLine("ERROR: could not finalize backup for: $Source")
+            return $false
+        }
+    } finally {
+        if (Test-InstallLibExistsOrLink -Path $staging) {
+            Remove-Item -LiteralPath $staging -Recurse -Force -ErrorAction SilentlyContinue
+        }
+        Remove-Item -LiteralPath $lock -Force -ErrorAction SilentlyContinue
     }
 
     $script:InstallBackupPath = $candidate
@@ -475,7 +487,7 @@ function Install-LibRestoreBackup {
     }
 
     $backupItem = Get-Item -LiteralPath $Backup -Force
-    $destExists = Test-Path -LiteralPath $Destination
+    $destExists = Test-InstallLibExistsOrLink -Path $Destination
     $destItem = $null
     if ($destExists) {
         $destItem = Get-Item -LiteralPath $Destination -Force
@@ -495,7 +507,7 @@ function Install-LibRestoreBackup {
     }
 
     try {
-        if (Test-Path -LiteralPath $Destination) {
+        if (Test-InstallLibExistsOrLink -Path $Destination) {
             Remove-Item -LiteralPath $Destination -Recurse -Force -ErrorAction Stop
         }
     } catch {
@@ -524,7 +536,7 @@ function Install-LibRollbackTarget {
     }
 
     try {
-        if (Test-Path -LiteralPath $Destination) {
+        if (Test-InstallLibExistsOrLink -Path $Destination) {
             Remove-Item -LiteralPath $Destination -Recurse -Force -ErrorAction Stop
         }
     } catch {

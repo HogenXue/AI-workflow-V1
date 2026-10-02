@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 function Show-Usage {
     [Console]::Error.WriteLine(
-        'Usage: install.ps1 <skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge> [component options]'
+        'Usage: install.ps1 <deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge> [component options]'
     )
     [Console]::Error.WriteLine('       install.ps1   # interactive (TTY only)')
     [Console]::Error.WriteLine('')
@@ -30,6 +30,7 @@ function Invoke-InstallComponent {
     )
 
     $scriptMap = @{
+        'deps'        = 'install-deps.ps1'
         'skills'       = 'install-skills.ps1'
         'graphify'     = 'install-graphify.ps1'
         'agents'       = 'install-agents.ps1'
@@ -50,7 +51,16 @@ function Invoke-InstallComponent {
     if ($null -ne $ComponentArgs -and $ComponentArgs.Count -gt 0) {
         $forward = @($ComponentArgs)
     }
-    & $scriptPath @forward
+    # Match Bash's process boundary: child exit and script scope must not leak
+    # into the wizard or let a failed component be followed by more writes.
+    $PSNativeCommandUseErrorActionPreference = $false
+    $pwshName = if ($IsWindows) { 'pwsh.exe' } else { 'pwsh' }
+    & (Join-Path $PSHOME $pwshName) -NoProfile -File $scriptPath @forward
+    $componentStatus = $LASTEXITCODE
+    if ($componentStatus -ne 0) {
+        [Console]::Error.WriteLine("ERROR: installer component '$Component' failed (exit $componentStatus); stopping.")
+        exit $componentStatus
+    }
 }
 
 function Test-PromptReplaceIfNeeded {
@@ -62,6 +72,21 @@ function Test-PromptReplaceIfNeeded {
         return $true
     }
     return (Install-LibPromptYn -Question "Existing $Kind at $Target — backup and replace?" -Default 'n')
+}
+
+function Install-FullDependencies {
+    $pathFile = [System.IO.Path]::GetTempFileName()
+    try {
+        Invoke-InstallComponent deps @('--apply', '--path-file', $pathFile)
+        foreach ($directory in Get-Content -LiteralPath $pathFile) {
+            if (-not [string]::IsNullOrWhiteSpace($directory)) {
+                # Keep the user's Python/Node ahead of tools' private environments.
+                $env:PATH = $env:PATH + [System.IO.Path]::PathSeparator + $directory
+            }
+        }
+    } finally {
+        Remove-Item -LiteralPath $pathFile -Force -ErrorAction SilentlyContinue
+    }
 }
 
 function Parse-AgentSelection {
@@ -109,7 +134,7 @@ function Install-ProfileCodex {
     }
 
     $skillArgs = @('--copy', '--target', $skillsTarget)
-    if (Test-Path -LiteralPath $skillsTarget) {
+    if (Test-InstallLibExistsOrLink -Path $skillsTarget) {
         if (Test-PromptReplaceIfNeeded -Kind 'skills' -Target $skillsTarget) {
             $skillArgs += '--replace'
         } else {
@@ -136,7 +161,7 @@ function Install-ProfileCodex {
     }
 
     $configArgs = @('--copy', '--target', $configTarget)
-    if (Test-Path -LiteralPath $configTarget) {
+    if (Test-InstallLibExistsOrLink -Path $configTarget) {
         if (Test-PromptReplaceIfNeeded -Kind 'config' -Target $configTarget) {
             $configArgs += '--replace'
         } else {
@@ -183,7 +208,7 @@ function Install-ProfileCursor {
     $configTarget = Join-Path $homeDir '.cursor/config'
 
     $skillArgs = @('--copy', '--target', $skillsTarget)
-    if (Test-Path -LiteralPath $skillsTarget) {
+    if (Test-InstallLibExistsOrLink -Path $skillsTarget) {
         if (Test-PromptReplaceIfNeeded -Kind 'skills' -Target $skillsTarget) {
             $skillArgs += '--replace'
         } else {
@@ -196,7 +221,7 @@ function Install-ProfileCursor {
     }
 
     $configArgs = @('--copy', '--target', $configTarget)
-    if (Test-Path -LiteralPath $configTarget) {
+    if (Test-InstallLibExistsOrLink -Path $configTarget) {
         if (Test-PromptReplaceIfNeeded -Kind 'config' -Target $configTarget) {
             $configArgs += '--replace'
         } else {
@@ -243,7 +268,7 @@ function Install-ProfileClaude {
     $agentsHome = Join-Path $homeDir '.claude'
 
     $skillArgs = @('--copy', '--target', $skillsTarget)
-    if (Test-Path -LiteralPath $skillsTarget) {
+    if (Test-InstallLibExistsOrLink -Path $skillsTarget) {
         if (Test-PromptReplaceIfNeeded -Kind 'skills' -Target $skillsTarget) {
             $skillArgs += '--replace'
         } else {
@@ -256,7 +281,7 @@ function Install-ProfileClaude {
     }
 
     $configArgs = @('--copy', '--target', $configTarget)
-    if (Test-Path -LiteralPath $configTarget) {
+    if (Test-InstallLibExistsOrLink -Path $configTarget) {
         if (Test-PromptReplaceIfNeeded -Kind 'config' -Target $configTarget) {
             $configArgs += '--replace'
         } else {
@@ -317,7 +342,11 @@ function Invoke-InteractiveMain {
     [Console]::Out.WriteLine('  2) Single component (advanced)')
     [Console]::Out.Write('Choice [1-2]: ')
     $modeChoice = [Console]::In.ReadLine()
-    if ($null -eq $modeChoice) { $modeChoice = '1' }
+    if ($null -eq $modeChoice -or $modeChoice -notin @('', '1', '2')) {
+        [Console]::Error.WriteLine('ERROR: invalid install mode (expected 1 or 2)')
+        exit 2
+    }
+    if ($modeChoice -eq '') { $modeChoice = '1' }
 
     $projectRoot = ''
     if ($wantCursor) {
@@ -335,12 +364,12 @@ function Invoke-InteractiveMain {
     $mem0Url = ''
 
     if ($modeChoice -eq '2') {
-        [Console]::Out.WriteLine('Component: skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge')
+        [Console]::Out.WriteLine('Component: deps | skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge')
         [Console]::Out.Write('Component: ')
         $comp = [Console]::In.ReadLine()
         if ($null -eq $comp) { $comp = '' }
         switch ($comp) {
-            { $_ -in @('skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge') } {
+            { $_ -in @('deps', 'skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge') } {
                 $extra = [System.Collections.Generic.List[string]]::new()
                 if ($comp -like '*-merge') {
                     if (-not [string]::IsNullOrEmpty($projectRoot)) {
@@ -367,6 +396,7 @@ function Invoke-InteractiveMain {
     }
 
     [Console]::Out.WriteLine('--- Recommended full install plan ---')
+    [Console]::Out.WriteLine('- Dependencies: keep usable GitNexus/Trellis/Graphify CLIs; install missing tools first')
     if ($wantCodex) {
         [Console]::Out.WriteLine(
             '- Codex: ~/.agents/skills (including Graphify) + ~/.agents/config + ~/.codex AGENTS/user hooks + global MCP'
@@ -391,6 +421,8 @@ function Invoke-InteractiveMain {
         [Console]::Out.WriteLine('Aborted.')
         exit 0
     }
+
+    Install-FullDependencies
 
     if ($wantCodex) {
         [Console]::Out.WriteLine('=== Installing Codex profile ===')
@@ -426,7 +458,7 @@ if ($argv.Count -gt 1) {
 }
 
 switch ($component) {
-    { $_ -in @('skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge') } {
+    { $_ -in @('deps', 'skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge') } {
         Invoke-InstallComponent $component @rest
     }
     { $_ -in @('--help', '-h', 'help') } {

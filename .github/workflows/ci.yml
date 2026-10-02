@@ -69,3 +69,7 @@ jobs:
         shell: pwsh
         run: |
           python -m unittest discover -s tests -p "test_install_*_ps.py" -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p "test_install_wizard.py" -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p "test_install_dependencies.py" -v

@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class GrillWithDocsTrellisRouteTests(unittest.TestCase):
     def test_global_template_routes_simple_and_complex_trellis_work(self) -> None:
-        content = (ROOT / "AGENTS.global.md").read_text(encoding="utf-8")
+        content = (ROOT / "agents" / "AGENTS.global.md").read_text(encoding="utf-8")
 
         for phrase in (
             "Trellis 是任务、规格和状态的唯一工作流来源",
@@ -21,7 +21,7 @@ class GrillWithDocsTrellisRouteTests(unittest.TestCase):
         self.assertNotIn("复杂、跨模块或需求不明确的任务：先使用", content)
 
     def test_global_template_keeps_capability_boundaries_explicit(self) -> None:
-        content = (ROOT / "AGENTS.global.md").read_text(encoding="utf-8")
+        content = (ROOT / "agents" / "AGENTS.global.md").read_text(encoding="utf-8")
 
         for phrase in (
             "Skill 不得创建与 Trellis 平行的任务生命周期",
@@ -37,7 +37,7 @@ class GrillWithDocsTrellisRouteTests(unittest.TestCase):
         self.assertNotIn("workflow_check.py", content)
 
     def test_project_override_resolves_native_trellis_skill_aliases(self) -> None:
-        content = (ROOT / "AGENTS.project.md").read_text(encoding="utf-8")
+        content = (ROOT / "agents" / "AGENTS.project.md").read_text(encoding="utf-8")
 
         for phrase in (
             "`$grill-me` 是唯一 Grill Skill",

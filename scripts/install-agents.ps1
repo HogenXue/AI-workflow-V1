@@ -163,7 +163,7 @@ function Enable-HooksFeature {
 
 $scriptDir = $PSScriptRoot
 $rootDir = (Resolve-Path -LiteralPath (Join-Path $scriptDir '..')).ProviderPath
-$sourceFile = Join-Path $rootDir 'AGENTS.global.md'
+$sourceFile = Join-Path $rootDir 'agents/AGENTS.global.md'
 $installHome = Get-InstallHome
 $agentsHome = if (-not [string]::IsNullOrEmpty($env:CODEX_HOME)) {
     $env:CODEX_HOME

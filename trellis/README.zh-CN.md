@@ -1,6 +1,6 @@
 # Trellis 兼容迁移包
 
-本目录为现有 AI-workflow-V1 提供可选的 Trellis 集成。它不会自动安装 Trellis 或初始化项目；执行安装脚本的 `--apply` 时，会增量确保 `~/.codex/config.toml` 的 `[features].hooks = true`。
+本目录为现有 AI-workflow-V1 提供可选的 Trellis 集成。本目录的安装包装脚本不会安装 Trellis 或初始化项目；主入口 `scripts/install.sh` / `scripts/install.ps1` 的完整安装向导和 `deps --apply` 会自动补装缺失的 Trellis CLI。执行本目录安装脚本的 `--apply` 时，会增量确保 `~/.codex/config.toml` 的 `[features].hooks = true`。
 
 Codex App 的 Skill 统一安装到 `~/.agents/skills`，配置安装到 `~/.agents/config`。不要把同名 Skill 同时安装到 `~/.codex/skills`；Codex 可能发现两处并产生来源歧义。安装器默认只警告，显式 `--prune-other-root` 才会先备份再移走另一目录中的本包 Skill。
 
@@ -77,11 +77,11 @@ cd /path/to/project
 trellis init --codex -u hogenxue
 ```
 
-不要对所有项目批量初始化。初始化后，将项目特有规则追加在 Trellis 管理区外；应从根目录的 [AGENTS.project.md](../AGENTS.project.md) 复制 Codex 阶段映射，确保 Grill with Docs 只替代 `trellis-brainstorm`，质量阶段继续由 `trellis-check` 单独负责。
+不要对所有项目批量初始化。初始化后，将项目特有规则追加在 Trellis 管理区外；应从 `agents/` 目录的 [AGENTS.project.md](../agents/AGENTS.project.md) 复制 Codex 阶段映射，确保 Grill with Docs 只替代 `trellis-brainstorm`，质量阶段继续由 `trellis-check` 单独负责。
 
 ## 模板说明
 
-- [AGENTS.global.md](../AGENTS.global.md)：供全局 Codex 使用的可复制模板，存放在仓库根目录。
-- [AGENTS.project.md](../AGENTS.project.md)：供 Trellis 项目追加项目特有规则的补充模板，存放在仓库根目录。
+- [AGENTS.global.md](../agents/AGENTS.global.md)：供全局 Codex 使用的可复制模板，存放在 `agents/` 目录。
+- [AGENTS.project.md](../agents/AGENTS.project.md)：供 Trellis 项目追加项目特有规则的补充模板，存放在 `agents/` 目录。
 - `config-check.sh`：只读诊断。
 - `install.sh`：旧版兼容入口；等价于统一入口的 `scripts/install.sh agents`。

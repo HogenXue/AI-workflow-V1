@@ -541,7 +541,7 @@ class BundledSkillContractTests(unittest.TestCase):
                 self.assertIn("--project-root", content)
 
     def test_agents_templates_use_native_trellis_checks(self) -> None:
-        for relative in ("AGENTS.global.md", "AGENTS.project.md", "AGENTS-egm.md"):
+        for relative in ("agents/AGENTS.global.md", "agents/AGENTS.project.md", "agents/AGENTS-egm.md"):
             with self.subTest(file=relative):
                 content = (ROOT / relative).read_text(encoding="utf-8")
                 self.assertNotIn("workflow_check.py", content)
@@ -560,8 +560,8 @@ class BundledSkillContractTests(unittest.TestCase):
                 self.assertNotIn("workflow_check.py", content)
 
     def test_agents_templates_keep_graphify_optional_and_gitnexus_authoritative(self) -> None:
-        global_template = (ROOT / "AGENTS.global.md").read_text(encoding="utf-8")
-        project_template = (ROOT / "AGENTS.project.md").read_text(encoding="utf-8")
+        global_template = (ROOT / "agents" / "AGENTS.global.md").read_text(encoding="utf-8")
+        project_template = (ROOT / "agents" / "AGENTS.project.md").read_text(encoding="utf-8")
 
         self.assertIn("已有可用图谱时", global_template)
         self.assertIn("简单源码定位或局部修改不要求使用", global_template)
@@ -572,7 +572,7 @@ class BundledSkillContractTests(unittest.TestCase):
         self.assertIn("不得为了任务自动生成或更新图谱", project_template)
 
     def test_egm_agents_template_is_current_and_discoverable(self) -> None:
-        content = (ROOT / "AGENTS-egm.md").read_text(encoding="utf-8")
+        content = (ROOT / "agents" / "AGENTS-egm.md").read_text(encoding="utf-8")
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
         for phrase in (
@@ -593,9 +593,14 @@ class BundledSkillContractTests(unittest.TestCase):
             self.assertIn(phrase, content)
 
         self.assertNotIn("uni-app：移动端", content)
-        self.assertIn("[AGENTS-egm.md](AGENTS-egm.md)", readme)
+        self.assertIn("[AGENTS-egm.md](agents/AGENTS-egm.md)", readme)
         self.assertIn("不会由全局 `agents` 安装器自动写入", readme)
 
+    def test_agents_templates_have_one_canonical_directory(self) -> None:
+        for name in ("AGENTS.global.md", "AGENTS.project.md", "AGENTS-egm.md"):
+            with self.subTest(template=name):
+                self.assertTrue((ROOT / "agents" / name).is_file())
+                self.assertFalse((ROOT / name).exists(), "Obsolete root template must not shadow agents/")
 
 
     def test_grill_me_is_the_single_explicit_stateless_skill(self) -> None:

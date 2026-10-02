@@ -76,6 +76,23 @@ class InstallEntryPsTests(unittest.TestCase):
         self.assertIn("unknown installer component", result.stderr)
         self.assertFalse(self.skills_target.exists())
 
+    def test_component_usage_error_exits_2(self) -> None:
+        result = self.run_install_ps("skills", "--unknown")
+        self.assertEqual(result.returncode, 2, result.stderr + result.stdout)
+        self.assertIn("unrecognized option", result.stderr)
+        self.assertFalse(self.skills_target.exists())
+
+    def test_agents_dry_run_uses_agents_template_directory(self) -> None:
+        result = self.run_install_ps("agents", "--dry-run", "--agents-home", str(self.root / "codex"))
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertIn(str(ROOT / "agents" / "AGENTS.global.md"), result.stdout)
+        self.assertFalse((self.root / "codex").exists())
+
+    def test_dependency_preview_via_dispatch(self) -> None:
+        result = self.run_install_ps("deps", "--dry-run")
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertIn("DEPENDENCIES:", result.stdout)
+
     def test_skills_dry_run_via_dispatch(self) -> None:
         result = self.run_install_ps(
             "skills",
@@ -101,6 +118,15 @@ class InstallEntryPsTests(unittest.TestCase):
         combined = result.stderr + result.stdout
         self.assertIn("install-claude-merge.ps1", combined)
         self.assertIn("user-level MCP only", combined)
+
+    @unittest.skipUnless(os.name == "nt", "install.cmd is Windows-only")
+    def test_install_cmd_propagates_component_error(self) -> None:
+        result = subprocess.run(
+            ["cmd", "/c", str(ROOT / "scripts" / "install.cmd"), "skills", "--unknown"],
+            cwd=ROOT, text=True, capture_output=True, check=False,
+        )
+        self.assertEqual(result.returncode, 2, result.stderr + result.stdout)
+        self.assertIn("unrecognized option", result.stderr)
 
     @unittest.skipUnless(os.name == "nt", "install.cmd is Windows-only")
     def test_install_cmd_skills_dry_run(self) -> None:

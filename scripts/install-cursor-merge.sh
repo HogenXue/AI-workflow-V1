@@ -136,7 +136,7 @@ if [[ -z "${INSTALL_PROJECT_ROOT:-}" ]]; then
 fi
 
 proj="$INSTALL_PROJECT_ROOT"
-agents_src="$root_dir/AGENTS.global.md"
+agents_src="$root_dir/agents/AGENTS.global.md"
 if [[ ! -f "$agents_src" || ! -f "$templates/hooks.json" || ! -d "$templates/hooks" ]]; then
   printf 'ERROR: incomplete Cursor rules/hooks templates under %s\n' "$root_dir/trellis" >&2
   rollback_mcp || true
@@ -173,7 +173,7 @@ write_rules_mdc_from_agents_global() {
   {
     cat <<'EOF'
 ---
-description: AI-workflow global guidance (from AGENTS.global.md)
+description: AI-workflow global guidance (from agents/AGENTS.global.md)
 alwaysApply: true
 ---
 

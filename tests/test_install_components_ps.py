@@ -185,6 +185,8 @@ class InstallComponentsPsTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         self.assertTrue((agents_home / "CLAUDE.md").is_file())
+        self.assertEqual((agents_home / "CLAUDE.md").read_bytes(),
+                         (ROOT / "agents" / "AGENTS.global.md").read_bytes())
         self.assertFalse((agents_home / "config.toml").exists())
         self.assertFalse((agents_home / "AGENTS.md").exists())
         self.assertNotIn("UPDATED: config.toml", result.stdout)

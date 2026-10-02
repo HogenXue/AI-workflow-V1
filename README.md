@@ -9,7 +9,7 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 | 组件            | 说明                                                                         |
 | ------------- | -------------------------------------------------------------------------- |
 | **Skills**    | `memory`、`gitnexus`、`grill-me`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` |
-| **AGENTS 模板** | [AGENTS.global.md](AGENTS.global.md)：跨项目通用规则；[AGENTS-egm.md](AGENTS-egm.md)：EGM 项目补充规则 |
+| **AGENTS 模板** | [AGENTS.global.md](agents/AGENTS.global.md)：跨项目通用规则；[AGENTS.project.md](agents/AGENTS.project.md)：项目补充规则；[AGENTS-egm.md](agents/AGENTS-egm.md)：EGM 项目补充规则 |
 | **config/**   | 默认配置、有效配置运行时和平台无关工作流门禁；项目可用 `hogen-codex.yaml` 覆盖                         |
 
 Trellis 是项目唯一工作流，搭配五个 AI Hero 开发能力：`grill-me`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts`。记忆由 `memory` 对接 Recallium/Mem0，代码分析按需使用 GitNexus/Graphify。`grill-me` 是手动调用、无状态的 Grill 入口，结束后由 Trellis 接管落盘和实施；质量门由原生 `trellis-check` 负责。Graphify 是单独安装的第三方技能，不在七项 manifest 中。
@@ -19,6 +19,8 @@ Trellis 是项目唯一工作流，搭配五个 AI Hero 开发能力：`grill-me
 - macOS / Linux：Bash
 - Windows：PowerShell 7+（`pwsh`）；可用 `winget install Microsoft.PowerShell` 安装
 - `python3 >= 3.10` 与 PyYAML（配置合并、工作流门禁和包校验需要）
+- 缺失 GitNexus/Trellis 时需要 Node.js/npm；使用受支持的 Node.js LTS。npm 安装启用
+  `--engine-strict`，版本不满足软件包要求时停止。Graphify 的独立环境需要 Python 的 `venv`/pip。
 
 ```bash
 python3 -m pip install -r requirements-dev.txt
@@ -35,7 +37,7 @@ cd AI-workflow-V1
 
 ### macOS / Linux（bash）
 
-安装统一入口：`scripts/install.sh <skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge>`。TTY 下无参数运行进入交互向导（多选编号：`1` Codex、`2` Cursor、`3` Claude，如 `1 3` / `1,2,3`）；非 TTY 无参数则打印用法并以 exit 2 退出。交互向导会按宿主逐项检测已有的 URL 型 MCP：显示当前 URL，并默认沿用；只有用户明确选择替换时才写入模板 URL 或要求输入新的 Mem0 URL。Codex hooks 与 MCP 安装到用户级 `~/.codex`；Claude MCP 合并到用户级 `~/.claude.json`，全局规则写入 `~/.claude/CLAUDE.md`；两者都不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择，且仅当选中 Cursor）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置；Claude 使用 `agents --document-name CLAUDE.md --no-hooks-feature`，不写 `config.toml`。
+安装统一入口：`scripts/install.sh <deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge>`。TTY 下无参数运行进入交互向导（多选编号：`1` Codex、`2` Cursor、`3` Claude，如 `1 3` / `1,2,3`）；非 TTY 无参数则打印用法并以 exit 2 退出。交互向导会按宿主逐项检测已有的 URL 型 MCP：显示当前 URL，并默认沿用；只有用户明确选择替换时才写入模板 URL 或要求输入新的 Mem0 URL。Codex hooks 与 MCP 安装到用户级 `~/.codex`；Claude MCP 合并到用户级 `~/.claude.json`，全局规则写入 `~/.claude/CLAUDE.md`；两者都不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择，且仅当选中 Cursor）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置；Claude 使用 `agents --document-name CLAUDE.md --no-hooks-feature`，不写 `config.toml`。
 
 所有组件在覆盖、删除或迁移现有目标前都会先备份。备份直接写入所选备份目录，命名为 `<原名称>.<UTC 时间戳>.bak`；同一秒内重复执行会追加序号，绝不会覆盖已有备份。目录同样使用 `.bak` 后缀并保留完整内容。备份失败时当前组件立即停止，原目标保持不变。自定义 `--backup-dir` 不能等于正被备份的目标或位于其内部。
 
@@ -50,7 +52,7 @@ cd AI-workflow-V1
 | `agents`     | `<agents-home>/<document>`（默认 `AGENTS.md`；Claude 用 `CLAUDE.md` + `--no-hooks-feature`） | dry-run；已有文件先备份 |
 | `config`     | 指定的配置目录                      | dry-run         |
 | `codex-merge` | Codex 全局 MCP + 用户级 `hooks.json` / `hooks/` | 写入 `${CODEX_HOME:-~/.codex}` |
-| `cursor-merge` | Cursor MCP + 可选项目 `.cursor` hooks；rules `.mdc` 由 `AGENTS.global.md` 动态生成 | 需显式 project-root 才写项目级 |
+| `cursor-merge` | Cursor MCP + 可选项目 `.cursor` hooks；rules `.mdc` 由 `agents/AGENTS.global.md` 动态生成 | 需显式 project-root 才写项目级 |
 | `claude-merge` | Claude 用户级 MCP（`~/.claude.json` 的 `mcpServers`） | 不写项目 `.claude/` / `.mcp.json` |
 
 `skills` 与 `config` 默认 **copy**（独立副本，不依赖源码目录）；本地开发可用 **link** 实时同步。
@@ -85,6 +87,29 @@ pwsh -File scripts\install.ps1 --help
 TTY 下无参数进入交互向导；非 TTY 无参数打印用法并以 exit 2 退出（与 bash 一致）。
 
 ### 预览（不写文件）
+
+完整安装向导会在写入宿主配置前自动检测 GitNexus、Graphify、Trellis CLI。已有可用版本会保留；
+缺失的 GitNexus/Trellis 通过 npm 全局安装，Graphify 使用 `~/.agents/tools/graphify` 中的独立 Python
+环境。安装失败立即停止，完成安装后验证 CLI，当前安装进程自动补充 PATH。
+脚本不修改终端启动文件；独立 `deps --apply` 会打印工具路径，必要时将它们加入终端 PATH。
+Node.js/npm、Python/venv 本身缺失时会提示先安装，不会自动提权或安装系统运行时。
+安装 CLI 不会执行 `trellis init`、GitNexus/Graphify 建图，也不会更改已有项目初始化状态。
+
+只补装依赖：
+
+```bash
+bash scripts/install.sh deps --dry-run
+bash scripts/install.sh deps --apply
+```
+
+Windows 对等命令：
+
+```powershell
+scripts\install.cmd deps --dry-run
+scripts\install.cmd deps --apply
+```
+
+`--dry-run` 是默认模式，不联网安装、不创建工具环境。`--apply` 才执行安装。
 
 ```bash
 bash scripts/install.sh skills --dry-run --target ~/.agents/skills
@@ -175,6 +200,7 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
 
 | 参数             | 说明                                                                                       |
 | -------------- | ---------------------------------------------------------------------------------------- |
+| `deps`         | 支持 `--dry-run` / `--apply`；只安装缺失的 GitNexus/Trellis/Graphify CLI并验证可用性 |
 | `skills`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--prune-legacy`、`--prune-other-root`、`--target PATH`、`--backup-dir PATH` |
 | `graphify`     | 支持 `--dry-run` / `--apply`、`--replace`、`--backup-dir PATH`；只写 `~/.agents/skills/graphify` |
 | `agents`       | 支持 `--dry-run` / `--apply`、`--agents-home PATH`、`--backup-dir PATH`；`--codex-home` 是兼容别名 |
@@ -218,11 +244,11 @@ bash scripts/install.sh skills --copy --replace --target ~/.agents/skills
 
 ## AGENTS 规则用法
 
-全局规则模板位于根目录的 [AGENTS.global.md](AGENTS.global.md)：`agents --apply` 写入 Codex 的 `AGENTS.md`；`agents --apply --document-name CLAUDE.md --no-hooks-feature` 写入 Claude 的 `CLAUDE.md`；`cursor-merge`（含显式 `--project-root`）据此动态生成项目 `.cursor/rules/ai-workflow-global.mdc`。项目根目录的 `AGENTS.md` / `CLAUDE.md` 由 Trellis 初始化和更新时维护，不应以全局模板直接覆盖。
+全局规则模板位于 `agents/` 目录的 [AGENTS.global.md](agents/AGENTS.global.md)：`agents --apply` 写入 Codex 的 `AGENTS.md`；`agents --apply --document-name CLAUDE.md --no-hooks-feature` 写入 Claude 的 `CLAUDE.md`；`cursor-merge`（含显式 `--project-root`）据此动态生成项目 `.cursor/rules/ai-workflow-global.mdc`。项目根目录的 `AGENTS.md` / `CLAUDE.md` 由 Trellis 初始化和更新时维护，不应以全局模板直接覆盖。[AGENTS.project.md](agents/AGENTS.project.md) 是通用项目补充模板，按目标项目需要手动合并到 Trellis 管理区之外。
 
 项目专属规则（如 EGM 的分层、Git 格式、`egm_docs` 等）应在**该项目仓库**内维护 `AGENTS.md`；Trellis 项目将这些规则追加到 Trellis Managed Block 之外。GitNexus 流程由对应 Skill 承担，索引块由项目内 GitNexus CLI 注入。
 
-[AGENTS-egm.md](AGENTS-egm.md) 位于根目录，是 EGM 项目补充规则的参考模板；它不会由全局 `agents` 安装器自动写入，避免把 EGM 约束注入其他项目。同步时只更新目标 EGM 根 `AGENTS.md` 中 Trellis Managed Block 之外的项目补充内容；覆盖既有内容前必须先备份为 `AGENTS.md.<UTC 时间戳>.bak`。目标项目中的项目规则仍是运行时事实来源，本仓库模板不会自动覆盖它。
+[AGENTS-egm.md](agents/AGENTS-egm.md) 位于 `agents/` 目录，是 EGM 项目补充规则的参考模板；它不会由全局 `agents` 安装器自动写入，避免把 EGM 约束注入其他项目。同步时只更新目标 EGM 根 `AGENTS.md` 中 Trellis Managed Block 之外的项目补充内容；覆盖既有内容前必须先备份为 `AGENTS.md.<UTC 时间戳>.bak`。目标项目中的项目规则仍是运行时事实来源，本仓库模板不会自动覆盖它。
 
 ## 项目级配置覆盖
 

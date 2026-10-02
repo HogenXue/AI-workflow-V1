@@ -109,6 +109,54 @@ class InstallLibPsTests(unittest.TestCase):
             {"original\n"},
         )
 
+    def test_reservation_is_exclusive_when_directory_creation_races(self) -> None:
+        # Force both contenders past the check-before-create window. A directory
+        # creator may return an existing directory; this must not reserve twice.
+        lib = self.root / "clocked-lib.ps1"
+        source_text = INSTALL_LIB_PS1.read_text(encoding="utf-8")
+        source_text = source_text.replace(
+            "$stamp = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssZ')",
+            "$stamp = '20300101T000000Z'",
+        )
+        lib.write_text(source_text, encoding="utf-8")
+        backup_dir = self.root / "contended-backups"
+        sources = [self.root / "first.txt", self.root / "second.txt"]
+        for source, value in zip(sources, ("first", "second")):
+            source.write_text(value, encoding="utf-8")
+        processes = []
+        for worker, source in enumerate(sources):
+            quoted_root = str(self.root).replace("'", "''")
+            script = (
+                f". '{lib}'; $worker = {worker}; $fixture = '{quoted_root}'; "
+                "function New-Item { [CmdletBinding()] "
+                "param([string]$Path,[string]$ItemType,[switch]$Force) "
+                "if ($ItemType -eq 'Directory' -and $Path.EndsWith('.bak.lock')) { "
+                "[IO.File]::WriteAllText((Join-Path $fixture ('ready-' + $worker)), 'ready'); "
+                "$deadline = [DateTime]::UtcNow.AddSeconds(10); "
+                "while (-not ((Test-Path (Join-Path $fixture 'ready-0')) -and "
+                "(Test-Path (Join-Path $fixture 'ready-1')))) { "
+                "if ([DateTime]::UtcNow -gt $deadline) { throw 'barrier timed out' }; "
+                "Start-Sleep -Milliseconds 10 }; [IO.Directory]::CreateDirectory($Path) "
+                "} else { Microsoft.PowerShell.Management\\New-Item @PSBoundParameters } }; "
+                "function Install-LibInternalCopy { "
+                "param([string]$Source,[string]$Destination,[switch]$Recurse) "
+                "Start-Sleep -Milliseconds 150; "
+                "Copy-Item -LiteralPath $Source -Destination $Destination -Force -ErrorAction Stop }; "
+                f"if (-not (Install-LibBackupFile -Source '{source}' -BackupDir '{backup_dir}' "
+                "-Name 'shared.txt')) { exit 1 }"
+            )
+            processes.append(subprocess.Popen(
+                [_find_pwsh(), "-NoProfile", "-Command", script], cwd=ROOT,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            ))
+        for process in processes:
+            stdout, stderr = process.communicate(timeout=30)
+            self.assertEqual(process.returncode, 0, (stdout + stderr).decode("utf-8", errors="replace"))
+        backups = list(backup_dir.glob("*.bak"))
+        self.assertEqual(len(backups), 2)
+        self.assertEqual({p.read_text(encoding="utf-8") for p in backups}, {"first", "second"})
+        self.assertFalse(list(backup_dir.glob("*.lock*")))
+
     def test_unwritable_backup_directory_fails_without_hanging(self) -> None:
         source = self.root / "source.txt"
         source.write_text("original\n", encoding="utf-8")

@@ -202,7 +202,7 @@ class InstallMergePsSmokeTests(unittest.TestCase):
         rules = self.project / ".cursor" / "rules" / "ai-workflow-global.mdc"
         self.assertTrue(rules.is_file())
         rules_text = rules.read_text(encoding="utf-8")
-        agents_body = (ROOT / "AGENTS.global.md").read_text(encoding="utf-8")
+        agents_body = (ROOT / "agents" / "AGENTS.global.md").read_text(encoding="utf-8")
         self.assertTrue(rules_text.startswith("---\n"))
         self.assertIn("alwaysApply: true", rules_text)
         _, _, body = rules_text.split("---", 2)
@@ -322,7 +322,8 @@ class InstallMergePsSmokeTests(unittest.TestCase):
         backups = list(backup_dir.glob("config.toml.*.bak"))
         self.assertEqual(len(backups), 1)
         self.assertTrue(backups[0].is_symlink())
-        self.assertEqual(os.readlink(backups[0]), str(missing_target))
+        # Windows may expose the equivalent absolute target with an NT path prefix.
+        self.assertEqual(os.readlink(backups[0]).removeprefix('\\\\?\\'), str(missing_target))
 
     @unittest.skipUnless(
         _can_create_symlink(),
@@ -352,7 +353,8 @@ class InstallMergePsSmokeTests(unittest.TestCase):
         backups = list(backup_dir.glob("mcp.json.*.bak"))
         self.assertEqual(len(backups), 1)
         self.assertTrue(backups[0].is_symlink())
-        self.assertEqual(os.readlink(backups[0]), str(missing_target))
+        # Preserve the target itself; its optional Windows namespace prefix is incidental.
+        self.assertEqual(os.readlink(backups[0]).removeprefix('\\\\?\\'), str(missing_target))
 
     def test_claude_merge_mcp_overwrite_preserves_other_keys(self) -> None:
         mcp_file = self.home / ".claude.json"

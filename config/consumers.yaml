@@ -1,10 +1,10 @@
 consumers:
   language:
-    - AGENTS.global.md
+    - agents/AGENTS.global.md
   change_policy.minimal_change:
-    - AGENTS.global.md
+    - agents/AGENTS.global.md
   change_policy.preserve_dirty_worktree:
-    - AGENTS.global.md
+    - agents/AGENTS.global.md
   change_policy.require_impact_analysis_before_symbol_edit:
     - skills/gitnexus/SKILL.md
   tools.missing_tool_policy:

@@ -4,7 +4,7 @@ set -euo pipefail
 
 usage() {
   cat >&2 <<'EOF'
-Usage: install.sh <skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge> [component options]
+Usage: install.sh <deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge> [component options]
        install.sh   # interactive (TTY only)
 
 Run "install.sh <component> --help" for component-specific options.
@@ -20,6 +20,7 @@ run_component() {
   local component="$1"
   shift
   case "$component" in
+    deps) bash "$script_dir/install-deps.sh" "$@" ;;
     skills) bash "$script_dir/install-skills.sh" "$@" ;;
     graphify) bash "$script_dir/install-graphify.sh" "$@" ;;
     agents) bash "$script_dir/install-agents.sh" "$@" ;;
@@ -45,6 +46,28 @@ prompt_replace_if_needed() {
     return 0
   fi
   return 1
+}
+
+install_full_dependencies() {
+  local path_file directory status
+  path_file="$(mktemp)"
+  if run_component deps --apply --path-file "$path_file"; then
+    while IFS= read -r directory; do
+      [[ -n "$directory" ]] || continue
+      # Also support Windows Python invoked from Git Bash during verification.
+      if command -v cygpath >/dev/null 2>&1; then
+        directory="$(cygpath -u "$directory")"
+      fi
+      # Do not let Graphify's private Python shadow the user's interpreter.
+      PATH="$PATH:$directory"
+    done < "$path_file"
+    export PATH
+    rm -f "$path_file"
+  else
+    status=$?
+    rm -f "$path_file"
+    exit "$status"
+  fi
 }
 
 # Parse multi-select agent tokens (spaces or commas). Sets want_codex/cursor/claude.
@@ -77,7 +100,7 @@ install_profile_codex() {
   local agents_home="${CODEX_HOME:-$HOME/.codex}"
 
   local skill_args=(--copy --target "$skills_target")
-  if [[ -e "$skills_target" ]]; then
+  if [[ -e "$skills_target" || -L "$skills_target" ]]; then
     if prompt_replace_if_needed "skills" "$skills_target"; then
       skill_args+=(--replace)
     else
@@ -104,7 +127,7 @@ install_profile_codex() {
   fi
 
   local config_args=(--copy --target "$config_target")
-  if [[ -e "$config_target" ]]; then
+  if [[ -e "$config_target" || -L "$config_target" ]]; then
     if prompt_replace_if_needed "config" "$config_target"; then
       config_args+=(--replace)
     else
@@ -140,7 +163,7 @@ install_profile_cursor() {
   local config_target="$HOME/.cursor/config"
 
   local skill_args=(--copy --target "$skills_target")
-  if [[ -e "$skills_target" ]]; then
+  if [[ -e "$skills_target" || -L "$skills_target" ]]; then
     if prompt_replace_if_needed "skills" "$skills_target"; then
       skill_args+=(--replace)
     else
@@ -153,7 +176,7 @@ install_profile_cursor() {
   fi
 
   local config_args=(--copy --target "$config_target")
-  if [[ -e "$config_target" ]]; then
+  if [[ -e "$config_target" || -L "$config_target" ]]; then
     if prompt_replace_if_needed "config" "$config_target"; then
       config_args+=(--replace)
     else
@@ -191,7 +214,7 @@ install_profile_claude() {
   local agents_home="$HOME/.claude"
 
   local skill_args=(--copy --target "$skills_target")
-  if [[ -e "$skills_target" ]]; then
+  if [[ -e "$skills_target" || -L "$skills_target" ]]; then
     if prompt_replace_if_needed "skills" "$skills_target"; then
       skill_args+=(--replace)
     else
@@ -204,7 +227,7 @@ install_profile_claude() {
   fi
 
   local config_args=(--copy --target "$config_target")
-  if [[ -e "$config_target" ]]; then
+  if [[ -e "$config_target" || -L "$config_target" ]]; then
     if prompt_replace_if_needed "config" "$config_target"; then
       config_args+=(--replace)
     else
@@ -253,7 +276,15 @@ interactive_main() {
   printf '%s\n' '  2) Single component (advanced)'
   printf 'Choice [1-2]: '
   local mode_choice
-  read -r mode_choice || mode_choice="1"
+  if ! read -r mode_choice; then
+    printf 'ERROR: invalid install mode (expected 1 or 2)\n' >&2
+    exit 2
+  fi
+  case "$mode_choice" in
+    ''|1) mode_choice=1 ;;
+    2) ;;
+    *) printf 'ERROR: invalid install mode (expected 1 or 2)\n' >&2; exit 2 ;;
+  esac
 
   local project_root=""
   if ((want_cursor)); then
@@ -266,12 +297,12 @@ interactive_main() {
   local mem0_url=""
 
   if [[ "$mode_choice" == "2" ]]; then
-    printf '%s\n' 'Component: skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge'
+    printf '%s\n' 'Component: deps | skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge'
     printf 'Component: '
     local comp
     read -r comp || comp=""
     case "$comp" in
-      skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge)
+      deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge)
         local extra=()
         if [[ "$comp" == *-merge && -n "$project_root" ]]; then
           extra+=(--project-root "$project_root" --interactive)
@@ -290,6 +321,7 @@ interactive_main() {
   fi
 
   printf '%s\n' '--- Recommended full install plan ---'
+  printf '%s\n' '- Dependencies: keep usable GitNexus/Trellis/Graphify CLIs; install missing tools first'
   ((want_codex)) && printf '%s\n' '- Codex: ~/.agents/skills (including Graphify) + ~/.agents/config + ~/.codex AGENTS/user hooks + global MCP'
   ((want_cursor)) && printf '%s\n' '- Cursor: ~/.cursor/skills + ~/.cursor/config + mcp.json + project rules/hooks'
   ((want_claude)) && printf '%s\n' '- Claude: ~/.claude/skills + ~/.claude/config + CLAUDE.md + ~/.claude.json MCP (no Graphify, no project .claude/)'
@@ -302,6 +334,8 @@ interactive_main() {
     printf '%s\n' 'Aborted.'
     exit 0
   fi
+
+  install_full_dependencies
 
   if ((want_codex)); then
     printf '%s\n' '=== Installing Codex profile ==='
@@ -331,7 +365,7 @@ component="$1"
 shift
 
 case "$component" in
-  skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge)
+  deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge)
     run_component "$component" "$@"
     ;;
   --help|-h|help)

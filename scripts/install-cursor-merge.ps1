@@ -63,10 +63,10 @@ function Write-RulesMdcFromAgentsGlobal {
         [Parameter(Mandatory)][string]$Dest,
         [Parameter(Mandatory)][string]$AgentsSrc
     )
-    # Match bash: frontmatter heredoc + cat AGENTS.global.md + printf '\n'
+    # Match bash: frontmatter + agents/AGENTS.global.md body + trailing newline.
     $header = @(
         '---'
-        'description: AI-workflow global guidance (from AGENTS.global.md)'
+        'description: AI-workflow global guidance (from agents/AGENTS.global.md)'
         'alwaysApply: true'
         '---'
         ''
@@ -260,8 +260,8 @@ if ([string]::IsNullOrEmpty($script:InstallProjectRoot)) {
 }
 
 $proj = $script:InstallProjectRoot
-# Match bash: $root_dir/AGENTS.global.md (repo-root template; same content referenced as trellis/AGENTS.global.md in docs).
-$agentsSrc = Join-Path $rootDir 'AGENTS.global.md'
+# Match Bash's packaged global template; never fall back to an obsolete root copy.
+$agentsSrc = Join-Path $rootDir 'agents/AGENTS.global.md'
 $templateHooksJson = Join-Path $templates 'hooks.json'
 $templateHooksDir = Join-Path $templates 'hooks'
 if (
