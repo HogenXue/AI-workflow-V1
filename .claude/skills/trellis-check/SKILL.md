@@ -7,6 +7,8 @@ description: "Comprehensive quality verification: spec compliance, lint, type-ch
 
 Comprehensive quality verification for recently written code. Combines spec compliance, cross-layer safety, and pre-commit checks.
 
+Review the current task's authorized files and applicable acceptance criteria. In a dirty worktree, distinguish task changes from unrelated existing work; do not treat every diff as permission to edit it. Read-only review requests authorize findings, not fixes.
+
 ---
 
 ## Step 1: Identify What Changed
@@ -38,7 +40,7 @@ Read the specific guideline files referenced — the index is a pointer, not the
 
 ## Step 3: Run Project Checks
 
-Run the project's lint, type-check, and test commands. Fix any failures before proceeding.
+Run checks required by the current task and applicable specs. Fix failures introduced by this task within its authorized scope; report pre-existing failures separately. Documentation-only changes can use file/reference checks when those cover the risk. Do not expand to full-repository tests unless the task or unresolved evidence requires them.
 
 ## Step 4: Review Against Checklist
 
@@ -95,4 +97,4 @@ Skip this step if your change is confined to a single layer.
 
 ## Step 6: Report and Fix
 
-Report violations found and fix them directly. Re-run project checks after fixes.
+Report findings with their scope and evidence. When implementation is authorized, fix task-caused violations and rerun affected checks. Report unrelated failures or unresolved business decisions without silently changing their files or relaxing checks.

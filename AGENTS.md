@@ -24,9 +24,9 @@ Managed by Trellis. Edits outside this block are preserved; edits inside may be 
 
 ## Codex workflow ownership
 
-- 简单且需求明确的任务直接走 Trellis；复杂、跨模块或需求不明确时，Codex 主动使用 `$grill-with-docs` 完成 Trellis Phase 1.1 需求审查，仅对需要用户决策的未决项访谈。使用后不要再加载 `trellis-brainstorm`。需求只写 Trellis PRD；领域术语与持久决定分别写 `.trellis/spec/domain/`、`.trellis/spec/decisions/`。
+- 简单且需求明确的任务直接走 Trellis 轻量流程；需要 Task 时复用已有授权，并遵守当前工作流的规划审核门槛。复杂、跨模块或需求不明确时先查证事实，仅询问需要用户决策的未决项。`$grill-me` 是唯一 Grill Skill，仅在用户显式调用时进行无状态澄清；确认结论后由 Trellis 落盘，使用后不要再加载 `trellis-brainstorm`。需求只写 Trellis PRD；领域术语与持久决定分别写 `.trellis/spec/domain/`、`.trellis/spec/decisions/`。
 - 实现稳定后，按当前 Task 要求使用项目原生 `trellis-check`。
-- `$tdd` 是 Trellis 执行阶段的实现方法，Karpathy Guidelines 是横切约束；两者都不创建平行任务或工作流。
+- `$tdd` 是 Trellis 执行阶段的实现方法，不创建平行任务或工作流。保持最小修改、保留他人工作和真实验证等通用约束由项目规则负责，不另装横切流程 Skill。
 - `$diagnosing-bugs`、`$codebase-design`、`$resolving-merge-conflicts` 只作为当前 Trellis task 内的专项能力，不接管任务状态、质量审查或 Git 授权。
 - 原生 Trellis helper 未暴露时，手动执行等价的 task/spec 读取、验证或同步步骤，并明确说明降级。
 

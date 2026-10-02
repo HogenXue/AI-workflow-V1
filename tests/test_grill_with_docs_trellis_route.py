@@ -29,10 +29,12 @@ class GrillWithDocsTrellisRouteTests(unittest.TestCase):
             "局部低风险修改不自动调用",
             "最终验证是**任务级门禁**",
             "可用命令清单不是默认必跑清单",
-            "`quality` 会执行所选检查并记录结果",
-            "证据复用必须以 helper 的实际校验结果为准",
+            "使用项目原生 `task.py validate",
+            "在任务内记录",
         ):
             self.assertIn(phrase, content)
+
+        self.assertNotIn("workflow_check.py", content)
 
     def test_project_override_resolves_native_trellis_skill_aliases(self) -> None:
         content = (ROOT / "AGENTS.project.md").read_text(encoding="utf-8")

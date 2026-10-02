@@ -2,9 +2,11 @@
 
 ## Karpathy-inspired guidelines
 
-本仓库以下内容基于或改编自 `twj515895394/andrej-karpathy-skills-12`：
+历史版本的 `skills/karpathy-guidelines-zh/` 及相关行为约束基于或改编自
+`twj515895394/andrej-karpathy-skills-12`。该独立 Skill 已于 2026-10-02 从当前安装清单和源码移除。
+保留本归属说明供历史版本及仍保留的衍生约束核对：
 
-- `skills/karpathy-guidelines-zh/`
+- 历史版本的 `skills/karpathy-guidelines-zh/`
 - 相关 Cursor 规则和行为约束说明
 
 上游地址：<https://github.com/twj515895394/andrej-karpathy-skills-12>

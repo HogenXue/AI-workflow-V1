@@ -122,7 +122,7 @@ Skill 是按需能力，不是固定流水线。
 
 ### 其他 Skill
 
-Diagnosing Bugs、Codebase Design、Resolving Merge Conflicts、Release、Memory 等仅在当前任务确有需要时使用。
+Diagnosing Bugs、Codebase Design、Resolving Merge Conflicts、Memory 等仅在当前任务确有需要时使用。任务管理由 Trellis 负责，记忆使用 Recallium/Mem0，代码分析按需使用 GitNexus/Graphify。
 
 Skill 不得创建与 Trellis 平行的任务生命周期。
 

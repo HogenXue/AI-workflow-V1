@@ -2,13 +2,11 @@ consumers:
   language:
     - AGENTS.global.md
   change_policy.minimal_change:
-    - skills/karpathy-guidelines-zh/SKILL.md
+    - AGENTS.global.md
   change_policy.preserve_dirty_worktree:
     - AGENTS.global.md
-    - skills/karpathy-guidelines-zh/SKILL.md
   change_policy.require_impact_analysis_before_symbol_edit:
     - skills/gitnexus/SKILL.md
   tools.missing_tool_policy:
     - skills/memory/SKILL.md
     - skills/gitnexus/SKILL.md
-    - skills/release/SKILL.md

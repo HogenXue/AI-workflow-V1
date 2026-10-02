@@ -2,8 +2,6 @@ version: 3.0.0
 skills:
   - memory
   - gitnexus
-  - release
-  - karpathy-guidelines-zh
   - grill-me
   - tdd
   - diagnosing-bugs

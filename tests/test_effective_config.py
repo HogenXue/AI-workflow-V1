@@ -99,7 +99,7 @@ class EffectiveConfigCliTests(unittest.TestCase):
         (self.package / "config" / "consumers.yaml").write_text(
             "consumers:\n"
             "  language: [agents]\n"
-            "  change_policy.minimal_change: [karpathy-guidelines-zh]\n",
+            "  change_policy.minimal_change: [agents]\n",
             encoding="utf-8",
         )
 

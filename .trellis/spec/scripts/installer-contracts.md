@@ -448,7 +448,11 @@ the direct CI command references.
 **Manifest contract**: `manifest.yaml` lists only currently distributed Skill names. A renamed or removed
 workflow Skill is not silently deleted during an ordinary install. Add it to the installer's legacy list;
 `--prune-legacy` must preview the removal and, on execution, create a unique timestamped `.bak` before
-removing the old directory or symlink. The `grill-me` → `grill-with-docs` migration follows this path.
+removing the old directory or symlink. The `grill-with-docs` → `grill-me` migration follows this path;
+`grilling`, `domain-modeling`, `release`, and `karpathy-guidelines-zh` are also legacy entries, not current
+manifest Skills. The current package contains five Trellis-adapted AI Hero capabilities plus Memory and
+GitNexus; Graphify remains a separately installed analysis skill. General constraints remain in AGENTS,
+and release operations follow the existing project workflow without a second lifecycle skill.
 
 **Structure contract**: Every Skill requires `SKILL.md` and `agents/openai.yaml`. `references/`,
 `templates/`, `examples/`, `scripts/`, and `assets/` are optional and should exist only when the Skill uses

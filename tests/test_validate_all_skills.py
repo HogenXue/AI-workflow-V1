@@ -302,8 +302,8 @@ class ValidateAllSkillsTests(unittest.TestCase):
         )
         (config_dir / "consumers.yaml").write_text(
             "consumers:\n"
-            "  change_policy.minimal_change: [karpathy-guidelines-zh]\n"
-            "  change_policy.preserve_dirty_worktree: [karpathy-guidelines-zh]\n"
+            "  change_policy.minimal_change: [agents]\n"
+            "  change_policy.preserve_dirty_worktree: [agents]\n"
             "  tools.missing_tool_policy: [memory]\n",
             encoding="utf-8",
         )
@@ -401,8 +401,6 @@ class ManifestTests(unittest.TestCase):
             [
                 "memory",
                 "gitnexus",
-                "release",
-                "karpathy-guidelines-zh",
                 "grill-me",
                 "tdd",
                 "diagnosing-bugs",
@@ -447,22 +445,6 @@ class BundledSkillContractTests(unittest.TestCase):
             "description": (
                 "Analyze high-risk code impact, worktrees, and commit scope when graph "
                 "evidence is needed."
-            ),
-        },
-        "release": {
-            "name": "release",
-            "description": (
-                "Plan, verify, execute, and report releases with versioning, change notes, "
-                "rollback readiness, and post-release checks. Use for release preparation, "
-                "deployment, rollout, rollback, or release-status verification."
-            ),
-        },
-        "karpathy-guidelines-zh": {
-            "name": "karpathy-guidelines-zh",
-            "description": (
-                "Apply Karpathy-inspired guardrails as cross-cutting behavior for coding, "
-                "review, refactor, and multi-step agent work. Use to reduce silent assumptions, "
-                "over-engineering, unrelated edits, weak tests, context drift, and hidden failures."
             ),
         },
         "grill-me": {
@@ -522,16 +504,6 @@ class BundledSkillContractTests(unittest.TestCase):
                 self.assertGreaterEqual(len(short_description), 25)
                 self.assertLessEqual(len(short_description), 64)
 
-    def test_release_workflow_covers_configuration_and_fallbacks(self) -> None:
-        content = (ROOT / "skills" / "release" / "SKILL.md").read_text(encoding="utf-8")
-        for phrase in (
-            "config/defaults.yaml",
-            "hogen-codex.yaml",
-            "默认配置不存在时",
-            "发布工具不可用时",
-            "不重复 Trellis 的代码质量检查",
-        ):
-            self.assertIn(phrase, content)
 
     def test_gitnexus_honors_the_project_impact_analysis_policy(self) -> None:
         content = (ROOT / "skills" / "gitnexus" / "SKILL.md").read_text(encoding="utf-8")
@@ -562,7 +534,7 @@ class BundledSkillContractTests(unittest.TestCase):
         self.assertNotIn("http://www.59005046.xyz:8102/mcp", content)
 
     def test_runtime_config_consumers_prefer_the_effective_config_helper(self) -> None:
-        for name in ("memory", "gitnexus", "release"):
+        for name in ("memory", "gitnexus"):
             with self.subTest(skill=name):
                 content = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
                 self.assertIn("config/effective_config.py", content)
@@ -624,19 +596,7 @@ class BundledSkillContractTests(unittest.TestCase):
         self.assertIn("[AGENTS-egm.md](AGENTS-egm.md)", readme)
         self.assertIn("不会由全局 `agents` 安装器自动写入", readme)
 
-    def test_release_template_uses_fixed_evidence_gates(self) -> None:
-        content = (ROOT / "skills" / "release" / "templates/release-checklist.md").read_text(
-            encoding="utf-8"
-        )
-        for heading in (
-            "Scope",
-            "Pre-release checks",
-            "Rollback",
-            "Execution record",
-            "Post-release checks",
-            "Outstanding risks",
-        ):
-            self.assertIn(f"## {heading}", content)
+
 
     def test_grill_me_is_the_single_explicit_stateless_skill(self) -> None:
         skill = ROOT / "skills" / "grill-me"
@@ -687,12 +647,4 @@ class BundledSkillContractTests(unittest.TestCase):
             "trellis-check",
             "GitNexus",
         ):
-            self.assertIn(phrase, content)
-
-    def test_karpathy_guidelines_are_cross_cutting_not_a_duplicate_stage(self) -> None:
-        content = (ROOT / "skills" / "karpathy-guidelines-zh" / "SKILL.md").read_text(
-            encoding="utf-8"
-        )
-
-        for phrase in ("横切行为约束", "不创建独立阶段", "TDD", "Trellis"):
             self.assertIn(phrase, content)

@@ -1,6 +1,6 @@
 # AI-workflow-V1
 
-可安装的 AI 协作 Skill 包：9 个独立 Skill、全局 AGENTS 模板，以及共享默认配置（`config/`）。
+可安装的 AI 协作 Skill 包：7 个独立 Skill、全局 AGENTS 模板，以及共享默认配置（`config/`）。
 
 GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
@@ -8,11 +8,11 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
 | 组件            | 说明                                                                         |
 | ------------- | -------------------------------------------------------------------------- |
-| **Skills**    | `memory`、`gitnexus`、`release`、`karpathy-guidelines-zh`、`grill-me`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` |
+| **Skills**    | `memory`、`gitnexus`、`grill-me`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` |
 | **AGENTS 模板** | [AGENTS.global.md](AGENTS.global.md)：跨项目通用规则；[AGENTS-egm.md](AGENTS-egm.md)：EGM 项目补充规则 |
 | **config/**   | 默认配置、有效配置运行时和平台无关工作流门禁；项目可用 `hogen-codex.yaml` 覆盖                         |
 
-Trellis 是项目唯一工作流；9 个 Skill 按阶段或能力增强它。`grill-me` 是唯一、手动调用、无状态的 Grill 入口，结束后由 Trellis 接管落盘和实施；TDD 实现行为代码，质量门由原生 `trellis-check` 负责。
+Trellis 是项目唯一工作流，搭配五个 AI Hero 开发能力：`grill-me`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts`。记忆由 `memory` 对接 Recallium/Mem0，代码分析按需使用 GitNexus/Graphify。`grill-me` 是手动调用、无状态的 Grill 入口，结束后由 Trellis 接管落盘和实施；质量门由原生 `trellis-check` 负责。Graphify 是单独安装的第三方技能，不在七项 manifest 中。
 
 ## 前置条件
 
@@ -135,7 +135,7 @@ bash scripts/install.sh skills --copy --replace --target ~/.codex/skills
 
 Codex 可能同时发现 `~/.agents/skills` 与 `~/.codex/skills`。同一组 Skill 只选择一个目录；本包对 Codex App 默认使用 `~/.agents/skills`，对应配置目录是 `~/.agents/config`。安装器发现另一目录存在同名 Skill 时会警告；只有显式 `--prune-other-root` 才会先备份再移走另一目录中的本包同名 Skill。
 
-旧版本安装的 OpenSpec 与 Review 不在当前 manifest 中，普通更新不会删除它们。先预览，再用显式 `--prune-legacy` 将它们移动到时间戳 `.bak` 备份目录；若两处都曾安装，需要分别处理：
+旧版本安装的 `openspec`、`review`、`grill-with-docs`、`grilling`、`domain-modeling`、`release` 和 `karpathy-guidelines-zh` 不在当前 manifest 中，普通更新不会删除它们。先预览，再用显式 `--prune-legacy` 将它们备份并移除；若两处都曾安装，需要分别处理：
 
 ```bash
 bash scripts/install.sh skills --dry-run --prune-legacy --target ~/.agents/skills
@@ -192,13 +192,11 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
 └── skills/
     ├── memory/
     ├── gitnexus/
-    ├── release/
     ├── grill-me/
     ├── tdd/
     ├── diagnosing-bugs/
     ├── codebase-design/
     ├── resolving-merge-conflicts/
-    ├── karpathy-guidelines-zh/
     └── graphify/              # 仅执行 graphify 组件后存在
 ```
 
@@ -283,12 +281,12 @@ TTY 一键安装会分别读取 Codex、Cursor 与 Claude 的现有 MCP 配置�
 
 - **memory**：Recallium / Mem0（见 `skills/memory/references/memory-backends.md`）
 - **gitnexus**：GitNexus MCP；EGM 等项目需先索引
-- **release**：按 Skill 说明使用 CLI 或 Markdown 模板
+- **graphify**：可选第三方图谱 CLI/Skill；普通源码查询无需先建图
 
 Skill 不可用时须明确说明限制，不得虚报已执行工具结果。
 
 ## 变更与第三方归属
 
 - 未发布变更见 [CHANGELOG.md](CHANGELOG.md)。
-- Karpathy 衍生材料的来源与许可证声明见
+- AI Hero 改编内容及保留的历史归属声明见
   [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。该说明不为本仓库其他内容指定许可证。

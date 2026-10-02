@@ -224,10 +224,10 @@ def validate_skill(skill_path: Path) -> list[str]:
             try:
                 contents = example_path.read_text(encoding="utf-8")
             except OSError as error:
-                errors.append(f"unable to read example: {example_path.relative_to(skill_path)}: {error}")
+                errors.append(f"unable to read example: {example_path.relative_to(skill_path).as_posix()}: {error}")
                 continue
             if re.search(r"\b(?:TODO|TBD)\b", contents, flags=re.IGNORECASE):
-                errors.append(f"placeholder in example: {example_path.relative_to(skill_path)}")
+                errors.append(f"placeholder in example: {example_path.relative_to(skill_path).as_posix()}")
 
     return errors
 

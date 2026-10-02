@@ -14,8 +14,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILLS = (
     "memory",
     "gitnexus",
-    "release",
-    "karpathy-guidelines-zh",
     "grill-me",
     "tdd",
     "diagnosing-bugs",
@@ -73,7 +71,7 @@ class InstallComponentsPsTests(unittest.TestCase):
             with self.subTest(skill=name):
                 self.assertTrue((self.skills_target / name / "SKILL.md").is_file())
 
-        sentinel = self.skills_target / "release" / "sentinel"
+        sentinel = self.skills_target / "tdd" / "sentinel"
         sentinel.write_text("keep", encoding="utf-8")
         conflict = self.run_ps(
             "install-skills.ps1",
@@ -84,6 +82,39 @@ class InstallComponentsPsTests(unittest.TestCase):
         self.assertNotEqual(conflict.returncode, 0)
         self.assertIn("CONFLICT", conflict.stderr)
         self.assertEqual(sentinel.read_text(encoding="utf-8"), "keep")
+
+    def test_removed_skills_require_explicit_pruning_and_keep_backups(self) -> None:
+        # Ordinary updates must preserve old skills; cleanup must be explicit and recoverable.
+        sentinels = {}
+        for name in ("release", "karpathy-guidelines-zh"):
+            sentinel = self.skills_target / name / "sentinel"
+            sentinel.parent.mkdir(parents=True)
+            sentinel.write_text(f"old {name}", encoding="utf-8")
+            sentinels[name] = sentinel
+
+        ordinary = self.run_ps("install-skills.ps1", "--copy", "--replace",
+                               "--target", str(self.skills_target), "--backup-dir", str(self.backup))
+        self.assertEqual(ordinary.returncode, 0, ordinary.stderr + ordinary.stdout)
+        for name, sentinel in sentinels.items():
+            self.assertEqual(sentinel.read_text(encoding="utf-8"), f"old {name}")
+
+        preview = self.run_ps("install-skills.ps1", "--dry-run", "--prune-legacy",
+                             "--target", str(self.skills_target), "--backup-dir", str(self.backup))
+        self.assertEqual(preview.returncode, 0, preview.stderr + preview.stdout)
+        for name, sentinel in sentinels.items():
+            self.assertIn(f"DRY-RUN: would back up and remove legacy Skill: {name}", preview.stdout)
+            self.assertTrue(sentinel.exists())
+
+        cleanup = self.run_ps("install-skills.ps1", "--copy", "--replace", "--prune-legacy",
+                             "--target", str(self.skills_target), "--backup-dir", str(self.backup))
+        self.assertEqual(cleanup.returncode, 0, cleanup.stderr + cleanup.stdout)
+        for name in sentinels:
+            self.assertFalse((self.skills_target / name).exists())
+            backups = list(self.backup.glob(f"{name}.*.bak/sentinel"))
+            self.assertEqual(len(backups), 1)
+            self.assertEqual(backups[0].read_text(encoding="utf-8"), f"old {name}")
+        for name in SKILLS:
+            self.assertTrue((self.skills_target / name / "SKILL.md").is_file())
 
     def test_config_copy_and_overlap_reject(self) -> None:
         dry = self.run_ps(
@@ -134,8 +165,8 @@ class InstallComponentsPsTests(unittest.TestCase):
             env={**os.environ, "HOME": str(home)},
         )
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-        expected = home / ".agents" / "skills" / "release"
-        self.assertIn(f"DRY-RUN: copy release -> {expected}", result.stdout)
+        expected = home / ".agents" / "skills" / "tdd"
+        self.assertIn(f"DRY-RUN: copy tdd -> {expected}", result.stdout)
 
     def test_agents_document_name_no_hooks_feature(self) -> None:
         # Why: Claude profile needs CLAUDE.md without creating/updating config.toml hooks.

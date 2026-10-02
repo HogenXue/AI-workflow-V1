@@ -9,8 +9,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILLS = (
     "memory",
     "gitnexus",
-    "release",
-    "karpathy-guidelines-zh",
     "grill-me",
     "tdd",
     "diagnosing-bugs",
@@ -20,6 +18,20 @@ SKILLS = (
 
 
 class ComponentInstallTests(unittest.TestCase):
+    def assert_bash_target(self, stdout: str, prefix: str, expected: Path) -> None:
+        # Git Bash can print POSIX or mixed paths; compare their filesystem meaning.
+        lines = [line for line in stdout.splitlines() if line.startswith(prefix)]
+        self.assertEqual(len(lines), 1, stdout)
+        rendered = lines[0][len(prefix):]
+        if os.name == "nt" and rendered.startswith("/"):
+            converted = subprocess.run(
+                ["bash", "-c", 'cygpath -w -- "$1"', "install-target", rendered],
+                text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(converted.returncode, 0, converted.stderr)
+            rendered = converted.stdout.strip()
+        self.assertEqual(Path(rendered).resolve(), expected.resolve())
+
     def setUp(self) -> None:
         self.temp_dir = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp_dir.cleanup)
@@ -41,12 +53,8 @@ class ComponentInstallTests(unittest.TestCase):
         result = self.run_component("skills", "--dry-run", "--target", str(self.skills_target))
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn(f"DRY-RUN: copy memory -> {self.skills_target / 'memory'}", result.stdout)
-        self.assertIn(
-            f"DRY-RUN: copy grill-me -> {self.skills_target / 'grill-me'}",
-            result.stdout,
-        )
-        self.assertIn(f"DRY-RUN: copy tdd -> {self.skills_target / 'tdd'}", result.stdout)
+        for name in ("memory", "grill-me", "tdd"):
+            self.assert_bash_target(result.stdout, f"DRY-RUN: copy {name} -> ", self.skills_target / name)
         self.assertNotIn("DRY-RUN: copy review", result.stdout)
         self.assertFalse(self.skills_target.exists())
         self.assertFalse(self.config_target.exists())
@@ -69,7 +77,7 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertFalse(self.config_target.exists())
 
     def test_skills_conflict_requires_replace_and_preserves_existing_file(self) -> None:
-        sentinel = self.skills_target / "release" / "sentinel"
+        sentinel = self.skills_target / "tdd" / "sentinel"
         sentinel.parent.mkdir(parents=True)
         sentinel.write_text("keep", encoding="utf-8")
 
@@ -89,7 +97,7 @@ class ComponentInstallTests(unittest.TestCase):
             str(self.backup),
         )
         self.assertEqual(replace.returncode, 0, replace.stderr)
-        backups = list(self.backup.glob("release.*.bak/sentinel"))
+        backups = list(self.backup.glob("tdd.*.bak/sentinel"))
         self.assertEqual(len(backups), 1)
         self.assertEqual(backups[0].read_text(encoding="utf-8"), "keep")
 
@@ -368,10 +376,7 @@ class ComponentInstallTests(unittest.TestCase):
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn(
-            f"DRY-RUN: copy release -> {home / '.agents' / 'skills' / 'release'}",
-            result.stdout,
-        )
+        self.assert_bash_target(result.stdout, "DRY-RUN: copy tdd -> ", home / ".agents" / "skills" / "tdd")
         self.assertFalse(home.exists())
 
     def test_graphify_component_installs_global_agents_skill(self) -> None:
@@ -570,9 +575,9 @@ class ComponentInstallTests(unittest.TestCase):
     def test_default_component_backups_share_agents_root(self) -> None:
         home = self.root / "home"
         skills_target = home / ".agents" / "skills"
-        release_sentinel = skills_target / "release" / "sentinel"
-        release_sentinel.parent.mkdir(parents=True)
-        release_sentinel.write_text("old release\n", encoding="utf-8")
+        tdd_sentinel = skills_target / "tdd" / "sentinel"
+        tdd_sentinel.parent.mkdir(parents=True)
+        tdd_sentinel.write_text("old tdd\n", encoding="utf-8")
 
         skills = subprocess.run(
             ["bash", str(ROOT / "scripts" / "install.sh"), "skills", "--copy", "--replace"],
@@ -600,7 +605,7 @@ class ComponentInstallTests(unittest.TestCase):
 
         backup_root = home / ".agents" / ".ai-workflow-backups"
         self.assertEqual(
-            len(list(backup_root.glob("release.*.bak/sentinel"))),
+            len(list(backup_root.glob("tdd.*.bak/sentinel"))),
             1,
         )
         self.assertEqual(
@@ -610,7 +615,7 @@ class ComponentInstallTests(unittest.TestCase):
 
     def test_legacy_workflow_skills_pruning_is_explicit_and_backed_up(self) -> None:
         sentinels = {}
-        for name in ("openspec", "review"):
+        for name in ("openspec", "review", "release", "karpathy-guidelines-zh"):
             sentinel = self.skills_target / name / "sentinel"
             sentinel.parent.mkdir(parents=True)
             sentinel.write_text("legacy", encoding="utf-8")
