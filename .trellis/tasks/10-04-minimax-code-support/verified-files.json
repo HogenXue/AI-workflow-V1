@@ -1,0 +1,21 @@
+{
+  "scripts/install.sh": "83247f8d2eb6b6074c1062fdb4eab5e583ad1f1a129cab0b95a2a916dd79db16",
+  "scripts/install.ps1": "015400d317ccad395c9279ee5c68de784652867b14cc1eb30108d03ef1909d2e",
+  "scripts/lib/merge_host_mcp.py": "692f207156f37813bddc3445a1b36fdb92a2cf2436b22feb4cdad23088aeed36",
+  "scripts/install-json-mcp.sh": "061b2838712042c751ac4278d40b306e739a42cf32559504ed6c7e5e4d11b342",
+  "scripts/install-json-mcp.ps1": "4e5e229a1e1ff7cc389dfa9821444d2c5e49167e3bb6f98c14a18aa761b471a7",
+  "scripts/install-minimax-merge.sh": "1585dac868a7694e0d70bf86dc0fa32fb45e620a366c9469d3bed6f01aa86644",
+  "scripts/install-minimax-merge.ps1": "e092ef021ff02d406fd01ce3f4676010749bc9b0ab9d9d9d0d858462f0b902a6",
+  "scripts/install-workbuddy-merge.sh": "09a52649871c805b0b6bedba528e777cc9947b0282cb964bb3db5cb8a93cb8dd",
+  "scripts/install-workbuddy-merge.ps1": "5e2bc6296f3ac604e8555b36173b6489e5179f931af6f64ed24504fe54b4589c",
+  "tests/test_install_new_hosts.py": "31a29a9b227e6b6be76783400303a3d0d84ce3d97c5c5f39f4546cbfd20fd5bc",
+  "tests/test_install_wizard.py": "c00c10be19fe971b6f0cd984ae7649b01649048cb70a96d2fea8373a73a1537a",
+  "tests/test_install_interactive.py": "9421f3c859e7183b0a8c373c335c43788d691b3747fd28f4a9e78f5fa0dfb0df",
+  "tests/test_install_entry_ps.py": "a5537eda98af65ca1c0cd2fd5fd2d01634415505bf4d08a7fefada5dc0ae8fb8",
+  "trellis/minimax/mcp/servers.json": "a8b2530da1905528a172cb307cd9f0eb3806cfd48528d0a538a1bf9a3add709f",
+  "trellis/workbuddy/mcp/servers.json": "a8b2530da1905528a172cb307cd9f0eb3806cfd48528d0a538a1bf9a3add709f",
+  "tests/test_mcp_defaults.py": "716f6a6f096686289b14d270acca190b8fd5c0060eecd55287c1590900bc282a",
+  "trellis/codex/mcp/mem0.toml": "2f62f532f9b461939b2afc02966238c24f16f3a2303e183a6c3375670ef2f145",
+  "trellis/cursor/mcp/servers.json": "ec8f8765d1b63fe9069da518de83d74689d62e8b124919c520385ecfdbf51c74",
+  "trellis/claude/mcp/servers.json": "ec8f8765d1b63fe9069da518de83d74689d62e8b124919c520385ecfdbf51c74"
+}

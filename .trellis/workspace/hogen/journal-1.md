@@ -72,3 +72,65 @@ Planned and shipped Claude Code user-level install profile: claude-merge into ~/
 ### Next Steps
 
 - None - task complete
+
+
+## Session 3: MiniMax Code and WorkBuddy installer support
+
+**Date**: 2026-10-04
+**Task**: MiniMax Code and WorkBuddy installer support
+**Branch**: `main`
+
+### Summary
+
+Added native user-level profiles, five-host wizard, JSON MCP drivers and host-specific templates. Isolated focused verification: 61 passed, 42 skipped because pwsh is unavailable. Original LAN changes preserved. Native Trellis check recorded in 10-04-minimax-code-support/verification.md; no real profile/API install, commit or push.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+(Implementation was uncommitted at this session; see the task publication record for delivery.)
+
+### Testing
+
+- Actual validation counts are recorded in the summary and task verification.md.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
+
+
+## Session 4: Align Mem0 and Recallium default URLs
+
+**Date**: 2026-10-04
+**Task**: Align Mem0 and Recallium default URLs
+**Branch**: `main`
+
+### Summary
+
+Both endpoints default to https://www.59005046.xyz:8102/mcp across Codex, Cursor, Claude, MiniMax Code and WorkBuddy. Explicit Mem0 overrides and existing URL keep choices retained. Affected verification: 50 passed, 22 skipped (pwsh unavailable); no real-profile writes, commit or push.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+(Implementation was uncommitted at this session; see the task publication record for delivery.)
+
+### Testing
+
+- Actual validation counts are recorded in the summary and task verification.md.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

@@ -22,7 +22,8 @@ class InstallEntryPsSourceContractTests(unittest.TestCase):
         self.assertIn("Install-ProfileClaude", text)
         self.assertIn("Parse-AgentSelection", text)
         self.assertIn("Select agents (e.g. 1, 1 3, 1,2,3)", text)
-        self.assertIn("--document-name', 'CLAUDE.md'", text.replace('"', "'"))
+        self.assertIn("-DocumentName 'CLAUDE.md'", text)
+        self.assertIn("'--document-name', $DocumentName", text)
         self.assertIn("--no-hooks-feature", text)
         # Why: bash wizard leaves mem0 to merge_host_mcp interactive prompts;
         # a PS-only pre-merge URL question would violate dual-impl drift rule.
@@ -34,6 +35,20 @@ class InstallEntryPsSourceContractTests(unittest.TestCase):
         self.assertIn("--host', 'claude'", text.replace('"', "'"))
         self.assertIn(".claude/.ai-workflow-backups", text)
         self.assertIn("SKIP: Claude merge has no project-scoped steps", text)
+
+    def test_new_host_ports_dispatch_and_propagate_component_exit(self) -> None:
+        text = (ROOT / "scripts/install.ps1").read_text()
+        for host, label, document in (
+            ("minimax", "MiniMax Code", "AGENTS.md"),
+            ("workbuddy", "WorkBuddy", "CODEBUDDY.md"),
+        ):
+            with self.subTest(host=host):
+                self.assertIn(f"'{host}-merge' = 'install-{host}-merge.ps1'", text)
+                self.assertIn(f"-HostLabel '{label}'", text)
+                self.assertIn(f"-DocumentName '{document}'", text)
+                wrapper = (ROOT / "scripts" / f"install-{host}-merge.ps1").read_text()
+                self.assertIn(f'install-json-mcp.ps1" {host} @args', wrapper)
+                self.assertIn('exit $LASTEXITCODE', wrapper)
 
 
 def _find_pwsh() -> str | None:

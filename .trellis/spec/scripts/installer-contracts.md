@@ -127,7 +127,7 @@ fi
 
 ---
 
-## Scenario: Codex / Cursor / Claude profile pairing
+## Scenario: Host profile pairing
 
 ### 1. Scope / Trigger
 
@@ -138,7 +138,7 @@ fi
 
 ```text
 install.sh                          # TTY: multi-select agents → full or single component
-install.sh skills|agents|config|codex-merge|cursor-merge|claude-merge [options]
+install.sh skills|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge [options]
 
 install.ps1 / install.cmd           # same interactive + component dispatch (pwsh 7+)
 
@@ -155,6 +155,8 @@ install_profile_claude <mem0_url_or_empty>
 | **Codex** | `~/.agents/skills` | `~/.agents/config` (parent of skills root) | `~/.codex` (`AGENTS.md` + hooks feature); **not** root repo `AGENTS.md` for Cursor rules | `~/.codex/config.toml` `[mcp_servers.*]` | User-level hooks under `~/.codex` via `codex-merge` (not silent git-root project install) |
 | **Cursor** | `~/.cursor/skills` | `~/.cursor/config` | Project `.cursor/rules/*.mdc` **generated from** `agents/AGENTS.global.md` at install | `~/.cursor/mcp.json` `mcpServers` | `<project>/.cursor/hooks.json` + `hooks/` (requires `--project-root`) |
 | **Claude** | `~/.claude/skills` | `~/.claude/config` | User `~/.claude/CLAUDE.md` from `agents/AGENTS.global.md` (`agents --document-name CLAUDE.md --no-hooks-feature`) | `~/.claude.json` `mcpServers` | **None** — installer never writes project `.claude/` or `.mcp.json` |
+| **MiniMax Code** | `<dataDir>/skills` | `<dataDir>/config` | `<dataDir>/AGENTS.md` with `--no-hooks-feature` | Native JSON `mcpServers`; `type: stdio/http` | None |
+| **WorkBuddy** | `<codebuddyHome>/skills` | `<codebuddyHome>/config` | `<codebuddyHome>/CODEBUDDY.md` with `--no-hooks-feature` | Native JSON `mcpServers`; `type: stdio/http` | None |
 
 **Hard rules**:
 
@@ -168,6 +170,37 @@ install_profile_claude <mem0_url_or_empty>
 - Claude MCP default backup-dir is `~/.claude/.ai-workflow-backups` even when the MCP file is `~/.claude.json`.
 - Multi-select runs selected profiles sequentially; never delete the other host’s files.
 
+### MiniMax Code / WorkBuddy native user configuration
+
+- MiniMax data root: `MINIMAX_DATA_DIR`, then `MAVIS_DATA_DIR`, then `~/.minimax`.
+  Component override: `--minimax-home PATH`. Use existing `mcp.json`, otherwise
+  existing `mcp/mcp.json`; create `mcp.json` only when neither exists.
+- WorkBuddy reads CodeBuddy-compatible user configuration. Root:
+  `CODEBUDDY_CONFIG_DIR`, otherwise `~/.codebuddy`; component override:
+  `--workbuddy-home PATH`. Select first existing `.mcp.json`, then `mcp.json`,
+  then `~/.codebuddy.json` for the default root. A custom root stays isolated;
+  use `--mcp-file` to deliberately select a different legacy file.
+- Current MCP file-priority documentation supersedes the older directory overview
+  that lists `mcp.json` as the canonical CodeBuddy filename.
+- `minimax-merge` / `workbuddy-merge` are equivalent Bash/PowerShell components
+  using shared `install-json-mcp` drivers and host-native fragments.
+- Preview creates no files/directories/backups. Reject non-regular targets,
+  symlinks and package-fragment targets before any write. Backups are timestamped
+  under the resolved host home's `.ai-workflow-backups` by default.
+- Malformed JSON or a non-object `mcpServers` is an error; never silently replace
+  it with an empty object. Existing unrelated JSON keys and servers are retained.
+- Full profiles install the seven Skills and paired defaults, canonical global
+  instructions and MCP. Preserve native `config.yaml` / `settings.json`. No
+  guessed hooks, Graphify Skill, application install or project initialization.
+- Wizard choices: `4=MiniMax Code`, `5=WorkBuddy`; duplicates ignored and profiles
+  run sequentially with the existing failure-stop contract.
+- Evidence: `tests/test_install_new_hosts.py` (native components and real full
+  profiles in temporary homes), `tests/test_install_wizard.py` (routing/failures).
+
+References: https://github.com/MiniMax-AI/minimax-code ;
+https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Setting ;
+https://www.codebuddy.cn/docs/cli/mcp ; https://www.codebuddy.cn/docs/cli/env-vars .
+
 ### 4. Validation & Error Matrix
 
 | Condition | Result |
@@ -175,7 +208,7 @@ install_profile_claude <mem0_url_or_empty>
 | Unknown agent / component | Usage + exit `2` |
 | MCP key conflict + policy `ask` | `CONFLICT: ...` stderr; exit `2` (need `--mcp-keep` / `--mcp-overwrite`) |
 | Existing project hooks/rules without `--replace` (non-interactive) | `CONFLICT: ...`; exit `1` |
-| `mem0` fragment without `--mem0-url` | Skip mem0 entry with message (other servers may still merge) |
+| Packaged `mem0` fragment without `--mem0-url` | Use `https://www.59005046.xyz:8102/mcp`; explicit `--mem0-url` overrides Mem0 only |
 
 ### 5. Good / Base / Bad Cases
 
@@ -229,7 +262,7 @@ install.sh / install.ps1 / install.cmd   # no args
   non-TTY: usage on stderr → exit 2
 
 Interactive choices:
-  agents: multi-select numbers — 1=Codex | 2=Cursor | 3=Claude
+  agents: multi-select numbers — 1=Codex | 2=Cursor | 3=Claude | 4=MiniMax Code | 5=WorkBuddy
           (e.g. `1`, `1 3`, `1,2,3`; whitespace or comma separated; duplicates ignored)
   mode:   1=recommended full | 2=single component
   then:   explicit project-root menu only when Cursor is selected
@@ -400,7 +433,7 @@ through unrelated aliases, and both Graphify failure modes with retry/original r
 ```text
 install.sh / install.ps1           # TTY wizard
   -> install-<host>-merge.sh|.ps1 --interactive
-  -> merge_host_mcp.py --interactive --host <codex|cursor|claude> ...
+  -> merge_host_mcp.py --interactive --host <codex|cursor|claude|minimax|workbuddy> ...
 
 merge_host_mcp.py --interactive
   # Internal flag. Bash and PowerShell entrypoints pass it only when stdin is a TTY.
@@ -409,9 +442,12 @@ merge_host_mcp.py --interactive
 ### 3. Contracts
 
 - Show each existing managed URL and default to keeping it.
-- Replace only after explicit confirmation. Packaged URL entries show the replacement URL; Mem0 asks for a new URL when no `--mem0-url` value exists.
-- A missing Mem0 entry may be added interactively, but remains optional.
-- Resolve Codex, Cursor, and Claude independently when multiple profiles are selected.
+- Replace only after explicit confirmation. Both Mem0 and Recallium packaged URL
+  entries default to `https://www.59005046.xyz:8102/mcp`. Show that replacement URL;
+  an explicit `--mem0-url` overrides Mem0 only. Custom placeholder-only fragments
+  still prompt for a URL when none is supplied.
+- Missing packaged Mem0 entries use the default without requesting another URL.
+- Resolve all five host profiles independently when multiple profiles are selected.
 - Existing command/args entries continue to use the host's ordinary `--mcp-keep` / `--mcp-overwrite` policy.
 - Component and non-TTY calls never read stdin unless their shell entrypoint has confirmed an interactive TTY.
 
@@ -421,9 +457,8 @@ merge_host_mcp.py --interactive
 |-----------|--------|
 | Existing URL + default/No | Print `KEEP`; preserve the complete existing entry |
 | Existing packaged URL + Yes | Replace with the packaged URL after transport validation |
-| Existing Mem0 URL + Yes | Require a non-empty replacement URL; validate it before write |
-| Missing Mem0 + default/No | Print `SKIP`; do not add Mem0 |
-| Missing Mem0 + Yes | Require and validate a URL, then add Mem0 |
+| Existing Mem0 URL + Yes | Use the displayed default/explicit override after validation |
+| Missing packaged Mem0 | Add the default, or explicit `--mem0-url` override |
 | Non-TTY component invocation | Do not prompt; use existing policy flags |
 | Remote plaintext HTTP replacement | Print `ERROR:` and leave the target unmodified |
 
@@ -437,7 +472,8 @@ merge_host_mcp.py --interactive
 
 - Codex TOML: independent keep/replace decisions; assert old Recallium remains and Mem0 changes.
 - Cursor JSON / Claude JSON: inverse or independent decisions; assert packaged Recallium replaces old value and Mem0 remains when kept.
-- Missing Mem0: opt in with a URL; assert the entry is added.
+- Missing Mem0: assert the default is added without an extra URL prompt; test
+  explicit overrides and both template defaults across all supported hosts.
 - Claude: assert non-`mcpServers` keys in `~/.claude.json` are preserved.
 - Regression suite: component CLI, non-TTY no-args, URL transport validation, backup, and rollback behavior remain green.
 - TTY smoke test: verify the shell entrypoint propagates interactivity and the resulting host config matches the selected decisions.
@@ -460,8 +496,8 @@ Replace ... with https://packaged.example/mcp? [y/N]: n
 KEEP: mcp_servers.recallium
 
 Existing Codex mem0 URL: https://old.example/mem0
-Replace ...? [y/N]: y
-New Codex mem0 URL: https://new.example/mem0
+Replace ... with https://www.59005046.xyz:8102/mcp? [y/N]: y
+OVERWRITE: mcp_servers.mem0
 ```
 
 ## Convention: Timestamped backup names

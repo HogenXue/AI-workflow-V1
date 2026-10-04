@@ -8,7 +8,7 @@
     "transport": "http"
   },
   "mem0": {
-    "url": "__MEM0_URL__",
+    "url": "https://www.59005046.xyz:8102/mcp",
     "transport": "http"
   }
 }

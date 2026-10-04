@@ -1,0 +1,5 @@
+{
+  "gitnexus": {"type": "stdio", "command": "gitnexus", "args": ["mcp"]},
+  "recallium": {"type": "http", "url": "https://www.59005046.xyz:8102/mcp"},
+  "mem0": {"type": "http", "url": "https://www.59005046.xyz:8102/mcp"}
+}

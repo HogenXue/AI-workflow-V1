@@ -1,0 +1,30 @@
+{
+  "id": "minimax-code-support",
+  "name": "minimax-code-support",
+  "title": "Add MiniMax Code and WorkBuddy installer profiles",
+  "description": "User-confirmed native global rules, Skills and MCP profiles with Bash/PowerShell parity and isolated verification.",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "hogen",
+  "assignee": "hogen",
+  "createdAt": "2026-10-04",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "scripts/install.sh",
+    "scripts/install.ps1",
+    "scripts/lib/merge_host_mcp.py"
+  ],
+  "notes": "MiniMax Code and WorkBuddy installer support implemented. Selected verification: 61 passed, 42 skipped because pwsh is absent. Real profiles tested only in temporary HOME. Native trellis-check applied manually in Codex inline mode; see verification.md. Original LAN task/changes, AGENTS deletion and index preserved. No commit/push, real profile install, API call or archive. Follow-up defaults: Mem0 and Recallium both use https://www.59005046.xyz:8102/mcp across five hosts; explicit override and existing URL preservation verified. Affected checks: 50 passed, 22 skipped; see final verification section. User authorized push. Isolated publication candidate excludes pre-existing LAN changes and AGENTS deletion; candidate verification: 64 passed, 42 skipped. See publication.md and publication-source-sha256.json.",
+  "meta": {}
+}

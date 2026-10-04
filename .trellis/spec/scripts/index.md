@@ -7,9 +7,9 @@
 ## Overview
 
 This layer covers the AI-workflow installer surface: interactive `install.sh` / `install.ps1`,
-Codex/Cursor/Claude profile pairing, MCP merge, and explicit project-root rules. Load these specs before
+Codex/Cursor/Claude/MiniMax Code/WorkBuddy profile pairing, MCP merge, and explicit project-root rules. Load these specs before
 changing installer scripts, merge helpers, or packaged templates under `trellis/codex/` /
-`trellis/cursor/` / `trellis/claude/`.
+`trellis/cursor/` / `trellis/claude/` / `trellis/minimax/` / `trellis/workbuddy/`.
 
 **Dual implementation**: bash (`install*.sh`) is the macOS/Linux entry; PowerShell 7+ (`pwsh`,
 `install*.ps1` + `install.cmd`) is the Windows-native peer. Behavioral contracts are shared; when a
@@ -46,6 +46,7 @@ Before changing installer or host-merge code:
 - [ ] Cursor rules land in `.cursor/rules/*.mdc`; Claude global rules land in `~/.claude/CLAUDE.md`; installer never rewrites repo-root `AGENTS.md` / `CLAUDE.md`
 - [ ] MCP format matches host (Codex TOML vs Cursor/Claude JSON); remote HTTP MCP URLs are rejected
 - [ ] Claude merge targets `~/.claude.json` `mcpServers` only and preserves other JSON keys
+- [ ] MiniMax/WorkBuddy use native `type` fields and supported home/file precedence; preview creates no files
 - [ ] Non-TTY `install.sh` / `install.ps1` with no args still exits `2` with usage
 - [ ] Contract-affecting edits land in both bash and PS (or an explicit exemption is documented)
 

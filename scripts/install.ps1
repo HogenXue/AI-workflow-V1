@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 function Show-Usage {
     [Console]::Error.WriteLine(
-        'Usage: install.ps1 <deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge> [component options]'
+        'Usage: install.ps1 <deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge> [component options]'
     )
     [Console]::Error.WriteLine('       install.ps1   # interactive (TTY only)')
     [Console]::Error.WriteLine('')
@@ -38,6 +38,8 @@ function Invoke-InstallComponent {
         'codex-merge'  = 'install-codex-merge.ps1'
         'cursor-merge' = 'install-cursor-merge.ps1'
         'claude-merge' = 'install-claude-merge.ps1'
+        'minimax-merge' = 'install-minimax-merge.ps1'
+        'workbuddy-merge' = 'install-workbuddy-merge.ps1'
     }
 
     if (-not $scriptMap.ContainsKey($Component)) {
@@ -95,6 +97,8 @@ function Parse-AgentSelection {
     $wantCodex = $false
     $wantCursor = $false
     $wantClaude = $false
+    $wantMinimax = $false
+    $wantWorkBuddy = $false
     $found = $false
     if ([string]::IsNullOrEmpty($normalized)) {
         return $null
@@ -105,6 +109,8 @@ function Parse-AgentSelection {
             '1' { $wantCodex = $true; $found = $true }
             '2' { $wantCursor = $true; $found = $true }
             '3' { $wantClaude = $true; $found = $true }
+            '4' { $wantMinimax = $true; $found = $true }
+            '5' { $wantWorkBuddy = $true; $found = $true }
             default { return $null }
         }
     }
@@ -115,6 +121,8 @@ function Parse-AgentSelection {
         WantCodex  = $wantCodex
         WantCursor = $wantCursor
         WantClaude = $wantClaude
+        WantMinimax = $wantMinimax
+        WantWorkBuddy = $wantWorkBuddy
     }
 }
 
@@ -257,22 +265,24 @@ function Install-ProfileCursor {
     Invoke-InstallComponent cursor-merge @($mergeArgs.ToArray())
 }
 
-function Install-ProfileClaude {
+function Install-ProfileDocumentHost {
     param(
+        [Parameter(Mandatory)][string]$HostLabel,
+        [Parameter(Mandatory)][string]$AgentsHome,
+        [Parameter(Mandatory)][string]$DocumentName,
+        [Parameter(Mandatory)][string]$MergeComponent,
         [AllowEmptyString()][string]$Mem0Url = ''
     )
 
-    $homeDir = Get-InstallHome
-    $skillsTarget = Join-Path $homeDir '.claude/skills'
-    $configTarget = Join-Path $homeDir '.claude/config'
-    $agentsHome = Join-Path $homeDir '.claude'
+    $skillsTarget = Join-Path $AgentsHome 'skills'
+    $configTarget = Join-Path $AgentsHome 'config'
 
     $skillArgs = @('--copy', '--target', $skillsTarget)
     if (Test-InstallLibExistsOrLink -Path $skillsTarget) {
         if (Test-PromptReplaceIfNeeded -Kind 'skills' -Target $skillsTarget) {
             $skillArgs += '--replace'
         } else {
-            [Console]::Out.WriteLine('SKIP: Claude skills')
+            [Console]::Out.WriteLine("SKIP: $HostLabel skills")
             $skillArgs = @()
         }
     }
@@ -285,7 +295,7 @@ function Install-ProfileClaude {
         if (Test-PromptReplaceIfNeeded -Kind 'config' -Target $configTarget) {
             $configArgs += '--replace'
         } else {
-            [Console]::Out.WriteLine('SKIP: Claude config')
+            [Console]::Out.WriteLine("SKIP: $HostLabel config")
             $configArgs = @()
         }
     }
@@ -296,7 +306,7 @@ function Install-ProfileClaude {
     Invoke-InstallComponent agents @(
         '--apply',
         '--agents-home', $agentsHome,
-        '--document-name', 'CLAUDE.md',
+        '--document-name', $DocumentName,
         '--no-hooks-feature'
     )
 
@@ -307,7 +317,7 @@ function Install-ProfileClaude {
         $mergeArgs.Add($Mem0Url) | Out-Null
     }
     if (Test-InstallLibStdinTty) {
-        if (Install-LibPromptYn -Question 'Overwrite existing non-URL Claude MCP entries that conflict?' -Default 'n') {
+        if (Install-LibPromptYn -Question "Overwrite existing non-URL $HostLabel MCP entries that conflict?" -Default 'n') {
             $mergeArgs.Add('--mcp-overwrite') | Out-Null
         } else {
             $mergeArgs.Add('--mcp-keep') | Out-Null
@@ -315,7 +325,27 @@ function Install-ProfileClaude {
     } else {
         $mergeArgs.Add('--mcp-keep') | Out-Null
     }
-    Invoke-InstallComponent claude-merge @($mergeArgs.ToArray())
+    Invoke-InstallComponent $MergeComponent @($mergeArgs.ToArray())
+}
+
+function Install-ProfileClaude {
+    param([AllowEmptyString()][string]$Mem0Url = '')
+    Install-ProfileDocumentHost -HostLabel 'Claude' -AgentsHome (Join-Path (Get-InstallHome) '.claude') -DocumentName 'CLAUDE.md' -MergeComponent 'claude-merge' -Mem0Url $Mem0Url
+}
+
+function Install-ProfileMinimax {
+    param([AllowEmptyString()][string]$Mem0Url = '')
+    $hostHome = if ($env:MINIMAX_DATA_DIR) { $env:MINIMAX_DATA_DIR }
+                elseif ($env:MAVIS_DATA_DIR) { $env:MAVIS_DATA_DIR }
+                else { Join-Path (Get-InstallHome) '.minimax' }
+    Install-ProfileDocumentHost -HostLabel 'MiniMax Code' -AgentsHome $hostHome -DocumentName 'AGENTS.md' -MergeComponent 'minimax-merge' -Mem0Url $Mem0Url
+}
+
+function Install-ProfileWorkBuddy {
+    param([AllowEmptyString()][string]$Mem0Url = '')
+    $hostHome = if ($env:CODEBUDDY_CONFIG_DIR) { $env:CODEBUDDY_CONFIG_DIR }
+                else { Join-Path (Get-InstallHome) '.codebuddy' }
+    Install-ProfileDocumentHost -HostLabel 'WorkBuddy' -AgentsHome $hostHome -DocumentName 'CODEBUDDY.md' -MergeComponent 'workbuddy-merge' -Mem0Url $Mem0Url
 }
 
 function Invoke-InteractiveMain {
@@ -324,6 +354,8 @@ function Invoke-InteractiveMain {
     [Console]::Out.WriteLine('  1) Codex')
     [Console]::Out.WriteLine('  2) Cursor')
     [Console]::Out.WriteLine('  3) Claude')
+    [Console]::Out.WriteLine('  4) MiniMax Code (mcode)')
+    [Console]::Out.WriteLine('  5) WorkBuddy')
     [Console]::Out.Write('Select agents (e.g. 1, 1 3, 1,2,3): ')
     $agentChoice = [Console]::In.ReadLine()
     if ($null -eq $agentChoice) { $agentChoice = '' }
@@ -336,6 +368,8 @@ function Invoke-InteractiveMain {
     $wantCodex = [bool]$selection.WantCodex
     $wantCursor = [bool]$selection.WantCursor
     $wantClaude = [bool]$selection.WantClaude
+    $wantMinimax = [bool]$selection.WantMinimax
+    $wantWorkBuddy = [bool]$selection.WantWorkBuddy
 
     [Console]::Out.WriteLine('Install mode:')
     [Console]::Out.WriteLine('  1) Recommended full install')
@@ -364,12 +398,12 @@ function Invoke-InteractiveMain {
     $mem0Url = ''
 
     if ($modeChoice -eq '2') {
-        [Console]::Out.WriteLine('Component: deps | skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge')
+        [Console]::Out.WriteLine('Component: deps | skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge | minimax-merge | workbuddy-merge')
         [Console]::Out.Write('Component: ')
         $comp = [Console]::In.ReadLine()
         if ($null -eq $comp) { $comp = '' }
         switch ($comp) {
-            { $_ -in @('deps', 'skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge') } {
+            { $_ -in @('deps', 'skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge', 'minimax-merge', 'workbuddy-merge') } {
                 $extra = [System.Collections.Generic.List[string]]::new()
                 if ($comp -like '*-merge') {
                     if (-not [string]::IsNullOrEmpty($projectRoot)) {
@@ -412,6 +446,14 @@ function Invoke-InteractiveMain {
             '- Claude: ~/.claude/skills + ~/.claude/config + CLAUDE.md + ~/.claude.json MCP (no Graphify, no project .claude/)'
         )
     }
+    if ($wantMinimax) {
+        $hostHome = if ($env:MINIMAX_DATA_DIR) { $env:MINIMAX_DATA_DIR } elseif ($env:MAVIS_DATA_DIR) { $env:MAVIS_DATA_DIR } else { Join-Path (Get-InstallHome) '.minimax' }
+        [Console]::Out.WriteLine("- MiniMax Code: $hostHome/{skills,config,AGENTS.md} + native MCP")
+    }
+    if ($wantWorkBuddy) {
+        $hostHome = if ($env:CODEBUDDY_CONFIG_DIR) { $env:CODEBUDDY_CONFIG_DIR } else { Join-Path (Get-InstallHome) '.codebuddy' }
+        [Console]::Out.WriteLine("- WorkBuddy: $hostHome/{skills,config,CODEBUDDY.md} + native MCP")
+    }
     if (-not [string]::IsNullOrEmpty($projectRoot)) {
         [Console]::Out.WriteLine("- Project root: $projectRoot")
     } else {
@@ -436,6 +478,14 @@ function Invoke-InteractiveMain {
         [Console]::Out.WriteLine('=== Installing Claude profile ===')
         Install-ProfileClaude -Mem0Url $mem0Url
     }
+    if ($wantMinimax) {
+        [Console]::Out.WriteLine('=== Installing MiniMax Code profile ===')
+        Install-ProfileMinimax -Mem0Url $mem0Url
+    }
+    if ($wantWorkBuddy) {
+        [Console]::Out.WriteLine('=== Installing WorkBuddy profile ===')
+        Install-ProfileWorkBuddy -Mem0Url $mem0Url
+    }
     [Console]::Out.WriteLine('Done.')
 }
 
@@ -458,7 +508,7 @@ if ($argv.Count -gt 1) {
 }
 
 switch ($component) {
-    { $_ -in @('deps', 'skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge') } {
+    { $_ -in @('deps', 'skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge', 'minimax-merge', 'workbuddy-merge') } {
         Invoke-InstallComponent $component @rest
     }
     { $_ -in @('--help', '-h', 'help') } {

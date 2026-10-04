@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-COMPONENTS = ("deps", "skills", "graphify", "config", "agents", "codex-merge", "cursor-merge", "claude-merge")
+COMPONENTS = ("deps", "skills", "graphify", "config", "agents", "codex-merge", "cursor-merge", "claude-merge", "minimax-merge", "workbuddy-merge")
 
 
 class WizardHarness:
@@ -23,6 +23,9 @@ class WizardHarness:
         self.home.mkdir()
         self.publish_path = False
         self.env = {**os.environ, "HOME": str(self.home), "CODEX_HOME": str(self.home / ".codex")}
+        for key in ("MINIMAX_DATA_DIR", "MAVIS_DATA_DIR", "CODEBUDDY_CONFIG_DIR"):
+            self.env.pop(key, None)
+        self.python_name = "python" if shutil.which("python") else "python3"
 
     def prepare(self, failure: str = "", status: int = 37) -> Path:
         entry = ROOT / "scripts" / f"install.{self.ext}"
@@ -41,22 +44,24 @@ class WizardHarness:
             code = status if component == failure else 0
             if self.ext == "ps1":
                 body = f"[Console]::Out.WriteLine('CALLED:{component}');\n"
+                body += "[Console]::Out.WriteLine('ARGS:' + [string]::Join(' ', $args));\n"
                 if self.publish_path and component == "deps":
                     directory = str(self.root / "tools bin").replace("'", "''")
                     body += ("$idx = [Array]::IndexOf($args, '--path-file'); "
                              f"Set-Content -LiteralPath $args[$idx + 1] -Value '{directory}' -Encoding utf8;\n")
                 if self.publish_path and component == "skills":
                     body += ("Get-Command path-marker -ErrorAction Stop | Out-Null; "
-                             "if ((Get-Command python).Source -like '*tools bin*') { exit 14 }; "
+                             f"if ((Get-Command {self.python_name}).Source -like '*tools bin*') {{ exit 14 }}; "
                              "[Console]::Out.WriteLine('PATH-REACHED');\n")
             else:
                 body = f"printf '%s\\n' 'CALLED:{component}'\n"
+                body += "printf 'ARG:%s\\n' \"$@\"\n"
                 if self.publish_path and component == "deps":
                     directory = (self.root / "tools bin").as_posix().replace("'", "'\"'\"'")
                     body += f"while (($#)); do if [[ \"$1\" == --path-file ]]; then printf '%s\\n' '{directory}' > \"$2\"; break; fi; shift; done\n"
                 if self.publish_path and component == "skills":
                     body += ("command -v path-marker >/dev/null || exit 12\n"
-                             "[[ \"$(command -v python)\" != *'tools bin'* ]] || exit 14\n"
+                             f"[[ \"$(command -v {self.python_name})\" != *'tools bin'* ]] || exit 14\n"
                              "printf '%s\\n' 'PATH-REACHED'\n")
             body += f"exit {code}\n"
             (self.root / f"install-{component}.{self.ext}").write_text(body, encoding="utf-8")
@@ -92,6 +97,34 @@ class WizardHarness:
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         self.assertLess(result.stdout.index("CALLED:deps"), result.stdout.index("CALLED:skills"))
 
+    def test_new_profiles_route_native_roots_and_documents(self) -> None:
+        for choice, host, directory, document in (
+            ("4", "minimax", ".minimax", "AGENTS.md"),
+            ("5", "workbuddy", ".codebuddy", "CODEBUDDY.md"),
+        ):
+            with self.subTest(host=host):
+                result = self.run_wizard(f"{choice}\n1\ny\n")
+                self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+                for component in ("deps", "skills", "config", "agents", f"{host}-merge"):
+                    self.assertIn(f"CALLED:{component}", result.stdout)
+                for path in ("skills", "config"):
+                    self.assertIn(str(self.home / directory / path), result.stdout)
+                self.assertIn(document, result.stdout)
+                self.assertIn("--no-hooks-feature", result.stdout)
+                self.assertNotIn("CALLED:graphify", result.stdout)
+                self.assertNotIn("CALLED:claude-merge", result.stdout)
+                self.assertNotIn("Select project root", result.stdout)
+                self.assertIn("Done.", result.stdout)
+
+    def test_new_profile_multiselect_and_failure_stop(self) -> None:
+        result = self.run_wizard("4,5\n1\ny\n")
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertLess(result.stdout.index("CALLED:minimax-merge"), result.stdout.index("CALLED:workbuddy-merge"))
+        result = self.run_wizard("4 5\n1\ny\n", failure="minimax-merge")
+        self.assertEqual(result.returncode, 37, result.stderr + result.stdout)
+        self.assertNotIn("CALLED:workbuddy-merge", result.stdout)
+        self.assertNotIn("Done.", result.stdout)
+
     def test_dependency_failure_stops_before_profile_writes(self) -> None:
         result = self.run_wizard("1 3\n1\ny\n", failure="deps")
         self.assertEqual(result.returncode, 37, result.stderr + result.stdout)
@@ -106,7 +139,7 @@ class WizardHarness:
         marker = directory / ("path-marker.cmd" if self.ext == "ps1" else "path-marker")
         marker.write_text("echo marker\n", encoding="utf-8", newline="\n")
         marker.chmod(0o755)
-        shadow = directory / ("python.cmd" if self.ext == "ps1" else "python")
+        shadow = directory / (self.python_name + ".cmd" if self.ext == "ps1" else self.python_name)
         shadow.write_text("echo unexpected-python\n", encoding="utf-8", newline="\n")
         shadow.chmod(0o755)
         result = self.run_wizard("3\n1\ny\n")

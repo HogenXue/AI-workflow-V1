@@ -70,7 +70,9 @@ class InteractiveInstallTests(unittest.TestCase):
             "--policy",
             "overwrite",
             "--interactive",
-            input_text="n\ny\nhttps://new.example/mem0\n",
+            "--mem0-url",
+            "https://new.example/mem0",
+            input_text="n\ny\n",
         )
 
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
@@ -115,7 +117,7 @@ class InteractiveInstallTests(unittest.TestCase):
         self.assertIn("Existing Cursor recallium URL: https://old.example/recallium", result.stderr)
         self.assertIn("Existing Cursor mem0 URL: https://old.example/mem0", result.stderr)
 
-    def test_interactive_merge_can_add_missing_mem0_url(self) -> None:
+    def test_interactive_merge_uses_default_for_missing_mem0(self) -> None:
         target = self.root / "config.toml"
         target.write_text("", encoding="utf-8")
 
@@ -129,12 +131,12 @@ class InteractiveInstallTests(unittest.TestCase):
             "--policy",
             "keep",
             "--interactive",
-            input_text="y\nhttps://new.example/mem0\n",
+            input_text="",
         )
 
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-        self.assertIn('url = "https://new.example/mem0"', target.read_text(encoding="utf-8"))
-        self.assertIn("Add Codex mem0 URL now?", result.stderr)
+        self.assertIn('[mcp_servers.mem0]\nurl = "https://www.59005046.xyz:8102/mcp"', target.read_text(encoding="utf-8"))
+        self.assertNotIn("Add Codex mem0 URL now?", result.stderr)
 
     def test_codex_merge_rejects_remote_http_before_mutating_target(self) -> None:
         codex_home = self.home / ".codex"
@@ -725,7 +727,9 @@ class InteractiveInstallTests(unittest.TestCase):
             "--policy",
             "keep",
             "--interactive",
-            input_text="n\ny\nhttps://new.example/mem0\n",
+            "--mem0-url",
+            "https://new.example/mem0",
+            input_text="n\ny\n",
         )
 
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
@@ -930,7 +934,7 @@ class InteractiveInstallTests(unittest.TestCase):
             'case "$1" in\n'
             "  ok)\n"
             '    parse_agent_selection "$2"\n'
-            '    printf \'codex=%s cursor=%s claude=%s\\n\' "$want_codex" "$want_cursor" "$want_claude"\n'
+            '    printf \'codex=%s cursor=%s claude=%s minimax=%s workbuddy=%s\\n\' "$want_codex" "$want_cursor" "$want_claude" "$want_minimax" "$want_workbuddy"\n'
             "    ;;\n"
             "  bad)\n"
             '    if parse_agent_selection "$2"; then\n'
@@ -942,10 +946,13 @@ class InteractiveInstallTests(unittest.TestCase):
             encoding="utf-8",
         )
         cases = [
-            ("1", "codex=1 cursor=0 claude=0"),
-            ("1 3", "codex=1 cursor=0 claude=1"),
-            ("1,2,3", "codex=1 cursor=1 claude=1"),
-            ("2,2", "codex=0 cursor=1 claude=0"),
+            ("1", "codex=1 cursor=0 claude=0 minimax=0 workbuddy=0"),
+            ("1 3", "codex=1 cursor=0 claude=1 minimax=0 workbuddy=0"),
+            ("1,2,3", "codex=1 cursor=1 claude=1 minimax=0 workbuddy=0"),
+            ("2,2", "codex=0 cursor=1 claude=0 minimax=0 workbuddy=0"),
+            ("4", "codex=0 cursor=0 claude=0 minimax=1 workbuddy=0"),
+            ("4,5,5", "codex=0 cursor=0 claude=0 minimax=1 workbuddy=1"),
+            ("1,2,3,4,5", "codex=1 cursor=1 claude=1 minimax=1 workbuddy=1"),
         ]
         for raw, expected in cases:
             with self.subTest(raw=raw):
@@ -957,7 +964,7 @@ class InteractiveInstallTests(unittest.TestCase):
                 )
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertEqual(result.stdout.strip(), expected)
-        for raw in ("", "4", "1 9", "x"):
+        for raw in ("", "6", "1 9", "x"):
             with self.subTest(bad=raw):
                 result = subprocess.run(
                     ["bash", str(harness), "bad", raw],

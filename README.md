@@ -37,7 +37,7 @@ cd AI-workflow-V1
 
 ### macOS / Linux（bash）
 
-安装统一入口：`scripts/install.sh <deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge>`。TTY 下无参数运行进入交互向导（多选编号：`1` Codex、`2` Cursor、`3` Claude，如 `1 3` / `1,2,3`）；非 TTY 无参数则打印用法并以 exit 2 退出。交互向导会按宿主逐项检测已有的 URL 型 MCP：显示当前 URL，并默认沿用；只有用户明确选择替换时才写入模板 URL 或要求输入新的 Mem0 URL。Codex hooks 与 MCP 安装到用户级 `~/.codex`；Claude MCP 合并到用户级 `~/.claude.json`，全局规则写入 `~/.claude/CLAUDE.md`；两者都不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择，且仅当选中 Cursor）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置；Claude 使用 `agents --document-name CLAUDE.md --no-hooks-feature`，不写 `config.toml`。
+安装统一入口：`scripts/install.sh <deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge>`。TTY 下无参数运行进入交互向导（多选编号：`1` Codex、`2` Cursor、`3` Claude、`4` MiniMax Code、`5` WorkBuddy，如 `1 3` / `4 5`）；非 TTY 无参数则打印用法并以 exit 2 退出。交互向导会按宿主逐项检测已有的 URL 型 MCP：显示当前 URL，并默认沿用；只有用户明确选择替换时才写入模板 URL 或显式指定的 Mem0 URL。Codex hooks 与 MCP 安装到用户级 `~/.codex`；Claude MCP 合并到用户级 `~/.claude.json`，全局规则写入 `~/.claude/CLAUDE.md`；两者都不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择，且仅当选中 Cursor）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置；Claude 使用 `agents --document-name CLAUDE.md --no-hooks-feature`，不写 `config.toml`。
 
 所有组件在覆盖、删除或迁移现有目标前都会先备份。备份直接写入所选备份目录，命名为 `<原名称>.<UTC 时间戳>.bak`；同一秒内重复执行会追加序号，绝不会覆盖已有备份。目录同样使用 `.bak` 后缀并保留完整内容。备份失败时当前组件立即停止，原目标保持不变。自定义 `--backup-dir` 不能等于正被备份的目标或位于其内部。
 
@@ -54,6 +54,8 @@ cd AI-workflow-V1
 | `codex-merge` | Codex 全局 MCP + 用户级 `hooks.json` / `hooks/` | 写入 `${CODEX_HOME:-~/.codex}` |
 | `cursor-merge` | Cursor MCP + 可选项目 `.cursor` hooks；rules `.mdc` 由 `agents/AGENTS.global.md` 动态生成 | 需显式 project-root 才写项目级 |
 | `claude-merge` | Claude 用户级 MCP（`~/.claude.json` 的 `mcpServers`） | 不写项目 `.claude/` / `.mcp.json` |
+| `minimax-merge` | MiniMax Code 用户级 MCP（默认 `~/.minimax/mcp.json`） | JSON；保留已有 `mcp/mcp.json` |
+| `workbuddy-merge` | WorkBuddy / CodeBuddy 用户级 MCP（默认 `~/.codebuddy/.mcp.json`） | 按现有文件优先级合并；保留其它配置 |
 
 `skills` 与 `config` 默认 **copy**（独立副本，不依赖源码目录）；本地开发可用 **link** 实时同步。
 
@@ -151,6 +153,44 @@ bash scripts/install.sh claude-merge --mcp-overwrite --mem0-url https://example.
 ```
 
 TTY 交互向导选择 `3`（或与其它宿主组合，如 `1 3`）即可一次完成推荐安装。Windows 对等：`scripts\install.cmd` / `pwsh -File scripts\install.ps1`（同一组件序列与标志）。更新时对上述目标重新 copy/merge；重启 Claude Code 会话后生效。
+
+### MiniMax Code 与 WorkBuddy
+
+无参数运行 `bash scripts/install.sh`，选择 `4` **MiniMax Code（mcode）**、`5` **WorkBuddy**，
+或 `4 5` 同时安装。Windows 使用 `scripts\install.cmd`，菜单和组件保持对等。
+请先安装宿主应用；这里安装的是工作流配置，应用安装与登录由各自官方工具负责。
+
+| 宿主 | Skills / 配套默认配置 | 全局规则 | 用户级 MCP |
+| --- | --- | --- | --- |
+| MiniMax Code | `~/.minimax/skills` / `~/.minimax/config` | `~/.minimax/AGENTS.md` | 先沿用已有 `mcp.json`，其次 `mcp/mcp.json`；缺失时创建 `mcp.json` |
+| WorkBuddy | `~/.codebuddy/skills` / `~/.codebuddy/config` | `~/.codebuddy/CODEBUDDY.md` | 优先已有 `.mcp.json`，其次 `mcp.json`，再 `~/.codebuddy.json`；缺失时创建 `.mcp.json` |
+
+MiniMax Code 数据目录优先使用 `MINIMAX_DATA_DIR`、其次 `MAVIS_DATA_DIR`；命名 profile 可设置
+对应数据目录后安装。WorkBuddy 支持 `CODEBUDDY_CONFIG_DIR`；此时配置写入该自定义目录。
+`config/` 仅放本包 Skill 默认配置，保留宿主的 `config.yaml` / `settings.json`。
+这两个宿主采用原生 `type: stdio/http` MCP 字段，保留其它服务器、headers 和用户配置；
+推荐安装不写项目文件、Codex hooks 或 Graphify Skill。WorkBuddy 接入使用官方说明的
+代码开发配置兼容机制，配置后重启宿主并确认 Skills/MCP 加载状态。
+
+只预览 MCP 合并（不创建目录或备份）：
+
+```bash
+bash scripts/install.sh minimax-merge --dry-run --mcp-keep
+bash scripts/install.sh workbuddy-merge --dry-run --mcp-keep
+```
+
+确认后使用 `--apply`；Mem0 地址用 `--mem0-url URL`，已有服务器的策略用 `--mcp-keep` 或
+`--mcp-overwrite`。组件支持 `--minimax-home PATH` / `--workbuddy-home PATH`、`--mcp-file PATH`
+和 `--backup-dir PATH`；环境变量用于完整安装的目录覆盖。Windows 对等示例：
+
+```powershell
+scripts\install.cmd minimax-merge --dry-run --mcp-keep
+scripts\install.cmd workbuddy-merge --dry-run --mcp-keep
+```
+
+配置依据：[MiniMax Code 源码与说明](https://github.com/MiniMax-AI/minimax-code)、
+[WorkBuddy 用户级配置兼容](https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Setting)、
+[CodeBuddy MCP 文件优先级](https://www.codebuddy.cn/docs/cli/mcp)。
 
 ### Codex CLI 独立目录（仅在不使用 App 共享目录时）
 
@@ -294,12 +334,13 @@ python3 scripts/validate-all-skills.py
 
 ## MCP 与外部依赖
 
-本包包含 Codex TOML 与 Cursor/Claude JSON 的 MCP 合并模板；安装器按宿主格式增量合并，不会
+本包包含 Codex TOML 与 Cursor/Claude/MiniMax Code/WorkBuddy JSON 的 MCP 合并模板；安装器按宿主格式增量合并，不会
 把一套格式复制到另一宿主。Claude 只改 `~/.claude.json` 的 `mcpServers`，保留其它用户状态字段。
-Recallium 默认地址为 `https://www.59005046.xyz:8102/mcp`。
+Mem0 与 Recallium 默认地址均为 `https://www.59005046.xyz:8102/mcp`；五个宿主使用相同默认值。
+`--mem0-url URL` 可单独覆盖 Mem0 地址，未提供时使用模板默认地址。
 
-TTY 一键安装会分别读取 Codex、Cursor 与 Claude 的现有 MCP 配置。对本包管理且已有 URL 的 MCP，
-安装器逐项询问沿用或替换；直接回车默认沿用。缺少 Mem0 配置时才询问是否新增 URL。
+TTY 一键安装会分别读取所选宿主的现有 MCP 配置。对本包管理且已有 URL 的 MCP，
+安装器逐项询问沿用或替换；直接回车默认沿用。缺少 Mem0 配置时安装默认地址。
 非交互组件调用不读取输入，继续由 `--mcp-keep`、`--mcp-overwrite` 和 `--mem0-url` 明确控制。
 
 安全策略：远端 MCP URL 必须使用 HTTPS；只有 `localhost`、`127.0.0.1`、`::1` 允许
