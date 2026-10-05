@@ -221,7 +221,7 @@ $hooksExist = (
 )
 if ($hooksExist -and ($replace -eq 0)) {
     if (($interactive -eq 1) -and (Test-InstallLibStdinTty)) {
-        if (-not (Install-LibPromptYn -Question "Replace existing Codex user hooks in $codexHome?" -Default 'n')) {
+        if (-not (Install-LibPromptYn -Question "Replace existing Codex user hooks in ${codexHome}?" -Default 'n')) {
             [Console]::Out.WriteLine('SKIP: existing Codex user hooks preserved')
             exit 0
         }

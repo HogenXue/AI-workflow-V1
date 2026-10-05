@@ -294,7 +294,7 @@ if (
 
 if (($conflict -eq 1) -and ($replace -eq 0)) {
     if (($interactive -eq 1) -and (Test-InstallLibStdinTty)) {
-        if (-not (Install-LibPromptYn -Question "Replace/update existing Cursor project hooks/rules in $proj?" -Default 'n')) {
+        if (-not (Install-LibPromptYn -Question "Replace/update existing Cursor project hooks/rules in ${proj}?" -Default 'n')) {
             [Console]::Out.WriteLine('SKIP: existing project Cursor hooks/rules preserved')
             exit 0
         }

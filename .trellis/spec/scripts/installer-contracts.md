@@ -339,6 +339,12 @@ fi
 
 ## Convention: Wizard input and component failure boundaries
 
+- In PowerShell interpolated prompts, delimit a variable before adjacent punctuation that can
+  belong to its name: `${codexHome}?` / `${proj}?`, not `$codexHome?` / `$proj?`. StrictMode treats
+  the latter as an unset variable. Cover existing-target interactive confirmations with both No
+  and Yes; fresh-target and non-interactive checks do not exercise those branches. Bash's existing
+  variable punctuation boundaries need no corresponding change.
+
 - The mode menu accepts `1`, `2`, or an empty line (default `1`). Invalid input and EOF
   exit `2` before project-root selection or component execution.
 - Bash and PowerShell run components in separate processes. PowerShell launches its current

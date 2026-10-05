@@ -1,0 +1,89 @@
+test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable (__main__.BeforeFix.test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable) ...
+  test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable (__main__.BeforeFix.test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable) (answer='n') ... FAIL
+  test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable (__main__.BeforeFix.test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable) (answer='y') ... FAIL
+test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable (__main__.BeforeFix.test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable) ...
+  test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable (__main__.BeforeFix.test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable) (answer='n') ... FAIL
+  test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable (__main__.BeforeFix.test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable) (answer='y') ... FAIL
+
+======================================================================
+FAIL: test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable (__main__.BeforeFix.test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable) (answer='n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Project\AI-workflow-V1\tests\test_install_existing_hooks_ps.py", line 68, in test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+AssertionError: 1 != 0 : BACKUP: C:\Users\hogen\AppData\Local\Temp\tmphhcje97c\home\codex-n\.ai-workflow-backups\config.toml.20261005T075534Z.bak
+ADD: mcp_servers.gitnexus
+KEEP: mcp_servers.recallium
+KEEP: mcp_servers.mem0
+UPDATED: C:\Users\hogen\AppData\Local\Temp\tmphhcje97c\home\codex-n\config.toml
+Existing Codex recallium URL: http://www.59005046.xyz:8102/mcp
+Replace Codex recallium URL with https://www.59005046.xyz:8102/mcp? [y/N]: Existing Codex mem0 URL: https://www.59005046.xyz:8102/mcp
+Replace Codex mem0 URL with https://www.59005046.xyz:8102/mcp? [y/N]: InvalidOperation: C:\Users\hogen\AppData\Local\Temp\tmphhcje97c\package\scripts\install-codex-merge.ps1:224
+Line |
+ 224 |  … n -Question "Replace existing Codex user hooks in $codexHome?" -Defau …
+     |                                                      ~~~~~~~~~~~
+     | The variable '$codexHome?' cannot be retrieved because it has not been set.
+
+
+======================================================================
+FAIL: test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable (__main__.BeforeFix.test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable) (answer='y')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Project\AI-workflow-V1\tests\test_install_existing_hooks_ps.py", line 68, in test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+AssertionError: 1 != 0 : BACKUP: C:\Users\hogen\AppData\Local\Temp\tmphhcje97c\home\codex-y\.ai-workflow-backups\config.toml.20261005T075534Z.bak
+ADD: mcp_servers.gitnexus
+KEEP: mcp_servers.recallium
+KEEP: mcp_servers.mem0
+UPDATED: C:\Users\hogen\AppData\Local\Temp\tmphhcje97c\home\codex-y\config.toml
+Existing Codex recallium URL: http://www.59005046.xyz:8102/mcp
+Replace Codex recallium URL with https://www.59005046.xyz:8102/mcp? [y/N]: Existing Codex mem0 URL: https://www.59005046.xyz:8102/mcp
+Replace Codex mem0 URL with https://www.59005046.xyz:8102/mcp? [y/N]: InvalidOperation: C:\Users\hogen\AppData\Local\Temp\tmphhcje97c\package\scripts\install-codex-merge.ps1:224
+Line |
+ 224 |  … n -Question "Replace existing Codex user hooks in $codexHome?" -Defau …
+     |                                                      ~~~~~~~~~~~
+     | The variable '$codexHome?' cannot be retrieved because it has not been set.
+
+
+======================================================================
+FAIL: test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable (__main__.BeforeFix.test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable) (answer='n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Project\AI-workflow-V1\tests\test_install_existing_hooks_ps.py", line 94, in test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+AssertionError: 1 != 0 : BACKUP: C:\Users\hogen\AppData\Local\Temp\tmp44f7tizl\home\.ai-workflow-backups\mcp.json.20261005T075535Z.bak
+ADD: mcpServers.gitnexus
+ADD: mcpServers.recallium
+ADD: mcpServers.mem0
+UPDATED: C:\Users\hogen\AppData\Local\Temp\tmp44f7tizl\home\cursor-n.json
+NOTE: leaving project root AGENTS.md untouched (Trellis / project owned)
+InvalidOperation: C:\Users\hogen\AppData\Local\Temp\tmp44f7tizl\package\scripts\install-cursor-merge.ps1:297
+Line |
+ 297 |  … "Replace/update existing Cursor project hooks/rules in $proj?" -Defau …
+     |                                                           ~~~~~~
+     | The variable '$proj?' cannot be retrieved because it has not been set.
+
+
+======================================================================
+FAIL: test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable (__main__.BeforeFix.test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable) (answer='y')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Project\AI-workflow-V1\tests\test_install_existing_hooks_ps.py", line 94, in test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable
+    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+AssertionError: 1 != 0 : BACKUP: C:\Users\hogen\AppData\Local\Temp\tmp44f7tizl\home\.ai-workflow-backups\mcp.json.20261005T075536Z.bak
+ADD: mcpServers.gitnexus
+ADD: mcpServers.recallium
+ADD: mcpServers.mem0
+UPDATED: C:\Users\hogen\AppData\Local\Temp\tmp44f7tizl\home\cursor-y.json
+NOTE: leaving project root AGENTS.md untouched (Trellis / project owned)
+InvalidOperation: C:\Users\hogen\AppData\Local\Temp\tmp44f7tizl\package\scripts\install-cursor-merge.ps1:297
+Line |
+ 297 |  … "Replace/update existing Cursor project hooks/rules in $proj?" -Defau …
+     |                                                           ~~~~~~
+     | The variable '$proj?' cannot be retrieved because it has not been set.
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 2.791s
+
+FAILED (failures=4)

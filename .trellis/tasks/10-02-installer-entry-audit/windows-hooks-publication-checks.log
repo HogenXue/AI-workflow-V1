@@ -1,0 +1,20 @@
+test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable (test_install_existing_hooks_ps.ExistingHooksInteractiveTests.test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable) ... ok
+test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable (test_install_existing_hooks_ps.ExistingHooksInteractiveTests.test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable) ... ok
+test_merge_scripts_forward_interactive_to_merge_host_mcp (test_install_merge_ps.InstallMergePsInteractiveWiringTests.test_merge_scripts_forward_interactive_to_merge_host_mcp) ... ok
+test_claude_merge_mcp_overwrite_preserves_other_keys (test_install_merge_ps.InstallMergePsSmokeTests.test_claude_merge_mcp_overwrite_preserves_other_keys) ... ok
+test_claude_merge_rejects_remote_http_before_mutating (test_install_merge_ps.InstallMergePsSmokeTests.test_claude_merge_rejects_remote_http_before_mutating) ... ok
+test_codex_merge_apply_user_hooks_ignores_project_root (test_install_merge_ps.InstallMergePsSmokeTests.test_codex_merge_apply_user_hooks_ignores_project_root) ... ok
+test_codex_merge_backs_up_dangling_config_symlink (test_install_merge_ps.InstallMergePsSmokeTests.test_codex_merge_backs_up_dangling_config_symlink) ... ok
+test_codex_merge_conflict_restores_mcp (test_install_merge_ps.InstallMergePsSmokeTests.test_codex_merge_conflict_restores_mcp) ... ok
+test_codex_merge_rejects_remote_http_before_mutating_target (test_install_merge_ps.InstallMergePsSmokeTests.test_codex_merge_rejects_remote_http_before_mutating_target) ... ok
+test_codex_merge_skip_project_dry_run (test_install_merge_ps.InstallMergePsSmokeTests.test_codex_merge_skip_project_dry_run) ... ok
+test_cursor_merge_backs_up_dangling_mcp_symlink (test_install_merge_ps.InstallMergePsSmokeTests.test_cursor_merge_backs_up_dangling_mcp_symlink) ... ok
+test_cursor_merge_project_root_generates_rules_leaves_agents_md (test_install_merge_ps.InstallMergePsSmokeTests.test_cursor_merge_project_root_generates_rules_leaves_agents_md) ... ok
+test_cursor_merge_rejects_packaged_mcp_fragment (test_install_merge_ps.InstallMergePsSmokeTests.test_cursor_merge_rejects_packaged_mcp_fragment) ... ok
+test_cursor_merge_rejects_remote_http_before_mutating_target (test_install_merge_ps.InstallMergePsSmokeTests.test_cursor_merge_rejects_remote_http_before_mutating_target) ... ok
+test_cursor_merge_skip_project_leaves_project_untouched (test_install_merge_ps.InstallMergePsSmokeTests.test_cursor_merge_skip_project_leaves_project_untouched) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 10.011s
+
+OK

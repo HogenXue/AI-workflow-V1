@@ -53,6 +53,25 @@ for every existing caller, and historical review evidence remains unchanged.
       argument forwarding behavior still passes. Verify with a portable minimum runtime if available.
 - [x] New regression failures are observed before implementation; relevant checks pass afterward.
 
+## Windows interactive update repair — 2026-10-05
+
+The user supplied a concrete Codex failure after successful MCP merge: strict-mode expansion
+of `$codexHome?` in the existing-hook confirmation. Repair the matching installer task with a
+local string-boundary fix and lock down the existing-target interactive path, not fresh installs
+alone. Preserve the user's URL choices and actual installed configuration.
+
+- [x] Existing Codex hooks can be declined or replaced interactively without an unset-variable error.
+- [x] Fix and verify the same `$proj?` ambiguity in Cursor's existing-project confirmation.
+- [x] Tests preserve existing URL choices and original hooks on No; Yes installs valid hooks/rules.
+- [x] Exercise the actual existing-target command in an isolated interactive Windows terminal.
+- [x] No actual user hooks/configuration overwrite, commit, or push as part of this repair.
+
+Publication follow-up: the user subsequently authorized preserving the effective repair,
+reviewing the plan, and committing it. The earlier no-commit statement records the initial
+repair stage; it does not revoke the later Git authorization. Publish only the two prompt-boundary
+fixes and their regression/spec/review evidence, reusing the earlier push authorization. Do not
+include unrelated model-routing drafts, raw historical logs or archived task records.
+
 ## Scope and risk
 
 Source reading establishes the entry dispatch/profile call chains. Recallium MCP is unavailable.
