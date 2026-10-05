@@ -37,12 +37,12 @@ Before checking, read:
 1. **Get code changes** - Use git diff to get uncommitted code
 2. **Review task artifacts** - Check changes against prd.md, design.md if present, and implement.md if present
 3. **Check against specs** - Verify code follows guidelines
-4. **Self-fix** - Fix issues yourself, not just report them
-5. **Run verification** - typecheck and lint
+4. **Self-fix** - Fix task-caused issues only within authorized implementation scope; read-only review reports findings
+5. **Run verification** - task-selected checks proportionate to risk
 
 ## Important
 
-**Fix issues yourself**, don't just report them.
+When implementation is authorized, fix task-caused issues directly. For read-only review or unrelated changes, report findings without editing.
 
 You have write and edit tools, you can modify code directly.
 
@@ -55,9 +55,23 @@ You have write and edit tools, you can modify code directly.
 ```bash
 git diff --name-only  # List changed files
 git diff              # View specific changes
+git diff --cached     # View staged changes
+git status --short
+git ls-files --others --exclude-standard
 ```
 
+Scope the review to the active task using its artifacts and implementation record. Read task-owned new files explicitly; include earlier task commits against the verified task base when needed. Do not fix unrelated user changes. An unresolved base/scope is a review limitation, not permission to select an arbitrary diff. Read-only review authorizes findings rather than edits.
+
 ### Step 2: Check Against Specs and Task Artifacts
+
+Review two dimensions within this native check:
+
+- **Spec**: map PRD acceptance criteria to behavior and evidence; identify missing/incorrect behavior, scope expansion, and contract/design mismatches.
+- **Standards**: cite project rules for hard violations; distinguish these from optional design heuristics. Project conventions override generic preferences.
+
+Report both dimensions separately; success in one does not prove success in the other. Do not spawn additional reviewers.
+
+The installed `code-review` capability can guide this analysis here; it does not start another check or repeat valid verification evidence.
 
 Read the task's prd.md, design.md if present, and implement.md if present, then read relevant specs in `.trellis/spec/` to check code:
 
@@ -73,15 +87,15 @@ Read the task's prd.md, design.md if present, and implement.md if present, then 
 
 After finding issues:
 
-1. Fix the issue directly (use edit tool)
+1. Fix task-caused issues within authorized implementation scope (use edit tool); otherwise report them
 2. Record what was fixed
 3. Continue checking other issues
 
 ### Step 4: Run Verification
 
-Run project's lint and typecheck commands to verify changes.
+Run the task-selected checks and relevant spec Quality Check commands with a scope proportionate to the change. Documentation can use file/structure checks. Record actual commands, results, and coverage; never report unrun lint/type-check as passed.
 
-If failed, fix issues and re-run.
+Fix task-caused failures and rerun affected checks. Record pre-existing failures without repairing unrelated work. Review completion does not authorize a commit, push, or task-state change.
 
 ---
 
@@ -97,6 +111,8 @@ If failed, fix issues and re-run.
 
 ### Issues Found and Fixed
 
+Keep **Spec** and **Standards** findings separate, with acceptance-criterion or documented-rule evidence.
+
 1. `<file>:<line>` - <what was fixed>
 2. `<file>:<line>` - <what was fixed>
 
@@ -106,8 +122,8 @@ If failed, fix issues and re-run.
 
 ### Verification Results
 
-- TypeCheck: Passed
-- Lint: Passed
+- Actual command: result and coverage
+- Not run / uncovered: reason
 
 ### Summary
 

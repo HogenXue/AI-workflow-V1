@@ -1,0 +1,4 @@
+interface:
+  display_name: "To Spec"
+  short_description: "AIHero capability adapted to native Trellis"
+  default_prompt: "Use $to-spec within the current project workflow and authorization."

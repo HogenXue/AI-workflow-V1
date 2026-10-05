@@ -1,0 +1,9 @@
+# Design
+
+Separate authority from facts: global/project AGENTS are scoped guidance subordinate to host instructions and permissions; PRD/design are canonical task facts, and skill instructions support the selected action without extending authorization. Document Codex's per-directory override selection and root-to-leaf merge, and distinguish repository template filenames from runtime discovery names.
+
+Consolidate the global template into scope, working agreements, native workflow/capability routing, selective validation, delegation, memory and Git/config boundaries. Retain non-obvious safety/integration invariants (explicit Grill, parent-pointer preservation, single native check, valid evidence reuse). Project templates keep local artifact destinations and conditional guides/checks; domain-specific EGM requirements remain intact.
+
+Shorten and discriminate the 11 new skill descriptions; preserve existing 7 descriptions and all invocation policies. Clarify the highest-overlap pairs: documented/stateless/support interviews, uncertain decision mapping vs settled deliverables, synthesis vs discovery, domain vocabulary vs module design, research vs debugging, disposable prototypes vs authorized implementation, and review vs the native quality gate. A combined task may use complementary skills but must not duplicate one action or start another lifecycle.
+
+Documentation/metadata scope only; no runtime symbols, contracts, installer mechanisms or graph changes. Validate structures, existing route/metadata checks and isolated copied templates. Use a small independent description-only routing sample with negative controls rather than assert a deterministic model guarantee. Existing test wording may need narrow updates where redundant text was removed; do not weaken authorization/invocation checks.

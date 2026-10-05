@@ -1,0 +1,16 @@
+{
+  "root": "C:\\Users\\hogen\\AppData\\Local\\Temp\\aihero-baseline-v4fslcy9",
+  "head": "de4820b550f5395a0049a86f00f1f80265c203ba",
+  "test_ids": [
+    "test_install.ComponentInstallTests.test_agents_target_warns_about_duplicate_codex_skill_names",
+    "test_install.ComponentInstallTests.test_config_rejects_nonexistent_target_inside_source",
+    "test_install.ComponentInstallTests.test_config_rejects_source_directory_as_target",
+    "test_install.ComponentInstallTests.test_default_config_target_uses_agents_config",
+    "test_install.ComponentInstallTests.test_failed_backup_copy_never_publishes_partial_bak",
+    "test_install.ComponentInstallTests.test_other_root_pruning_is_explicit_and_backed_up",
+    "test_install.ComponentInstallTests.test_skills_rejects_nonexistent_target_inside_source",
+    "test_install.ComponentInstallTests.test_skills_rejects_source_directory_as_target",
+    "test_install.ComponentInstallTests.test_unwritable_backup_directory_fails_without_hanging",
+    "test_install_wizard.BashWizardTests.test_new_profiles_route_native_roots_and_documents"
+  ]
+}

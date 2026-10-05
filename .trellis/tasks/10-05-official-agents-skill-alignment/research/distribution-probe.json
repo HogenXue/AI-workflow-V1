@@ -1,0 +1,17 @@
+{
+  "fixture": "C:\\Users\\hogen\\AppData\\Local\\Temp\\official-agents-distribution-m6ak5n__",
+  "template_copied_exactly": true,
+  "override_and_project_preserved": true,
+  "old_global_backed_up": true,
+  "before": {
+    "project\\AGENTS.md": "b3aecfe23605320bd5e926cd38fccaaa178f63752ce802d09966187b410475b2",
+    "project\\.trellis\\workflow.md": "6d6b8cd60f9e060e4e4f1b48405f91152fc85747c580ccf82c769b19c00d37f2",
+    "host\\AGENTS.override.md": "bbf288d4172208c59af784ba591159552392d4d847f6b78d371ebb7150ced46a"
+  },
+  "after": {
+    "project\\AGENTS.md": "b3aecfe23605320bd5e926cd38fccaaa178f63752ce802d09966187b410475b2",
+    "project\\.trellis\\workflow.md": "6d6b8cd60f9e060e4e4f1b48405f91152fc85747c580ccf82c769b19c00d37f2",
+    "host\\AGENTS.override.md": "bbf288d4172208c59af784ba591159552392d4d847f6b78d371ebb7150ced46a"
+  },
+  "limits": "Verified file distribution/preservation; did not launch a new Codex session to exercise native instruction discovery."
+}

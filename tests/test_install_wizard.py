@@ -158,6 +158,7 @@ class WizardHarness:
     def test_default_mode_and_successful_profile(self) -> None:
         result = self.run_wizard("3\n\ny\n")
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertIn("AIHero/Trellis", result.stdout)
         for component in ("skills", "config", "agents", "claude-merge"):
             self.assertIn(f"CALLED:{component}", result.stdout)
         self.assertIn("Done.", result.stdout)

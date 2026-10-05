@@ -40,7 +40,7 @@ class GrillWithDocsTrellisRouteTests(unittest.TestCase):
         content = (ROOT / "agents" / "AGENTS.project.md").read_text(encoding="utf-8")
 
         for phrase in (
-            "`$grill-me` 是唯一 Grill Skill",
+            "`$grill-me` 仅在用户显式调用",
             "仅在用户显式调用时进行无状态澄清",
             "项目原生 `trellis-check`",
             "纯咨询不建 Task",
@@ -53,12 +53,12 @@ class GrillWithDocsTrellisRouteTests(unittest.TestCase):
             self.skipTest("project-owned AGENTS.md is absent in this working tree")
         content = path.read_text(encoding="utf-8")
 
-        self.assertIn("`$grill-me` 是唯一 Grill Skill", content)
+        self.assertIn("`$grill-me` 仅在用户显式调用", content)
         self.assertIn("简单且需求明确的任务直接走 Trellis", content)
         self.assertIn("不要再加载 `trellis-brainstorm`", content)
         self.assertIn("实现稳定后，按当前 Task 要求使用项目原生 `trellis-check`", content)
 
-    def test_single_grill_skill_is_explicit_and_stateless(self) -> None:
+    def test_stateless_grill_and_documented_planning_are_both_distributed(self) -> None:
         manifest = (ROOT / "manifest.yaml").read_text(encoding="utf-8")
         for capability in (
             "grill-me",
@@ -69,9 +69,9 @@ class GrillWithDocsTrellisRouteTests(unittest.TestCase):
             self.assertIn(f"  - {capability}", manifest)
             self.assertTrue((ROOT / "skills" / capability / "SKILL.md").is_file())
 
-        for removed in ("grill-with-docs", "grilling", "domain-modeling"):
-            self.assertNotIn(f"  - {removed}", manifest)
-            self.assertFalse((ROOT / "skills" / removed / "SKILL.md").exists())
+        for restored in ("grill-with-docs", "grilling", "domain-modeling", "to-spec", "to-tickets", "implement", "code-review", "wayfinder", "research", "prototype", "handoff"):
+            self.assertIn(f"  - {restored}", manifest)
+            self.assertTrue((ROOT / "skills" / restored / "SKILL.md").is_file())
 
         skill = ROOT / "skills" / "grill-me"
         content = (skill / "SKILL.md").read_text(encoding="utf-8")

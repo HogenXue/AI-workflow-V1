@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research"
+  short_description: "AIHero capability adapted to native Trellis"
+  default_prompt: "Use $research within the current project workflow and authorization."

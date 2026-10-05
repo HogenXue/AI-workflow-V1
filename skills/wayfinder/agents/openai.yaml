@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wayfinder"
+  short_description: "AIHero capability adapted to native Trellis"
+  default_prompt: "Use $wayfinder within the current project workflow and authorization."

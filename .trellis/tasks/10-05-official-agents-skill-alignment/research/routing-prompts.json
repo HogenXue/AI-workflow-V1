@@ -1,0 +1,90 @@
+[
+  {
+    "id": "explicit-grill",
+    "prompt": "使用 $grill-me 推敲我还没成形的想法，先只对话不写文件。"
+  },
+  {
+    "id": "documented-discovery",
+    "prompt": "当前 Trellis Task 还有几个产品选择未决，需要访谈我并把确认结论落入现有规划文档。"
+  },
+  {
+    "id": "interview-support",
+    "prompt": "已经在进行 documented Grill；帮这轮访谈把问题按前置依赖排成可回答的轮次，不再开一次访谈。"
+  },
+  {
+    "id": "confirmed-spec",
+    "prompt": "这些需求已经确认，没有未决问题。请综合成当前任务 PRD，保留既有设计。"
+  },
+  {
+    "id": "approved-slices",
+    "prompt": "范围已经批准，请拆成能独立验收的父子任务，并列出阻塞和解除条件。"
+  },
+  {
+    "id": "uncertain-map",
+    "prompt": "大型迁移的目标知道，但路线还不明确。请先梳理待决定问题、前置条件和证据缺口，不实施。"
+  },
+  {
+    "id": "external-evidence",
+    "prompt": "查官方数据库文档，研究这一版本的锁语义并记录来源，用于当前任务的决定。"
+  },
+  {
+    "id": "debug-only",
+    "prompt": "这个接口偶发抛异常，先建立可复现信号、定位根因；还不要修代码。"
+  },
+  {
+    "id": "module-design",
+    "prompt": "只分析这个模块是否能把接口做得更深、边界更清楚，给设计选项，不重构。"
+  },
+  {
+    "id": "domain-language",
+    "prompt": "我们的业务里订单和预约两个词混用，请对照既有领域文档厘清定义并记录已确认术语，不改接口。"
+  },
+  {
+    "id": "bounded-prototype",
+    "prompt": "做一个明确标记为可丢弃的状态演示，回答这个交互模型是否合理；不要上线生产。"
+  },
+  {
+    "id": "authorized-build",
+    "prompt": "当前 task 已通过原生规划门并 in_progress，请实现已批准的规格与验收，保留别人的修改。"
+  },
+  {
+    "id": "explicit-tdd",
+    "prompt": "使用 $tdd 实现已确认的新行为，先验证 RED，再 GREEN/REFACTOR；遵守当前原生执行阶段。"
+  },
+  {
+    "id": "readonly-review",
+    "prompt": "审查给定 patch 和验收要求，分开报告需求和规范问题；只读，不修复，不提交。"
+  },
+  {
+    "id": "handoff-only",
+    "prompt": "把当前任务的进度、有效检查、阻塞和下一步写成交接指针，不继续实施。"
+  },
+  {
+    "id": "existing-conflict",
+    "prompt": "合并已经进行中，帮我解决当前冲突文件并验证；不要提交、继续 rebase 或推送。"
+  },
+  {
+    "id": "past-decision",
+    "prompt": "查一下我们之前为什么选这个持久化方案，不要从当前实现猜历史。"
+  },
+  {
+    "id": "impact-only",
+    "prompt": "改公共 API 前先查代码图谱分析调用者和影响范围，只分析，不改代码。"
+  },
+  {
+    "id": "negative-typo",
+    "prompt": "只把 README 里的拼写错误改掉，范围和文本都已经明确。"
+  },
+  {
+    "id": "negative-explain",
+    "prompt": "只解释给定函数当前做什么，不设计接口、不查外部资料也不改代码。"
+  },
+  {
+    "id": "negative-no-git",
+    "prompt": "测试已经通过，只报告结果；没有授权提交或启动新一轮检查。"
+  },
+  {
+    "id": "negative-fresh-chat",
+    "prompt": "先随意聊一个产品想法，不启动正式访谈，不落盘也不实施。"
+  }
+]

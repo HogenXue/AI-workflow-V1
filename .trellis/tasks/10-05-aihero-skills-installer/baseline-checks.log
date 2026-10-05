@@ -1,0 +1,95 @@
+FFFFFFFFFFF
+======================================================================
+FAIL: test_agents_target_warns_about_duplicate_codex_skill_names (test_install.ComponentInstallTests.test_agents_target_warns_about_duplicate_codex_skill_names)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install.py", line 500, in test_agents_target_warns_about_duplicate_codex_skill_names
+    self.assertIn(str(codex_home / "skills"), result.stderr)
+AssertionError: 'C:\\Users\\hogen\\AppData\\Local\\Temp\\tmpq_b5_sk8\\home\\.codex\\skills' not found in 'WARNING: duplicate Skill names also exist in C:\\Users\\hogen\\AppData\\Local\\Temp\\tmpq_b5_sk8\\home\\.codex/skills: memory\nCodex may discover both roots; keep one canonical copy per Skill name.\n'
+
+======================================================================
+FAIL: test_config_rejects_nonexistent_target_inside_source (test_install.ComponentInstallTests.test_config_rejects_nonexistent_target_inside_source)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install.py", line 221, in test_config_rejects_nonexistent_target_inside_source
+    self.assertNotEqual(result.returncode, 0)
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_config_rejects_source_directory_as_target (test_install.ComponentInstallTests.test_config_rejects_source_directory_as_target)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install.py", line 212, in test_config_rejects_source_directory_as_target
+    self.assertNotEqual(result.returncode, 0)
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_default_config_target_uses_agents_config (test_install.ComponentInstallTests.test_default_config_target_uses_agents_config)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install.py", line 572, in test_default_config_target_uses_agents_config
+    self.assertIn(f"DRY-RUN: copy config -> {home / '.agents' / 'config'}", result.stdout)
+AssertionError: 'DRY-RUN: copy config -> C:\\Users\\hogen\\AppData\\Local\\Temp\\tmpksdk4710\\home\\.agents\\config' not found in 'DRY-RUN: copy config -> /tmp/tmpksdk4710/home/.agents/config\n'
+
+======================================================================
+FAIL: test_failed_backup_copy_never_publishes_partial_bak (test_install.ComponentInstallTests.test_failed_backup_copy_never_publishes_partial_bak)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install.py", line 362, in test_failed_backup_copy_never_publishes_partial_bak
+    self.assertNotEqual(result.returncode, 0)
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_other_root_pruning_is_explicit_and_backed_up (test_install.ComponentInstallTests.test_other_root_pruning_is_explicit_and_backed_up)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install.py", line 530, in test_other_root_pruning_is_explicit_and_backed_up
+    self.assertEqual(preview.returncode, 0, preview.stderr)
+AssertionError: 2 != 0 : ERROR: --prune-other-root requires --target ~/.agents/skills or the active CODEX_HOME/skills
+Usage: install-skills.sh [--dry-run] [--link | --copy] [--replace] [--prune-legacy] [--prune-other-root] [--target PATH] [--backup-dir PATH]
+
+
+======================================================================
+FAIL: test_skills_rejects_nonexistent_target_inside_source (test_install.ComponentInstallTests.test_skills_rejects_nonexistent_target_inside_source)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install.py", line 241, in test_skills_rejects_nonexistent_target_inside_source
+    self.assertNotEqual(result.returncode, 0)
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_skills_rejects_source_directory_as_target (test_install.ComponentInstallTests.test_skills_rejects_source_directory_as_target)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install.py", line 232, in test_skills_rejects_source_directory_as_target
+    self.assertNotEqual(result.returncode, 0)
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_unwritable_backup_directory_fails_without_hanging (test_install.ComponentInstallTests.test_unwritable_backup_directory_fails_without_hanging)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install.py", line 323, in test_unwritable_backup_directory_fails_without_hanging
+    self.assertNotEqual(result.returncode, 0)
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_new_profiles_route_native_roots_and_documents (test_install_wizard.BashWizardTests.test_new_profiles_route_native_roots_and_documents) (host='minimax')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install_wizard.py", line 111, in test_new_profiles_route_native_roots_and_documents
+    self.assertIn(str(self.home / directory / path), result.stdout)
+AssertionError: 'C:\\Users\\hogen\\AppData\\Local\\Temp\\tmp2p_x6hxd\\home\\.minimax\\skills' not found in 'AI-workflow installer\nSelect target agent(s):\n  1) Codex\n  2) Cursor\n  3) Claude\n  4) MiniMax Code (mcode)\n  5) WorkBuddy\nSelect agents (e.g. 1, 1 3, 1,2,3): Install mode:\n  1) Recommended full install\n  2) Single component (advanced)\nChoice [1-2]: --- Recommended full install plan ---\n- Dependencies: keep usable GitNexus/Trellis/Graphify CLIs; install missing tools first\n- MiniMax Code: /tmp/tmp2p_x6hxd/home/.minimax/{skills,config,AGENTS.md} + native MCP\n- Project-scoped steps: skipped\nCALLED:deps\nARG:--apply\nARG:--path-file\nARG:/tmp/tmp.IDotgAo6ez\n=== Installing MiniMax Code profile ===\nCALLED:skills\nARG:--copy\nARG:--target\nARG:/tmp/tmp2p_x6hxd/home/.minimax/skills\nCALLED:config\nARG:--copy\nARG:--target\nARG:/tmp/tmp2p_x6hxd/home/.minimax/config\nCALLED:agents\nARG:--apply\nARG:--agents-home\nARG:/tmp/tmp2p_x6hxd/home/.minimax\nARG:--document-name\nARG:AGENTS.md\nARG:--no-hooks-feature\nCALLED:minimax-merge\nARG:--interactive\nARG:--mcp-keep\nDone.\n'
+
+======================================================================
+FAIL: test_new_profiles_route_native_roots_and_documents (test_install_wizard.BashWizardTests.test_new_profiles_route_native_roots_and_documents) (host='workbuddy')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\hogen\AppData\Local\Temp\aihero-baseline-v4fslcy9\tests\test_install_wizard.py", line 111, in test_new_profiles_route_native_roots_and_documents
+    self.assertIn(str(self.home / directory / path), result.stdout)
+AssertionError: 'C:\\Users\\hogen\\AppData\\Local\\Temp\\tmp2p_x6hxd\\home\\.codebuddy\\skills' not found in 'AI-workflow installer\nSelect target agent(s):\n  1) Codex\n  2) Cursor\n  3) Claude\n  4) MiniMax Code (mcode)\n  5) WorkBuddy\nSelect agents (e.g. 1, 1 3, 1,2,3): Install mode:\n  1) Recommended full install\n  2) Single component (advanced)\nChoice [1-2]: --- Recommended full install plan ---\n- Dependencies: keep usable GitNexus/Trellis/Graphify CLIs; install missing tools first\n- WorkBuddy: /tmp/tmp2p_x6hxd/home/.codebuddy/{skills,config,CODEBUDDY.md} + native MCP\n- Project-scoped steps: skipped\nCALLED:deps\nARG:--apply\nARG:--path-file\nARG:/tmp/tmp.0xsoSRBP2g\n=== Installing WorkBuddy profile ===\nCALLED:skills\nARG:--copy\nARG:--target\nARG:/tmp/tmp2p_x6hxd/home/.codebuddy/skills\nCALLED:config\nARG:--copy\nARG:--target\nARG:/tmp/tmp2p_x6hxd/home/.codebuddy/config\nCALLED:agents\nARG:--apply\nARG:--agents-home\nARG:/tmp/tmp2p_x6hxd/home/.codebuddy\nARG:--document-name\nARG:CODEBUDDY.md\nARG:--no-hooks-feature\nCALLED:workbuddy-merge\nARG:--interactive\nARG:--mcp-keep\nDone.\n'
+
+----------------------------------------------------------------------
+Ran 10 tests in 9.933s
+
+FAILED (failures=11)

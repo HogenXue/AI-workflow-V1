@@ -17,6 +17,15 @@
 
 ## Matt Pocock Skills
 
+2026-10-05 新增的 11 个 Trellis 适配技能基于上游固定提交
+`24fe0ef7737efae15c87225755e9f6f5965e4888`：`grill-with-docs`、`grilling`、
+`domain-modeling`、`to-spec`、`to-tickets`、`wayfinder`、`research`、`prototype`、
+`implement`、`code-review`、`handoff`。原路径与 SHA-256 记录在
+`skills/aihero-provenance.json`；每个新技能目录包含上游 MIT `LICENSE`，随完整目录安装。
+适配保留实际能力，任务输出归 Trellis，不自动提交或创建外部 tracker，也不强制特定平台 Agent。
+
+以下继续记录原有四个适配技能的来源：
+
 本仓库以下内容基于或改编自 `mattpocock/skills` 提交
 `c55ee46073ed923f86ce59a5eb3b6d895095d1b7`：
 

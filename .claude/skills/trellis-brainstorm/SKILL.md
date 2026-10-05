@@ -1,15 +1,21 @@
 ---
 name: trellis-brainstorm
-description: "Guides collaborative requirements discovery before implementation. Creates task directory, seeds PRD, asks high-value questions one at a time, researches technical choices, and converges on MVP scope. Use when requirements are unclear, there are multiple valid approaches, or the user describes a new feature or complex task."
+description: "Resolve unsettled requirements in native Trellis planning using repository evidence, dependency-aware questions, and testable outcome slices. Use when user choices still block implementation; reuse agreed conclusions and skip interviewing clear requests."
 ---
 
 # Trellis Brainstorm
 
-## Non-Negotiable Interview Contract
+## Interview Scope
 
-Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+The installed `grill-with-docs` capability is an alternative documented interview within the same Trellis phase. Select one; do not interview again after its conclusions are confirmed. `to-spec`, `to-tickets`, and `wayfinder` reuse these same artifacts rather than establishing another planning workflow.
 
-Ask the questions one at a time.
+Use this skill for unresolved requirements in Trellis Phase 1.1, not as an automatic interview for every complex task. Reuse approved conclusions and inspect the repository before asking. If the request is clear, record the required artifacts and proceed under existing authorization.
+
+An explicitly invoked `grill-me` is a separate stateless conversation. After its conclusions are confirmed, Trellis persists them without launching this skill for another interview. Revisit only a newly changed requirement.
+
+Treat unresolved choices as a dependency tree. Ask one high-value question at a time from the current frontier: decisions whose prerequisites are already settled. Give a recommended answer and its trade-off. Do not ask dependent questions until the prerequisite is resolved.
+
+If a choice needs research or a bounded prototype, record the question, evidence needed, and completion condition in the current task. Pause that branch and continue independent planning; do not turn speculation into a user decision or begin unauthorized prototype work.
 
 ## Non-Negotiable Evidence Rule
 
@@ -25,7 +31,7 @@ Use this skill during Phase 1 planning to turn the user's request into clear req
 
 ## Preconditions
 
-Use this skill only after task-creation consent has been given and the user is ready to enter Trellis planning.
+Resolve task authorization under `.trellis/workflow.md` first. An explicit implementation request authorizes task recording within its settled scope; do not ask again solely to create a task. Consultation alone does not authorize task creation or implementation.
 
 If no task exists yet, create one:
 
@@ -49,7 +55,7 @@ Use a concise title from the user's request. Use a slug without a date prefix. `
    - product intent still needed from the user
    - scope or risk decisions still needed from the user
    - likely out-of-scope items
-4. Ask the single highest-value remaining question.
+4. Ask the single highest-value remaining question whose prerequisites are settled; if none remains, do not manufacture an interview.
 5. Include your recommended answer with the question.
 6. After each user answer, update `prd.md` before continuing.
 7. For complex tasks, create or update `design.md` and `implement.md` before implementation starts.
@@ -114,6 +120,22 @@ For each component of the current plan:
 - What's the simplest experiment to test this?
 
 ## Artifact Rules
+
+### Outcome slicing and blockers
+
+Split large scopes only when each child delivers an independently demonstrable or verifiable outcome. Prefer the smallest complete path through the necessary layers over separate schema/API/UI tasks. Keep related small work in one task; do not create children just to reproduce an upstream ticket workflow.
+
+For each child, record its outcome, acceptance criteria, actual blockers, and what evidence clears them. Use native Trellis parent/child commands; tree position and numbering do not imply a dependency. Choose the next task whose blockers are satisfied. An unresolved decision belongs in planning, not in a supposedly implementation-ready child.
+
+Capture the parent path explicitly. When drafting multiple children, use native `create --parent <parent> --no-start` where supported and verify the session remains on the parent with children in `planning`. Default `create` activates the new child; do not use `start` merely to restore context and accidentally advance a planning task to implementation.
+
+Broad migrations can use expand, migrate, then contract, with compatibility and validation boundaries in `design.md` / `implement.md`. Do not force an unsafe migration into artificial vertical slices.
+
+### Domain terms and durable decisions
+
+Read existing domain/decision specs before introducing new language. Clarify overloaded terms with concrete examples and verify code agrees. Persist resolved terms in the existing domain location, not the PRD or a new root glossary.
+
+Keep task-specific choices in `design.md`. Record a durable decision in the project's existing decision location only when it is costly to reverse, surprising without context, and reflects a real trade-off. Create entries lazily; empty glossary/ADR scaffolds are unnecessary. In this project, use `.trellis/spec/domain/` and `.trellis/spec/decisions/`.
 
 `prd.md` records requirements and acceptance:
 

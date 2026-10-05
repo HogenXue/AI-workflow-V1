@@ -402,6 +402,8 @@ class ManifestTests(unittest.TestCase):
                 "memory",
                 "gitnexus",
                 "grill-me",
+                "grill-with-docs", "grilling", "domain-modeling", "to-spec", "to-tickets", "wayfinder",
+                "research", "prototype", "implement", "code-review", "handoff",
                 "tdd",
                 "diagnosing-bugs",
                 "codebase-design",
@@ -579,7 +581,7 @@ class BundledSkillContractTests(unittest.TestCase):
             "版本：V9-EGM",
             "`egm_wechat`：微信小程序",
             "`egm_wechat_backend`：微信小程序后端",
-            "`$grill-me` 是唯一 Grill Skill",
+            "`$grill-me` 仅在用户显式调用",
             "仅在用户显式调用时进行无状态澄清",
             "cd egm_backend && mvn test",
             "cd egm_vue && pnpm test",
@@ -603,7 +605,7 @@ class BundledSkillContractTests(unittest.TestCase):
                 self.assertFalse((ROOT / name).exists(), "Obsolete root template must not shadow agents/")
 
 
-    def test_grill_me_is_the_single_explicit_stateless_skill(self) -> None:
+    def test_grill_me_remains_explicit_and_stateless_with_documented_planning_available(self) -> None:
         skill = ROOT / "skills" / "grill-me"
         content = (skill / "SKILL.md").read_text(encoding="utf-8")
         frontmatter = yaml.safe_load(content.split("---", 2)[1])
@@ -612,8 +614,8 @@ class BundledSkillContractTests(unittest.TestCase):
         self.assertIs(agent["policy"]["allow_implicit_invocation"], False)
         for phrase in ("stateless", "decision tree", "frontier", "do not write files"):
             self.assertIn(phrase, content)
-        for removed in ("grill-with-docs", "grilling", "domain-modeling"):
-            self.assertFalse((ROOT / "skills" / removed / "SKILL.md").exists())
+        for restored in ("grill-with-docs", "grilling", "domain-modeling"):
+            self.assertTrue((ROOT / "skills" / restored / "SKILL.md").is_file())
 
     def test_selected_matt_capabilities_stay_inside_trellis_and_git_boundaries(self) -> None:
         expected = {

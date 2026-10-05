@@ -2,7 +2,7 @@
 
 > 版本：V9-EGM。本文件是 EGM 仓库根目录 `AGENTS.md` 的**项目专属补充**，应放在 Trellis Managed Block 之外。
 >
-> 优先级：用户指令、目标 EGM 仓库中更近的 `AGENTS.md` 与 Trellis 管理内容优先；本文件补充全局 AI 工作原则，不复制或替代它们。
+> 服从宿主系统/开发者指令、真实权限和用户明确要求；按目标目录有效 AGENTS 指导执行。本文件是项目补充模板，不自动加载、不复制全局规则，也不赋予任务文档或技能更高权限。
 
 ## 项目边界与架构
 
@@ -21,7 +21,7 @@
 
 - EGM 已启用 `.trellis/` 时，Trellis 是唯一的任务、PRD、Design、Spec 与工作日志来源。
 - Skill 路由、风险分级及最终门禁遵循全局 `AGENTS.md`，不额外增加完整工作流。工程数量或跨工程修改本身不构成强制访谈、全量测试或启动完整服务的理由。
-- `$grill-me` 是唯一 Grill Skill，仅在用户显式调用时进行无状态澄清。结束后由 Trellis 将确认结论维护在当前 Task 和 `.trellis/spec/`；需求已经明确时不启动 Grill。
+- `$grill-me` 仅在用户显式调用时进行无状态澄清；`$grill-with-docs` 用于当前 Task 内的文档化访谈，与原生 brainstorm 选用一个。已确认结论直接复用；其余 AIHero 入口遵循全局阶段映射，需求明确时不启动访谈。
 - OpenSpec、Superpowers 等能力只能作为当前 Trellis Task 内的方法，不创建第二套 Task、PRD、Design、Spec 或审批流程。
 
 ## 文档与质量证据

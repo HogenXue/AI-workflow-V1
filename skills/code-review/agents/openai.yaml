@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Review"
+  short_description: "AIHero capability adapted to native Trellis"
+  default_prompt: "Use $code-review within the current project workflow and authorization."

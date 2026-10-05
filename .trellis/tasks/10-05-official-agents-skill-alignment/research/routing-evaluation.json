@@ -1,0 +1,7 @@
+{
+  "cases": 22,
+  "primary_matches": 22,
+  "negative_controls": 4,
+  "mismatches": [],
+  "limits": "One independent classification pass; not proof of universal selection or execution behavior."
+}

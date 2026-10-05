@@ -1,0 +1,4 @@
+interface:
+  display_name: "Grilling"
+  short_description: "AIHero capability adapted to native Trellis"
+  default_prompt: "Use $grilling within the current project workflow and authorization."

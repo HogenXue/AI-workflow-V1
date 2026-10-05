@@ -1,0 +1,136 @@
+[
+  {
+    "id": "explicit-grill",
+    "primary": "grill-me",
+    "supports": [],
+    "reason": "用户显式调用 $grill-me，满足 implicit=false 的限制；目标是无状态推敲未成形想法，仅对话，不落盘或实施。"
+  },
+  {
+    "id": "documented-discovery",
+    "primary": "grill-with-docs",
+    "supports": [
+      "grilling"
+    ],
+    "reason": "当前 Task 有未决产品选择，要求访谈并将确认结论记录到既有规划文档。grilling 可辅助前置依赖问题排序；不另开 grill-me 或第二轮 brainstorm。"
+  },
+  {
+    "id": "interview-support",
+    "primary": "grilling",
+    "supports": [],
+    "reason": "已有 documented Grill，当前动作仅组织可回答的问题轮次；grilling 正好辅助既有访谈，不重复启动发现或写任务工件。"
+  },
+  {
+    "id": "confirmed-spec",
+    "primary": "to-spec",
+    "supports": [],
+    "reason": "需求已确认且无未决项，目标是综合到当前 PRD 并保留设计；不重新访谈、拆任务或建立第二份规格。"
+  },
+  {
+    "id": "approved-slices",
+    "primary": "to-tickets",
+    "supports": [],
+    "reason": "批准范围已确定，目标是可独立验收的原生父子任务及明确阻塞、解除条件；不是尚未确定路线的决定地图。"
+  },
+  {
+    "id": "uncertain-map",
+    "primary": "wayfinder",
+    "supports": [],
+    "reason": "大型迁移路线未明，先梳理前置决定、条件和证据缺口，符合交付未确定前的规划；不实施，也不提前拆成确定交付任务。"
+  },
+  {
+    "id": "external-evidence",
+    "primary": "research",
+    "supports": [],
+    "reason": "明确要求查官方外部资料、研究版本锁语义并记录来源，属于专题 primary-source 证据收集，结果归当前任务 research。"
+  },
+  {
+    "id": "debug-only",
+    "primary": "diagnosing-bugs",
+    "supports": [],
+    "reason": "偶发异常需要建立可复现信号和根因诊断；普通研究不替代复现。请求明确只排查，因此不追加实现或修复阶段。"
+  },
+  {
+    "id": "module-design",
+    "primary": "codebase-design",
+    "supports": [],
+    "reason": "目标是模块接口深度和边界的设计选项，符合深模块方法；不是业务术语建模，且分析授权不含重构。"
+  },
+  {
+    "id": "domain-language",
+    "primary": "domain-modeling",
+    "supports": [],
+    "reason": "目标是厘清订单、预约等业务词义并记录确认术语，使用既有领域文档；不涉及模块接口设计或实际重命名。"
+  },
+  {
+    "id": "bounded-prototype",
+    "primary": "prototype",
+    "supports": [],
+    "reason": "请求有明确可丢弃边界的状态演示，用来验证一个交互模型；不把原型转成生产实施或上线。"
+  },
+  {
+    "id": "authorized-build",
+    "primary": "implement",
+    "supports": [],
+    "reason": "当前 Task 已过原生规划门且 in_progress，目标是实施已批准规格。未给出必须使用 RED-GREEN 的行为或风险信息，不固定追加 tdd 或第二实施 Agent。"
+  },
+  {
+    "id": "explicit-tdd",
+    "primary": "tdd",
+    "supports": [],
+    "reason": "用户明确指定 $tdd 及 RED、GREEN、REFACTOR，目标是已确认行为的实施方法；Trellis 继续拥有执行阶段，不再重复启动另一套 implement 流程。"
+  },
+  {
+    "id": "readonly-review",
+    "primary": "code-review",
+    "supports": [],
+    "reason": "给定 patch 和验收，目标是分开审查需求与规范；保持只读并共享原生质量门，不启动修复、提交或第二套检查。"
+  },
+  {
+    "id": "handoff-only",
+    "primary": "handoff",
+    "supports": [],
+    "reason": "目标是当前进度、有效证据、阻塞、下一步及规范工件指针的交接；不会恢复实施或由交接推导状态、Git 授权。"
+  },
+  {
+    "id": "existing-conflict",
+    "primary": "resolving-merge-conflicts",
+    "supports": [],
+    "reason": "合并已进行中且用户明确要求解决当前冲突并验证，满足该技能边界；不启动、提交、继续 rebase 或推送 Git 操作。"
+  },
+  {
+    "id": "past-decision",
+    "primary": "memory",
+    "supports": [],
+    "reason": "明确查询历史持久化方案的取舍，需检索长期决策上下文，不能由当前源码推断历史；不因此自动进行模块设计或实施。"
+  },
+  {
+    "id": "impact-only",
+    "primary": "gitnexus",
+    "supports": [],
+    "reason": "公共 API 修改前明确要求代码图谱、调用者及影响分析，属于高风险图谱证据需求；本次仅分析，不授权修改。"
+  },
+  {
+    "id": "negative-typo",
+    "primary": null,
+    "supports": [],
+    "reason": "明确的 README 拼写修改只需最小文档编辑与文件检查，18 个技能没有必要的专属目标；不为小改强行启动发现、TDD 或完整实施流水线。"
+  },
+  {
+    "id": "negative-explain",
+    "primary": null,
+    "supports": [],
+    "reason": "只是解释给定函数当前行为，普通源码阅读足够；不涉及设计、专题研究、故障诊断或高风险图谱分析。"
+  },
+  {
+    "id": "negative-no-git",
+    "primary": null,
+    "supports": [],
+    "reason": "只报告已有测试结果，无新审查、实施或交接目标；复用有效证据，不追加检查或推导 Git 授权。"
+  },
+  {
+    "id": "negative-fresh-chat",
+    "primary": null,
+    "supports": [],
+    "reason": "用户明确只随意聊天并排除正式访谈；grill-me 需显式调用，grill-with-docs 会超出落盘范围，grilling 也没有已启动访谈可辅助。"
+  }
+]

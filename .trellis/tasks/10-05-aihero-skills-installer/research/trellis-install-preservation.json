@@ -1,0 +1,17 @@
+{
+  "fixture": "C:\\Users\\hogen\\AppData\\Local\\Temp\\aihero-trellis-install-preserve-59i0kxif",
+  "project_hashes_before": {
+    "AGENTS.md": "7e4723d8e0d9b7297fb58ab874cedbc7b8915b7370cf267738c2b2b47f6bc27c",
+    ".trellis\\workflow.md": "303b937346d0749db962c410ad4adc53fb287e4e4f3724c7c4ccd1d9b4f0f054",
+    ".trellis\\tasks\\active\\task.json": "6b4dabe1f9999432754b4d788b9ccdd8d7b633021e1c895945e96b218ad0b147"
+  },
+  "project_hashes_after": {
+    "AGENTS.md": "7e4723d8e0d9b7297fb58ab874cedbc7b8915b7370cf267738c2b2b47f6bc27c",
+    ".trellis\\workflow.md": "303b937346d0749db962c410ad4adc53fb287e4e4f3724c7c4ccd1d9b4f0f054",
+    ".trellis\\tasks\\active\\task.json": "6b4dabe1f9999432754b4d788b9ccdd8d7b633021e1c895945e96b218ad0b147"
+  },
+  "project_files_preserved": true,
+  "global_template_copied_exactly": true,
+  "updated_skill_copied_exactly": true,
+  "installed_skills": 18
+}

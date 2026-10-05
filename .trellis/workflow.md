@@ -169,7 +169,9 @@ Use a parent task when one user request contains several independently verifiabl
 
 Use child tasks for deliverables that can be planned, implemented, checked, and archived independently. Parent/child structure is not a dependency system: if one child must wait for another, write that ordering in the child `prd.md` / `implement.md` and keep each child's acceptance criteria testable.
 
-Create new children with `task.py create "<title>" --slug <name> --parent <parent-dir>`. Link existing tasks with `task.py add-subtask <parent> <child>`, and unlink mistakes with `task.py remove-subtask <parent> <child>`.
+Prefer the smallest independently verifiable outcome through the necessary layers, rather than separate schema/API/UI tickets. Record actual blockers and the evidence that clears them; take the next unblocked deliverable. Broad migrations may use expand, migrate, then contract with compatibility and verification boundaries. Do not create children for ordinary checklist steps or unresolved decisions.
+
+While planning multiple children, preserve the parent session context with `task.py create "<title>" --slug <name> --parent <parent-dir> --no-start`. Default `create` activates the new child for the session even while its status remains `planning`. Keep the parent path explicit and verify children remain planning; activate an authorized child only after its planning gate. Do not use `start` merely to restore the parent's pointer, because it can advance task status. Link existing tasks with `task.py add-subtask <parent> <child>`, and unlink mistakes with `task.py remove-subtask <parent> <child>`.
 
 <!-- Per-turn breadcrumb: shown when there is no active task (before Phase 1) -->
 
@@ -191,6 +193,7 @@ Explicit complex implementation request: create a planning task and review requi
 
 [workflow-state:planning]
 Use the project planning route. `$grill-me` is an explicit, stateless conversation used only when the user invokes it; after shared understanding is confirmed, Trellis persists the conclusions and resumes planning. Reuse approved conclusions and do not run `trellis-brainstorm` after Grill Me.
+For unsettled requirements use task-bound `grill-with-docs` or equivalent native `trellis-brainstorm`, once. Inspect facts and ask prerequisite-ready choices; clear requests need artifacts, not another interview. `to-spec` synthesizes the PRD, `to-tickets` uses native children, and `wayfinder` maps current Design decisions.
 Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; request review before `task.py start` only for outstanding decisions or an unsatisfied project gate.
 Multi-deliverable scope: consider a parent task plus independently verifiable child tasks; dependencies must be written in child artifacts, not implied by tree position.
 Sub-agent mode: curate `implement.jsonl` and `check.jsonl` as spec/research manifests before start.
@@ -204,6 +207,7 @@ Sub-agent mode: curate `implement.jsonl` and `check.jsonl` as spec/research mani
 
 [workflow-state:planning-inline]
 Use the project planning route. `$grill-me` is an explicit, stateless conversation used only when the user invokes it; after shared understanding is confirmed, Trellis persists the conclusions and resumes planning. Reuse approved conclusions and do not run `trellis-brainstorm` after Grill Me.
+For unsettled requirements use task-bound `grill-with-docs` or equivalent native `trellis-brainstorm`, once. Inspect facts and ask prerequisite-ready choices; clear requests need artifacts, not another interview. `to-spec` synthesizes the PRD, `to-tickets` uses native children, and `wayfinder` maps current Design decisions.
 Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; request review before `task.py start` only for outstanding decisions or an unsatisfied project gate.
 Multi-deliverable scope: consider a parent task plus independently verifiable child tasks; dependencies must be written in child artifacts, not implied by tree position.
 Inline mode: skip jsonl curation; Phase 2 reads artifacts/specs via `trellis-before-dev`.
@@ -225,6 +229,8 @@ Sub-agent dispatch protocol applies to all platforms and all sub-agents, includi
 [workflow-state:in_progress]
 Tools: `trellis-implement` / `trellis-research` are sub-agent types only (Task/Agent tool, NOT Skill; there is no skill by these names). `trellis-update-spec` is a skill. `trellis-check` exists as both; prefer the Agent form when verifying after code changes.
 Flow: `trellis-implement` -> `trellis-check` -> `trellis-update-spec` -> commit (Phase 3.4) -> `/trellis:finish-work`.
+Native checks cover the actual task scope and report Spec and Standards separately; use task-selected verification. Check success does not grant Git authorization.
+The adapted `implement` capability follows this execution policy; `code-review` supplies analysis inside the same native check rather than launching another review. `handoff` records canonical pointers in current task/journal locations.
 Main-session default: dispatch implement/check sub-agents. Sub-agent self-exemption: if already running as `trellis-implement`, do NOT spawn another `trellis-implement` or `trellis-check`; if already running as `trellis-check`, do NOT spawn another `trellis-check` or `trellis-implement`. Dispatch is main session only.
 Dispatch prompt starts with `Active task: <task path from task.py current>`. Read context: jsonl entries -> `prd.md` -> `design.md if present` -> `implement.md if present`.
 [/workflow-state:in_progress]
@@ -236,6 +242,8 @@ Dispatch prompt starts with `Active task: <task path from task.py current>`. Rea
 
 [workflow-state:in_progress-inline]
 Flow: `trellis-before-dev` -> edit -> `trellis-check` -> validation -> `trellis-update-spec` -> commit (Phase 3.4) -> `/trellis:finish-work`.
+Native checks cover the actual task scope and report Spec and Standards separately; use task-selected verification. Check success does not grant Git authorization.
+The adapted `implement` capability follows this execution policy; `code-review` supplies analysis inside the same native check rather than launching another review. `handoff` records canonical pointers in current task/journal locations.
 Do not dispatch implement/check sub-agents in inline mode.
 Read context: `prd.md` -> `design.md if present` -> `implement.md if present`, plus relevant spec/research loaded by skills.
 [/workflow-state:in_progress-inline]
@@ -274,7 +282,7 @@ When a user request matches one of these intents inside an active task, route fi
 
 [Claude Code, Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, Oh My Pi, ZCode, Reasonix, Trae]
 
-- Planning or unclear requirements -> `trellis-brainstorm`.
+- Unsettled requirements -> task-bound `grill-with-docs` or equivalent `trellis-brainstorm`, once; clear requests record artifacts without interviewing. Reuse confirmed Grill conclusions.
 - `in_progress` implementation/check -> dispatch `trellis-implement` / `trellis-check`.
 - Repeated debugging -> `trellis-break-loop`; spec updates -> `trellis-update-spec`.
 
@@ -282,7 +290,7 @@ When a user request matches one of these intents inside an active task, route fi
 
 [codex-inline, Kilo, Antigravity, Devin]
 
-- Planning or unclear requirements -> `trellis-brainstorm`.
+- Unsettled requirements -> task-bound `grill-with-docs` or equivalent `trellis-brainstorm`, once; clear requests record artifacts without interviewing. Reuse confirmed Grill conclusions.
 - Before editing -> `trellis-before-dev`; after editing -> `trellis-check`.
 - Repeated debugging -> `trellis-break-loop`; spec updates -> `trellis-update-spec`.
 
@@ -319,7 +327,7 @@ python3 ./.trellis/scripts/task.py create "<task title>" --slug <name>
 
 `--slug` is the human-readable name only. Do **not** include the `MM-DD-` date prefix; `task.py create` adds that prefix automatically.
 
-For task trees, create the parent task first and then create each child with `--parent <parent-dir>`. Do not start the parent just because children exist; start the child that owns the next independently verifiable deliverable.
+For task trees, create the parent task first and draft each child with `--parent <parent-dir> --no-start` so the parent retains this session's planning context. Do not start the parent just because children exist; start the authorized child owning the next independently verifiable deliverable after its planning gate.
 
 After this command succeeds, the per-turn breadcrumb auto-switches to `[workflow-state:planning]`, telling the AI to stay in planning.
 
@@ -329,16 +337,19 @@ Skip when `python3 ./.trellis/scripts/task.py current --source` already points t
 
 #### 1.1 Requirement exploration `[required · repeatable]`
 
-Load the `trellis-brainstorm` skill and explore requirements interactively with the user per the skill's guidance.
+Inspect evidence and reuse confirmed decisions first. For unsettled requirements, use task-bound `grill-with-docs` or equivalent native `trellis-brainstorm`, once. For clear requests, write required planning artifacts without manufacturing an interview. Explicit `grill-me` remains stateless; persist its confirmed conclusions afterward without a second interview. `to-spec`, `to-tickets`, and `wayfinder` provide synthesis, native outcome slicing, and decision mapping within this phase, using the same PRD/Design/Plan and native task commands.
 
 The brainstorm skill will guide you to:
 - Ask one question at a time
+- Ask only unresolved user choices whose prerequisite decisions are settled; mark research/prototype-dependent branches with the evidence needed
 - Prefer researching over asking the user
 - Prefer offering options over open-ended questions
 - Update `prd.md` immediately after each user answer
 - Split large scopes into a parent task plus child tasks when the deliverables can be verified independently
 - Keep `prd.md` focused on requirements and acceptance criteria
 - For complex tasks, produce `design.md` and `implement.md` before implementation starts
+
+Reuse project domain vocabulary. Persist resolved terms in the existing domain location and only durable, surprising, hard-to-reverse trade-offs in the existing decision location. Keep task-specific choices in `design.md`; create entries when needed rather than a second glossary/ADR tree.
 
 When considering a parent/child split:
 - Use a parent task when one request contains several independently verifiable deliverables.
@@ -526,6 +537,8 @@ The platform prelude auto-handles the context load requirement:
 
 #### 2.2 Quality check `[required · repeatable]`
 
+One native check covers two dimensions: **Spec** (PRD acceptance, correctness, scope, and design/contracts) and **Standards** (applicable project conventions and maintainability). Report each separately with evidence. Establish the actual task scope, including task-owned earlier commits, staged/unstaged changes, and new files; exclude unrelated work. Execute task-selected checks at the smallest sufficient scope and record actual results and uncovered boundaries. Parallel reviewers are not required by these dimensions.
+
 [Claude Code, Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, Oh My Pi, ZCode, Reasonix, Trae]
 
 Spawn the check sub-agent:
@@ -638,6 +651,8 @@ The AI drives a batched commit of this task's code changes so `/finish-work` can
 - The batched plan is one prompt; do not prompt per commit.
 
 #### 3.5 Wrap-up reminder
+
+Record the next action, unresolved blockers, and actual verification scope/results in the current task or journal. Reference canonical PRD/design/implementation/research files instead of a second handoff specification. Native continue resumes from task status and artifacts, reuses valid evidence, and does not grant implementation or Git authorization.
 
 After the above, remind the user they can run `/finish-work` to wrap up (archive the task, record the session).
 

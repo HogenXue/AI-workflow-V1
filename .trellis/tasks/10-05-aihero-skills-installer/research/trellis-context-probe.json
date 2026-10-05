@@ -1,0 +1,16 @@
+{
+  "fixture": "C:\\Users\\hogen\\AppData\\Local\\Temp\\aihero-trellis-context-ggtcl1wc",
+  "before_unprotected": "Current task: .trellis/tasks/10-05-parent\nSource: session:aihero-compatibility-probe\n",
+  "after_unprotected": "Current task: .trellis/tasks/10-05-unprotected\nSource: session:aihero-compatibility-probe\n",
+  "before_protected": "Current task: .trellis/tasks/10-05-protected-parent\nSource: session:aihero-compatibility-probe\n",
+  "after_protected": "Current task: .trellis/tasks/10-05-protected-parent\nSource: session:aihero-compatibility-probe\n",
+  "statuses": {
+    "10-05-child-one": "planning",
+    "10-05-child-two": "planning",
+    "10-05-parent": "planning",
+    "10-05-protected-parent": "planning",
+    "10-05-unprotected": "planning"
+  },
+  "unprotected_context_changed": true,
+  "protected_context_preserved": true
+}

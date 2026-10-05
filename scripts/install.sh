@@ -345,6 +345,7 @@ interactive_main() {
   fi
 
   printf '%s\n' '--- Recommended full install plan ---'
+  printf '%s\n' '- AIHero/Trellis: main-flow and support Skills from manifest.yaml + global rules from agents/AGENTS.global.md'
   printf '%s\n' '- Dependencies: keep usable GitNexus/Trellis/Graphify CLIs; install missing tools first'
   ((want_codex)) && printf '%s\n' '- Codex: ~/.agents/skills (including Graphify) + ~/.agents/config + ~/.codex AGENTS/user hooks + global MCP'
   ((want_cursor)) && printf '%s\n' '- Cursor: ~/.cursor/skills + ~/.cursor/config + mcp.json + project rules/hooks'

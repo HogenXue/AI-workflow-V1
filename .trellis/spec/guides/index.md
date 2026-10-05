@@ -24,6 +24,8 @@ These guides help you **ask the right questions before coding**.
 | [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md) | Identify patterns and reduce duplication | When you notice repeated patterns |
 | [Cross-Layer Thinking Guide](./cross-layer-thinking-guide.md) | Think through data flow across layers | Features spanning multiple layers |
 | [Installer Contracts](../scripts/installer-contracts.md) | Codex/Cursor install profiles + explicit project-root | Changing `scripts/install*` or host MCP/hooks/rules templates |
+| [AIHero / Trellis Integration](../decisions/aihero-native-trellis.md) | Ownership boundary for questioning, outcome slicing, review, and continuity | Adapting external workflow skills or changing native planning/check guidance |
+| [Codex Instruction / Skill Boundaries](../decisions/codex-instruction-skill-boundaries.md) | Official instruction scope, concise defaults and distinct capability triggers | Editing global/project templates or skill discovery metadata |
 
 ---
 

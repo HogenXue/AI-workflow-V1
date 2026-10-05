@@ -430,6 +430,7 @@ function Invoke-InteractiveMain {
     }
 
     [Console]::Out.WriteLine('--- Recommended full install plan ---')
+    [Console]::Out.WriteLine('- AIHero/Trellis: main-flow and support Skills from manifest.yaml + global rules from agents/AGENTS.global.md')
     [Console]::Out.WriteLine('- Dependencies: keep usable GitNexus/Trellis/Graphify CLIs; install missing tools first')
     if ($wantCodex) {
         [Console]::Out.WriteLine(

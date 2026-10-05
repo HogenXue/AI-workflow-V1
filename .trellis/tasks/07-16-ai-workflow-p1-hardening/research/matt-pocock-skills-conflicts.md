@@ -1,5 +1,7 @@
 # Matt Pocock Skills 与 Trellis 冲突评估
 
+> 历史快照：下文记录 2026-07-14 核对版本及当时的 `grill-with-docs` 迁移方案，不作为当前路由规则。2026-10-02 用户选择将 AIHero 方法融入 Trellis 原生流程，保留显式、无状态 `grill-me`；当前边界见 [AIHero / Trellis 决定](../../../spec/decisions/aihero-native-trellis.md)。
+
 ## 核对范围
 
 - 说明页：<https://www.aihero.dev/skills-setup-matt-pocock-skills>

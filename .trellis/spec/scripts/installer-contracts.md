@@ -568,11 +568,21 @@ the direct CI command references.
 **Manifest contract**: `manifest.yaml` lists only currently distributed Skill names. A renamed or removed
 workflow Skill is not silently deleted during an ordinary install. Add it to the installer's legacy list;
 `--prune-legacy` must preview the removal and, on execution, create a unique timestamped `.bak` before
-removing the old directory or symlink. The `grill-with-docs` → `grill-me` migration follows this path;
-`grilling`, `domain-modeling`, `release`, and `karpathy-guidelines-zh` are also legacy entries, not current
-manifest Skills. The current package contains five Trellis-adapted AI Hero capabilities plus Memory and
-GitNexus; Graphify remains a separately installed analysis skill. General constraints remain in AGENTS,
-and release operations follow the existing project workflow without a second lifecycle skill.
+removing the old directory or symlink. The current 18-skill manifest includes the restored
+`grill-with-docs`, `grilling`, and `domain-modeling` plus the AIHero main flow/support capabilities.
+Restored names must not remain in either shell's legacy list: `--replace --prune-legacy` backs up and
+replaces them normally, never removes the newly installed directories. Remaining legacy names are
+`openspec`, `review`, `release`, and `karpathy-guidelines-zh`. Graphify remains a separately installed
+analysis skill. General constraints remain in AGENTS; Git/release operations retain native authorization.
+
+**Source contract**: New AIHero adaptations carry pinned source URLs/commit and MIT `LICENSE` inside
+each skill folder, so copying the folder preserves attribution. Package provenance records original
+paths and hashes in `skills/aihero-provenance.json`. Installers do not fetch mutable upstream sources.
+
+**Expanded install checks**: Both peers must copy all current skills and resources, preview without
+mutation, and preserve restored names through a replace/prune upgrade while backing up old content.
+Full profiles use this same manifest; one-click plans show AIHero/Trellis capabilities and the global
+template source. Native project workflows are not copied into unrelated repositories.
 
 **Structure contract**: Every Skill requires `SKILL.md` and `agents/openai.yaml`. `references/`,
 `templates/`, `examples/`, `scripts/`, and `assets/` are optional and should exist only when the Skill uses

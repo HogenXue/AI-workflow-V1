@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement"
+  short_description: "AIHero capability adapted to native Trellis"
+  default_prompt: "Use $implement within the current project workflow and authorization."

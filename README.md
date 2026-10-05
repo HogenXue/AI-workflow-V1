@@ -1,6 +1,6 @@
 # AI-workflow-V1
 
-可安装的 AI 协作 Skill 包：7 个独立 Skill、全局 AGENTS 模板，以及共享默认配置（`config/`）。
+可安装的 AI 协作 Skill 包：18 个独立 Skill、Trellis 兼容的全局 AGENTS 模板，以及共享默认配置（`config/`）。
 
 GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
@@ -8,11 +8,25 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
 | 组件            | 说明                                                                         |
 | ------------- | -------------------------------------------------------------------------- |
-| **Skills**    | `memory`、`gitnexus`、`grill-me`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` |
+| **Skills**    | AIHero 主流程与配套技能，以及 Memory/GitNexus；18 项安装清单以 `manifest.yaml` 为准 |
 | **AGENTS 模板** | [AGENTS.global.md](agents/AGENTS.global.md)：跨项目通用规则；[AGENTS.project.md](agents/AGENTS.project.md)：项目补充规则；[AGENTS-egm.md](agents/AGENTS-egm.md)：EGM 项目补充规则 |
 | **config/**   | 默认配置、有效配置运行时和平台无关工作流门禁；项目可用 `hogen-codex.yaml` 覆盖                         |
 
-Trellis 是项目唯一工作流，搭配五个 AI Hero 开发能力：`grill-me`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts`。记忆由 `memory` 对接 Recallium/Mem0，代码分析按需使用 GitNexus/Graphify。`grill-me` 是手动调用、无状态的 Grill 入口，结束后由 Trellis 接管落盘和实施；质量门由原生 `trellis-check` 负责。Graphify 是单独安装的第三方技能，不在七项 manifest 中。
+Trellis 是任务、工件、状态和最终质量门的唯一所有者。本包安装经过 Trellis 适配的 AIHero 独立技能；同一需求不重复访谈、建规格或审查。记忆由 `memory` 对接 Recallium/Mem0，代码分析按需使用 GitNexus/Graphify；Graphify 单独安装，不在 18 项 manifest 中。
+
+| 阶段/目的 | 可安装入口 | 产物与边界 |
+| --- | --- | --- |
+| 文档化需求探索 | `grill-with-docs`、`grilling`、`domain-modeling` | 当前 PRD/Design 与既有领域/决定 Spec |
+| 综合已确认规格 | `to-spec` | 当前 PRD；不再发一份外部规格 |
+| 拆分交付与梳理决定 | `to-tickets`、`wayfinder` | 原生父子任务及当前 Design/Plan 的阻塞/决定地图 |
+| 获取证据 | `research`、`prototype` | 当前 Task 的研究或原型，实施仍需对应授权 |
+| 实施与审查 | `implement`、`tdd`、`code-review` | 原生执行阶段；Spec/Standards 融入一次 `trellis-check` |
+| 会话交接 | `handoff` | 既有 Task/Journal 与工件指针 |
+| 既有专项能力 | `grill-me`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` | 无状态 Grill 仍显式调用，其他能力服务当前任务 |
+
+所有完整宿主安装和 `skills` 组件从同一 manifest 分发。完整安装还更新全局规则；单独安装 `skills` 不更新规则，需另行安装 `agents` 或宿主规则。新增技能内置 Trellis 适配，无需将本仓库 `.trellis/` 或 `.claude/` 复制到其他项目；项目原生文件仍由项目管理。固定上游来源见 [归属说明](THIRD_PARTY_NOTICES.md) 和 `skills/aihero-provenance.json`。
+
+`agents/` 内的文件是分发模板，不按这些文件名自动加载。Codex 实际指导按全局 home 到项目目录分层，近目录指导覆盖较早指导，同目录 override 优先且不会与普通 AGENTS 同时加载。更新模板后需明确安装并启动新会话核对有效来源；已有 override 可能仍是所选来源，安装器不会擅自删除它。项目模板只增补本地差异，放在 Trellis 管理区之外。[OpenAI 官方加载说明](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 
 ## 前置条件
 
@@ -200,7 +214,7 @@ bash scripts/install.sh skills --copy --replace --target ~/.codex/skills
 
 Codex 可能同时发现 `~/.agents/skills` 与 `~/.codex/skills`。同一组 Skill 只选择一个目录；本包对 Codex App 默认使用 `~/.agents/skills`，对应配置目录是 `~/.agents/config`。安装器发现另一目录存在同名 Skill 时会警告；只有显式 `--prune-other-root` 才会先备份再移走另一目录中的本包同名 Skill。
 
-旧版本安装的 `openspec`、`review`、`grill-with-docs`、`grilling`、`domain-modeling`、`release` 和 `karpathy-guidelines-zh` 不在当前 manifest 中，普通更新不会删除它们。先预览，再用显式 `--prune-legacy` 将它们备份并移除；若两处都曾安装，需要分别处理：
+旧版本的 `openspec`、`review`、`release` 和 `karpathy-guidelines-zh` 不在当前 manifest 中，普通更新不会删除它们。`grill-with-docs`、`grilling`、`domain-modeling` 已恢复为当前技能，按普通冲突/备份替换处理，`--prune-legacy` 不会清理它们。先预览，再用显式 `--prune-legacy` 备份并移除上述四个旧技能；若两处都曾安装，需要分别处理：
 
 ```bash
 bash scripts/install.sh skills --dry-run --prune-legacy --target ~/.agents/skills

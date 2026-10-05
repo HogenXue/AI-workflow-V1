@@ -1,0 +1,4 @@
+interface:
+  display_name: "To Tickets"
+  short_description: "AIHero capability adapted to native Trellis"
+  default_prompt: "Use $to-tickets within the current project workflow and authorization."

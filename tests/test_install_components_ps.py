@@ -15,6 +15,8 @@ SKILLS = (
     "memory",
     "gitnexus",
     "grill-me",
+    "grill-with-docs", "grilling", "domain-modeling", "to-spec", "to-tickets", "wayfinder",
+    "research", "prototype", "implement", "code-review", "handoff",
     "tdd",
     "diagnosing-bugs",
     "codebase-design",
