@@ -8,7 +8,7 @@ Updated 2026-10-05: the user requested main-flow and support skills as independe
 
 Trellis owns task lifecycle, requirements/design/implementation artifacts, checks, and session records. AIHero contributes evidence-first decision questioning, outcome slicing with real blockers, selective domain/decision capture, separate Spec/Standards review, and artifact-based continuity.
 
-Keep `grill-me` explicit and stateless. Documented discovery uses task-bound `grill-with-docs` or equivalent native `trellis-brainstorm`, once. Confirmed conclusions do not trigger another interview. Neither complexity nor cross-module scope alone starts an interview.
+Keep `grill-me` explicit and stateless. Updated 2026-10-08: automatically select task-bound `grill-with-docs` for unresolved user decisions under native Phase 1.1 in `.trellis/workflow.md`; the skill's automatic-selection guidance defines the detailed boundaries. Reuse the current interview owner and confirmed conclusions, with native `trellis-brainstorm` as fallback when the skill is unavailable. Only affected new choices reopen discovery; complexity or cross-module scope alone does not start an interview. Confirmed results return to canonical task artifacts and the native planning gate.
 
 Use existing Trellis parent/child tasks and artifact paths. Do not add upstream setup/tracker routing, `.scratch` tickets, a second spec/ADR tree, or upstream implementation/commit orchestration. Native `trellis-check` owns both review dimensions and task-selected checks; independent dimensions do not mandate additional agents.
 

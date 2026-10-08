@@ -1,0 +1,32 @@
+{
+  "id": "grill-with-docs-auto-routing",
+  "name": "grill-with-docs-auto-routing",
+  "title": "Clarify automatic Grill with Docs routing in Trellis",
+  "description": "Select documented discovery automatically for unresolved user decisions while preserving native Trellis ownership and interview deduplication.",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "hogen",
+  "assignee": "hogen",
+  "createdAt": "2026-10-08",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "skills/grill-with-docs/SKILL.md",
+    "agents/AGENTS.global.md",
+    "AGENTS.md",
+    ".trellis/workflow.md",
+    ".trellis/spec/decisions/aihero-native-trellis.md"
+  ],
+  "notes": "Automatic documented-discovery routing implemented and verified. User explicitly authorized commit and push on 2026-10-08; see verification.md. No live install or archive.",
+  "meta": {}
+}

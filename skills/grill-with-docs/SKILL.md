@@ -1,6 +1,6 @@
 ---
 name: grill-with-docs
-description: "Resolve unsettled requirements and record confirmed decisions in the current task. Use for documented discovery, not clear requests or already-confirmed Grill conclusions."
+description: "Clarify unresolved user decisions affecting scope, key design choices, or acceptance criteria in current task documents. Skip clear requests, routine implementation choices, and confirmed decisions."
 license: MIT
 ---
 
@@ -13,6 +13,14 @@ Adapted from Matt Pocock's AIHero skills. This is a documented planning capabili
 In Trellis, read `.trellis/workflow.md`, resolve the current task, and read its PRD/design/plan and relevant domain/decision specs. Task creation follows existing authorization; consultation alone does not authorize creating a task. This capability replaces the interview inside Phase 1.1, not the task lifecycle. Do not run a second `trellis-brainstorm` interview afterward.
 
 Without Trellis, use the project's established planning documents. Do not initialize Trellis, run upstream setup, or create another tracker/spec hierarchy.
+
+## Automatic selection
+
+Within authorized task planning, select this skill without requiring the user to name it when reading task artifacts, relevant specs, and repository facts still leaves a user decision affecting scope, key design choices, or acceptance criteria. Questions answerable from evidence or routine engineering judgment are resolved directly. Complexity alone does not trigger an interview.
+
+Reuse the current interview owner and confirmed answers. If native brainstorm or explicit Grill already settled the same choices, capture/reuse those conclusions and continue planning. Reopen only choices affected by new evidence or changed requirements. When this skill is unavailable, native Trellis brainstorm can fill the same interview role.
+
+If implementation exposes such a requirement gap, return to native planning for the affected scope. Ask only questions whose prerequisites are settled, record missing evidence for dependent branches, and continue independent authorized work while awaiting answers. Resume dependent implementation only after the decisions and native planning gate are satisfied.
 
 ## Interview and capture
 

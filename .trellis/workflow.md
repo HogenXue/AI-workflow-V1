@@ -193,7 +193,7 @@ Explicit complex implementation request: create a planning task and review requi
 
 [workflow-state:planning]
 Use the project planning route. `$grill-me` is an explicit, stateless conversation used only when the user invokes it; after shared understanding is confirmed, Trellis persists the conclusions and resumes planning. Reuse approved conclusions and do not run `trellis-brainstorm` after Grill Me.
-For unsettled requirements use task-bound `grill-with-docs` or equivalent native `trellis-brainstorm`, once. Inspect facts and ask prerequisite-ready choices; clear requests need artifacts, not another interview. `to-spec` synthesizes the PRD, `to-tickets` uses native children, and `wayfinder` maps current Design decisions.
+Inspect task artifacts, specs, and code first. Automatically select task-bound `grill-with-docs` when a user decision affecting scope, key design choices, or acceptance criteria remains unresolved; reuse the current interview owner and confirmed answers. If the skill is unavailable, use native `trellis-brainstorm`. Clear requests proceed without interviewing. Follow Phase 1.1 for reopening affected choices and native gates. `to-spec` synthesizes the PRD, `to-tickets` uses native children, and `wayfinder` maps current Design decisions.
 Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; request review before `task.py start` only for outstanding decisions or an unsatisfied project gate.
 Multi-deliverable scope: consider a parent task plus independently verifiable child tasks; dependencies must be written in child artifacts, not implied by tree position.
 Sub-agent mode: curate `implement.jsonl` and `check.jsonl` as spec/research manifests before start.
@@ -207,7 +207,7 @@ Sub-agent mode: curate `implement.jsonl` and `check.jsonl` as spec/research mani
 
 [workflow-state:planning-inline]
 Use the project planning route. `$grill-me` is an explicit, stateless conversation used only when the user invokes it; after shared understanding is confirmed, Trellis persists the conclusions and resumes planning. Reuse approved conclusions and do not run `trellis-brainstorm` after Grill Me.
-For unsettled requirements use task-bound `grill-with-docs` or equivalent native `trellis-brainstorm`, once. Inspect facts and ask prerequisite-ready choices; clear requests need artifacts, not another interview. `to-spec` synthesizes the PRD, `to-tickets` uses native children, and `wayfinder` maps current Design decisions.
+Inspect task artifacts, specs, and code first. Automatically select task-bound `grill-with-docs` when a user decision affecting scope, key design choices, or acceptance criteria remains unresolved; reuse the current interview owner and confirmed answers. If the skill is unavailable, use native `trellis-brainstorm`. Clear requests proceed without interviewing. Follow Phase 1.1 for reopening affected choices and native gates. `to-spec` synthesizes the PRD, `to-tickets` uses native children, and `wayfinder` maps current Design decisions.
 Lightweight: `prd.md` can be enough. Complex: finish `prd.md`, `design.md`, and `implement.md`; request review before `task.py start` only for outstanding decisions or an unsatisfied project gate.
 Multi-deliverable scope: consider a parent task plus independently verifiable child tasks; dependencies must be written in child artifacts, not implied by tree position.
 Inline mode: skip jsonl curation; Phase 2 reads artifacts/specs via `trellis-before-dev`.
@@ -282,7 +282,7 @@ When a user request matches one of these intents inside an active task, route fi
 
 [Claude Code, Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, Oh My Pi, ZCode, Reasonix, Trae]
 
-- Unsettled requirements -> task-bound `grill-with-docs` or equivalent `trellis-brainstorm`, once; clear requests record artifacts without interviewing. Reuse confirmed Grill conclusions.
+- Unresolved user decisions -> automatically select task-bound `grill-with-docs` under Phase 1.1; reuse the current interview owner and confirmed answers, with native brainstorm as fallback. Clear requests proceed without interviewing. Implementation-discovered requirement gaps return to planning for the affected scope.
 - `in_progress` implementation/check -> dispatch `trellis-implement` / `trellis-check`.
 - Repeated debugging -> `trellis-break-loop`; spec updates -> `trellis-update-spec`.
 
@@ -290,7 +290,7 @@ When a user request matches one of these intents inside an active task, route fi
 
 [codex-inline, Kilo, Antigravity, Devin]
 
-- Unsettled requirements -> task-bound `grill-with-docs` or equivalent `trellis-brainstorm`, once; clear requests record artifacts without interviewing. Reuse confirmed Grill conclusions.
+- Unresolved user decisions -> automatically select task-bound `grill-with-docs` under Phase 1.1; reuse the current interview owner and confirmed answers, with native brainstorm as fallback. Clear requests proceed without interviewing. Implementation-discovered requirement gaps return to planning for the affected scope.
 - Before editing -> `trellis-before-dev`; after editing -> `trellis-check`.
 - Repeated debugging -> `trellis-break-loop`; spec updates -> `trellis-update-spec`.
 
@@ -337,7 +337,13 @@ Skip when `python3 ./.trellis/scripts/task.py current --source` already points t
 
 #### 1.1 Requirement exploration `[required · repeatable]`
 
-Inspect evidence and reuse confirmed decisions first. For unsettled requirements, use task-bound `grill-with-docs` or equivalent native `trellis-brainstorm`, once. For clear requests, write required planning artifacts without manufacturing an interview. Explicit `grill-me` remains stateless; persist its confirmed conclusions afterward without a second interview. `to-spec`, `to-tickets`, and `wayfinder` provide synthesis, native outcome slicing, and decision mapping within this phase, using the same PRD/Design/Plan and native task commands.
+Inspect current task artifacts, relevant specifications, and repository facts first. Automatically select task-bound `grill-with-docs`, without requiring the user to name it, when a user decision affecting scope, key design choices, or acceptance criteria remains unresolved. Use the selected skill's automatic-selection guidance for detailed boundaries. Resolve factual questions from evidence and routine implementation choices with engineering judgment; clear or already-confirmed requests proceed directly. Complexity alone does not trigger an interview.
+
+Reuse an ongoing interview owner and confirmed answers. If `grill-with-docs` is unavailable, use equivalent native `trellis-brainstorm`; use one interview path for the same choices. Explicit `grill-me` remains stateless, and Trellis persists its confirmed conclusions afterward without another interview. Reopen only choices affected by new evidence or changed requirements.
+
+If implementation reveals a requirement gap, return to this step for the affected scope. Record research/prototype evidence needed for dependent questions and continue independent authorized work. Capture confirmed answers in the current PRD/design/plan, then resume dependent implementation only after the native planning gate is satisfied. Interview completion alone grants no task-state, implementation, Git, or installation permission.
+
+`to-spec`, `to-tickets`, and `wayfinder` provide synthesis, native outcome slicing, and decision mapping within this phase, using the same PRD/Design/Plan and native task commands.
 
 The brainstorm skill will guide you to:
 - Ask one question at a time

@@ -26,7 +26,7 @@ Codex 全局 home 优先选非空 `AGENTS.override.md`，否则选 `AGENTS.md`�
 
 | 当前目标 | 主能力入口 | 归属与排重 |
 | --- | --- | --- |
-| 文档化未决需求 | `grill-with-docs` 或原生 `trellis-brainstorm` | 选一个；当前 PRD/Design/Plan，`grilling` 只辅助提问 |
+| 文档化未决需求 | 自动选用 `grill-with-docs`，不可用时用原生 `trellis-brainstorm` | 复用当前访谈入口与已确认结论；当前 PRD/Design/Plan，`grilling` 只辅助提问 |
 | 综合已确认需求 | `to-spec` | 当前 PRD；不重新访谈或发布第二份规格 |
 | 拆分已定交付 | `to-tickets` | 原生父子任务、真实阻塞与解除证据 |
 | 大型工作先梳理决定 | `wayfinder` | 当前 Design 的前置决定地图；不是第二套任务状态 |
@@ -37,7 +37,9 @@ Codex 全局 home 优先选非空 `AGENTS.override.md`，否则选 `AGENTS.md`�
 | 交接会话 | `handoff` | 当前 Task/Journal 与已有工件指针，不自动恢复工作 |
 | 专项诊断/设计/冲突 | `diagnosing-bugs` / `codebase-design` / `resolving-merge-conflicts` | 服务当前任务；诊断/设计本身不授权修复、重构或 Git |
 
-`$grill-me` 仅在用户显式调用时使用。Grill 期间只进行无状态对话，不写文件、不修改 Task、不实施；确认后交回 Trellis 持久化，不再启动相同的 documented Grill/brainstorm。任务复杂本身不要求访谈；只问查证后仍需用户决定的前置条件已满足的问题。
+自动文档化澄清：在获授权的任务规划中，先读当前工件、相关规格和代码；仍存在影响范围、关键方案或验收且需要用户决定的问题时，自动选用上述访谈入口，无需用户点名。事实问题先查证，普通实现细节自行判断，明确需求直接继续。实施中发现需求缺口时回到原生规划，只重开受新证据或需求变化影响的问题；确认后写回当前工件并按原生门槛继续。
+
+`$grill-me` 仅在用户显式调用时使用。该显式 Grill 期间只进行无状态对话，不写文件、不修改 Task、不实施；确认后交回 Trellis 持久化，不再启动相同的 documented Grill/brainstorm。任务复杂本身不要求访谈；只问查证后仍需用户决定的前置条件已满足的问题。
 
 领域术语由 `domain-modeling` 在既有领域位置澄清；软件模块接口设计由 `codebase-design` 提供方法。稳定且有真实取舍的持久决定写既有决策位置，任务专属方案留在 Design。批量建子任务保留父任务路径，用原生支持的 `create --parent ... --no-start` 保持规划关联；不要仅为恢复指针调用 `start` 而提前进入实施。
 

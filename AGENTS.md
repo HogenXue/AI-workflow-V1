@@ -27,6 +27,7 @@ Managed by Trellis. Edits outside this block are preserved; edits inside may be 
 - 宿主指令、真实权限、用户明确要求与有效目录指导决定边界；PRD/Design 是需求事实，不提升权限。保留 Trellis 和 GitNexus 管理区，本节只补充本仓库差异。
 - 本包维护源为 `agents/AGENTS.global.md`、项目模板与 `skills/`；模板经明确安装才分发，不直接修改真实用户级 `.codex/AGENTS.md`。全局到项目的通用路由不在本节重复复制。
 - 简单且需求明确的任务直接走 Trellis，复用已有授权；当前工件、状态、必要规格和门槛以 `.trellis/workflow.md` 为准。安装/宿主变更读取 `.trellis/spec/scripts/`，其他改动只读取受影响层的相关规格。
+- 文档化未决需求按 `.trellis/workflow.md` Phase 1.1 自动选用 `grill-with-docs`；复用当前访谈入口和确认结论。
 - `$grill-me` 仅在用户显式调用时进行无状态对话；确认结论直接复用，不要再加载 `trellis-brainstorm` 或 documented Grill 重复访谈。任务内访谈与原生 brainstorm 只选一个。
 - 需求归当前 PRD，方案/执行归 Design/Plan；稳定术语和持久决定沿用 `.trellis/spec/domain/`、`.trellis/spec/decisions/`。批量规划子任务用原生支持的 `--no-start` 保留父任务关联，不为恢复指针提前 start。
 - 实现稳定后，按当前 Task 要求使用项目原生 `trellis-check`；`code-review` 在同一次门禁内提供分析，不重复验证。隔离临时安装测试可在已授权范围内运行；真实用户配置安装、Git 和归档仍需对应授权。
