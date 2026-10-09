@@ -208,6 +208,52 @@ class InteractiveInstallTests(unittest.TestCase):
                 )
                 self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
 
+    def test_mcp_merge_allows_private_network_http_for_self_hosted_services(self) -> None:
+        codex_home = self.home / ".codex"
+        codex_home.mkdir(parents=True)
+        (codex_home / "config.toml").write_text("", encoding="utf-8")
+
+        for url in (
+            "http://10.0.0.8:3000/mcp",
+            "http://172.16.4.9:3000/mcp",
+            "http://192.168.50.160:3000/",
+            "http://[fd00::10]:3000/mcp",
+        ):
+            with self.subTest(url=url):
+                result = self.run_install(
+                    "codex-merge",
+                    "--mcp-overwrite",
+                    "--mem0-url",
+                    url,
+                    "--skip-project",
+                    "--codex-home",
+                    str(codex_home),
+                    "--backup-dir",
+                    str(self.root / "backup"),
+                    "--replace",
+                )
+                self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+
+    def test_mcp_merge_rejects_non_private_special_use_http_addresses(self) -> None:
+        for url in (
+            "http://169.254.10.20:3000/mcp",
+            "http://192.0.2.10:3000/mcp",
+        ):
+            with self.subTest(url=url):
+                result = self.run_install(
+                    "codex-merge",
+                    "--mcp-overwrite",
+                    "--mem0-url",
+                    url,
+                    "--skip-project",
+                    "--codex-home",
+                    str(self.home / ".codex"),
+                    "--backup-dir",
+                    str(self.root / "backup"),
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("insecure remote HTTP", result.stderr)
+
     def test_codex_merge_validates_single_quoted_toml_url(self) -> None:
         fragments = self.root / "fragments"
         fragments.mkdir()

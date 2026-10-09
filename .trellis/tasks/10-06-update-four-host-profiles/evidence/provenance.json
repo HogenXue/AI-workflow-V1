@@ -1,0 +1,182 @@
+{
+  "source_rollout_id": "01a1019a-98de-7c90-a953-427689ce4475",
+  "source_session_log": "/Users/hogenxue/.codex/sessions/2026/10/03/rollout-2026-10-03T19-51-11-01a1019a-98de-7c90-a953-427689ce4475.jsonl",
+  "terminal_session_id": 59521,
+  "terminal_chunks": [
+    {
+      "source_line": 828,
+      "call_id": "call_0PYl3tOAnfMglLnYuA94s0Cv",
+      "chunk_id": "dded9c",
+      "output_sha256": "0bc62f3a08ac2c205c37ea99a9560568749f2f970c569520ee6ed02965d02ef8",
+      "exit_code": null,
+      "source_line_sha256": "ccb0d58ccfb4ebdd4a79763b35c86f018e61376c85ee32c67b544585603fd9ad"
+    },
+    {
+      "source_line": 834,
+      "call_id": "call_MGOIWR7ksAyViR6U3N9PlH9r",
+      "chunk_id": "f2c73a",
+      "output_sha256": "65772df427913e4fea97ef82595d1eb0005985051b22b1589b1bfa9a813fcd13",
+      "exit_code": null,
+      "source_line_sha256": "059b65f96c2f87497100d482de9e142aa891e5cc56a1258aa9132fc83d99409b"
+    },
+    {
+      "source_line": 840,
+      "call_id": "call_gAn3FeRjOjCojtAhVfxvE5GT",
+      "chunk_id": "1f22b2",
+      "output_sha256": "c684aa7b018de2c1637f8ab266791cc7c921a64417e5943557ce1fb70f85d5c7",
+      "exit_code": null,
+      "source_line_sha256": "6ab6b5e499b2ef573b99d9f8117208027c29e234ab0b06548260c417aa8ee14b"
+    },
+    {
+      "source_line": 844,
+      "call_id": "call_SWGmdzwx0dREEx0potoYQMmB",
+      "chunk_id": "db9e33",
+      "output_sha256": "a0031a1233ddbee028d416553d2897935fb7af2f6243a0fb8c5d3279403dba1e",
+      "exit_code": null,
+      "source_line_sha256": "a39b9e5d46ae745ed0ae3d0b320c83ef360004fd3f7b625be814cf2a56386345"
+    },
+    {
+      "source_line": 848,
+      "call_id": "call_Ms5oNe2G02MFxq3j4VN1SwCb",
+      "chunk_id": "725ce6",
+      "output_sha256": "793012f48b80b57f864fab9472201306e19f7b540ba01f6e90e1a7f67243acba",
+      "exit_code": null,
+      "source_line_sha256": "ed7f2528075c220f640d7d7a049ee026f0afd90787a689115cf4b2c892057f0e"
+    },
+    {
+      "source_line": 852,
+      "call_id": "call_T1khffzwbDQn0058HS1RMwOe",
+      "chunk_id": "780817",
+      "output_sha256": "f7cccf3a1f3d80c0dc2ad1eb3a1a9d8a2e415924ce000498d78164ce8653ce6c",
+      "exit_code": null,
+      "source_line_sha256": "b8fd945dd8536c73fc5c9be5e080d2456b3d7f6ebc0967fcbe82ccd9e3e85cc7"
+    },
+    {
+      "source_line": 856,
+      "call_id": "call_RhmtEiwCHcrvf5F3HUyTygms",
+      "chunk_id": "919d41",
+      "output_sha256": "d9d0069dc267212e43917fda5dd35244c585d495e22e90858e30cea803109a29",
+      "exit_code": null,
+      "source_line_sha256": "e9a53ee0cf2aacee006dea56f1f12413f78275c9c927b4cf3d3c010eb7e76681"
+    },
+    {
+      "source_line": 860,
+      "call_id": "call_8Ald838PU8iEoeLBRwG7fvfJ",
+      "chunk_id": "5907d9",
+      "output_sha256": "230a06d2ed45ff1d26510ff416e09eaed2515c4c60c51eaf153795699189b54e",
+      "exit_code": null,
+      "source_line_sha256": "778111cded0d6f38ba22583ab6bc0546b238e0f163dcb06f8a529d58fc478339"
+    },
+    {
+      "source_line": 868,
+      "call_id": "call_qiexDH4zewEdVdgGpyCiR6UE",
+      "chunk_id": "fe376f",
+      "output_sha256": "96f549c2b00f2ecca1fd1b490f540c66c1e44ab4f25c1902a28066b7e229e0da",
+      "exit_code": null,
+      "source_line_sha256": "b9e090cf997f387b25ec46536eba027365658c23cab4d314433a2a22e015408d"
+    },
+    {
+      "source_line": 872,
+      "call_id": "call_h3vRyAlTqaDuWdsJelHwLOo7",
+      "chunk_id": "2f70ff",
+      "output_sha256": "d6365bcf7f57057f6e472ee56dbf9a84df183f7b6afe6deeb4171cb0dd250b5c",
+      "exit_code": null,
+      "source_line_sha256": "b18fade6ea5a3b399ab9c37b4ddb388883819cb769bb88c3070dd434df5f9fa1"
+    },
+    {
+      "source_line": 876,
+      "call_id": "call_q1HbGbBxv6hHnUpGfzoe2itM",
+      "chunk_id": "853cda",
+      "output_sha256": "c8364ce04b6316b9fdddaad90e5c88e308001c097d0d48d6b367c66d615568d3",
+      "exit_code": null,
+      "source_line_sha256": "4de79fb666c46f15528b146c844a25b4a56620b119baf87ce61b3a8aa13fc635"
+    },
+    {
+      "source_line": 880,
+      "call_id": "call_sedjrCkAZAFgJqNE9jKFhGUc",
+      "chunk_id": "3eb72d",
+      "output_sha256": "11ae769460bac468ab147fbdc5366bb40e5a9617724621d69454b058f21ae711",
+      "exit_code": null,
+      "source_line_sha256": "8cb1f8a9ae5aa551d11d8fc5e5668fe7bb3db95e1b59a09f189894c5e6bdbe39"
+    },
+    {
+      "source_line": 884,
+      "call_id": "call_G40Vrnn7JxQGRAqRiHXFc6s7",
+      "chunk_id": "8b763e",
+      "output_sha256": "7d75c554a124d7de0c6a8736aa9092c510ca15546b4b778402215b9df3994e15",
+      "exit_code": null,
+      "source_line_sha256": "a8c6f8ca7763d93ccac3e6317c9bbb2cfc1d925fdd3a6888165988cb12eb43e0"
+    },
+    {
+      "source_line": 888,
+      "call_id": "call_Bhzg0Li0HXPKljVl8dd4FXbl",
+      "chunk_id": "48648e",
+      "output_sha256": "ac30fd1ccb442e381d34b3214e15c745b895cbe0f72f9beab288a466826d656f",
+      "exit_code": null,
+      "source_line_sha256": "0b552d2996bf95c5bc334288e6d7ae4b3b2eae3391dd1377376884f6dabab599"
+    },
+    {
+      "source_line": 892,
+      "call_id": "call_0FVGl79ugEwGNr67EMdFQQE8",
+      "chunk_id": "632c00",
+      "output_sha256": "ced4f0c7d244c6b8e4706e1f65ef2878a13358984a6f76ef1f6d4cfe1967fd93",
+      "exit_code": null,
+      "source_line_sha256": "000ce8f64b77eb757ba6ebe70a0d4ee308267c392fcc65f6592d9b87b296b9d7"
+    },
+    {
+      "source_line": 896,
+      "call_id": "call_yfaqSJyKuhtrubG8EpLqRQhM",
+      "chunk_id": "3fbf41",
+      "output_sha256": "f63010c4b7a7d6a6ff9755fdaa1ca5e95d006185327d6a62c88656a5fff1dac1",
+      "exit_code": null,
+      "source_line_sha256": "cbe4f3a625671cb2caf589cf94dd84b7d30d1100d0656eab2665976798750ba8"
+    },
+    {
+      "source_line": 902,
+      "call_id": "call_U8xONz1lCSehXPcxahET4WQF",
+      "chunk_id": "cdfbb7",
+      "output_sha256": "b76e099d8a711af519b3c670298d0bff953583beef452255a5ad17b72ee957aa",
+      "exit_code": null,
+      "source_line_sha256": "620cc10d328d76137026e35679600bc8f718f3530bd5372231ee8121f3f00f68"
+    },
+    {
+      "source_line": 906,
+      "call_id": "call_rmLen4VABJxA5REfNorsj6xw",
+      "chunk_id": "0b25f4",
+      "output_sha256": "10402496643796a55daa050406bb477647d3750579ff7afce827a71cf1af9ff5",
+      "exit_code": null,
+      "source_line_sha256": "831ee8fe190bfc325cf7bac0f045ef0d558a2283f6a837fd0b98656f7d0ed074"
+    },
+    {
+      "source_line": 910,
+      "call_id": "call_sVk2ZB8kHOOFjqVuwEZmyqYi",
+      "chunk_id": "33868d",
+      "output_sha256": "f54b3085c301d3b39ef8cc86141b5b0d84e3906cbd6fadec95b41a7814dbf904",
+      "exit_code": null,
+      "source_line_sha256": "55f5602173a50230d48f50b22301e0f91eca2dcbd729286f6046a47f1c9816d2"
+    },
+    {
+      "source_line": 915,
+      "call_id": "call_vHETbwEWOP9MNwVky2FutlaJ",
+      "chunk_id": "83c5fb",
+      "output_sha256": "c09980be7dd2bb8cc839fee7fa65f9dfdd00a7f051a4f6bdd1ef01189d9dd3d8",
+      "exit_code": 0,
+      "source_line_sha256": "cd77b37ec8b332d696ef926aa0dd8b097906f2f2576737ec16f9cf024ae25c62"
+    }
+  ],
+  "historical_verification_source": {
+    "source_line": 950,
+    "chunk_id": "dcaf26",
+    "exit_code": 0,
+    "output_sha256": "227a2e137c252d6325ff7366f63f8ce544966b466af06e141536605a3ad05e93",
+    "source_line_sha256": "52d2c8daf2d017c5be7829682cd72c65c34eacbbb1930b3af09615b29cef3c81"
+  },
+  "private_snapshot_directory": "/Users/hogenxue/.local/state/codextamplate/install-audits/2026-10-06-recovery-2026-10-10-kfua58k_",
+  "evidence_classification": {
+    "historical_logs": "Recovered original outputs, not reenacted",
+    "before_mcp": "Copied from original timestamped installer backups",
+    "current_observations": "Read-only observation on 2026-10-10, not October 6 immediate post-state",
+    "lost_protected_fingerprints": "Cannot be reconstructed; historical reported pass retained with explicit limitation"
+  },
+  "source_session_sha256_at_recovery": "5a1bcb581a2342845a9a51f7d7617fb5a2ebfdf4e7598e1bdf132c8b0f09e73b"
+}

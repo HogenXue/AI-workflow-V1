@@ -134,3 +134,65 @@ Both endpoints default to https://www.59005046.xyz:8102/mcp across Codex, Cursor
 ### Next Steps
 
 - None - task complete
+
+
+## Session 5: Update four live host profiles; preserve MCP URLs
+
+**Date**: 2026-10-06
+**Task**: Update four live host profiles; preserve MCP URLs
+**Branch**: `main`
+
+### Summary
+
+Ran real one-click installer for Codex/Cursor/MiniMax/WorkBuddy, exit 0. Verified 18 manifest Skills per host, paired defaults, native global documents and Codex hooks. All 21 MCP entries, 11 URLs and 4 MCP file bytes unchanged. 86 backups confirmed; native settings, unselected roots and original dirty source diff preserved. Cursor project scope skipped. Application reload/connectivity not verified. Recallium checkpoint #1260 saved; no commit/push.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+(No commits - operational installation session)
+
+### Testing
+
+- Original verification is recorded in the Task; recovered provenance and limitations are now in `10-06-update-four-host-profiles/evidence/README.md`.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
+
+
+## Session 6: Address evidence retention and private HTTP review comments
+
+**Date**: 2026-10-10
+**Task**: Address evidence retention and private HTTP review comments
+**Branch**: `main`
+
+### Summary
+
+Recovered 20 real October 6 installer-output chunks and original verification output from session records; persisted sanitized provenance, 86 backup fingerprints, fresh SHA-256 observations and restricted private copies. All 11 URLs still match original backups; one stdio definition and some Skill trees have later differences, recorded without reinstalling. Original protected-state fingerprints remain lost and acceptance stays open. Synced exact RFC1918/ULA policy into installer specs. Artifact/privacy/digest/CIDR, native Task and diff checks passed; unchanged runtime review evidence reused. No host config changes, commit or push.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

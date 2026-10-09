@@ -1,0 +1,10 @@
+{
+  "recovered_terminal_chunks": 20,
+  "recovered_exit_code": 0,
+  "existing_original_backups": 86,
+  "observed_mcp_files_matching_original_backups": 3,
+  "observed_mcp_entries_matching_original_backups": 20,
+  "observed_mcp_urls_matching_original_backups": 11,
+  "observed_skills_matching_pinned_source": 40,
+  "historical_protected_baseline_recoverable": false
+}

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import json
 import re
 import sys
@@ -13,6 +14,10 @@ from urllib.parse import urlsplit
 
 SERVERS = ("gitnexus", "recallium", "mem0")
 LOOPBACK_HOSTS = frozenset(("localhost", "127.0.0.1", "::1"))
+PRIVATE_NETWORKS = tuple(
+    ipaddress.ip_network(cidr)
+    for cidr in ("10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "fc00::/7")
+)
 TOML_URL = re.compile(r"^\s*url\s*=\s*([\"'])(.*?)\1\s*(?:#.*)?$", re.M)
 
 
@@ -21,7 +26,7 @@ class McpUrlError(ValueError):
 
 
 def validate_mcp_url(url: object, location: str) -> None:
-    """Allow HTTPS everywhere and plain HTTP only for loopback development."""
+    """Allow HTTPS everywhere and HTTP for loopback or private-network hosts."""
 
     if not isinstance(url, str) or not url.strip():
         raise McpUrlError(f"{location} must use a non-empty URL")
@@ -33,16 +38,23 @@ def validate_mcp_url(url: object, location: str) -> None:
 
     if parsed.scheme == "https" and hostname:
         return
-    if parsed.scheme == "http" and hostname in LOOPBACK_HOSTS:
-        return
+    if parsed.scheme == "http" and hostname:
+        if hostname in LOOPBACK_HOSTS:
+            return
+        try:
+            address = ipaddress.ip_address(hostname)
+            if any(address in network for network in PRIVATE_NETWORKS):
+                return
+        except ValueError:
+            pass
     if parsed.scheme == "http":
         raise McpUrlError(
             f"insecure remote HTTP URL for {location}: {url}; "
-            "use HTTPS or a loopback host"
+            "use HTTPS, a loopback host, or a private IP address"
         )
     raise McpUrlError(
         f"unsupported MCP URL for {location}: {url}; "
-        "use HTTPS or loopback HTTP"
+        "use HTTPS or trusted local-network HTTP"
     )
 
 

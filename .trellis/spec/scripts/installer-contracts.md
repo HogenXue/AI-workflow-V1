@@ -534,20 +534,36 @@ OVERWRITE: mcp_servers.mem0
 
 **What**: URL-bearing MCP entries are validated in `scripts/lib/merge_host_mcp.py`
 before the merged host configuration is written. HTTPS is allowed for remote
-servers. Plain HTTP is allowed only for `localhost`, `127.0.0.1`, and `::1`.
+servers. Plain HTTP is allowed for the exact loopback hosts `localhost`,
+`127.0.0.1`, and `::1`, and literal IP addresses in these explicit networks:
 
-**Why**: Project memory and other MCP payloads must not be sent to a remote
-server over a plaintext default. Keeping the policy in the shared merge helper
-prevents Codex TOML and Cursor/Claude JSON behavior from drifting.
+| Address family | Allowed private networks |
+| --- | --- |
+| IPv4 (RFC1918) | `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16` |
+| IPv6 (ULA) | `fc00::/7` |
 
-**Failure contract**: An invalid, unsupported, or remote HTTP URL prints a
+This is an explicit CIDR allowlist, not Python's broader `is_private` predicate.
+Public IPs, non-loopback DNS names (even if they resolve to a private address),
+documentation ranges, link-local addresses such as `169.254.0.0/16` and `fe80::/10`,
+and shared-address space `100.64.0.0/10` are not HTTP exceptions. No DNS lookup is
+performed to decide trust. IPs immediately outside the allowed networks are rejected.
+
+**Why**: HTTPS remains the remote default; the user explicitly approved HTTP for
+self-hosted services on trusted private networks. Keeping the policy in the shared
+merge helper prevents Codex TOML and Cursor/Claude/MiniMax/WorkBuddy JSON, including
+their PowerShell peers, from drifting.
+
+**Failure contract**: A rejected plaintext HTTP host or unsupported URL scheme prints a
 stable `ERROR:` diagnostic and returns non-zero before target mutation. The
 calling shell installer retains its existing timestamped backup and rollback
 contract. Entries preserved by an explicit `keep` policy are not rewritten.
 
 **Tests required**: Cover Codex and Cursor rejection without target mutation,
-the three loopback hosts, the packaged Recallium HTTPS default, and valid remote
-HTTPS input. PowerShell peers assert the same reject-before-mutate behavior in
+the three loopback hosts, all four allowed private networks, both sides of CIDR
+boundaries, public/non-loopback DNS and special-use HTTP rejection, the packaged
+Recallium HTTPS default, and valid remote HTTPS input. Confirm accepted private
+URLs are persisted in both TOML and JSON host formats. PowerShell peers use the
+same shared validator and assert reject-before-mutate behavior in
 `tests/test_install_merge_ps.py`.
 
 ---

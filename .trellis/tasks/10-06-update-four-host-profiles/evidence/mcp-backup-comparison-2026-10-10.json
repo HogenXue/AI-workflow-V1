@@ -1,0 +1,176 @@
+{
+  "codex": {
+    "backup_path": "/Users/hogenxue/.codex/.ai-workflow-backups/config.toml.20261006T071737Z.bak",
+    "live_path": "/Users/hogenxue/.codex/config.toml",
+    "before_file_sha256": "f6c9ac7e1e9ad285f69510aa6de4f14d374498437d7b99552cfb625f53368f4e",
+    "observed_file_sha256": "24fc505a6ac5e78cc9b7761abbbe8edf739cac6e2653f9e2761abf6f5e3e4192",
+    "file_byte_identical": false,
+    "entries": {
+      "headroom": {
+        "before_definition_sha256": "d12fdaff45f7c956b45b285db386221c93211883886b1d72ddcffa5bd62fda4f",
+        "observed_definition_sha256": "d12fdaff45f7c956b45b285db386221c93211883886b1d72ddcffa5bd62fda4f",
+        "definition_unchanged": true,
+        "before_url_sha256": "caa9b7c83bf37cd873f13e633ab8fd24f2744a7e1203a28d773fa33fcd189c0d",
+        "observed_url_sha256": "caa9b7c83bf37cd873f13e633ab8fd24f2744a7e1203a28d773fa33fcd189c0d",
+        "url_unchanged": true
+      },
+      "recallium": {
+        "before_definition_sha256": "304bdbafb1cc6478257446cb38903975b07e892116732c1ec73c9bf65d5e107c",
+        "observed_definition_sha256": "304bdbafb1cc6478257446cb38903975b07e892116732c1ec73c9bf65d5e107c",
+        "definition_unchanged": true,
+        "before_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "observed_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "url_unchanged": true
+      },
+      "mem0": {
+        "before_definition_sha256": "9ba56611ff6633e911044ef2e6845e4c2d1375556223532083ebe29cc05f9725",
+        "observed_definition_sha256": "9ba56611ff6633e911044ef2e6845e4c2d1375556223532083ebe29cc05f9725",
+        "definition_unchanged": true,
+        "before_url_sha256": "18bac63bcdb9ad638f142a648567e506ae452c4718e6280a2c007e39a8142ac0",
+        "observed_url_sha256": "18bac63bcdb9ad638f142a648567e506ae452c4718e6280a2c007e39a8142ac0",
+        "url_unchanged": true
+      },
+      "node_repl": {
+        "before_definition_sha256": "b2fa01381569458aae53d9784d3028c050b96c0be3297f68877f0501d7522e0c",
+        "observed_definition_sha256": "3bc229c00ac68d18a40674c4d962c011c4e88b6e0430dc333507983eb040a243",
+        "definition_unchanged": false
+      },
+      "computer-use": {
+        "before_definition_sha256": "2ba560a8a75a24d869f0d91be34a840156bf7e7c8098a8bb6079c932e815a7f0",
+        "observed_definition_sha256": "2ba560a8a75a24d869f0d91be34a840156bf7e7c8098a8bb6079c932e815a7f0",
+        "definition_unchanged": true
+      },
+      "gitnexus": {
+        "before_definition_sha256": "19d8d3259abd62bb10c5327a92e78de72afa892078353cc0819c59651297e5cb",
+        "observed_definition_sha256": "19d8d3259abd62bb10c5327a92e78de72afa892078353cc0819c59651297e5cb",
+        "definition_unchanged": true
+      }
+    }
+  },
+  "cursor": {
+    "backup_path": "/Users/hogenxue/.cursor/.ai-workflow-backups/mcp.json.20261006T071827Z.bak",
+    "live_path": "/Users/hogenxue/.cursor/mcp.json",
+    "before_file_sha256": "3def0b2e08c838d687f87e00851cae5f5c6e83419e4a1c15bf62d0a2d892e4d4",
+    "observed_file_sha256": "3def0b2e08c838d687f87e00851cae5f5c6e83419e4a1c15bf62d0a2d892e4d4",
+    "file_byte_identical": true,
+    "entries": {
+      "recallium": {
+        "before_definition_sha256": "5cdb98bfbe310600170c24854aabea01986d5b5decd82ba2edda1fdabb38dfd0",
+        "observed_definition_sha256": "5cdb98bfbe310600170c24854aabea01986d5b5decd82ba2edda1fdabb38dfd0",
+        "definition_unchanged": true,
+        "before_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "observed_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "url_unchanged": true
+      },
+      "gitnexus": {
+        "before_definition_sha256": "19d8d3259abd62bb10c5327a92e78de72afa892078353cc0819c59651297e5cb",
+        "observed_definition_sha256": "19d8d3259abd62bb10c5327a92e78de72afa892078353cc0819c59651297e5cb",
+        "definition_unchanged": true
+      },
+      "codegraph": {
+        "before_definition_sha256": "e70b7a8dc9d51df823bc6c7aa0f1f01a1eca5843acb349baef6c4c198c230f47",
+        "observed_definition_sha256": "e70b7a8dc9d51df823bc6c7aa0f1f01a1eca5843acb349baef6c4c198c230f47",
+        "definition_unchanged": true
+      },
+      "mem0": {
+        "before_definition_sha256": "5cdb98bfbe310600170c24854aabea01986d5b5decd82ba2edda1fdabb38dfd0",
+        "observed_definition_sha256": "5cdb98bfbe310600170c24854aabea01986d5b5decd82ba2edda1fdabb38dfd0",
+        "definition_unchanged": true,
+        "before_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "observed_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "url_unchanged": true
+      },
+      "feishu": {
+        "before_definition_sha256": "9234c253633616481e2aa499e9896e51d64fb0389e90a7aa873c6d981965fa11",
+        "observed_definition_sha256": "9234c253633616481e2aa499e9896e51d64fb0389e90a7aa873c6d981965fa11",
+        "definition_unchanged": true
+      }
+    }
+  },
+  "minimax": {
+    "backup_path": "/Users/hogenxue/.minimax/.ai-workflow-backups/mcp.json.20261006T071848Z.bak",
+    "live_path": "/Users/hogenxue/.minimax/mcp/mcp.json",
+    "before_file_sha256": "2605a69a4dac720a3bf99e1fd2913dc1a3c3349123d4186802cb6bf3a46fdb1b",
+    "observed_file_sha256": "2605a69a4dac720a3bf99e1fd2913dc1a3c3349123d4186802cb6bf3a46fdb1b",
+    "file_byte_identical": true,
+    "entries": {
+      "matrix": {
+        "before_definition_sha256": "a76b56014d42670438a5bfc3046b3122eaa1c6dad851c00c43f2ff908bd742fb",
+        "observed_definition_sha256": "a76b56014d42670438a5bfc3046b3122eaa1c6dad851c00c43f2ff908bd742fb",
+        "definition_unchanged": true
+      },
+      "playwright": {
+        "before_definition_sha256": "877456b1bb3b995bf1826e366b3c43191483f970415849e7d356938301cf9d7a",
+        "observed_definition_sha256": "877456b1bb3b995bf1826e366b3c43191483f970415849e7d356938301cf9d7a",
+        "definition_unchanged": true
+      },
+      "cu": {
+        "before_definition_sha256": "23e163750b5731c3304b42e8ab1fe3c332bdb2321b9aaf5075c8e5f465f012fd",
+        "observed_definition_sha256": "23e163750b5731c3304b42e8ab1fe3c332bdb2321b9aaf5075c8e5f465f012fd",
+        "definition_unchanged": true,
+        "before_url_sha256": "37f9850c3b0c0abbf7fb7fe989903d934bb2d66cc05f8bdd6c8f44fdd841e3da",
+        "observed_url_sha256": "37f9850c3b0c0abbf7fb7fe989903d934bb2d66cc05f8bdd6c8f44fdd841e3da",
+        "url_unchanged": true
+      },
+      "trash": {
+        "before_definition_sha256": "cbd455487a090a40f034655c634e683aae0369e4d585c77dd286c595f50be3e4",
+        "observed_definition_sha256": "cbd455487a090a40f034655c634e683aae0369e4d585c77dd286c595f50be3e4",
+        "definition_unchanged": true,
+        "before_url_sha256": "a7573e078e4e94bb5d271aa5db0f2f5e211350ef8917985186fd2129d8e3d9e6",
+        "observed_url_sha256": "a7573e078e4e94bb5d271aa5db0f2f5e211350ef8917985186fd2129d8e3d9e6",
+        "url_unchanged": true
+      },
+      "gitnexus": {
+        "before_definition_sha256": "bd3d6f8b0eae037c47d3e39face3fe5587b7836a81f2f9eae98c423bdaf52c97",
+        "observed_definition_sha256": "bd3d6f8b0eae037c47d3e39face3fe5587b7836a81f2f9eae98c423bdaf52c97",
+        "definition_unchanged": true
+      },
+      "recallium": {
+        "before_definition_sha256": "5093044fdc7954d53480a1f7e461043ee0bebd0e31043dc8f1139d3d89253e8e",
+        "observed_definition_sha256": "5093044fdc7954d53480a1f7e461043ee0bebd0e31043dc8f1139d3d89253e8e",
+        "definition_unchanged": true,
+        "before_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "observed_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "url_unchanged": true
+      },
+      "mem0": {
+        "before_definition_sha256": "0b41854f4fd109f7f9e90a6b74ad79f79bb051e42312094b9607001f8d677e19",
+        "observed_definition_sha256": "0b41854f4fd109f7f9e90a6b74ad79f79bb051e42312094b9607001f8d677e19",
+        "definition_unchanged": true,
+        "before_url_sha256": "18bac63bcdb9ad638f142a648567e506ae452c4718e6280a2c007e39a8142ac0",
+        "observed_url_sha256": "18bac63bcdb9ad638f142a648567e506ae452c4718e6280a2c007e39a8142ac0",
+        "url_unchanged": true
+      }
+    }
+  },
+  "workbuddy": {
+    "backup_path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/mcp.json.20261006T071917Z.bak",
+    "live_path": "/Users/hogenxue/.codebuddy/mcp.json",
+    "before_file_sha256": "feb2802c07e18991a7e9319161833b4a7350fc196878aab3e3fd6e49ac341290",
+    "observed_file_sha256": "feb2802c07e18991a7e9319161833b4a7350fc196878aab3e3fd6e49ac341290",
+    "file_byte_identical": true,
+    "entries": {
+      "gitnexus": {
+        "before_definition_sha256": "bd3d6f8b0eae037c47d3e39face3fe5587b7836a81f2f9eae98c423bdaf52c97",
+        "observed_definition_sha256": "bd3d6f8b0eae037c47d3e39face3fe5587b7836a81f2f9eae98c423bdaf52c97",
+        "definition_unchanged": true
+      },
+      "recallium": {
+        "before_definition_sha256": "5093044fdc7954d53480a1f7e461043ee0bebd0e31043dc8f1139d3d89253e8e",
+        "observed_definition_sha256": "5093044fdc7954d53480a1f7e461043ee0bebd0e31043dc8f1139d3d89253e8e",
+        "definition_unchanged": true,
+        "before_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "observed_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "url_unchanged": true
+      },
+      "mem0": {
+        "before_definition_sha256": "5093044fdc7954d53480a1f7e461043ee0bebd0e31043dc8f1139d3d89253e8e",
+        "observed_definition_sha256": "5093044fdc7954d53480a1f7e461043ee0bebd0e31043dc8f1139d3d89253e8e",
+        "definition_unchanged": true,
+        "before_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "observed_url_sha256": "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "url_unchanged": true
+      }
+    }
+  }
+}

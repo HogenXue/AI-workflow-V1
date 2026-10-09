@@ -357,8 +357,8 @@ TTY 一键安装会分别读取所选宿主的现有 MCP 配置。对本包管�
 安装器逐项询问沿用或替换；直接回车默认沿用。缺少 Mem0 配置时安装默认地址。
 非交互组件调用不读取输入，继续由 `--mcp-keep`、`--mcp-overwrite` 和 `--mem0-url` 明确控制。
 
-安全策略：远端 MCP URL 必须使用 HTTPS；只有 `localhost`、`127.0.0.1`、`::1` 允许
-明文 HTTP，用于本机开发。不安全 URL 会在目标文件修改前失败。
+安全策略：远端 MCP URL 必须使用 HTTPS；`localhost`、`127.0.0.1`、`::1` 以及标准私有
+IPv4/IPv6 地址允许明文 HTTP，用于本机或可信局域网内的自托管服务。不安全 URL 会在目标文件修改前失败。
 
 - **memory**：Recallium / Mem0（见 `skills/memory/references/memory-backends.md`）
 - **gitnexus**：GitNexus MCP；EGM 等项目需先索引

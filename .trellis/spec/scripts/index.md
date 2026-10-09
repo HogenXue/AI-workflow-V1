@@ -44,7 +44,7 @@ Before changing installer or host-merge code:
 - [ ] Project-scoped paths never use silent `git rev-parse --show-toplevel` (or Windows equivalent)
 - [ ] Selected profile only writes its own host tree; never deletes the other host
 - [ ] Cursor rules land in `.cursor/rules/*.mdc`; Claude global rules land in `~/.claude/CLAUDE.md`; installer never rewrites repo-root `AGENTS.md` / `CLAUDE.md`
-- [ ] MCP format matches host (Codex TOML vs Cursor/Claude JSON); remote HTTP MCP URLs are rejected
+- [ ] MCP format matches host; HTTP is limited to the exact loopback hosts and explicit RFC1918/ULA CIDRs in Installer Contracts; public, non-loopback DNS and other special-use HTTP hosts are rejected
 - [ ] Claude merge targets `~/.claude.json` `mcpServers` only and preserves other JSON keys
 - [ ] MiniMax/WorkBuddy use native `type` fields and supported home/file precedence; preview creates no files
 - [ ] Non-TTY `install.sh` / `install.ps1` with no args still exits `2` with usage

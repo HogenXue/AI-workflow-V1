@@ -1,0 +1,32 @@
+{
+  "profiles": {
+    "codex": {
+      "skills_verified": 18,
+      "config_matches_installer_payload": true,
+      "mcp_file_byte_identical": true,
+      "mcp_entries_unchanged": true
+    },
+    "cursor": {
+      "skills_verified": 18,
+      "config_matches_installer_payload": true,
+      "mcp_file_byte_identical": true,
+      "mcp_entries_unchanged": true
+    },
+    "minimax": {
+      "skills_verified": 18,
+      "config_matches_installer_payload": true,
+      "mcp_file_byte_identical": true,
+      "mcp_entries_unchanged": true
+    },
+    "workbuddy": {
+      "skills_verified": 18,
+      "config_matches_installer_payload": true,
+      "mcp_file_byte_identical": true,
+      "mcp_entries_unchanged": true
+    }
+  },
+  "mcp_entry_count": 21,
+  "mcp_url_count": 11,
+  "protected_drift": [],
+  "new_backup_count": 86
+}

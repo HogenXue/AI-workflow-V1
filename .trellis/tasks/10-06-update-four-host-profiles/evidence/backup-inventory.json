@@ -1,0 +1,2331 @@
+[
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/memory.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "f7e85f29b6ecee4371c6c5e8983ee5887a59b145e43a996e5b9f76c7715fc8bd"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1904,
+          "sha256": "eef86af0e90193b19c0968da1fcdb1131eaca8599e5a7e120510df5f337c8415"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 286,
+          "sha256": "38a715516873e8787b13bea9b0db0f589ba4b41e27f564d6a83bfc27c0ea9e3d"
+        },
+        "examples/record-decision.md": {
+          "kind": "file",
+          "size": 765,
+          "sha256": "4130d9c9477fb36b7de520fb81db4aa97945e07d6955f8d35bd205777d59f8a0"
+        },
+        "references/memory-backends.md": {
+          "kind": "file",
+          "size": 4719,
+          "sha256": "1408df316335cb8d4665b8b89f2a298c7cc00be62ad0cc92f6b0d1fbbdff1d2f"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2"
+        },
+        "templates/decision.md": {
+          "kind": "file",
+          "size": 94,
+          "sha256": "54025889cc2370ec54567ee554fce8ff9c8eb36a07f776a6cad8063d84ea277a"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/gitnexus.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "7113e1f88e20f426c0071ad2d3a05ac7f1bf17094993039bf1f1283de31efd7b"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2118,
+          "sha256": "d096b84d8b2f926330de547581c46b91380e4d6c879c7d3d361d0d272387765c"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 291,
+          "sha256": "ca15ff6d31d98d363f4c4d88d13558f12cfd4ce84a4b7e5fba5c7b26fad4370d"
+        },
+        "examples/assess-symbol-change.md": {
+          "kind": "file",
+          "size": 958,
+          "sha256": "d7d185028ca6d40371e7c604280bd40814b4c9983d47e87938e2ba89bd4188e0"
+        },
+        "references/impact-and-worktree.md": {
+          "kind": "file",
+          "size": 1050,
+          "sha256": "8263e2772f6e388c561b23689e93988dee872825cb7da475f0a9144240da312c"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2"
+        },
+        "templates/impact-report.md": {
+          "kind": "file",
+          "size": 87,
+          "sha256": "64b0794f1039a4fbc851b06182dffe80ba3a1a91ad9f3cdd92ab73f1a97839c9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/grill-me.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "685235a5bbb1d0a725dd534f8839a00d726a9108b78bacf5dbb05ca61e171ad9"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2021,
+          "sha256": "72a03e62da307857e3bdf456d8058359fdfa97c0bac5c48a9e856eeacbb60c5b"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 269,
+          "sha256": "06f5754a6d94895b11610ca32087b301a1791b564ad7e7dc4a31b9f074de2f4f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/grill-with-docs.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "3a2508f08ab930f781132eec5abf42afc5395525908ae7d1f26c678c4d64389f"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2902,
+          "sha256": "eb9675e87600482e00985ac810c29a33ee537ae5cc2650c713881aa0e764e675"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 208,
+          "sha256": "0f06080121f1750e4f6b4f1a7c980c6e1bcd4c6c977bda466a651e3f4d5677f3"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/grilling.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "80d6f915bcf09b253f5f0a9df77ae18d490b1a47d7de27c88c230c38d68bf646"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1840,
+          "sha256": "65e90841b38d5607e880adedcc68ad0d20ec8091b70bf4389754bffe946e4d70"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 194,
+          "sha256": "b69cc30f0003ccd64960a99961140c8648a6f2da316b6b142bed78dcefcb8f1f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/domain-modeling.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "944aabd3e6e9903a53741cef0b7ca3b17f6be4e2cbabf401efaa36df4301ca70"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2115,
+          "sha256": "20952edfa96e76152ccfa5600f359a1d3eacca2f619b4611cc901347fa5f01e1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 208,
+          "sha256": "799ec35084fcb7c63a5f1be6bd20a5cd92e3f49635b51e536c26e0f1394b907d"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/to-spec.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2273,
+          "sha256": "4954155dd7655908b30ee28375bcd67825b6222301cf07483718f82db1034f6a"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 192,
+          "sha256": "1ab37495224c0b62ef714127eb7a0d7c0a6e3b11140b3988b263c3fca6f1f1cf"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/to-tickets.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 3068,
+          "sha256": "e171c31b4e056708788222b6277dd130c2fa84a70463a55c00f3e16224344f81"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 198,
+          "sha256": "a38d37b20c0db9567ff867dabf2af72b09e3915b84a9b3d83075d40ffd838821"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/wayfinder.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2349,
+          "sha256": "6ff0c6b51ef2475857c5b3d670c8762702017b8459ce552aaadaf68a41341d41"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "7a346138707e82350719a96a5af9e8ef4224187a4a4f21c03516d1d28eb93819"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/research.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1774,
+          "sha256": "3c4882d2c8d8513d5276853d19cd10dfac659787213831e6654fe676e60a2113"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 194,
+          "sha256": "718e328320eced54fc36b55d6b94a731863a00c0da8b7493916df12e7473fcf8"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/prototype.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2006,
+          "sha256": "fe93e7c7dc641e4f4f248c71c7688f9353f7eb92f017e64f8a720797cd54e158"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "92fc6a1d21d54baa83eec2c392e055ea2e27c1d1a490423a15f61099419020a9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/implement.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2514,
+          "sha256": "24e8bf5c878a8351227f4a6a2a69462e40906fadcef58f0252a5a566cdb926f1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "4e22c700e252da34465b6ce54d2bc6ada41039952973873301990f26d7b07795"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/code-review.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2714,
+          "sha256": "04a5fea82932c41c40a982cb501bea069b0c6b6ceb893c69679480975964c508"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 200,
+          "sha256": "6a5f8d1ea6b3c6a29d021eea69d7c20739a5ba9221d2881d5be190187582345f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/handoff.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1804,
+          "sha256": "9f5d53531bf5a52ce7a5e22f9496cbf930e5eae79a16a446f2f94f8d5c6d2612"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 192,
+          "sha256": "9afbf1df31599a34e0b22cb386379bfe313498472efe936362e4fe634df4ee00"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/tdd.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "db48495bcf65e59949bcafcf9b8cd8387ac85e37819573f92c324946498f7962"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 3020,
+          "sha256": "8acb2d1380907584ece2e48f3e867e8055f179874dbe114dcc718c18b4dca772"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 269,
+          "sha256": "27cba0bc47d8da728ec809e21844c2efd61dc6ef359fed75dd02e37768d88619"
+        },
+        "examples/feature-cycle.md": {
+          "kind": "file",
+          "size": 565,
+          "sha256": "fb4a71618893add3838e22e9b0f2918868107f257850d381ab1de4cf1a1566c1"
+        },
+        "references/trellis-boundary.md": {
+          "kind": "file",
+          "size": 920,
+          "sha256": "ce3b66a5c88ca4454c7c28a46b1abb249e9b6deac3b728167ed42ea16b6b9e52"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 366,
+          "sha256": "89a3e365746bd928f8c771ea60ebf17412fd32eb3d0e45905962e0d451222cb1"
+        },
+        "templates/tdd-cycle.md": {
+          "kind": "file",
+          "size": 510,
+          "sha256": "d711c26cb552ca8d9c2686784a0de09316e9dbecd0878d9250687efb3ceac2b9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/diagnosing-bugs.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "67e4861083e6d9548cbf073472db29734dc68105a9f8c2f9aa1af7f9257082f3"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 9237,
+          "sha256": "0a7d1ecdcbe56fe6b54f420ea76ee2e6fba8fddaa0c6104931eb7cb455157df1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "88898e3bd640bc19fea5e6bf32f35bfb91c5aa997ba5979b1a0eb71980f94391"
+        },
+        "scripts/hitl-loop.template.sh": {
+          "kind": "file",
+          "size": 1164,
+          "sha256": "b2932630950e5210075bcd6f850e5accf30c101c5367b29eac3a29b4dd8084c8"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/codebase-design.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "DEEPENING.md": {
+          "kind": "file",
+          "size": 2939,
+          "sha256": "84060e97b22192b80f7356584f42d6b059cc5d4736b537536c8901eac194e3eb"
+        },
+        "DESIGN-IT-TWICE.md": {
+          "kind": "file",
+          "size": 3190,
+          "sha256": "f03e6f4c2b5f1ad4801158770f8a24705eb0df4bec4041b98f9b8ea6022f9083"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 7269,
+          "sha256": "c374f93c6084d430db6da9555b5dd23cc6ebe58776c0b79a5851d2999f682bda"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 223,
+          "sha256": "469ec3b88d2d1dc89880d1ba5e785f2c8ddfa69878d48ec72662334a7fb68254"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/resolving-merge-conflicts.20261006T071714Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1655,
+          "sha256": "04da96a1703ac12a7b15330695f5c9f06d2e04f8eb16c721610f0a99c82aea7e"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 256,
+          "sha256": "346e0d039da71eb336e4989239cf6f15c204a407cadd3dae87443ff06da9f97e"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/graphify.20261006T071723Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".graphify_version": {
+          "kind": "file",
+          "size": 6,
+          "sha256": "fed34645e097d23d89bce7a3cc9325f2746f740bdc4fe5aee8658aeb9fc399ad"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 40134,
+          "sha256": "d0ad9721f656cb1446171bd16458a0e8fb0d6c04fe44eb05b33ae1947f894219"
+        },
+        "references/add-watch.md": {
+          "kind": "file",
+          "size": 2486,
+          "sha256": "b3f67570240582689c2834b4831917550c2d1aaf042148868c39dcbf387ce3fd"
+        },
+        "references/exports.md": {
+          "kind": "file",
+          "size": 3362,
+          "sha256": "ee47fae477f106d8aed38798c58493b5a7f060a0d9d2581ce6132302827bc14b"
+        },
+        "references/extraction-spec.md": {
+          "kind": "file",
+          "size": 7960,
+          "sha256": "f72a6d2dfa67446f06f27a8f0053af1adc8d53b02e393c8472045f6740c6183e"
+        },
+        "references/github-and-merge.md": {
+          "kind": "file",
+          "size": 2177,
+          "sha256": "e5ebd90c7686f50363ff7a535556bc2f596d4c47ec1e6c8b95e11e36a0dfea2b"
+        },
+        "references/hooks.md": {
+          "kind": "file",
+          "size": 1270,
+          "sha256": "7910939007ada7966681da02467302f6f1f7c392f42edecd35994aa639e4dee0"
+        },
+        "references/query.md": {
+          "kind": "file",
+          "size": 13456,
+          "sha256": "e563ddcb1e155aa230f107e5ef9380bc1249c5cd8241128de7ed8a7bd9c20cf5"
+        },
+        "references/transcribe.md": {
+          "kind": "file",
+          "size": 3173,
+          "sha256": "676a1e39aa6d43cdfcc416ec56616e36f7bad74066a82bd33a9485515b9a865c"
+        },
+        "references/update.md": {
+          "kind": "file",
+          "size": 10425,
+          "sha256": "661f559b3ff4f3db7ba47bc2ba1c7e19f1c1d66a36f647e49221eecb174f2228"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.agents/.ai-workflow-backups/config.20261006T071729Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "__init__.py": {
+          "kind": "file",
+          "size": 65,
+          "sha256": "61dd49c1fa2f1b986e3013512fecb4779a371e1e6cb66c4fd10ce70f73ccabed"
+        },
+        "consumers.yaml": {
+          "kind": "file",
+          "size": 366,
+          "sha256": "acdf2acdc14178db3599a2e0bbd67f9a4af68543808efb2eccef8892e2b57183"
+        },
+        "defaults.yaml": {
+          "kind": "file",
+          "size": 187,
+          "sha256": "82f3897f93ae47aca1d4377bb46d49ed4d01e930fb530c6b3d67db76a5ec051d"
+        },
+        "effective_config.py": {
+          "kind": "file",
+          "size": 9836,
+          "sha256": "1ab36ee2d4041c9b97ccc21d9016978d83ab0753c941b2e2cfd4521b11ea32ea"
+        },
+        "project-config.schema.yaml": {
+          "kind": "file",
+          "size": 372,
+          "sha256": "60bf1874dc52dfba773f7f371cc4d4ee5f43bd03632ff2e0f793c31f40ca914c"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codex/.ai-workflow-backups/AGENTS.md.20261006T071730Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "file",
+      "size": 9194,
+      "sha256": "62e4e169702b7e237db4b7569485745c9e4ed39220098e28f289bff76f2d2aad"
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codex/.ai-workflow-backups/config.toml.20261006T071737Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "file",
+      "size": 5119,
+      "sha256": "f6c9ac7e1e9ad285f69510aa6de4f14d374498437d7b99552cfb625f53368f4e"
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codex/.ai-workflow-backups/hooks.json.20261006T071752Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "file",
+      "size": 2081,
+      "sha256": "16e3d0f66af7a3d7913453b787fe2d46c140f8bbf80a26e2e3cd7f1c2e9850ca"
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codex/.ai-workflow-backups/hooks.20261006T071752Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "session-start.sh": {
+          "kind": "file",
+          "size": 290,
+          "sha256": "00314a3a1871ac29ef9fad7c6472574ffa27bf592ec6f5d5497655e5b08a249f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/memory.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "f7e85f29b6ecee4371c6c5e8983ee5887a59b145e43a996e5b9f76c7715fc8bd"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1904,
+          "sha256": "eef86af0e90193b19c0968da1fcdb1131eaca8599e5a7e120510df5f337c8415"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 286,
+          "sha256": "38a715516873e8787b13bea9b0db0f589ba4b41e27f564d6a83bfc27c0ea9e3d"
+        },
+        "examples/record-decision.md": {
+          "kind": "file",
+          "size": 765,
+          "sha256": "4130d9c9477fb36b7de520fb81db4aa97945e07d6955f8d35bd205777d59f8a0"
+        },
+        "references/memory-backends.md": {
+          "kind": "file",
+          "size": 4719,
+          "sha256": "1408df316335cb8d4665b8b89f2a298c7cc00be62ad0cc92f6b0d1fbbdff1d2f"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2"
+        },
+        "templates/decision.md": {
+          "kind": "file",
+          "size": 94,
+          "sha256": "54025889cc2370ec54567ee554fce8ff9c8eb36a07f776a6cad8063d84ea277a"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/gitnexus.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "7113e1f88e20f426c0071ad2d3a05ac7f1bf17094993039bf1f1283de31efd7b"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2118,
+          "sha256": "d096b84d8b2f926330de547581c46b91380e4d6c879c7d3d361d0d272387765c"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 291,
+          "sha256": "ca15ff6d31d98d363f4c4d88d13558f12cfd4ce84a4b7e5fba5c7b26fad4370d"
+        },
+        "examples/assess-symbol-change.md": {
+          "kind": "file",
+          "size": 958,
+          "sha256": "d7d185028ca6d40371e7c604280bd40814b4c9983d47e87938e2ba89bd4188e0"
+        },
+        "references/impact-and-worktree.md": {
+          "kind": "file",
+          "size": 1050,
+          "sha256": "8263e2772f6e388c561b23689e93988dee872825cb7da475f0a9144240da312c"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2"
+        },
+        "templates/impact-report.md": {
+          "kind": "file",
+          "size": 87,
+          "sha256": "64b0794f1039a4fbc851b06182dffe80ba3a1a91ad9f3cdd92ab73f1a97839c9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/grill-me.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "685235a5bbb1d0a725dd534f8839a00d726a9108b78bacf5dbb05ca61e171ad9"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2021,
+          "sha256": "72a03e62da307857e3bdf456d8058359fdfa97c0bac5c48a9e856eeacbb60c5b"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 269,
+          "sha256": "06f5754a6d94895b11610ca32087b301a1791b564ad7e7dc4a31b9f074de2f4f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/grill-with-docs.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "3a2508f08ab930f781132eec5abf42afc5395525908ae7d1f26c678c4d64389f"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2902,
+          "sha256": "eb9675e87600482e00985ac810c29a33ee537ae5cc2650c713881aa0e764e675"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 208,
+          "sha256": "0f06080121f1750e4f6b4f1a7c980c6e1bcd4c6c977bda466a651e3f4d5677f3"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/grilling.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "80d6f915bcf09b253f5f0a9df77ae18d490b1a47d7de27c88c230c38d68bf646"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1840,
+          "sha256": "65e90841b38d5607e880adedcc68ad0d20ec8091b70bf4389754bffe946e4d70"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 194,
+          "sha256": "b69cc30f0003ccd64960a99961140c8648a6f2da316b6b142bed78dcefcb8f1f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/domain-modeling.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "944aabd3e6e9903a53741cef0b7ca3b17f6be4e2cbabf401efaa36df4301ca70"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2115,
+          "sha256": "20952edfa96e76152ccfa5600f359a1d3eacca2f619b4611cc901347fa5f01e1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 208,
+          "sha256": "799ec35084fcb7c63a5f1be6bd20a5cd92e3f49635b51e536c26e0f1394b907d"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/to-spec.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2273,
+          "sha256": "4954155dd7655908b30ee28375bcd67825b6222301cf07483718f82db1034f6a"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 192,
+          "sha256": "1ab37495224c0b62ef714127eb7a0d7c0a6e3b11140b3988b263c3fca6f1f1cf"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/to-tickets.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 3068,
+          "sha256": "e171c31b4e056708788222b6277dd130c2fa84a70463a55c00f3e16224344f81"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 198,
+          "sha256": "a38d37b20c0db9567ff867dabf2af72b09e3915b84a9b3d83075d40ffd838821"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/wayfinder.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2349,
+          "sha256": "6ff0c6b51ef2475857c5b3d670c8762702017b8459ce552aaadaf68a41341d41"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "7a346138707e82350719a96a5af9e8ef4224187a4a4f21c03516d1d28eb93819"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/research.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1774,
+          "sha256": "3c4882d2c8d8513d5276853d19cd10dfac659787213831e6654fe676e60a2113"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 194,
+          "sha256": "718e328320eced54fc36b55d6b94a731863a00c0da8b7493916df12e7473fcf8"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/prototype.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2006,
+          "sha256": "fe93e7c7dc641e4f4f248c71c7688f9353f7eb92f017e64f8a720797cd54e158"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "92fc6a1d21d54baa83eec2c392e055ea2e27c1d1a490423a15f61099419020a9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/implement.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2514,
+          "sha256": "24e8bf5c878a8351227f4a6a2a69462e40906fadcef58f0252a5a566cdb926f1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "4e22c700e252da34465b6ce54d2bc6ada41039952973873301990f26d7b07795"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/code-review.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2714,
+          "sha256": "04a5fea82932c41c40a982cb501bea069b0c6b6ceb893c69679480975964c508"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 200,
+          "sha256": "6a5f8d1ea6b3c6a29d021eea69d7c20739a5ba9221d2881d5be190187582345f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/handoff.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1804,
+          "sha256": "9f5d53531bf5a52ce7a5e22f9496cbf930e5eae79a16a446f2f94f8d5c6d2612"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 192,
+          "sha256": "9afbf1df31599a34e0b22cb386379bfe313498472efe936362e4fe634df4ee00"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/tdd.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "db48495bcf65e59949bcafcf9b8cd8387ac85e37819573f92c324946498f7962"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 3020,
+          "sha256": "8acb2d1380907584ece2e48f3e867e8055f179874dbe114dcc718c18b4dca772"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 269,
+          "sha256": "27cba0bc47d8da728ec809e21844c2efd61dc6ef359fed75dd02e37768d88619"
+        },
+        "examples/feature-cycle.md": {
+          "kind": "file",
+          "size": 565,
+          "sha256": "fb4a71618893add3838e22e9b0f2918868107f257850d381ab1de4cf1a1566c1"
+        },
+        "references/trellis-boundary.md": {
+          "kind": "file",
+          "size": 920,
+          "sha256": "ce3b66a5c88ca4454c7c28a46b1abb249e9b6deac3b728167ed42ea16b6b9e52"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 366,
+          "sha256": "89a3e365746bd928f8c771ea60ebf17412fd32eb3d0e45905962e0d451222cb1"
+        },
+        "templates/tdd-cycle.md": {
+          "kind": "file",
+          "size": 510,
+          "sha256": "d711c26cb552ca8d9c2686784a0de09316e9dbecd0878d9250687efb3ceac2b9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/diagnosing-bugs.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "67e4861083e6d9548cbf073472db29734dc68105a9f8c2f9aa1af7f9257082f3"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 9237,
+          "sha256": "0a7d1ecdcbe56fe6b54f420ea76ee2e6fba8fddaa0c6104931eb7cb455157df1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "88898e3bd640bc19fea5e6bf32f35bfb91c5aa997ba5979b1a0eb71980f94391"
+        },
+        "scripts/hitl-loop.template.sh": {
+          "kind": "file",
+          "size": 1164,
+          "sha256": "b2932630950e5210075bcd6f850e5accf30c101c5367b29eac3a29b4dd8084c8"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/codebase-design.20261006T071817Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "DEEPENING.md": {
+          "kind": "file",
+          "size": 2939,
+          "sha256": "84060e97b22192b80f7356584f42d6b059cc5d4736b537536c8901eac194e3eb"
+        },
+        "DESIGN-IT-TWICE.md": {
+          "kind": "file",
+          "size": 3190,
+          "sha256": "f03e6f4c2b5f1ad4801158770f8a24705eb0df4bec4041b98f9b8ea6022f9083"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 7269,
+          "sha256": "c374f93c6084d430db6da9555b5dd23cc6ebe58776c0b79a5851d2999f682bda"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 223,
+          "sha256": "469ec3b88d2d1dc89880d1ba5e785f2c8ddfa69878d48ec72662334a7fb68254"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/resolving-merge-conflicts.20261006T071818Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1655,
+          "sha256": "04da96a1703ac12a7b15330695f5c9f06d2e04f8eb16c721610f0a99c82aea7e"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 256,
+          "sha256": "346e0d039da71eb336e4989239cf6f15c204a407cadd3dae87443ff06da9f97e"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/config.20261006T071822Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "__init__.py": {
+          "kind": "file",
+          "size": 65,
+          "sha256": "61dd49c1fa2f1b986e3013512fecb4779a371e1e6cb66c4fd10ce70f73ccabed"
+        },
+        "consumers.yaml": {
+          "kind": "file",
+          "size": 366,
+          "sha256": "acdf2acdc14178db3599a2e0bbd67f9a4af68543808efb2eccef8892e2b57183"
+        },
+        "defaults.yaml": {
+          "kind": "file",
+          "size": 187,
+          "sha256": "82f3897f93ae47aca1d4377bb46d49ed4d01e930fb530c6b3d67db76a5ec051d"
+        },
+        "effective_config.py": {
+          "kind": "file",
+          "size": 9836,
+          "sha256": "1ab36ee2d4041c9b97ccc21d9016978d83ab0753c941b2e2cfd4521b11ea32ea"
+        },
+        "project-config.schema.yaml": {
+          "kind": "file",
+          "size": 372,
+          "sha256": "60bf1874dc52dfba773f7f371cc4d4ee5f43bd03632ff2e0f793c31f40ca914c"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.cursor/.ai-workflow-backups/mcp.json.20261006T071827Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "file",
+      "size": 959,
+      "sha256": "3def0b2e08c838d687f87e00851cae5f5c6e83419e4a1c15bf62d0a2d892e4d4"
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/memory.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "f7e85f29b6ecee4371c6c5e8983ee5887a59b145e43a996e5b9f76c7715fc8bd"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1904,
+          "sha256": "eef86af0e90193b19c0968da1fcdb1131eaca8599e5a7e120510df5f337c8415"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 286,
+          "sha256": "38a715516873e8787b13bea9b0db0f589ba4b41e27f564d6a83bfc27c0ea9e3d"
+        },
+        "examples/record-decision.md": {
+          "kind": "file",
+          "size": 765,
+          "sha256": "4130d9c9477fb36b7de520fb81db4aa97945e07d6955f8d35bd205777d59f8a0"
+        },
+        "references/memory-backends.md": {
+          "kind": "file",
+          "size": 4719,
+          "sha256": "1408df316335cb8d4665b8b89f2a298c7cc00be62ad0cc92f6b0d1fbbdff1d2f"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2"
+        },
+        "templates/decision.md": {
+          "kind": "file",
+          "size": 94,
+          "sha256": "54025889cc2370ec54567ee554fce8ff9c8eb36a07f776a6cad8063d84ea277a"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/gitnexus.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "7113e1f88e20f426c0071ad2d3a05ac7f1bf17094993039bf1f1283de31efd7b"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2118,
+          "sha256": "d096b84d8b2f926330de547581c46b91380e4d6c879c7d3d361d0d272387765c"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 291,
+          "sha256": "ca15ff6d31d98d363f4c4d88d13558f12cfd4ce84a4b7e5fba5c7b26fad4370d"
+        },
+        "examples/assess-symbol-change.md": {
+          "kind": "file",
+          "size": 958,
+          "sha256": "d7d185028ca6d40371e7c604280bd40814b4c9983d47e87938e2ba89bd4188e0"
+        },
+        "references/impact-and-worktree.md": {
+          "kind": "file",
+          "size": 1050,
+          "sha256": "8263e2772f6e388c561b23689e93988dee872825cb7da475f0a9144240da312c"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2"
+        },
+        "templates/impact-report.md": {
+          "kind": "file",
+          "size": 87,
+          "sha256": "64b0794f1039a4fbc851b06182dffe80ba3a1a91ad9f3cdd92ab73f1a97839c9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/grill-me.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "685235a5bbb1d0a725dd534f8839a00d726a9108b78bacf5dbb05ca61e171ad9"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2021,
+          "sha256": "72a03e62da307857e3bdf456d8058359fdfa97c0bac5c48a9e856eeacbb60c5b"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 269,
+          "sha256": "06f5754a6d94895b11610ca32087b301a1791b564ad7e7dc4a31b9f074de2f4f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/grill-with-docs.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "3a2508f08ab930f781132eec5abf42afc5395525908ae7d1f26c678c4d64389f"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2902,
+          "sha256": "eb9675e87600482e00985ac810c29a33ee537ae5cc2650c713881aa0e764e675"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 208,
+          "sha256": "0f06080121f1750e4f6b4f1a7c980c6e1bcd4c6c977bda466a651e3f4d5677f3"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/grilling.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "80d6f915bcf09b253f5f0a9df77ae18d490b1a47d7de27c88c230c38d68bf646"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1840,
+          "sha256": "65e90841b38d5607e880adedcc68ad0d20ec8091b70bf4389754bffe946e4d70"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 194,
+          "sha256": "b69cc30f0003ccd64960a99961140c8648a6f2da316b6b142bed78dcefcb8f1f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/domain-modeling.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "944aabd3e6e9903a53741cef0b7ca3b17f6be4e2cbabf401efaa36df4301ca70"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2115,
+          "sha256": "20952edfa96e76152ccfa5600f359a1d3eacca2f619b4611cc901347fa5f01e1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 208,
+          "sha256": "799ec35084fcb7c63a5f1be6bd20a5cd92e3f49635b51e536c26e0f1394b907d"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/to-spec.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2273,
+          "sha256": "4954155dd7655908b30ee28375bcd67825b6222301cf07483718f82db1034f6a"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 192,
+          "sha256": "1ab37495224c0b62ef714127eb7a0d7c0a6e3b11140b3988b263c3fca6f1f1cf"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/to-tickets.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 3068,
+          "sha256": "e171c31b4e056708788222b6277dd130c2fa84a70463a55c00f3e16224344f81"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 198,
+          "sha256": "a38d37b20c0db9567ff867dabf2af72b09e3915b84a9b3d83075d40ffd838821"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/wayfinder.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2349,
+          "sha256": "6ff0c6b51ef2475857c5b3d670c8762702017b8459ce552aaadaf68a41341d41"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "7a346138707e82350719a96a5af9e8ef4224187a4a4f21c03516d1d28eb93819"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/research.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1774,
+          "sha256": "3c4882d2c8d8513d5276853d19cd10dfac659787213831e6654fe676e60a2113"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 194,
+          "sha256": "718e328320eced54fc36b55d6b94a731863a00c0da8b7493916df12e7473fcf8"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/prototype.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2006,
+          "sha256": "fe93e7c7dc641e4f4f248c71c7688f9353f7eb92f017e64f8a720797cd54e158"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "92fc6a1d21d54baa83eec2c392e055ea2e27c1d1a490423a15f61099419020a9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/implement.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2514,
+          "sha256": "24e8bf5c878a8351227f4a6a2a69462e40906fadcef58f0252a5a566cdb926f1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "4e22c700e252da34465b6ce54d2bc6ada41039952973873301990f26d7b07795"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/code-review.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2714,
+          "sha256": "04a5fea82932c41c40a982cb501bea069b0c6b6ceb893c69679480975964c508"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 200,
+          "sha256": "6a5f8d1ea6b3c6a29d021eea69d7c20739a5ba9221d2881d5be190187582345f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/handoff.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1804,
+          "sha256": "9f5d53531bf5a52ce7a5e22f9496cbf930e5eae79a16a446f2f94f8d5c6d2612"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 192,
+          "sha256": "9afbf1df31599a34e0b22cb386379bfe313498472efe936362e4fe634df4ee00"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/tdd.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "db48495bcf65e59949bcafcf9b8cd8387ac85e37819573f92c324946498f7962"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 3020,
+          "sha256": "8acb2d1380907584ece2e48f3e867e8055f179874dbe114dcc718c18b4dca772"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 269,
+          "sha256": "27cba0bc47d8da728ec809e21844c2efd61dc6ef359fed75dd02e37768d88619"
+        },
+        "examples/feature-cycle.md": {
+          "kind": "file",
+          "size": 565,
+          "sha256": "fb4a71618893add3838e22e9b0f2918868107f257850d381ab1de4cf1a1566c1"
+        },
+        "references/trellis-boundary.md": {
+          "kind": "file",
+          "size": 920,
+          "sha256": "ce3b66a5c88ca4454c7c28a46b1abb249e9b6deac3b728167ed42ea16b6b9e52"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 366,
+          "sha256": "89a3e365746bd928f8c771ea60ebf17412fd32eb3d0e45905962e0d451222cb1"
+        },
+        "templates/tdd-cycle.md": {
+          "kind": "file",
+          "size": 510,
+          "sha256": "d711c26cb552ca8d9c2686784a0de09316e9dbecd0878d9250687efb3ceac2b9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/diagnosing-bugs.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "67e4861083e6d9548cbf073472db29734dc68105a9f8c2f9aa1af7f9257082f3"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 9237,
+          "sha256": "0a7d1ecdcbe56fe6b54f420ea76ee2e6fba8fddaa0c6104931eb7cb455157df1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "88898e3bd640bc19fea5e6bf32f35bfb91c5aa997ba5979b1a0eb71980f94391"
+        },
+        "scripts/hitl-loop.template.sh": {
+          "kind": "file",
+          "size": 1164,
+          "sha256": "b2932630950e5210075bcd6f850e5accf30c101c5367b29eac3a29b4dd8084c8"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/codebase-design.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "DEEPENING.md": {
+          "kind": "file",
+          "size": 2939,
+          "sha256": "84060e97b22192b80f7356584f42d6b059cc5d4736b537536c8901eac194e3eb"
+        },
+        "DESIGN-IT-TWICE.md": {
+          "kind": "file",
+          "size": 3190,
+          "sha256": "f03e6f4c2b5f1ad4801158770f8a24705eb0df4bec4041b98f9b8ea6022f9083"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 7269,
+          "sha256": "c374f93c6084d430db6da9555b5dd23cc6ebe58776c0b79a5851d2999f682bda"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 223,
+          "sha256": "469ec3b88d2d1dc89880d1ba5e785f2c8ddfa69878d48ec72662334a7fb68254"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/resolving-merge-conflicts.20261006T071838Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1655,
+          "sha256": "04da96a1703ac12a7b15330695f5c9f06d2e04f8eb16c721610f0a99c82aea7e"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 256,
+          "sha256": "346e0d039da71eb336e4989239cf6f15c204a407cadd3dae87443ff06da9f97e"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/config.20261006T071843Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "__init__.py": {
+          "kind": "file",
+          "size": 65,
+          "sha256": "61dd49c1fa2f1b986e3013512fecb4779a371e1e6cb66c4fd10ce70f73ccabed"
+        },
+        "consumers.yaml": {
+          "kind": "file",
+          "size": 366,
+          "sha256": "acdf2acdc14178db3599a2e0bbd67f9a4af68543808efb2eccef8892e2b57183"
+        },
+        "defaults.yaml": {
+          "kind": "file",
+          "size": 187,
+          "sha256": "82f3897f93ae47aca1d4377bb46d49ed4d01e930fb530c6b3d67db76a5ec051d"
+        },
+        "effective_config.py": {
+          "kind": "file",
+          "size": 9836,
+          "sha256": "1ab36ee2d4041c9b97ccc21d9016978d83ab0753c941b2e2cfd4521b11ea32ea"
+        },
+        "project-config.schema.yaml": {
+          "kind": "file",
+          "size": 372,
+          "sha256": "60bf1874dc52dfba773f7f371cc4d4ee5f43bd03632ff2e0f793c31f40ca914c"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/AGENTS.md.20261006T071843Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "file",
+      "size": 9194,
+      "sha256": "62e4e169702b7e237db4b7569485745c9e4ed39220098e28f289bff76f2d2aad"
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.minimax/.ai-workflow-backups/mcp.json.20261006T071848Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "file",
+      "size": 3433,
+      "sha256": "2605a69a4dac720a3bf99e1fd2913dc1a3c3349123d4186802cb6bf3a46fdb1b"
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/memory.20261006T071906Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "f7e85f29b6ecee4371c6c5e8983ee5887a59b145e43a996e5b9f76c7715fc8bd"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1904,
+          "sha256": "eef86af0e90193b19c0968da1fcdb1131eaca8599e5a7e120510df5f337c8415"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 286,
+          "sha256": "38a715516873e8787b13bea9b0db0f589ba4b41e27f564d6a83bfc27c0ea9e3d"
+        },
+        "examples/record-decision.md": {
+          "kind": "file",
+          "size": 765,
+          "sha256": "4130d9c9477fb36b7de520fb81db4aa97945e07d6955f8d35bd205777d59f8a0"
+        },
+        "references/memory-backends.md": {
+          "kind": "file",
+          "size": 4719,
+          "sha256": "1408df316335cb8d4665b8b89f2a298c7cc00be62ad0cc92f6b0d1fbbdff1d2f"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2"
+        },
+        "templates/decision.md": {
+          "kind": "file",
+          "size": 94,
+          "sha256": "54025889cc2370ec54567ee554fce8ff9c8eb36a07f776a6cad8063d84ea277a"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/gitnexus.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "7113e1f88e20f426c0071ad2d3a05ac7f1bf17094993039bf1f1283de31efd7b"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2118,
+          "sha256": "d096b84d8b2f926330de547581c46b91380e4d6c879c7d3d361d0d272387765c"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 291,
+          "sha256": "ca15ff6d31d98d363f4c4d88d13558f12cfd4ce84a4b7e5fba5c7b26fad4370d"
+        },
+        "examples/assess-symbol-change.md": {
+          "kind": "file",
+          "size": 958,
+          "sha256": "d7d185028ca6d40371e7c604280bd40814b4c9983d47e87938e2ba89bd4188e0"
+        },
+        "references/impact-and-worktree.md": {
+          "kind": "file",
+          "size": 1050,
+          "sha256": "8263e2772f6e388c561b23689e93988dee872825cb7da475f0a9144240da312c"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2"
+        },
+        "templates/impact-report.md": {
+          "kind": "file",
+          "size": 87,
+          "sha256": "64b0794f1039a4fbc851b06182dffe80ba3a1a91ad9f3cdd92ab73f1a97839c9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/grill-me.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "685235a5bbb1d0a725dd534f8839a00d726a9108b78bacf5dbb05ca61e171ad9"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2021,
+          "sha256": "72a03e62da307857e3bdf456d8058359fdfa97c0bac5c48a9e856eeacbb60c5b"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 269,
+          "sha256": "06f5754a6d94895b11610ca32087b301a1791b564ad7e7dc4a31b9f074de2f4f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/grill-with-docs.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "3a2508f08ab930f781132eec5abf42afc5395525908ae7d1f26c678c4d64389f"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2902,
+          "sha256": "eb9675e87600482e00985ac810c29a33ee537ae5cc2650c713881aa0e764e675"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 208,
+          "sha256": "0f06080121f1750e4f6b4f1a7c980c6e1bcd4c6c977bda466a651e3f4d5677f3"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/grilling.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "80d6f915bcf09b253f5f0a9df77ae18d490b1a47d7de27c88c230c38d68bf646"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1840,
+          "sha256": "65e90841b38d5607e880adedcc68ad0d20ec8091b70bf4389754bffe946e4d70"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 194,
+          "sha256": "b69cc30f0003ccd64960a99961140c8648a6f2da316b6b142bed78dcefcb8f1f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/domain-modeling.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "944aabd3e6e9903a53741cef0b7ca3b17f6be4e2cbabf401efaa36df4301ca70"
+        },
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2115,
+          "sha256": "20952edfa96e76152ccfa5600f359a1d3eacca2f619b4611cc901347fa5f01e1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 208,
+          "sha256": "799ec35084fcb7c63a5f1be6bd20a5cd92e3f49635b51e536c26e0f1394b907d"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/to-spec.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2273,
+          "sha256": "4954155dd7655908b30ee28375bcd67825b6222301cf07483718f82db1034f6a"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 192,
+          "sha256": "1ab37495224c0b62ef714127eb7a0d7c0a6e3b11140b3988b263c3fca6f1f1cf"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/to-tickets.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 3068,
+          "sha256": "e171c31b4e056708788222b6277dd130c2fa84a70463a55c00f3e16224344f81"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 198,
+          "sha256": "a38d37b20c0db9567ff867dabf2af72b09e3915b84a9b3d83075d40ffd838821"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/wayfinder.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2349,
+          "sha256": "6ff0c6b51ef2475857c5b3d670c8762702017b8459ce552aaadaf68a41341d41"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "7a346138707e82350719a96a5af9e8ef4224187a4a4f21c03516d1d28eb93819"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/research.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1774,
+          "sha256": "3c4882d2c8d8513d5276853d19cd10dfac659787213831e6654fe676e60a2113"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 194,
+          "sha256": "718e328320eced54fc36b55d6b94a731863a00c0da8b7493916df12e7473fcf8"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/prototype.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2006,
+          "sha256": "fe93e7c7dc641e4f4f248c71c7688f9353f7eb92f017e64f8a720797cd54e158"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "92fc6a1d21d54baa83eec2c392e055ea2e27c1d1a490423a15f61099419020a9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/implement.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2514,
+          "sha256": "24e8bf5c878a8351227f4a6a2a69462e40906fadcef58f0252a5a566cdb926f1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 196,
+          "sha256": "4e22c700e252da34465b6ce54d2bc6ada41039952973873301990f26d7b07795"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/code-review.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 2714,
+          "sha256": "04a5fea82932c41c40a982cb501bea069b0c6b6ceb893c69679480975964c508"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 200,
+          "sha256": "6a5f8d1ea6b3c6a29d021eea69d7c20739a5ba9221d2881d5be190187582345f"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/handoff.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "LICENSE": {
+          "kind": "file",
+          "size": 1068,
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1804,
+          "sha256": "9f5d53531bf5a52ce7a5e22f9496cbf930e5eae79a16a446f2f94f8d5c6d2612"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 192,
+          "sha256": "9afbf1df31599a34e0b22cb386379bfe313498472efe936362e4fe634df4ee00"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/tdd.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "db48495bcf65e59949bcafcf9b8cd8387ac85e37819573f92c324946498f7962"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 3020,
+          "sha256": "8acb2d1380907584ece2e48f3e867e8055f179874dbe114dcc718c18b4dca772"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 269,
+          "sha256": "27cba0bc47d8da728ec809e21844c2efd61dc6ef359fed75dd02e37768d88619"
+        },
+        "examples/feature-cycle.md": {
+          "kind": "file",
+          "size": 565,
+          "sha256": "fb4a71618893add3838e22e9b0f2918868107f257850d381ab1de4cf1a1566c1"
+        },
+        "references/trellis-boundary.md": {
+          "kind": "file",
+          "size": 920,
+          "sha256": "ce3b66a5c88ca4454c7c28a46b1abb249e9b6deac3b728167ed42ea16b6b9e52"
+        },
+        "scripts/validate.sh": {
+          "kind": "file",
+          "size": 366,
+          "sha256": "89a3e365746bd928f8c771ea60ebf17412fd32eb3d0e45905962e0d451222cb1"
+        },
+        "templates/tdd-cycle.md": {
+          "kind": "file",
+          "size": 510,
+          "sha256": "d711c26cb552ca8d9c2686784a0de09316e9dbecd0878d9250687efb3ceac2b9"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/diagnosing-bugs.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        ".DS_Store": {
+          "kind": "file",
+          "size": 6148,
+          "sha256": "67e4861083e6d9548cbf073472db29734dc68105a9f8c2f9aa1af7f9257082f3"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 9237,
+          "sha256": "0a7d1ecdcbe56fe6b54f420ea76ee2e6fba8fddaa0c6104931eb7cb455157df1"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 210,
+          "sha256": "88898e3bd640bc19fea5e6bf32f35bfb91c5aa997ba5979b1a0eb71980f94391"
+        },
+        "scripts/hitl-loop.template.sh": {
+          "kind": "file",
+          "size": 1164,
+          "sha256": "b2932630950e5210075bcd6f850e5accf30c101c5367b29eac3a29b4dd8084c8"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/codebase-design.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "DEEPENING.md": {
+          "kind": "file",
+          "size": 2939,
+          "sha256": "84060e97b22192b80f7356584f42d6b059cc5d4736b537536c8901eac194e3eb"
+        },
+        "DESIGN-IT-TWICE.md": {
+          "kind": "file",
+          "size": 3190,
+          "sha256": "f03e6f4c2b5f1ad4801158770f8a24705eb0df4bec4041b98f9b8ea6022f9083"
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "size": 7269,
+          "sha256": "c374f93c6084d430db6da9555b5dd23cc6ebe58776c0b79a5851d2999f682bda"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 223,
+          "sha256": "469ec3b88d2d1dc89880d1ba5e785f2c8ddfa69878d48ec72662334a7fb68254"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/resolving-merge-conflicts.20261006T071907Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "SKILL.md": {
+          "kind": "file",
+          "size": 1655,
+          "sha256": "04da96a1703ac12a7b15330695f5c9f06d2e04f8eb16c721610f0a99c82aea7e"
+        },
+        "agents/openai.yaml": {
+          "kind": "file",
+          "size": 256,
+          "sha256": "346e0d039da71eb336e4989239cf6f15c204a407cadd3dae87443ff06da9f97e"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/config.20261006T071912Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "directory",
+      "files": {
+        "__init__.py": {
+          "kind": "file",
+          "size": 65,
+          "sha256": "61dd49c1fa2f1b986e3013512fecb4779a371e1e6cb66c4fd10ce70f73ccabed"
+        },
+        "consumers.yaml": {
+          "kind": "file",
+          "size": 366,
+          "sha256": "acdf2acdc14178db3599a2e0bbd67f9a4af68543808efb2eccef8892e2b57183"
+        },
+        "defaults.yaml": {
+          "kind": "file",
+          "size": 187,
+          "sha256": "82f3897f93ae47aca1d4377bb46d49ed4d01e930fb530c6b3d67db76a5ec051d"
+        },
+        "effective_config.py": {
+          "kind": "file",
+          "size": 9836,
+          "sha256": "1ab36ee2d4041c9b97ccc21d9016978d83ab0753c941b2e2cfd4521b11ea32ea"
+        },
+        "project-config.schema.yaml": {
+          "kind": "file",
+          "size": 372,
+          "sha256": "60bf1874dc52dfba773f7f371cc4d4ee5f43bd03632ff2e0f793c31f40ca914c"
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/CODEBUDDY.md.20261006T071912Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "file",
+      "size": 9194,
+      "sha256": "62e4e169702b7e237db4b7569485745c9e4ed39220098e28f289bff76f2d2aad"
+    }
+  },
+  {
+    "path": "/Users/hogenxue/.codebuddy/.ai-workflow-backups/mcp.json.20261006T071917Z.bak",
+    "observed_date": "2026-10-10",
+    "fingerprint": {
+      "kind": "file",
+      "size": 329,
+      "sha256": "feb2802c07e18991a7e9319161833b4a7350fc196878aab3e3fd6e49ac341290"
+    }
+  }
+]

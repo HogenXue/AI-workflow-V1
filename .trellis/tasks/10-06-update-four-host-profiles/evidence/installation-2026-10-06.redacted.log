@@ -1,0 +1,278 @@
+AI-workflow installer
+Select target agent(s):
+  1) Codex
+  2) Cursor
+  3) Claude
+  4) MiniMax Code (mcode)
+  5) WorkBuddy
+Select agents (e.g. 1, 1 3, 1,2,3): 1 2 4 5
+1
+3
+y
+Install mode:
+  1) Recommended full install
+  2) Single component (advanced)
+Choice [1-2]: Select project root for Cursor hooks/rules (explicit choice required; git root is only a candidate)...
+Project-scoped hooks/rules require an explicit project root.
+Git toplevel is a candidate only — it is never applied automatically.
+  1) $HOME/Projects/CodexTamplate  (detected git root)
+  2) Enter a custom path
+  3) Skip project-scoped steps
+Choice [1-3]: SKIP: skipping project-scoped steps (user declined)
+--- Recommended full install plan ---
+- AIHero/Trellis: main-flow and support Skills from manifest.yaml + global rules from agents/AGENTS.global.md
+- Dependencies: keep usable GitNexus/Trellis/Graphify CLIs; install missing tools first
+- Codex: ~/.agents/skills (including Graphify) + ~/.agents/config + ~/.codex AGENTS/user hooks + global MCP
+- Cursor: ~/.cursor/skills + ~/.cursor/config + mcp.json + project rules/hooks
+- MiniMax Code: $HOME/.minimax/{skills,config,AGENTS.md} + native MCP
+- WorkBuddy: $HOME/.codebuddy/{skills,config,CODEBUDDY.md} + native MCP
+- Project-scoped steps: skipped
+Proceed? [Y/n]: DEPENDENCIES: GitNexus, Trellis, Graphify
+SKIP: gitnexus already usable at /opt/homebrew/bin/gitnexus
+SKIP: trellis already usable at $HOME/.local/bin/trellis
+SKIP: graphify already usable at $HOME/.local/bin/graphify
+PATH: /opt/homebrew/bin
+PATH: $HOME/.local/bin
+NOTE: CLI installation does not initialize projects or generate graphs. Add the reported directories to your shell PATH if needed.
+=== Installing Codex profile ===
+Existing skills at $HOME/.agents/skills — backup and replace? [y/N]: y
+WARNING: legacy workflow Skills are outside the current manifest: openspec release karpathy-guidelines-zh
+They are preserved. Use --prune-legacy to back them up and remove them from this target.
+BACKUP: $HOME/.agents/.ai-workflow-backups/memory.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/gitnexus.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/grill-me.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/grill-with-docs.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/grilling.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/domain-modeling.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/to-spec.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/to-tickets.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/wayfinder.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/research.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/prototype.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/implement.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/code-review.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/handoff.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/tdd.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/diagnosing-bugs.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/codebase-design.20261006T071714Z.bak
+BACKUP: $HOME/.agents/.ai-workflow-backups/resolving-merge-conflicts.20261006T071714Z.bak
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+Existing Graphify Skill at $HOME/.agents/skills/graphify — backup and replace? [y/N]: y
+BACKUP: $HOME/.agents/.ai-workflow-backups/graphify.20261006T071723Z.bak
+
+  ╭──◉──╮     ╭──◉──╮
+ ╱  ◉   ◉ ╲ ╱ ◉   ◉  ╲
+│   ◉─◉─◉  ◉  ◉─◉─◉   │
+│    ◉   ◉ │ ◉   ◉    │
+│   ◉─◉─◉  ◉  ◉─◉─◉   │
+ ╲  ◉   ◉ ╱ ╲ ◉   ◉  ╱
+  ╰──◉──╯     ╰──◉──╯
+           ◉
+
+  █▀▀ █▀█ ▄▀█ █▀█ █ █ █ █▀▀ █▄█
+  █▄█ █▀▄ █▀█ █▀▀ █▀█ █ █▀   █  0.9.23
+
+  references       ->  $HOME/.agents/skills/graphify/references
+  skill installed  ->  $HOME/.agents/skills/graphify/SKILL.md
+
+Done. Open your AI coding assistant and type:
+
+  /graphify .
+
+INSTALLED: Graphify global Skill -> $HOME/.agents/skills/graphify
+Existing config at $HOME/.agents/config — backup and replace? [y/N]: y
+BACKUP: $HOME/.agents/.ai-workflow-backups/config.20261006T071729Z.bak
+INSTALLED: config -> $HOME/.agents/config
+BACKUP: $HOME/.codex/.ai-workflow-backups/AGENTS.md.20261006T071730Z.bak
+INSTALLED: $HOME/.codex/AGENTS.md
+UNCHANGED: config.toml already enables hooks
+Overwrite existing non-URL Codex MCP entries that conflict? [y/N]: n
+BACKUP: $HOME/.codex/.ai-workflow-backups/config.toml.20261006T071737Z.bak
+KEEP: mcp_servers.gitnexus
+Existing Codex recallium URL: <url-sha256:fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b>
+Replace Codex recallium URL with <url-sha256:4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2> [y/N]: n
+KEEP: mcp_servers.recallium
+Existing Codex mem0 URL: <url-sha256:18bac63bcdb9ad638f142a648567e506ae452c4718e6280a2c007e39a8142ac0>
+Replace Codex mem0 URL with <url-sha256:4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2> [y/N]: n
+KEEP: mcp_servers.mem0
+UNCHANGED: $HOME/.codex/config.toml
+BACKUP: $HOME/.codex/.ai-workflow-backups/hooks.json.20261006T071752Z.bak
+BACKUP: $HOME/.codex/.ai-workflow-backups/hooks.20261006T071752Z.bak
+INSTALLED: $HOME/.codex/hooks.json
+INSTALLED: $HOME/.codex/hooks/session-start.sh
+=== Installing Cursor profile ===
+Existing skills at $HOME/.cursor/skills — backup and replace? [y/N]: y
+BACKUP: $HOME/.cursor/.ai-workflow-backups/memory.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/gitnexus.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/grill-me.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/grill-with-docs.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/grilling.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/domain-modeling.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/to-spec.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/to-tickets.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/wayfinder.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/research.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/prototype.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/implement.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/code-review.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/handoff.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/tdd.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/diagnosing-bugs.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/codebase-design.20261006T071817Z.bak
+BACKUP: $HOME/.cursor/.ai-workflow-backups/resolving-merge-conflicts.20261006T071818Z.bak
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+Existing config at $HOME/.cursor/config — backup and replace? [y/N]: y
+BACKUP: $HOME/.cursor/.ai-workflow-backups/config.20261006T071822Z.bak
+INSTALLED: config -> $HOME/.cursor/config
+Overwrite existing non-URL Cursor MCP entries that conflict? [y/N]: n
+BACKUP: $HOME/.cursor/.ai-workflow-backups/mcp.json.20261006T071827Z.bak
+KEEP: mcpServers.gitnexus
+Existing Cursor recallium URL: <url-sha256:fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b>
+Replace Cursor recallium URL with <url-sha256:4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2> [y/N]: n
+n
+KEEP: mcpServers.recallium
+Existing Cursor mem0 URL: <url-sha256:fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b>
+Replace Cursor mem0 URL with <url-sha256:4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2> [y/N]: KEEP: mcpServers.mem0
+UNCHANGED: $HOME/.cursor/mcp.json
+SKIP: skipping project-scoped steps (--skip-project)
+=== Installing MiniMax Code profile ===
+Existing skills at $HOME/.minimax/skills — backup and replace? [y/N]: y
+BACKUP: $HOME/.minimax/.ai-workflow-backups/memory.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/gitnexus.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/grill-me.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/grill-with-docs.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/grilling.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/domain-modeling.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/to-spec.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/to-tickets.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/wayfinder.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/research.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/prototype.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/implement.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/code-review.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/handoff.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/tdd.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/diagnosing-bugs.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/codebase-design.20261006T071838Z.bak
+BACKUP: $HOME/.minimax/.ai-workflow-backups/resolving-merge-conflicts.20261006T071838Z.bak
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+Existing config at $HOME/.minimax/config — backup and replace? [y/N]: y
+BACKUP: $HOME/.minimax/.ai-workflow-backups/config.20261006T071843Z.bak
+INSTALLED: config -> $HOME/.minimax/config
+BACKUP: $HOME/.minimax/.ai-workflow-backups/AGENTS.md.20261006T071843Z.bak
+INSTALLED: $HOME/.minimax/AGENTS.md
+Overwrite existing non-URL MiniMax Code MCP entries that conflict? [y/N]: n
+BACKUP: $HOME/.minimax/.ai-workflow-backups/mcp.json.20261006T071848Z.bak
+KEEP: mcpServers.gitnexus
+Existing MiniMax Code recallium URL: <url-sha256:fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b>
+Replace MiniMax Code recallium URL with <url-sha256:4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2> [y/N]: n
+n
+KEEP: mcpServers.recallium
+Existing MiniMax Code mem0 URL: <url-sha256:18bac63bcdb9ad638f142a648567e506ae452c4718e6280a2c007e39a8142ac0>
+Replace MiniMax Code mem0 URL with <url-sha256:4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2> [y/N]: KEEP: mcpServers.mem0
+UNCHANGED: $HOME/.minimax/mcp/mcp.json
+=== Installing WorkBuddy profile ===
+Existing skills at $HOME/.codebuddy/skills — backup and replace? [y/N]: y
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/memory.20261006T071906Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/gitnexus.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/grill-me.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/grill-with-docs.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/grilling.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/domain-modeling.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/to-spec.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/to-tickets.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/wayfinder.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/research.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/prototype.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/implement.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/code-review.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/handoff.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/tdd.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/diagnosing-bugs.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/codebase-design.20261006T071907Z.bak
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/resolving-merge-conflicts.20261006T071907Z.bak
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+Existing config at $HOME/.codebuddy/config — backup and replace? [y/N]: y
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/config.20261006T071912Z.bak
+INSTALLED: config -> $HOME/.codebuddy/config
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/CODEBUDDY.md.20261006T071912Z.bak
+INSTALLED: $HOME/.codebuddy/CODEBUDDY.md
+Overwrite existing non-URL WorkBuddy MCP entries that conflict? [y/N]: n
+BACKUP: $HOME/.codebuddy/.ai-workflow-backups/mcp.json.20261006T071917Z.bak
+KEEP: mcpServers.gitnexus
+Existing WorkBuddy recallium URL: <url-sha256:fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b>
+Replace WorkBuddy recallium URL with <url-sha256:4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2> [y/N]: n
+n
+KEEP: mcpServers.recallium
+Existing WorkBuddy mem0 URL: <url-sha256:fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b>
+Replace WorkBuddy mem0 URL with <url-sha256:4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2> [y/N]: KEEP: mcpServers.mem0
+UNCHANGED: $HOME/.codebuddy/mcp.json
+Done.
