@@ -196,3 +196,35 @@ Recovered 20 real October 6 installer-output chunks and original verification ou
 ### Next Steps
 
 - None - task complete
+
+
+## Session 7: Prune duplicate and obsolete local Skills
+
+**Date**: 2026-10-10
+**Task**: Prune duplicate and obsolete local Skills
+**Branch**: `main`
+
+### Summary
+
+Archived 8 redundant/obsolete entries; consolidated the constrained Graphify variant; moved 3 historical backup containers/20 old Skill copies out of discovery, including July Grill Me. Retained 4 current Grill Me copies and specialized/system/plugin/independent-host Skills. Verified 37 protected paths, backup/selected-tree fingerprints and direct-name deduplication. Root-owned write-a-prd was archived via a verified user-owned-root rebuild, with no administrator credentials. No MCP/config changes or Task archive; app metadata refresh unverified. Git publication was authorized separately after cleanup.
+
+### Main Changes
+
+- Cleanup decisions, recovery paths and verification results are recorded in `.trellis/tasks/10-10-local-skill-cleanup/`.
+
+### Git Commits
+
+Publication scope: the cleanup Task and this session's Journal/index updates. Existing `AGENTS.md` deletion and the old LAN task are excluded.
+
+### Testing
+
+- Protected-path and backup/selected-tree fingerprints passed; 4 current Grill Me copies were preserved, and duplicate direct Skill names were absent.
+- Native `task.py validate` and `git diff --check` passed; see `verification.md`. Application discovery refresh: `not_run`.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

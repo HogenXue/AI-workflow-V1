@@ -1,0 +1,84 @@
+{
+  "backup_root": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw",
+  "entries": [
+    {
+      "source": "/Users/hogenxue/.codex/skills/anysearch",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/removed/.codex/skills/anysearch",
+      "reason": "same-source Codex alias; .agents canonical link retained",
+      "action": "remove_entry"
+    },
+    {
+      "source": "/Users/hogenxue/.codex/skills/figma-implement-design",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/removed/.codex/skills/figma-implement-design",
+      "reason": "same-source Codex alias; .agents canonical tree retained",
+      "action": "remove_entry"
+    },
+    {
+      "source": "/Users/hogenxue/.codex/skills/playwright",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/removed/.codex/skills/playwright",
+      "reason": "same-source Codex alias; .agents canonical tree retained",
+      "action": "remove_entry"
+    },
+    {
+      "source": "/Users/hogenxue/.codex/skills/open-spec",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/removed/.codex/skills/open-spec",
+      "reason": "old unadapted mandatory OpenSpec workflow without Skill frontmatter; adapted openspec retained",
+      "action": "remove_entry"
+    },
+    {
+      "source": "/Users/hogenxue/.codex/skills/debugging",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/removed/.codex/skills/debugging",
+      "reason": "superseded generic diagnostic entry; native diagnosing-bugs retained",
+      "action": "remove_entry"
+    },
+    {
+      "source": "/Users/hogenxue/.agents/skills/write-a-prd",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/shared-root.before/write-a-prd",
+      "reason": "unadapted duplicate interviewer/PRD workflow with automatic GitHub issue publication",
+      "action": "remove_entry"
+    },
+    {
+      "source": "/Users/hogenxue/.agents/skills/karpathy-guidelines-zh",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/shared-root.before/karpathy-guidelines-zh",
+      "reason": "redundant all-task policy routing; global principles retained",
+      "action": "remove_entry"
+    },
+    {
+      "source": "/Users/hogenxue/.agents/skills/superpowers",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/shared-root.before/superpowers",
+      "reason": "redundant multi-stage workflow discovery alias; underlying source package retained",
+      "action": "remove_entry"
+    },
+    {
+      "source": "/Users/hogenxue/.agents/skills/.codex-ultimate-v3-backups",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/shared-root.before/.codex-ultimate-v3-backups",
+      "reason": "move historical versions, including obsolete July Grill Me, out of Skill discovery",
+      "action": "relocate_archive"
+    },
+    {
+      "source": "/Users/hogenxue/.codex/skills/.codex-ultimate-v3-backups",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/removed/.codex/skills/.codex-ultimate-v3-backups",
+      "reason": "move historical versions, including obsolete July Grill Me, out of Skill discovery",
+      "action": "relocate_archive"
+    },
+    {
+      "source": "/Users/hogenxue/.cursor/skills/.codex-ultimate-v3-backups",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/removed/.cursor/skills/.codex-ultimate-v3-backups",
+      "reason": "move historical versions, including obsolete July Grill Me, out of Skill discovery",
+      "action": "relocate_archive"
+    },
+    {
+      "source": "/Users/hogenxue/.agents/skills/graphify",
+      "backup": "/Users/hogenxue/.local/state/codextamplate/skill-cleanups/2026-10-10-wp2vo_sw/shared-root.before/graphify",
+      "reason": "replace broad duplicate with already-existing narrow customized variant",
+      "action": "remove_entry"
+    }
+  ],
+  "graphify_selection": {
+    "source": "/Users/hogenxue/.codex/skills/graphify",
+    "destination": "/Users/hogenxue/.agents/skills/graphify",
+    "action": "consolidate_existing_variant"
+  },
+  "grill_me_decision": "retain current copies matching manifest; move obsolete July archived copy outside discovery",
+  "root_owned_entry_handling": "verified keep-set rebuild of user-owned parent; no sudo/chown/chmod on original entries"
+}
