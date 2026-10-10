@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 7
+- **Total Sessions**: 8
 - **Last Active**: 2026-10-10
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~229 | Active |
+| `journal-1.md` | ~268 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 8 | 2026-10-10 | Reinstall four local profiles after Skill cleanup | - | `main` |
 | 7 | 2026-10-10 | Prune duplicate and obsolete local Skills | - | `main` |
 | 6 | 2026-10-10 | Address evidence retention and private HTTP review comments | - | `main` |
 | 5 | 2026-10-06 | Update four live host profiles; preserve MCP URLs | - | `main` |

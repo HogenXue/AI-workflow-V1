@@ -1,0 +1,257 @@
+AI-workflow installer
+Select target agent(s):
+  1) Codex
+  2) Cursor
+  3) Claude
+  4) MiniMax Code (mcode)
+  5) WorkBuddy
+Select agents (e.g. 1, 1 3, 1,2,3): 1 2 4 5
+Install mode:
+  1) Recommended full install
+  2) Single component (advanced)
+Choice [1-2]: 1
+Select project root for Cursor hooks/rules (explicit choice required; git root is only a candidate)...
+Project-scoped hooks/rules require an explicit project root.
+Git toplevel is a candidate only — it is never applied automatically.
+  1) /Users/hogenxue/Projects/CodexTamplate  (detected git root)
+  2) Enter a custom path
+  3) Skip project-scoped steps
+Choice [1-3]: 3
+SKIP: skipping project-scoped steps (user declined)
+--- Recommended full install plan ---
+- AIHero/Trellis: main-flow and support Skills from manifest.yaml + global rules from agents/AGENTS.global.md
+- Dependencies: keep usable GitNexus/Trellis/Graphify CLIs; install missing tools first
+- Codex: ~/.agents/skills (including Graphify) + ~/.agents/config + ~/.codex AGENTS/user hooks + global MCP
+- Cursor: ~/.cursor/skills + ~/.cursor/config + mcp.json + project rules/hooks
+- MiniMax Code: /Users/hogenxue/.minimax/{skills,config,AGENTS.md} + native MCP
+- WorkBuddy: /Users/hogenxue/.codebuddy/{skills,config,CODEBUDDY.md} + native MCP
+- Project-scoped steps: skipped
+Proceed? [Y/n]: y
+DEPENDENCIES: GitNexus, Trellis, Graphify
+SKIP: gitnexus already usable at /opt/homebrew/bin/gitnexus
+SKIP: trellis already usable at /Users/hogenxue/.local/bin/trellis
+SKIP: graphify already usable at /Users/hogenxue/.local/bin/graphify
+PATH: /opt/homebrew/bin
+PATH: /Users/hogenxue/.local/bin
+NOTE: CLI installation does not initialize projects or generate graphs. Add the reported directories to your shell PATH if needed.
+=== Installing Codex profile ===
+Existing skills at /Users/hogenxue/.agents/skills — backup and replace? [y/N]: y
+WARNING: legacy workflow Skills are outside the current manifest: openspec release
+They are preserved. Use --prune-legacy to back them up and remove them from this target.
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/memory.20261010T123726Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/gitnexus.20261010T123726Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/grill-me.20261010T123726Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/grill-with-docs.20261010T123726Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/grilling.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/domain-modeling.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/to-spec.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/to-tickets.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/wayfinder.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/research.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/prototype.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/implement.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/code-review.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/handoff.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/tdd.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/diagnosing-bugs.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/codebase-design.20261010T123727Z.bak
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/resolving-merge-conflicts.20261010T123727Z.bak
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+Existing Graphify Skill at /Users/hogenxue/.agents/skills/graphify — backup and replace? [y/N]: n
+SKIP: Graphify global Skill
+Existing config at /Users/hogenxue/.agents/config — backup and replace? [y/N]: y
+BACKUP: /Users/hogenxue/.agents/.ai-workflow-backups/config.20261010T123735Z.bak
+INSTALLED: config -> /Users/hogenxue/.agents/config
+BACKUP: /Users/hogenxue/.codex/.ai-workflow-backups/AGENTS.md.20261010T123735Z.bak
+INSTALLED: /Users/hogenxue/.codex/AGENTS.md
+UNCHANGED: config.toml already enables hooks
+Overwrite existing non-URL Codex MCP entries that conflict? [y/N]: n
+BACKUP: /Users/hogenxue/.codex/.ai-workflow-backups/config.toml.20261010T123741Z.bak
+KEEP: mcp_servers.gitnexus
+Existing Codex recallium URL: [URL sha256=fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b]
+Replace Codex recallium URL with [URL sha256=4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2] [y/N]: n
+KEEP: mcp_servers.recallium
+Existing Codex mem0 URL: [URL sha256=18bac63bcdb9ad638f142a648567e506ae452c4718e6280a2c007e39a8142ac0]
+Replace Codex mem0 URL with [URL sha256=4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2] [y/N]: n
+KEEP: mcp_servers.mem0
+UNCHANGED: /Users/hogenxue/.codex/config.toml
+BACKUP: /Users/hogenxue/.codex/.ai-workflow-backups/hooks.json.20261010T123749Z.bak
+BACKUP: /Users/hogenxue/.codex/.ai-workflow-backups/hooks.20261010T123749Z.bak
+INSTALLED: /Users/hogenxue/.codex/hooks.json
+INSTALLED: /Users/hogenxue/.codex/hooks/session-start.sh
+=== Installing Cursor profile ===
+Existing skills at /Users/hogenxue/.cursor/skills — backup and replace? [y/N]: y
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/memory.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/gitnexus.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/grill-me.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/grill-with-docs.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/grilling.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/domain-modeling.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/to-spec.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/to-tickets.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/wayfinder.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/research.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/prototype.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/implement.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/code-review.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/handoff.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/tdd.20261010T123758Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/diagnosing-bugs.20261010T123759Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/codebase-design.20261010T123759Z.bak
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/resolving-merge-conflicts.20261010T123759Z.bak
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+Existing config at /Users/hogenxue/.cursor/config — backup and replace? [y/N]: y
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/config.20261010T123807Z.bak
+INSTALLED: config -> /Users/hogenxue/.cursor/config
+Overwrite existing non-URL Cursor MCP entries that conflict? [y/N]: n
+BACKUP: /Users/hogenxue/.cursor/.ai-workflow-backups/mcp.json.20261010T123811Z.bak
+KEEP: mcpServers.gitnexus
+Existing Cursor recallium URL: [URL sha256=fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b]
+Replace Cursor recallium URL with [URL sha256=4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2] [y/N]: n
+KEEP: mcpServers.recallium
+Existing Cursor mem0 URL: [URL sha256=fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b]
+Replace Cursor mem0 URL with [URL sha256=4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2] [y/N]: n
+KEEP: mcpServers.mem0
+UNCHANGED: /Users/hogenxue/.cursor/mcp.json
+SKIP: skipping project-scoped steps (--skip-project)
+=== Installing MiniMax Code profile ===
+Existing skills at /Users/hogenxue/.minimax/skills — backup and replace? [y/N]: y
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/memory.20261010T123823Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/gitnexus.20261010T123823Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/grill-me.20261010T123823Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/grill-with-docs.20261010T123823Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/grilling.20261010T123823Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/domain-modeling.20261010T123823Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/to-spec.20261010T123823Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/to-tickets.20261010T123823Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/wayfinder.20261010T123823Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/research.20261010T123823Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/prototype.20261010T123824Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/implement.20261010T123824Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/code-review.20261010T123824Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/handoff.20261010T123824Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/tdd.20261010T123824Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/diagnosing-bugs.20261010T123824Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/codebase-design.20261010T123824Z.bak
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/resolving-merge-conflicts.20261010T123824Z.bak
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+Existing config at /Users/hogenxue/.minimax/config — backup and replace? [y/N]: y
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/config.20261010T123828Z.bak
+INSTALLED: config -> /Users/hogenxue/.minimax/config
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/AGENTS.md.20261010T123828Z.bak
+INSTALLED: /Users/hogenxue/.minimax/AGENTS.md
+Overwrite existing non-URL MiniMax Code MCP entries that conflict? [y/N]: n
+BACKUP: /Users/hogenxue/.minimax/.ai-workflow-backups/mcp.json.20261010T123833Z.bak
+KEEP: mcpServers.gitnexus
+Existing MiniMax Code recallium URL: [URL sha256=fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b]
+Replace MiniMax Code recallium URL with [URL sha256=4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2] [y/N]: n
+KEEP: mcpServers.recallium
+Existing MiniMax Code mem0 URL: [URL sha256=18bac63bcdb9ad638f142a648567e506ae452c4718e6280a2c007e39a8142ac0]
+Replace MiniMax Code mem0 URL with [URL sha256=4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2] [y/N]: n
+KEEP: mcpServers.mem0
+UNCHANGED: /Users/hogenxue/.minimax/mcp/mcp.json
+=== Installing WorkBuddy profile ===
+Existing skills at /Users/hogenxue/.codebuddy/skills — backup and replace? [y/N]: y
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/memory.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/gitnexus.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/grill-me.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/grill-with-docs.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/grilling.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/domain-modeling.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/to-spec.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/to-tickets.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/wayfinder.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/research.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/prototype.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/implement.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/code-review.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/handoff.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/tdd.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/diagnosing-bugs.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/codebase-design.20261010T123845Z.bak
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/resolving-merge-conflicts.20261010T123845Z.bak
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+Existing config at /Users/hogenxue/.codebuddy/config — backup and replace? [y/N]: y
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/config.20261010T123850Z.bak
+INSTALLED: config -> /Users/hogenxue/.codebuddy/config
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/CODEBUDDY.md.20261010T123851Z.bak
+INSTALLED: /Users/hogenxue/.codebuddy/CODEBUDDY.md
+Overwrite existing non-URL WorkBuddy MCP entries that conflict? [y/N]: n
+BACKUP: /Users/hogenxue/.codebuddy/.ai-workflow-backups/mcp.json.20261010T123854Z.bak
+KEEP: mcpServers.gitnexus
+Existing WorkBuddy recallium URL: [URL sha256=fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b]
+Replace WorkBuddy recallium URL with [URL sha256=4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2] [y/N]: n
+KEEP: mcpServers.recallium
+Existing WorkBuddy mem0 URL: [URL sha256=fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b]
+Replace WorkBuddy mem0 URL with [URL sha256=4388a7673a03a960d76d7fd747c9e77b9af7508619efbb3c972d1370ae4cf9b2] [y/N]: n
+KEEP: mcpServers.mem0
+UNCHANGED: /Users/hogenxue/.codebuddy/mcp.json
+Done.

@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "source_commit": "276a8d4c802f2b403c2f7b9245fe39b5a2822b98",
+  "private_evidence_root": "/Users/hogenxue/.local/state/codextamplate/installation-audits/2026-10-10-6w4gwze7",
+  "selected_profiles": [
+    "codex",
+    "cursor",
+    "minimax",
+    "workbuddy"
+  ],
+  "manifest_skills_per_host": 18,
+  "installed_skill_trees": 72,
+  "protected_paths_verified": 56,
+  "repository_tracked_paths_verified": 542,
+  "mcp_server_entries_preserved": 21,
+  "mcp_urls_preserved": 11,
+  "new_backups_verified": 85,
+  "mismatches": [],
+  "graphify_preserved": true,
+  "application_loading": "not_run",
+  "external_mcp_connectivity": "not_run",
+  "git_publication": "not_run",
+  "installer_exit_code": 0,
+  "backup_coverage_complete": true,
+  "backup_covered_replacement_targets": 85,
+  "unmanaged_hook_entries_preserved": 4,
+  "extra_hook_files_preserved": 0,
+  "private_permissions_verified": true,
+  "native_task_validation": "passed",
+  "diff_check": "passed",
+  "native_trellis_check": "passed",
+  "completion_memory": {
+    "backend": "Recallium",
+    "id": 1302,
+    "status": "saved"
+  }
+}

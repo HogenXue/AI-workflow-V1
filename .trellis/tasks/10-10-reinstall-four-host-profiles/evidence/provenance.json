@@ -1,0 +1,21 @@
+{
+  "source_commit": "276a8d4c802f2b403c2f7b9245fe39b5a2822b98",
+  "before_captured_at_utc": "2026-10-10T12:36:58.775716+00:00",
+  "execution_command": [
+    "python3",
+    "/Users/hogenxue/.local/state/codextamplate/installation-audits/2026-10-10-6w4gwze7/run_installer.py"
+  ],
+  "installer_command": [
+    "bash",
+    "scripts/install.sh"
+  ],
+  "installer_exit_code": 0,
+  "private_root": "/Users/hogenxue/.local/state/codextamplate/installation-audits/2026-10-10-6w4gwze7",
+  "private_root_mode": "0700",
+  "private_snapshots_and_raw_log_mode": "0600",
+  "raw_log_sha256": "f9c058998e96761e410c43fac6e99c58c75b3c743781315d56e1ba7c2b68f8cb",
+  "redacted_log_sha256": "3558295419b877730b04bfedd8a109adfa96386c21959be259de40608f4bda60",
+  "redaction": "URL values replaced with SHA-256; credential-bearing lines removed",
+  "script_sha256": "b868d71d579f775aad747d9a0d3e30aad7513b0a86cd9ca6d18e780f3228b62a",
+  "pty_wrapper_sha256": "cc5fa87e50f28b9603d9db98d501ea6d7fb1bcbf5063ba51a3f4ea50fa4bc93a"
+}

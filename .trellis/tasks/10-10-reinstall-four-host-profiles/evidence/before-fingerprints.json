@@ -1,0 +1,4713 @@
+{
+  "captured_at": "2026-10-10T12:36:58.775716+00:00",
+  "source_commit": "276a8d4c802f2b403c2f7b9245fe39b5a2822b98",
+  "private_evidence_root": "/Users/hogenxue/.local/state/codextamplate/installation-audits/2026-10-10-6w4gwze7",
+  "replacement_targets": {
+    "/Users/hogenxue/.agents/skills/memory": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "f7e85f29b6ecee4371c6c5e8983ee5887a59b145e43a996e5b9f76c7715fc8bd",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "eef86af0e90193b19c0968da1fcdb1131eaca8599e5a7e120510df5f337c8415",
+          "bytes": 1904
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "38a715516873e8787b13bea9b0db0f589ba4b41e27f564d6a83bfc27c0ea9e3d",
+              "bytes": 286
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "record-decision.md": {
+              "kind": "file",
+              "sha256": "4130d9c9477fb36b7de520fb81db4aa97945e07d6955f8d35bd205777d59f8a0",
+              "bytes": 765
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "memory-backends.md": {
+              "kind": "file",
+              "sha256": "1408df316335cb8d4665b8b89f2a298c7cc00be62ad0cc92f6b0d1fbbdff1d2f",
+              "bytes": 4719
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2",
+              "bytes": 210
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "decision.md": {
+              "kind": "file",
+              "sha256": "54025889cc2370ec54567ee554fce8ff9c8eb36a07f776a6cad8063d84ea277a",
+              "bytes": 94
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/gitnexus": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "7113e1f88e20f426c0071ad2d3a05ac7f1bf17094993039bf1f1283de31efd7b",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "d096b84d8b2f926330de547581c46b91380e4d6c879c7d3d361d0d272387765c",
+          "bytes": 2118
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "ca15ff6d31d98d363f4c4d88d13558f12cfd4ce84a4b7e5fba5c7b26fad4370d",
+              "bytes": 291
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "assess-symbol-change.md": {
+              "kind": "file",
+              "sha256": "d7d185028ca6d40371e7c604280bd40814b4c9983d47e87938e2ba89bd4188e0",
+              "bytes": 958
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "impact-and-worktree.md": {
+              "kind": "file",
+              "sha256": "8263e2772f6e388c561b23689e93988dee872825cb7da475f0a9144240da312c",
+              "bytes": 1050
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2",
+              "bytes": 210
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "impact-report.md": {
+              "kind": "file",
+              "sha256": "64b0794f1039a4fbc851b06182dffe80ba3a1a91ad9f3cdd92ab73f1a97839c9",
+              "bytes": 87
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/grill-me": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "685235a5bbb1d0a725dd534f8839a00d726a9108b78bacf5dbb05ca61e171ad9",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "72a03e62da307857e3bdf456d8058359fdfa97c0bac5c48a9e856eeacbb60c5b",
+          "bytes": 2021
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "06f5754a6d94895b11610ca32087b301a1791b564ad7e7dc4a31b9f074de2f4f",
+              "bytes": 269
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/grill-with-docs": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "3a2508f08ab930f781132eec5abf42afc5395525908ae7d1f26c678c4d64389f",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "eb9675e87600482e00985ac810c29a33ee537ae5cc2650c713881aa0e764e675",
+          "bytes": 2902
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "0f06080121f1750e4f6b4f1a7c980c6e1bcd4c6c977bda466a651e3f4d5677f3",
+              "bytes": 208
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/grilling": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "80d6f915bcf09b253f5f0a9df77ae18d490b1a47d7de27c88c230c38d68bf646",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "65e90841b38d5607e880adedcc68ad0d20ec8091b70bf4389754bffe946e4d70",
+          "bytes": 1840
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "b69cc30f0003ccd64960a99961140c8648a6f2da316b6b142bed78dcefcb8f1f",
+              "bytes": 194
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/domain-modeling": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "944aabd3e6e9903a53741cef0b7ca3b17f6be4e2cbabf401efaa36df4301ca70",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "20952edfa96e76152ccfa5600f359a1d3eacca2f619b4611cc901347fa5f01e1",
+          "bytes": 2115
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "799ec35084fcb7c63a5f1be6bd20a5cd92e3f49635b51e536c26e0f1394b907d",
+              "bytes": 208
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/to-spec": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "4954155dd7655908b30ee28375bcd67825b6222301cf07483718f82db1034f6a",
+          "bytes": 2273
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "1ab37495224c0b62ef714127eb7a0d7c0a6e3b11140b3988b263c3fca6f1f1cf",
+              "bytes": 192
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/to-tickets": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "e171c31b4e056708788222b6277dd130c2fa84a70463a55c00f3e16224344f81",
+          "bytes": 3068
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "a38d37b20c0db9567ff867dabf2af72b09e3915b84a9b3d83075d40ffd838821",
+              "bytes": 198
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/wayfinder": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "6ff0c6b51ef2475857c5b3d670c8762702017b8459ce552aaadaf68a41341d41",
+          "bytes": 2349
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "7a346138707e82350719a96a5af9e8ef4224187a4a4f21c03516d1d28eb93819",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/research": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "3c4882d2c8d8513d5276853d19cd10dfac659787213831e6654fe676e60a2113",
+          "bytes": 1774
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "718e328320eced54fc36b55d6b94a731863a00c0da8b7493916df12e7473fcf8",
+              "bytes": 194
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/prototype": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "fe93e7c7dc641e4f4f248c71c7688f9353f7eb92f017e64f8a720797cd54e158",
+          "bytes": 2006
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "92fc6a1d21d54baa83eec2c392e055ea2e27c1d1a490423a15f61099419020a9",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/implement": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "24e8bf5c878a8351227f4a6a2a69462e40906fadcef58f0252a5a566cdb926f1",
+          "bytes": 2514
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "4e22c700e252da34465b6ce54d2bc6ada41039952973873301990f26d7b07795",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/code-review": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "04a5fea82932c41c40a982cb501bea069b0c6b6ceb893c69679480975964c508",
+          "bytes": 2714
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "6a5f8d1ea6b3c6a29d021eea69d7c20739a5ba9221d2881d5be190187582345f",
+              "bytes": 200
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/handoff": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "9f5d53531bf5a52ce7a5e22f9496cbf930e5eae79a16a446f2f94f8d5c6d2612",
+          "bytes": 1804
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "9afbf1df31599a34e0b22cb386379bfe313498472efe936362e4fe634df4ee00",
+              "bytes": 192
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/tdd": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "db48495bcf65e59949bcafcf9b8cd8387ac85e37819573f92c324946498f7962",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "8acb2d1380907584ece2e48f3e867e8055f179874dbe114dcc718c18b4dca772",
+          "bytes": 3020
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "27cba0bc47d8da728ec809e21844c2efd61dc6ef359fed75dd02e37768d88619",
+              "bytes": 269
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "feature-cycle.md": {
+              "kind": "file",
+              "sha256": "fb4a71618893add3838e22e9b0f2918868107f257850d381ab1de4cf1a1566c1",
+              "bytes": 565
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "trellis-boundary.md": {
+              "kind": "file",
+              "sha256": "ce3b66a5c88ca4454c7c28a46b1abb249e9b6deac3b728167ed42ea16b6b9e52",
+              "bytes": 920
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "89a3e365746bd928f8c771ea60ebf17412fd32eb3d0e45905962e0d451222cb1",
+              "bytes": 366
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "tdd-cycle.md": {
+              "kind": "file",
+              "sha256": "d711c26cb552ca8d9c2686784a0de09316e9dbecd0878d9250687efb3ceac2b9",
+              "bytes": 510
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/diagnosing-bugs": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "67e4861083e6d9548cbf073472db29734dc68105a9f8c2f9aa1af7f9257082f3",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "0a7d1ecdcbe56fe6b54f420ea76ee2e6fba8fddaa0c6104931eb7cb455157df1",
+          "bytes": 9237
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "88898e3bd640bc19fea5e6bf32f35bfb91c5aa997ba5979b1a0eb71980f94391",
+              "bytes": 210
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "hitl-loop.template.sh": {
+              "kind": "file",
+              "sha256": "b2932630950e5210075bcd6f850e5accf30c101c5367b29eac3a29b4dd8084c8",
+              "bytes": 1164
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/codebase-design": {
+      "kind": "directory",
+      "children": {
+        "DEEPENING.md": {
+          "kind": "file",
+          "sha256": "84060e97b22192b80f7356584f42d6b059cc5d4736b537536c8901eac194e3eb",
+          "bytes": 2939
+        },
+        "DESIGN-IT-TWICE.md": {
+          "kind": "file",
+          "sha256": "f03e6f4c2b5f1ad4801158770f8a24705eb0df4bec4041b98f9b8ea6022f9083",
+          "bytes": 3190
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "c374f93c6084d430db6da9555b5dd23cc6ebe58776c0b79a5851d2999f682bda",
+          "bytes": 7269
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "469ec3b88d2d1dc89880d1ba5e785f2c8ddfa69878d48ec72662334a7fb68254",
+              "bytes": 223
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/resolving-merge-conflicts": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "04da96a1703ac12a7b15330695f5c9f06d2e04f8eb16c721610f0a99c82aea7e",
+          "bytes": 1655
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "346e0d039da71eb336e4989239cf6f15c204a407cadd3dae87443ff06da9f97e",
+              "bytes": 256
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/memory": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "f7e85f29b6ecee4371c6c5e8983ee5887a59b145e43a996e5b9f76c7715fc8bd",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "eef86af0e90193b19c0968da1fcdb1131eaca8599e5a7e120510df5f337c8415",
+          "bytes": 1904
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "38a715516873e8787b13bea9b0db0f589ba4b41e27f564d6a83bfc27c0ea9e3d",
+              "bytes": 286
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "record-decision.md": {
+              "kind": "file",
+              "sha256": "4130d9c9477fb36b7de520fb81db4aa97945e07d6955f8d35bd205777d59f8a0",
+              "bytes": 765
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "memory-backends.md": {
+              "kind": "file",
+              "sha256": "1408df316335cb8d4665b8b89f2a298c7cc00be62ad0cc92f6b0d1fbbdff1d2f",
+              "bytes": 4719
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2",
+              "bytes": 210
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "decision.md": {
+              "kind": "file",
+              "sha256": "54025889cc2370ec54567ee554fce8ff9c8eb36a07f776a6cad8063d84ea277a",
+              "bytes": 94
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/gitnexus": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "7113e1f88e20f426c0071ad2d3a05ac7f1bf17094993039bf1f1283de31efd7b",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "d096b84d8b2f926330de547581c46b91380e4d6c879c7d3d361d0d272387765c",
+          "bytes": 2118
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "ca15ff6d31d98d363f4c4d88d13558f12cfd4ce84a4b7e5fba5c7b26fad4370d",
+              "bytes": 291
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "assess-symbol-change.md": {
+              "kind": "file",
+              "sha256": "d7d185028ca6d40371e7c604280bd40814b4c9983d47e87938e2ba89bd4188e0",
+              "bytes": 958
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "impact-and-worktree.md": {
+              "kind": "file",
+              "sha256": "8263e2772f6e388c561b23689e93988dee872825cb7da475f0a9144240da312c",
+              "bytes": 1050
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2",
+              "bytes": 210
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "impact-report.md": {
+              "kind": "file",
+              "sha256": "64b0794f1039a4fbc851b06182dffe80ba3a1a91ad9f3cdd92ab73f1a97839c9",
+              "bytes": 87
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/grill-me": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "685235a5bbb1d0a725dd534f8839a00d726a9108b78bacf5dbb05ca61e171ad9",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "72a03e62da307857e3bdf456d8058359fdfa97c0bac5c48a9e856eeacbb60c5b",
+          "bytes": 2021
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "06f5754a6d94895b11610ca32087b301a1791b564ad7e7dc4a31b9f074de2f4f",
+              "bytes": 269
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/grill-with-docs": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "3a2508f08ab930f781132eec5abf42afc5395525908ae7d1f26c678c4d64389f",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "eb9675e87600482e00985ac810c29a33ee537ae5cc2650c713881aa0e764e675",
+          "bytes": 2902
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "0f06080121f1750e4f6b4f1a7c980c6e1bcd4c6c977bda466a651e3f4d5677f3",
+              "bytes": 208
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/grilling": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "80d6f915bcf09b253f5f0a9df77ae18d490b1a47d7de27c88c230c38d68bf646",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "65e90841b38d5607e880adedcc68ad0d20ec8091b70bf4389754bffe946e4d70",
+          "bytes": 1840
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "b69cc30f0003ccd64960a99961140c8648a6f2da316b6b142bed78dcefcb8f1f",
+              "bytes": 194
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/domain-modeling": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "944aabd3e6e9903a53741cef0b7ca3b17f6be4e2cbabf401efaa36df4301ca70",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "20952edfa96e76152ccfa5600f359a1d3eacca2f619b4611cc901347fa5f01e1",
+          "bytes": 2115
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "799ec35084fcb7c63a5f1be6bd20a5cd92e3f49635b51e536c26e0f1394b907d",
+              "bytes": 208
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/to-spec": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "4954155dd7655908b30ee28375bcd67825b6222301cf07483718f82db1034f6a",
+          "bytes": 2273
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "1ab37495224c0b62ef714127eb7a0d7c0a6e3b11140b3988b263c3fca6f1f1cf",
+              "bytes": 192
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/to-tickets": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "e171c31b4e056708788222b6277dd130c2fa84a70463a55c00f3e16224344f81",
+          "bytes": 3068
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "a38d37b20c0db9567ff867dabf2af72b09e3915b84a9b3d83075d40ffd838821",
+              "bytes": 198
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/wayfinder": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "6ff0c6b51ef2475857c5b3d670c8762702017b8459ce552aaadaf68a41341d41",
+          "bytes": 2349
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "7a346138707e82350719a96a5af9e8ef4224187a4a4f21c03516d1d28eb93819",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/research": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "3c4882d2c8d8513d5276853d19cd10dfac659787213831e6654fe676e60a2113",
+          "bytes": 1774
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "718e328320eced54fc36b55d6b94a731863a00c0da8b7493916df12e7473fcf8",
+              "bytes": 194
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/prototype": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "fe93e7c7dc641e4f4f248c71c7688f9353f7eb92f017e64f8a720797cd54e158",
+          "bytes": 2006
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "92fc6a1d21d54baa83eec2c392e055ea2e27c1d1a490423a15f61099419020a9",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/implement": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "24e8bf5c878a8351227f4a6a2a69462e40906fadcef58f0252a5a566cdb926f1",
+          "bytes": 2514
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "4e22c700e252da34465b6ce54d2bc6ada41039952973873301990f26d7b07795",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/code-review": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "04a5fea82932c41c40a982cb501bea069b0c6b6ceb893c69679480975964c508",
+          "bytes": 2714
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "6a5f8d1ea6b3c6a29d021eea69d7c20739a5ba9221d2881d5be190187582345f",
+              "bytes": 200
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/handoff": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "9f5d53531bf5a52ce7a5e22f9496cbf930e5eae79a16a446f2f94f8d5c6d2612",
+          "bytes": 1804
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "9afbf1df31599a34e0b22cb386379bfe313498472efe936362e4fe634df4ee00",
+              "bytes": 192
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/tdd": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "db48495bcf65e59949bcafcf9b8cd8387ac85e37819573f92c324946498f7962",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "8acb2d1380907584ece2e48f3e867e8055f179874dbe114dcc718c18b4dca772",
+          "bytes": 3020
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "27cba0bc47d8da728ec809e21844c2efd61dc6ef359fed75dd02e37768d88619",
+              "bytes": 269
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "feature-cycle.md": {
+              "kind": "file",
+              "sha256": "fb4a71618893add3838e22e9b0f2918868107f257850d381ab1de4cf1a1566c1",
+              "bytes": 565
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "trellis-boundary.md": {
+              "kind": "file",
+              "sha256": "ce3b66a5c88ca4454c7c28a46b1abb249e9b6deac3b728167ed42ea16b6b9e52",
+              "bytes": 920
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "89a3e365746bd928f8c771ea60ebf17412fd32eb3d0e45905962e0d451222cb1",
+              "bytes": 366
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "tdd-cycle.md": {
+              "kind": "file",
+              "sha256": "d711c26cb552ca8d9c2686784a0de09316e9dbecd0878d9250687efb3ceac2b9",
+              "bytes": 510
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/diagnosing-bugs": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "67e4861083e6d9548cbf073472db29734dc68105a9f8c2f9aa1af7f9257082f3",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "0a7d1ecdcbe56fe6b54f420ea76ee2e6fba8fddaa0c6104931eb7cb455157df1",
+          "bytes": 9237
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "88898e3bd640bc19fea5e6bf32f35bfb91c5aa997ba5979b1a0eb71980f94391",
+              "bytes": 210
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "hitl-loop.template.sh": {
+              "kind": "file",
+              "sha256": "b2932630950e5210075bcd6f850e5accf30c101c5367b29eac3a29b4dd8084c8",
+              "bytes": 1164
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/codebase-design": {
+      "kind": "directory",
+      "children": {
+        "DEEPENING.md": {
+          "kind": "file",
+          "sha256": "84060e97b22192b80f7356584f42d6b059cc5d4736b537536c8901eac194e3eb",
+          "bytes": 2939
+        },
+        "DESIGN-IT-TWICE.md": {
+          "kind": "file",
+          "sha256": "f03e6f4c2b5f1ad4801158770f8a24705eb0df4bec4041b98f9b8ea6022f9083",
+          "bytes": 3190
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "c374f93c6084d430db6da9555b5dd23cc6ebe58776c0b79a5851d2999f682bda",
+          "bytes": 7269
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "469ec3b88d2d1dc89880d1ba5e785f2c8ddfa69878d48ec72662334a7fb68254",
+              "bytes": 223
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/skills/resolving-merge-conflicts": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "04da96a1703ac12a7b15330695f5c9f06d2e04f8eb16c721610f0a99c82aea7e",
+          "bytes": 1655
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "346e0d039da71eb336e4989239cf6f15c204a407cadd3dae87443ff06da9f97e",
+              "bytes": 256
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/memory": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "f7e85f29b6ecee4371c6c5e8983ee5887a59b145e43a996e5b9f76c7715fc8bd",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "eef86af0e90193b19c0968da1fcdb1131eaca8599e5a7e120510df5f337c8415",
+          "bytes": 1904
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "38a715516873e8787b13bea9b0db0f589ba4b41e27f564d6a83bfc27c0ea9e3d",
+              "bytes": 286
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "record-decision.md": {
+              "kind": "file",
+              "sha256": "4130d9c9477fb36b7de520fb81db4aa97945e07d6955f8d35bd205777d59f8a0",
+              "bytes": 765
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "memory-backends.md": {
+              "kind": "file",
+              "sha256": "1408df316335cb8d4665b8b89f2a298c7cc00be62ad0cc92f6b0d1fbbdff1d2f",
+              "bytes": 4719
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2",
+              "bytes": 210
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "decision.md": {
+              "kind": "file",
+              "sha256": "54025889cc2370ec54567ee554fce8ff9c8eb36a07f776a6cad8063d84ea277a",
+              "bytes": 94
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/gitnexus": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "7113e1f88e20f426c0071ad2d3a05ac7f1bf17094993039bf1f1283de31efd7b",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "d096b84d8b2f926330de547581c46b91380e4d6c879c7d3d361d0d272387765c",
+          "bytes": 2118
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "ca15ff6d31d98d363f4c4d88d13558f12cfd4ce84a4b7e5fba5c7b26fad4370d",
+              "bytes": 291
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "assess-symbol-change.md": {
+              "kind": "file",
+              "sha256": "d7d185028ca6d40371e7c604280bd40814b4c9983d47e87938e2ba89bd4188e0",
+              "bytes": 958
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "impact-and-worktree.md": {
+              "kind": "file",
+              "sha256": "8263e2772f6e388c561b23689e93988dee872825cb7da475f0a9144240da312c",
+              "bytes": 1050
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2",
+              "bytes": 210
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "impact-report.md": {
+              "kind": "file",
+              "sha256": "64b0794f1039a4fbc851b06182dffe80ba3a1a91ad9f3cdd92ab73f1a97839c9",
+              "bytes": 87
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/grill-me": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "685235a5bbb1d0a725dd534f8839a00d726a9108b78bacf5dbb05ca61e171ad9",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "72a03e62da307857e3bdf456d8058359fdfa97c0bac5c48a9e856eeacbb60c5b",
+          "bytes": 2021
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "06f5754a6d94895b11610ca32087b301a1791b564ad7e7dc4a31b9f074de2f4f",
+              "bytes": 269
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/grill-with-docs": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "3a2508f08ab930f781132eec5abf42afc5395525908ae7d1f26c678c4d64389f",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "eb9675e87600482e00985ac810c29a33ee537ae5cc2650c713881aa0e764e675",
+          "bytes": 2902
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "0f06080121f1750e4f6b4f1a7c980c6e1bcd4c6c977bda466a651e3f4d5677f3",
+              "bytes": 208
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/grilling": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "80d6f915bcf09b253f5f0a9df77ae18d490b1a47d7de27c88c230c38d68bf646",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "65e90841b38d5607e880adedcc68ad0d20ec8091b70bf4389754bffe946e4d70",
+          "bytes": 1840
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "b69cc30f0003ccd64960a99961140c8648a6f2da316b6b142bed78dcefcb8f1f",
+              "bytes": 194
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/domain-modeling": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "944aabd3e6e9903a53741cef0b7ca3b17f6be4e2cbabf401efaa36df4301ca70",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "20952edfa96e76152ccfa5600f359a1d3eacca2f619b4611cc901347fa5f01e1",
+          "bytes": 2115
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "799ec35084fcb7c63a5f1be6bd20a5cd92e3f49635b51e536c26e0f1394b907d",
+              "bytes": 208
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/to-spec": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "4954155dd7655908b30ee28375bcd67825b6222301cf07483718f82db1034f6a",
+          "bytes": 2273
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "1ab37495224c0b62ef714127eb7a0d7c0a6e3b11140b3988b263c3fca6f1f1cf",
+              "bytes": 192
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/to-tickets": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "e171c31b4e056708788222b6277dd130c2fa84a70463a55c00f3e16224344f81",
+          "bytes": 3068
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "a38d37b20c0db9567ff867dabf2af72b09e3915b84a9b3d83075d40ffd838821",
+              "bytes": 198
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/wayfinder": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "6ff0c6b51ef2475857c5b3d670c8762702017b8459ce552aaadaf68a41341d41",
+          "bytes": 2349
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "7a346138707e82350719a96a5af9e8ef4224187a4a4f21c03516d1d28eb93819",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/research": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "3c4882d2c8d8513d5276853d19cd10dfac659787213831e6654fe676e60a2113",
+          "bytes": 1774
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "718e328320eced54fc36b55d6b94a731863a00c0da8b7493916df12e7473fcf8",
+              "bytes": 194
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/prototype": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "fe93e7c7dc641e4f4f248c71c7688f9353f7eb92f017e64f8a720797cd54e158",
+          "bytes": 2006
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "92fc6a1d21d54baa83eec2c392e055ea2e27c1d1a490423a15f61099419020a9",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/implement": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "24e8bf5c878a8351227f4a6a2a69462e40906fadcef58f0252a5a566cdb926f1",
+          "bytes": 2514
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "4e22c700e252da34465b6ce54d2bc6ada41039952973873301990f26d7b07795",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/code-review": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "04a5fea82932c41c40a982cb501bea069b0c6b6ceb893c69679480975964c508",
+          "bytes": 2714
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "6a5f8d1ea6b3c6a29d021eea69d7c20739a5ba9221d2881d5be190187582345f",
+              "bytes": 200
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/handoff": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "9f5d53531bf5a52ce7a5e22f9496cbf930e5eae79a16a446f2f94f8d5c6d2612",
+          "bytes": 1804
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "9afbf1df31599a34e0b22cb386379bfe313498472efe936362e4fe634df4ee00",
+              "bytes": 192
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/tdd": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "db48495bcf65e59949bcafcf9b8cd8387ac85e37819573f92c324946498f7962",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "8acb2d1380907584ece2e48f3e867e8055f179874dbe114dcc718c18b4dca772",
+          "bytes": 3020
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "27cba0bc47d8da728ec809e21844c2efd61dc6ef359fed75dd02e37768d88619",
+              "bytes": 269
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "feature-cycle.md": {
+              "kind": "file",
+              "sha256": "fb4a71618893add3838e22e9b0f2918868107f257850d381ab1de4cf1a1566c1",
+              "bytes": 565
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "trellis-boundary.md": {
+              "kind": "file",
+              "sha256": "ce3b66a5c88ca4454c7c28a46b1abb249e9b6deac3b728167ed42ea16b6b9e52",
+              "bytes": 920
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "89a3e365746bd928f8c771ea60ebf17412fd32eb3d0e45905962e0d451222cb1",
+              "bytes": 366
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "tdd-cycle.md": {
+              "kind": "file",
+              "sha256": "d711c26cb552ca8d9c2686784a0de09316e9dbecd0878d9250687efb3ceac2b9",
+              "bytes": 510
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/diagnosing-bugs": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "67e4861083e6d9548cbf073472db29734dc68105a9f8c2f9aa1af7f9257082f3",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "0a7d1ecdcbe56fe6b54f420ea76ee2e6fba8fddaa0c6104931eb7cb455157df1",
+          "bytes": 9237
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "88898e3bd640bc19fea5e6bf32f35bfb91c5aa997ba5979b1a0eb71980f94391",
+              "bytes": 210
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "hitl-loop.template.sh": {
+              "kind": "file",
+              "sha256": "b2932630950e5210075bcd6f850e5accf30c101c5367b29eac3a29b4dd8084c8",
+              "bytes": 1164
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/codebase-design": {
+      "kind": "directory",
+      "children": {
+        "DEEPENING.md": {
+          "kind": "file",
+          "sha256": "84060e97b22192b80f7356584f42d6b059cc5d4736b537536c8901eac194e3eb",
+          "bytes": 2939
+        },
+        "DESIGN-IT-TWICE.md": {
+          "kind": "file",
+          "sha256": "f03e6f4c2b5f1ad4801158770f8a24705eb0df4bec4041b98f9b8ea6022f9083",
+          "bytes": 3190
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "c374f93c6084d430db6da9555b5dd23cc6ebe58776c0b79a5851d2999f682bda",
+          "bytes": 7269
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "469ec3b88d2d1dc89880d1ba5e785f2c8ddfa69878d48ec72662334a7fb68254",
+              "bytes": 223
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/resolving-merge-conflicts": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "04da96a1703ac12a7b15330695f5c9f06d2e04f8eb16c721610f0a99c82aea7e",
+          "bytes": 1655
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "346e0d039da71eb336e4989239cf6f15c204a407cadd3dae87443ff06da9f97e",
+              "bytes": 256
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/memory": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "f7e85f29b6ecee4371c6c5e8983ee5887a59b145e43a996e5b9f76c7715fc8bd",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "eef86af0e90193b19c0968da1fcdb1131eaca8599e5a7e120510df5f337c8415",
+          "bytes": 1904
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "38a715516873e8787b13bea9b0db0f589ba4b41e27f564d6a83bfc27c0ea9e3d",
+              "bytes": 286
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "record-decision.md": {
+              "kind": "file",
+              "sha256": "4130d9c9477fb36b7de520fb81db4aa97945e07d6955f8d35bd205777d59f8a0",
+              "bytes": 765
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "memory-backends.md": {
+              "kind": "file",
+              "sha256": "1408df316335cb8d4665b8b89f2a298c7cc00be62ad0cc92f6b0d1fbbdff1d2f",
+              "bytes": 4719
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2",
+              "bytes": 210
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "decision.md": {
+              "kind": "file",
+              "sha256": "54025889cc2370ec54567ee554fce8ff9c8eb36a07f776a6cad8063d84ea277a",
+              "bytes": 94
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/gitnexus": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "7113e1f88e20f426c0071ad2d3a05ac7f1bf17094993039bf1f1283de31efd7b",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "d096b84d8b2f926330de547581c46b91380e4d6c879c7d3d361d0d272387765c",
+          "bytes": 2118
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "ca15ff6d31d98d363f4c4d88d13558f12cfd4ce84a4b7e5fba5c7b26fad4370d",
+              "bytes": 291
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "assess-symbol-change.md": {
+              "kind": "file",
+              "sha256": "d7d185028ca6d40371e7c604280bd40814b4c9983d47e87938e2ba89bd4188e0",
+              "bytes": 958
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "impact-and-worktree.md": {
+              "kind": "file",
+              "sha256": "8263e2772f6e388c561b23689e93988dee872825cb7da475f0a9144240da312c",
+              "bytes": 1050
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2",
+              "bytes": 210
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "impact-report.md": {
+              "kind": "file",
+              "sha256": "64b0794f1039a4fbc851b06182dffe80ba3a1a91ad9f3cdd92ab73f1a97839c9",
+              "bytes": 87
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/grill-me": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "685235a5bbb1d0a725dd534f8839a00d726a9108b78bacf5dbb05ca61e171ad9",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "72a03e62da307857e3bdf456d8058359fdfa97c0bac5c48a9e856eeacbb60c5b",
+          "bytes": 2021
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "06f5754a6d94895b11610ca32087b301a1791b564ad7e7dc4a31b9f074de2f4f",
+              "bytes": 269
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/grill-with-docs": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "3a2508f08ab930f781132eec5abf42afc5395525908ae7d1f26c678c4d64389f",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "eb9675e87600482e00985ac810c29a33ee537ae5cc2650c713881aa0e764e675",
+          "bytes": 2902
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "0f06080121f1750e4f6b4f1a7c980c6e1bcd4c6c977bda466a651e3f4d5677f3",
+              "bytes": 208
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/grilling": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "80d6f915bcf09b253f5f0a9df77ae18d490b1a47d7de27c88c230c38d68bf646",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "65e90841b38d5607e880adedcc68ad0d20ec8091b70bf4389754bffe946e4d70",
+          "bytes": 1840
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "b69cc30f0003ccd64960a99961140c8648a6f2da316b6b142bed78dcefcb8f1f",
+              "bytes": 194
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/domain-modeling": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "944aabd3e6e9903a53741cef0b7ca3b17f6be4e2cbabf401efaa36df4301ca70",
+          "bytes": 6148
+        },
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "20952edfa96e76152ccfa5600f359a1d3eacca2f619b4611cc901347fa5f01e1",
+          "bytes": 2115
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "799ec35084fcb7c63a5f1be6bd20a5cd92e3f49635b51e536c26e0f1394b907d",
+              "bytes": 208
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/to-spec": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "4954155dd7655908b30ee28375bcd67825b6222301cf07483718f82db1034f6a",
+          "bytes": 2273
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "1ab37495224c0b62ef714127eb7a0d7c0a6e3b11140b3988b263c3fca6f1f1cf",
+              "bytes": 192
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/to-tickets": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "e171c31b4e056708788222b6277dd130c2fa84a70463a55c00f3e16224344f81",
+          "bytes": 3068
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "a38d37b20c0db9567ff867dabf2af72b09e3915b84a9b3d83075d40ffd838821",
+              "bytes": 198
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/wayfinder": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "6ff0c6b51ef2475857c5b3d670c8762702017b8459ce552aaadaf68a41341d41",
+          "bytes": 2349
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "7a346138707e82350719a96a5af9e8ef4224187a4a4f21c03516d1d28eb93819",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/research": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "3c4882d2c8d8513d5276853d19cd10dfac659787213831e6654fe676e60a2113",
+          "bytes": 1774
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "718e328320eced54fc36b55d6b94a731863a00c0da8b7493916df12e7473fcf8",
+              "bytes": 194
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/prototype": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "fe93e7c7dc641e4f4f248c71c7688f9353f7eb92f017e64f8a720797cd54e158",
+          "bytes": 2006
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "92fc6a1d21d54baa83eec2c392e055ea2e27c1d1a490423a15f61099419020a9",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/implement": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "24e8bf5c878a8351227f4a6a2a69462e40906fadcef58f0252a5a566cdb926f1",
+          "bytes": 2514
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "4e22c700e252da34465b6ce54d2bc6ada41039952973873301990f26d7b07795",
+              "bytes": 196
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/code-review": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "04a5fea82932c41c40a982cb501bea069b0c6b6ceb893c69679480975964c508",
+          "bytes": 2714
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "6a5f8d1ea6b3c6a29d021eea69d7c20739a5ba9221d2881d5be190187582345f",
+              "bytes": 200
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/handoff": {
+      "kind": "directory",
+      "children": {
+        "LICENSE": {
+          "kind": "file",
+          "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+          "bytes": 1068
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "9f5d53531bf5a52ce7a5e22f9496cbf930e5eae79a16a446f2f94f8d5c6d2612",
+          "bytes": 1804
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "9afbf1df31599a34e0b22cb386379bfe313498472efe936362e4fe634df4ee00",
+              "bytes": 192
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/tdd": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "db48495bcf65e59949bcafcf9b8cd8387ac85e37819573f92c324946498f7962",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "8acb2d1380907584ece2e48f3e867e8055f179874dbe114dcc718c18b4dca772",
+          "bytes": 3020
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "27cba0bc47d8da728ec809e21844c2efd61dc6ef359fed75dd02e37768d88619",
+              "bytes": 269
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "feature-cycle.md": {
+              "kind": "file",
+              "sha256": "fb4a71618893add3838e22e9b0f2918868107f257850d381ab1de4cf1a1566c1",
+              "bytes": 565
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "trellis-boundary.md": {
+              "kind": "file",
+              "sha256": "ce3b66a5c88ca4454c7c28a46b1abb249e9b6deac3b728167ed42ea16b6b9e52",
+              "bytes": 920
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "89a3e365746bd928f8c771ea60ebf17412fd32eb3d0e45905962e0d451222cb1",
+              "bytes": 366
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "tdd-cycle.md": {
+              "kind": "file",
+              "sha256": "d711c26cb552ca8d9c2686784a0de09316e9dbecd0878d9250687efb3ceac2b9",
+              "bytes": 510
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/diagnosing-bugs": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "67e4861083e6d9548cbf073472db29734dc68105a9f8c2f9aa1af7f9257082f3",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "0a7d1ecdcbe56fe6b54f420ea76ee2e6fba8fddaa0c6104931eb7cb455157df1",
+          "bytes": 9237
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "88898e3bd640bc19fea5e6bf32f35bfb91c5aa997ba5979b1a0eb71980f94391",
+              "bytes": 210
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "hitl-loop.template.sh": {
+              "kind": "file",
+              "sha256": "b2932630950e5210075bcd6f850e5accf30c101c5367b29eac3a29b4dd8084c8",
+              "bytes": 1164
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/codebase-design": {
+      "kind": "directory",
+      "children": {
+        "DEEPENING.md": {
+          "kind": "file",
+          "sha256": "84060e97b22192b80f7356584f42d6b059cc5d4736b537536c8901eac194e3eb",
+          "bytes": 2939
+        },
+        "DESIGN-IT-TWICE.md": {
+          "kind": "file",
+          "sha256": "f03e6f4c2b5f1ad4801158770f8a24705eb0df4bec4041b98f9b8ea6022f9083",
+          "bytes": 3190
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "c374f93c6084d430db6da9555b5dd23cc6ebe58776c0b79a5851d2999f682bda",
+          "bytes": 7269
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "469ec3b88d2d1dc89880d1ba5e785f2c8ddfa69878d48ec72662334a7fb68254",
+              "bytes": 223
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/resolving-merge-conflicts": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "04da96a1703ac12a7b15330695f5c9f06d2e04f8eb16c721610f0a99c82aea7e",
+          "bytes": 1655
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "346e0d039da71eb336e4989239cf6f15c204a407cadd3dae87443ff06da9f97e",
+              "bytes": 256
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/config": {
+      "kind": "directory",
+      "children": {
+        "__init__.py": {
+          "kind": "file",
+          "sha256": "61dd49c1fa2f1b986e3013512fecb4779a371e1e6cb66c4fd10ce70f73ccabed",
+          "bytes": 65
+        },
+        "consumers.yaml": {
+          "kind": "file",
+          "sha256": "acdf2acdc14178db3599a2e0bbd67f9a4af68543808efb2eccef8892e2b57183",
+          "bytes": 366
+        },
+        "defaults.yaml": {
+          "kind": "file",
+          "sha256": "82f3897f93ae47aca1d4377bb46d49ed4d01e930fb530c6b3d67db76a5ec051d",
+          "bytes": 187
+        },
+        "effective_config.py": {
+          "kind": "file",
+          "sha256": "1ab36ee2d4041c9b97ccc21d9016978d83ab0753c941b2e2cfd4521b11ea32ea",
+          "bytes": 9836
+        },
+        "project-config.schema.yaml": {
+          "kind": "file",
+          "sha256": "60bf1874dc52dfba773f7f371cc4d4ee5f43bd03632ff2e0f793c31f40ca914c",
+          "bytes": 372
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/config": {
+      "kind": "directory",
+      "children": {
+        "__init__.py": {
+          "kind": "file",
+          "sha256": "61dd49c1fa2f1b986e3013512fecb4779a371e1e6cb66c4fd10ce70f73ccabed",
+          "bytes": 65
+        },
+        "consumers.yaml": {
+          "kind": "file",
+          "sha256": "acdf2acdc14178db3599a2e0bbd67f9a4af68543808efb2eccef8892e2b57183",
+          "bytes": 366
+        },
+        "defaults.yaml": {
+          "kind": "file",
+          "sha256": "82f3897f93ae47aca1d4377bb46d49ed4d01e930fb530c6b3d67db76a5ec051d",
+          "bytes": 187
+        },
+        "effective_config.py": {
+          "kind": "file",
+          "sha256": "1ab36ee2d4041c9b97ccc21d9016978d83ab0753c941b2e2cfd4521b11ea32ea",
+          "bytes": 9836
+        },
+        "project-config.schema.yaml": {
+          "kind": "file",
+          "sha256": "60bf1874dc52dfba773f7f371cc4d4ee5f43bd03632ff2e0f793c31f40ca914c",
+          "bytes": 372
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/config": {
+      "kind": "directory",
+      "children": {
+        "__init__.py": {
+          "kind": "file",
+          "sha256": "61dd49c1fa2f1b986e3013512fecb4779a371e1e6cb66c4fd10ce70f73ccabed",
+          "bytes": 65
+        },
+        "consumers.yaml": {
+          "kind": "file",
+          "sha256": "acdf2acdc14178db3599a2e0bbd67f9a4af68543808efb2eccef8892e2b57183",
+          "bytes": 366
+        },
+        "defaults.yaml": {
+          "kind": "file",
+          "sha256": "82f3897f93ae47aca1d4377bb46d49ed4d01e930fb530c6b3d67db76a5ec051d",
+          "bytes": 187
+        },
+        "effective_config.py": {
+          "kind": "file",
+          "sha256": "1ab36ee2d4041c9b97ccc21d9016978d83ab0753c941b2e2cfd4521b11ea32ea",
+          "bytes": 9836
+        },
+        "project-config.schema.yaml": {
+          "kind": "file",
+          "sha256": "60bf1874dc52dfba773f7f371cc4d4ee5f43bd03632ff2e0f793c31f40ca914c",
+          "bytes": 372
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/config": {
+      "kind": "directory",
+      "children": {
+        "__init__.py": {
+          "kind": "file",
+          "sha256": "61dd49c1fa2f1b986e3013512fecb4779a371e1e6cb66c4fd10ce70f73ccabed",
+          "bytes": 65
+        },
+        "consumers.yaml": {
+          "kind": "file",
+          "sha256": "acdf2acdc14178db3599a2e0bbd67f9a4af68543808efb2eccef8892e2b57183",
+          "bytes": 366
+        },
+        "defaults.yaml": {
+          "kind": "file",
+          "sha256": "82f3897f93ae47aca1d4377bb46d49ed4d01e930fb530c6b3d67db76a5ec051d",
+          "bytes": 187
+        },
+        "effective_config.py": {
+          "kind": "file",
+          "sha256": "1ab36ee2d4041c9b97ccc21d9016978d83ab0753c941b2e2cfd4521b11ea32ea",
+          "bytes": 9836
+        },
+        "project-config.schema.yaml": {
+          "kind": "file",
+          "sha256": "60bf1874dc52dfba773f7f371cc4d4ee5f43bd03632ff2e0f793c31f40ca914c",
+          "bytes": 372
+        }
+      }
+    },
+    "/Users/hogenxue/.codex/AGENTS.md": {
+      "kind": "file",
+      "sha256": "62e4e169702b7e237db4b7569485745c9e4ed39220098e28f289bff76f2d2aad",
+      "bytes": 9194
+    },
+    "/Users/hogenxue/.minimax/AGENTS.md": {
+      "kind": "file",
+      "sha256": "62e4e169702b7e237db4b7569485745c9e4ed39220098e28f289bff76f2d2aad",
+      "bytes": 9194
+    },
+    "/Users/hogenxue/.codebuddy/CODEBUDDY.md": {
+      "kind": "file",
+      "sha256": "62e4e169702b7e237db4b7569485745c9e4ed39220098e28f289bff76f2d2aad",
+      "bytes": 9194
+    },
+    "/Users/hogenxue/.codex/config.toml": {
+      "kind": "file",
+      "sha256": "24fc505a6ac5e78cc9b7761abbbe8edf739cac6e2653f9e2761abf6f5e3e4192",
+      "bytes": 5833
+    },
+    "/Users/hogenxue/.cursor/mcp.json": {
+      "kind": "file",
+      "sha256": "3def0b2e08c838d687f87e00851cae5f5c6e83419e4a1c15bf62d0a2d892e4d4",
+      "bytes": 959
+    },
+    "/Users/hogenxue/.minimax/mcp/mcp.json": {
+      "kind": "file",
+      "sha256": "2605a69a4dac720a3bf99e1fd2913dc1a3c3349123d4186802cb6bf3a46fdb1b",
+      "bytes": 3433
+    },
+    "/Users/hogenxue/.codebuddy/mcp.json": {
+      "kind": "file",
+      "sha256": "feb2802c07e18991a7e9319161833b4a7350fc196878aab3e3fd6e49ac341290",
+      "bytes": 329
+    },
+    "/Users/hogenxue/.codex/hooks.json": {
+      "kind": "file",
+      "sha256": "16e3d0f66af7a3d7913453b787fe2d46c140f8bbf80a26e2e3cd7f1c2e9850ca",
+      "bytes": 2081
+    },
+    "/Users/hogenxue/.codex/hooks": {
+      "kind": "directory",
+      "children": {
+        "session-start.sh": {
+          "kind": "file",
+          "sha256": "00314a3a1871ac29ef9fad7c6472574ffa27bf592ec6f5d5497655e5b08a249f",
+          "bytes": 290
+        }
+      }
+    }
+  },
+  "protected": {
+    "/Users/hogenxue/.agents/skills/.DS_Store": {
+      "kind": "file",
+      "sha256": "63c93bf8ab854ab40a079a82d865e2bf3d2f664283d930f795c78623cc224388",
+      "bytes": 14340
+    },
+    "/Users/hogenxue/.agents/skills/.codex-ultimate-v3-backups": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.agents/skills/anysearch": {
+      "kind": "symlink",
+      "target": "/Users/hogenxue/.cc-switch/skills/anysearch"
+    },
+    "/Users/hogenxue/.agents/skills/config": {
+      "kind": "directory",
+      "children": {
+        "defaults.yaml": {
+          "kind": "file",
+          "sha256": "a0cab25803d8f8be24eff459788c48648c10dfe91e90176f3200e1a9583f57ca",
+          "bytes": 273
+        },
+        "project-config.schema.yaml": {
+          "kind": "file",
+          "sha256": "b744fd1f2df2520def7dbefb19ed1ec4e316cbc6e94ce6103ca3719a29d9c011",
+          "bytes": 538
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/figma-implement-design": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "3838efc08cb47a199e89eff2c6f53e43e74fa96008d4642163e96c3bafc58a2a",
+          "bytes": 6148
+        },
+        "LICENSE.txt": {
+          "kind": "file",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "bytes": 11358
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "adea0fa5ed0b77a75112f64737f4aa562fcc231d242370f8cbdb25d050be19ad",
+          "bytes": 11513
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "85458037bb2fa5fe85375ceb9535c8eefe14591c4ca2994501e0d89690292c03",
+              "bytes": 488
+            }
+          }
+        },
+        "assets": {
+          "kind": "directory",
+          "children": {
+            "figma-small.svg": {
+              "kind": "file",
+              "sha256": "6a38267efbd872bbc215d0227a395eb0b0093bc6441c44a39a43f3210549e5e9",
+              "bytes": 818
+            },
+            "figma.png": {
+              "kind": "file",
+              "sha256": "4d16e1b19ae7bdac7d601d0b3bf3c0ea4a018a8cb0e38d19e5b00971968ecada",
+              "bytes": 1612
+            },
+            "icon.svg": {
+              "kind": "file",
+              "sha256": "8936c5dcd619c41f5a27f7c08e8c50b22e428069c36217e4aa872099d6cc2cf7",
+              "bytes": 964
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/find-skills": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "1e85f6f9686e145aca4a124e3b704b9bbea9aa87e08515c1e352eee70f6e6e7a",
+          "bytes": 5446
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/graphify": {
+      "kind": "directory",
+      "children": {
+        ".graphify_version": {
+          "kind": "file",
+          "sha256": "fed34645e097d23d89bce7a3cc9325f2746f740bdc4fe5aee8658aeb9fc399ad",
+          "bytes": 6
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "11c6e4f8e33a584b97fbe1ac9e1f7207969448ccc8cbe8e2b9ab18cce50a0424",
+          "bytes": 40640
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "add-watch.md": {
+              "kind": "file",
+              "sha256": "b3f67570240582689c2834b4831917550c2d1aaf042148868c39dcbf387ce3fd",
+              "bytes": 2486
+            },
+            "exports.md": {
+              "kind": "file",
+              "sha256": "ee47fae477f106d8aed38798c58493b5a7f060a0d9d2581ce6132302827bc14b",
+              "bytes": 3362
+            },
+            "extraction-spec.md": {
+              "kind": "file",
+              "sha256": "32d7decad42d58129c6694ea4e4ce1f72a531bc5161827d2095787e9448735e9",
+              "bytes": 4431
+            },
+            "github-and-merge.md": {
+              "kind": "file",
+              "sha256": "e5ebd90c7686f50363ff7a535556bc2f596d4c47ec1e6c8b95e11e36a0dfea2b",
+              "bytes": 2177
+            },
+            "hooks.md": {
+              "kind": "file",
+              "sha256": "b9a4e9f66813c6fc720589f1071d1a03c95756ab7101447e14e57291fe7844e5",
+              "bytes": 1267
+            },
+            "query.md": {
+              "kind": "file",
+              "sha256": "e563ddcb1e155aa230f107e5ef9380bc1249c5cd8241128de7ed8a7bd9c20cf5",
+              "bytes": 13456
+            },
+            "transcribe.md": {
+              "kind": "file",
+              "sha256": "676a1e39aa6d43cdfcc416ec56616e36f7bad74066a82bd33a9485515b9a865c",
+              "bytes": 3173
+            },
+            "update.md": {
+              "kind": "file",
+              "sha256": "661f559b3ff4f3db7ba47bc2ba1c7e19f1c1d66a36f647e49221eecb174f2228",
+              "bytes": 10425
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/karpathy-guidelines-zh": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.agents/skills/openspec": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "3f7c7f3d9a78292e57efad37dbcf75768d804e281440f23d7a5a54561fedafe0",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "6d617986ed20d53dc0597b493cf77aa10058909791d2b60c1c8ccadc7a13432a",
+          "bytes": 1921
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "87955c0a8027c33b01d5f5e0f816795e0350e0330125f08a49bda8eaa192615f",
+              "bytes": 328
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "design-api-change.md": {
+              "kind": "file",
+              "sha256": "1ddccfe0e2e63bcc530c65feb50e6b4a2b0a54a64145d2f429bfb63fe5e795a9",
+              "bytes": 873
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "change-classification.md": {
+              "kind": "file",
+              "sha256": "acd00aced089a2c37620478ad38bd58eb403427e2b98b1bbed0e077a65f33cc4",
+              "bytes": 710
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2",
+              "bytes": 210
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "change-spec.md": {
+              "kind": "file",
+              "sha256": "ff69b7cd341a909ee9d1b364db585ebfadd18ed509cd5efe96a52fceccb16518",
+              "bytes": 107
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/playwright": {
+      "kind": "directory",
+      "children": {
+        "LICENSE.txt": {
+          "kind": "file",
+          "sha256": "9a7110fc2d2f964038e5dc49128f908f29f47a574c961cba16085914e879cbda",
+          "bytes": 11552
+        },
+        "NOTICE.txt": {
+          "kind": "file",
+          "sha256": "417d5d3372914ecfd9fe102ac1d7dc2119253209f9718d6c222f616876c1904b",
+          "bytes": 403
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "0ffaabcc8e0990627c4725f18bf1c7955534a796c1c199e872909de2013ce6a8",
+          "bytes": 3771
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "ddda43720fc566fffa45264be8f17f7745a3cee28d5245d41d3b963bc9967230",
+              "bytes": 313
+            }
+          }
+        },
+        "assets": {
+          "kind": "directory",
+          "children": {
+            "playwright-small.svg": {
+              "kind": "file",
+              "sha256": "f1d213c0f76735d8272c3d3e9fbf71fe7b894e2d1588907044c780f2c33a9732",
+              "bytes": 828
+            },
+            "playwright.png": {
+              "kind": "file",
+              "sha256": "521669f088c838196c6c852ccc9abdd7234d8f37fc9a8a7a9af7db2d50193381",
+              "bytes": 1730
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "cli.md": {
+              "kind": "file",
+              "sha256": "7c069a8206ba20b9ddbdc42436b04de30bb3aa4a825ba98680757ee62e954900",
+              "bytes": 1863
+            },
+            "workflows.md": {
+              "kind": "file",
+              "sha256": "a2b5835a00ebee3906c146adf7f764f7718ea3f89a8702d86eaa135dfe0fc8c2",
+              "bytes": 1864
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "playwright_cli.sh": {
+              "kind": "file",
+              "sha256": "aa3fdff5d0e4556177f4dfd5f04117e772aa54f94b6a2e34b6c0edf629c6b9b5",
+              "bytes": 526
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/release": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "655697c021a35e6c5d96c349eb723ab795ba817b4cc6aee7d61f1c3a8b16249c",
+          "bytes": 6148
+        },
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "a1885c8c920fd5665bdcde06ebeaea4bd711bb39e545cde3375a9a0ce58ac49d",
+          "bytes": 2106
+        },
+        "agents": {
+          "kind": "directory",
+          "children": {
+            "openai.yaml": {
+              "kind": "file",
+              "sha256": "66723a71e96e7f275180f5529461024da00b476f82089a7d324391edc70587ad",
+              "bytes": 335
+            }
+          }
+        },
+        "examples": {
+          "kind": "directory",
+          "children": {
+            "prepare-release.md": {
+              "kind": "file",
+              "sha256": "d871ad446530be7e38512952284d3e142f66f50acf45ec37807617dfecf3c91c",
+              "bytes": 919
+            }
+          }
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "release-gates.md": {
+              "kind": "file",
+              "sha256": "52b77b0b2e1fd52e2c41eaae72781f421826d8e55cbd6a07b84ea0caa04b7b87",
+              "bytes": 608
+            }
+          }
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "validate.sh": {
+              "kind": "file",
+              "sha256": "34abe62d5752d6b3e31bc5bd1999d43cba66bb9cee8041e7d858e259874237f2",
+              "bytes": 210
+            }
+          }
+        },
+        "templates": {
+          "kind": "directory",
+          "children": {
+            "release-checklist.md": {
+              "kind": "file",
+              "sha256": "3531bd597f341538a3a7228d5a4040db33f8f2937861975a554b4c25d7bf1ff6",
+              "bytes": 133
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.agents/skills/superpowers": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.agents/skills/write-a-prd": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.claude.json": {
+      "kind": "file",
+      "sha256": "cb7336ae5d8592184ce41bbea39e7d2a475b4cd45b4746c173b1cf9b69b4bf1d",
+      "bytes": 55831
+    },
+    "/Users/hogenxue/.claude/CLAUDE.md": {
+      "kind": "file",
+      "sha256": "3d8370efa7f536884c1ce8653a5324bae00eece15a96bef19e1768331f4d6198",
+      "bytes": 815
+    },
+    "/Users/hogenxue/.claude/config": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.claude/settings.json": {
+      "kind": "file",
+      "sha256": "52fcca3aeda37e1c5c872fe762875afc4458dd71c36dd22a1b0d9be29f3afc8e",
+      "bytes": 506
+    },
+    "/Users/hogenxue/.claude/skills": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "9511c1c654fb07675227dffc226d51dc9d9bc5c810b7ae89a84bd32c575f33f2",
+          "bytes": 14340
+        },
+        "anysearch": {
+          "kind": "symlink",
+          "target": "/Users/hogenxue/.cc-switch/skills/anysearch"
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/AGENTS.override.md": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codebuddy/CODEBUDDY.override.md": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codebuddy/config.yaml": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codebuddy/settings.json": {
+      "kind": "file",
+      "sha256": "492f54ff5081e4a2ee2b1936008858c67421daeb1e72005d8811e43f1535efd8",
+      "bytes": 475
+    },
+    "/Users/hogenxue/.codebuddy/skills/.DS_Store": {
+      "kind": "file",
+      "sha256": "3f2ecee9c25efddc027e1cb768e34be543420aaade0f79b3142c01da797a5f72",
+      "bytes": 6148
+    },
+    "/Users/hogenxue/.codebuddy/skills/miniprogram-ui-ux-design": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "599bde7a5c0ccc42e9065df78cd3616173ab721459e6887b8f5d5718a489b274",
+          "bytes": 7001
+        },
+        "_meta.json": {
+          "kind": "file",
+          "sha256": "f1119e5821dbf774960c6b4829cdeb37b289350d104cf5d05fb37117de8688fd",
+          "bytes": 297
+        },
+        "_skillhub_meta.json": {
+          "kind": "file",
+          "sha256": "3813ef353ebdc03056ab16ffc46c988b8bc027464be6a36a4a46bcfebf42d417",
+          "bytes": 159
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "ACCESSIBILITY.md": {
+              "kind": "file",
+              "sha256": "c0bafd37a4f749d95c8d37179e00405cfa35a11ca21c347827a9f89195ed847e",
+              "bytes": 7320
+            },
+            "COMPONENTS.md": {
+              "kind": "file",
+              "sha256": "6c37e1d96d82a6bb97a89cda3ea082a898ba5bb49b3da748790b3b08545d5b83",
+              "bytes": 18561
+            },
+            "DESIGN_TOKENS.md": {
+              "kind": "file",
+              "sha256": "1677bc7ee0f05238d880f988240e81e31a73982763b26045dfbaf16a26334440",
+              "bytes": 8742
+            },
+            "DESIGN_WORKFLOW.md": {
+              "kind": "file",
+              "sha256": "ca6aabdafca5a9e10f686f9c175bd0711a554376a7325d9d92b643cc16a7565c",
+              "bytes": 4073
+            },
+            "MINIPROGRAM_BASICS.md": {
+              "kind": "file",
+              "sha256": "24d5582b1713c9226d06fce6bc2b0b46bf120ade4e1abd5b1bf3e6c3842a243c",
+              "bytes": 9754
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/skyline渲染引擎": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "c4b54c393cf1c86a26637e0ae976abf7492156af05b25f534cf236b89aea95e1",
+          "bytes": 6079
+        },
+        "_skillhub_meta.json": {
+          "kind": "file",
+          "sha256": "20e6829eaf4526e5e7fcaffcf94253339626f648cd4ad8245d1f8fcfaa2949c2",
+          "bytes": 143
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "components": {
+              "kind": "directory",
+              "children": {
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "c57119eba097aa58a7eb93476091ba9081d181ca1c20917964e5a88cff4c63f4",
+                  "bytes": 10733
+                },
+                "references": {
+                  "kind": "directory",
+                  "children": {
+                    "form": {
+                      "kind": "directory",
+                      "children": {
+                        "input.md": {
+                          "kind": "file",
+                          "sha256": "18131a4c38edbacc1e6fc5837381820c6474dd5c2f58a1bae6a8f86a5aebb6ed",
+                          "bytes": 7534
+                        }
+                      }
+                    },
+                    "layout": {
+                      "kind": "directory",
+                      "children": {
+                        "swiper.md": {
+                          "kind": "file",
+                          "sha256": "dca957e21cf2dc14a565bce85207feff9a8998b7b7d1efd6f33bea74726886ed",
+                          "bytes": 7194
+                        }
+                      }
+                    },
+                    "media": {
+                      "kind": "directory",
+                      "children": {
+                        "image.md": {
+                          "kind": "file",
+                          "sha256": "0dc131585585dda746e5cf301b062cab8f6e8159a9e755682afec5c765ec3053",
+                          "bytes": 6347
+                        },
+                        "text.md": {
+                          "kind": "file",
+                          "sha256": "1f820c5680fe410724894c50ff6e47999e5673d0ad478b084673fd613c103c60",
+                          "bytes": 6042
+                        }
+                      }
+                    },
+                    "scroll": {
+                      "kind": "directory",
+                      "children": {
+                        "draggable-sheet.md": {
+                          "kind": "file",
+                          "sha256": "1ff6090bc5983e31c0beaf60a4d83f18ffd6244cd9e032223196098c6e6e8f97",
+                          "bytes": 7361
+                        },
+                        "list-grid-view.md": {
+                          "kind": "file",
+                          "sha256": "298de17d7a869ba034c46f1206209b054ef9e7adea5a2008c32912d9a3b4b71b",
+                          "bytes": 6757
+                        },
+                        "nested-scroll.md": {
+                          "kind": "file",
+                          "sha256": "dc9cb03e49024fcebae2d74e51085a76df46e7ed42330869de26cde6f6efcdce",
+                          "bytes": 8311
+                        },
+                        "scroll-view.md": {
+                          "kind": "file",
+                          "sha256": "fd218eb7aa35a7d836b63b88a6c837d4e6578b2f7dd10eb6de60d87fd3bc952a",
+                          "bytes": 9560
+                        },
+                        "sticky.md": {
+                          "kind": "file",
+                          "sha256": "284441551ee256b63f9385e872c23d57d32c32f813f114d65b80c395a59e5f41",
+                          "bytes": 6942
+                        }
+                      }
+                    },
+                    "special": {
+                      "kind": "directory",
+                      "children": {
+                        "share-element.md": {
+                          "kind": "file",
+                          "sha256": "8fbc22878887ac80373d8d19871792ff7a7996a82a1ba222a4abc79286be258f",
+                          "bytes": 7964
+                        },
+                        "snapshot.md": {
+                          "kind": "file",
+                          "sha256": "f174a1655fb9ad16126e945556c479c93c98e8ac292f6731c67e77e2728f3fe6",
+                          "bytes": 8683
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "config": {
+              "kind": "directory",
+              "children": {
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "693c57dc9d52558fe41a10986679b4431412d098fb917cf64f8be808e2af67b6",
+                  "bytes": 6156
+                },
+                "references": {
+                  "kind": "directory",
+                  "children": {
+                    "app-config.md": {
+                      "kind": "file",
+                      "sha256": "4b466cc07dc3c4c83bd5e6757745d6c694b61f4775c4fed6ecaacc2c8e8ab7d2",
+                      "bytes": 4279
+                    },
+                    "page-config.md": {
+                      "kind": "file",
+                      "sha256": "3e9da4ce96a7694360e01afc13da3ede4526e37e145bc9287a3e28b9ca250229",
+                      "bytes": 4054
+                    },
+                    "patterns.md": {
+                      "kind": "file",
+                      "sha256": "69adaa52e89b9930cf1a8c0b796135420b8317e4bb5ac4c6a3097a5ce5dea752",
+                      "bytes": 4363
+                    },
+                    "project-config.md": {
+                      "kind": "file",
+                      "sha256": "79efb5360805c5d7ddf27f1aeb96ac895305d55b24ead9c71f858255e1dd8cf2",
+                      "bytes": 2023
+                    }
+                  }
+                }
+              }
+            },
+            "overview": {
+              "kind": "directory",
+              "children": {
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "536834b237c06267f1e42edd076003c1108b8439fb97f034e71544ef8d3faa27",
+                  "bytes": 6434
+                },
+                "references": {
+                  "kind": "directory",
+                  "children": {
+                    "api": {
+                      "kind": "directory",
+                      "children": {
+                        "getSkylineInfo.md": {
+                          "kind": "file",
+                          "sha256": "e9a592d4a37f55cc354a65cb592c1d880d03ad7449c3d8b77918d788b46adb84",
+                          "bytes": 3614
+                        },
+                        "preloadSkylineView.md": {
+                          "kind": "file",
+                          "sha256": "cf055c301422c0a9d859c0972165a074f33533f14c331f9c5dc386d560a435a2",
+                          "bytes": 3929
+                        }
+                      }
+                    },
+                    "changelog": {
+                      "kind": "directory",
+                      "children": {
+                        "changelog.md": {
+                          "kind": "file",
+                          "sha256": "54282542730c3b72e5ba6049c2e901c755483250a677d2c08f945f288a5eb3d4",
+                          "bytes": 8052
+                        }
+                      }
+                    },
+                    "introduction": {
+                      "kind": "directory",
+                      "children": {
+                        "component-support.md": {
+                          "kind": "file",
+                          "sha256": "d43c967d33641106ba0725555fed69ccbe243f4433ddb831c6bb29994149ab6e",
+                          "bytes": 5071
+                        },
+                        "features.md": {
+                          "kind": "file",
+                          "sha256": "7473fef9b5ae74c279e594a55ae662a0eb4021cc882bce276fd22ebad97ee7b1",
+                          "bytes": 5530
+                        },
+                        "overview.md": {
+                          "kind": "file",
+                          "sha256": "57a2e4b99ed6befe6d5222ad325629fed3c98068c488ebf83c5c46697347328c",
+                          "bytes": 4667
+                        }
+                      }
+                    },
+                    "migration": {
+                      "kind": "directory",
+                      "children": {
+                        "best-practice.md": {
+                          "kind": "file",
+                          "sha256": "226228ad4235316dba037129ed6682e058229e864fe89bb7bbbad71caa505fde",
+                          "bytes": 5507
+                        },
+                        "compatibility.md": {
+                          "kind": "file",
+                          "sha256": "887c7c9d76c26e2889a3cf93736c0ceada29d38904266d71e891151a1c2f4220",
+                          "bytes": 5965
+                        },
+                        "getting-started.md": {
+                          "kind": "file",
+                          "sha256": "86cea3313f2cf46599a17178d9d7e4af5a0631ac42efb553f26de80d9941c3a1",
+                          "bytes": 5857
+                        },
+                        "release.md": {
+                          "kind": "file",
+                          "sha256": "7529f4ffa10d009051dd15712068eb65689242d04935fb71ba503baace29b7bc",
+                          "bytes": 5056
+                        }
+                      }
+                    },
+                    "performance": {
+                      "kind": "directory",
+                      "children": {
+                        "comparison.md": {
+                          "kind": "file",
+                          "sha256": "79bd3e193dca17ceb673cace64348fe4f68ce3f3008e8da271ee638a0106d915",
+                          "bytes": 4260
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "route": {
+              "kind": "directory",
+              "children": {
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "f8152a5dd3a8ea27f22c10fbc825fd3a6db3736507af360deda2d1e98388bbd0",
+                  "bytes": 7529
+                },
+                "references": {
+                  "kind": "directory",
+                  "children": {
+                    "api": {
+                      "kind": "directory",
+                      "children": {
+                        "navigate-to.md": {
+                          "kind": "file",
+                          "sha256": "0b13bd71091215d16c93806c30efa3eb75d0863bda350ba271dfcbd666f840dd",
+                          "bytes": 3326
+                        },
+                        "route-events.md": {
+                          "kind": "file",
+                          "sha256": "06fdff6b7377bf29d75c5c040388861f0c3513ca0bd551139c96ae4dd18de481",
+                          "bytes": 2873
+                        },
+                        "router-api.md": {
+                          "kind": "file",
+                          "sha256": "63ad2071cd6e008d936abfd4d9cb61f37d1c98d863cad71f2e533e5b0af19181",
+                          "bytes": 3840
+                        }
+                      }
+                    },
+                    "custom-route": {
+                      "kind": "directory",
+                      "children": {
+                        "custom-route-guide.md": {
+                          "kind": "file",
+                          "sha256": "2b42d1e38e1b18518e7061b6228db95adb21ade83ed52fe8db61a6f928cff12b",
+                          "bytes": 7586
+                        },
+                        "route-patterns.md": {
+                          "kind": "file",
+                          "sha256": "6c3839d7fc0f81c070f41b683861ca3fbb3a370c1fb04758a28956024728be69",
+                          "bytes": 9233
+                        }
+                      }
+                    },
+                    "open-container": {
+                      "kind": "directory",
+                      "children": {
+                        "open-container.md": {
+                          "kind": "file",
+                          "sha256": "1672d7ad7f6dcf2419e60a5af35a271115b76796b6894d06f5f11aff7eb118ac",
+                          "bytes": 2883
+                        }
+                      }
+                    },
+                    "pop-gesture": {
+                      "kind": "directory",
+                      "children": {
+                        "pop-gesture.md": {
+                          "kind": "file",
+                          "sha256": "09e1ea0e0be6d9066596cca5e648e34aa40ba12d8793f5b80626994b778b3638",
+                          "bytes": 2496
+                        }
+                      }
+                    },
+                    "preset-route": {
+                      "kind": "directory",
+                      "children": {
+                        "preset-route.md": {
+                          "kind": "file",
+                          "sha256": "7bd84641308766b7e716e9a80732283e1ac8db4c7be7fbdbc2f08f2997cab60d",
+                          "bytes": 2363
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "scroll-api": {
+              "kind": "directory",
+              "children": {
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "1f6488a7b6db17aabb0831555025a2f32d9feb6096f62844fb81f7af334d59aa",
+                  "bytes": 6807
+                },
+                "references": {
+                  "kind": "directory",
+                  "children": {
+                    "api": {
+                      "kind": "directory",
+                      "children": {
+                        "draggable-sheet-context.md": {
+                          "kind": "file",
+                          "sha256": "e3d75695e44787006d560d799ad729b93269cc9410212aee48064598e5926255",
+                          "bytes": 2559
+                        },
+                        "scroll-view-context.md": {
+                          "kind": "file",
+                          "sha256": "00ffe238fcfcef2944e2d2e75c78f9f4f8310a8bcef9cd4c76791fffc8b4d710",
+                          "bytes": 4310
+                        },
+                        "worklet-scroll-context.md": {
+                          "kind": "file",
+                          "sha256": "3e6f2b2a903c32bca27fbc85a24cc1a3cb38094bf2059e5b4391240d878dbdef",
+                          "bytes": 2871
+                        }
+                      }
+                    },
+                    "patterns.md": {
+                      "kind": "file",
+                      "sha256": "fb5513c6f0c24a2de69cdebe5032e3758bd92a89ca985a5137f158dad13d289b",
+                      "bytes": 5602
+                    }
+                  }
+                }
+              }
+            },
+            "worklet": {
+              "kind": "directory",
+              "children": {
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "a60717279fdcba8a96b1fc93983fd9d38d07a16762ad8d81d14bc0b2b2d53996",
+                  "bytes": 6478
+                },
+                "references": {
+                  "kind": "directory",
+                  "children": {
+                    "animation": {
+                      "kind": "directory",
+                      "children": {
+                        "combine-animation.md": {
+                          "kind": "file",
+                          "sha256": "7792d562166f88453848ce18947f793a589f8a0af9f12a56eb9712e21f7002ff",
+                          "bytes": 3400
+                        },
+                        "easing.md": {
+                          "kind": "file",
+                          "sha256": "452977d0be75fb9faecf3dab27b4bec79640dea58c40cf9a67047b9c2cdec86e",
+                          "bytes": 3445
+                        },
+                        "timing-spring-decay.md": {
+                          "kind": "file",
+                          "sha256": "b09c5605c802f1158d6eb1623af533d46f3c3c14a2502f1411a16884ab95c543",
+                          "bytes": 5351
+                        }
+                      }
+                    },
+                    "base": {
+                      "kind": "directory",
+                      "children": {
+                        "scroll-view-context.md": {
+                          "kind": "file",
+                          "sha256": "cc6f9005d17a5f90cc99ce0a9efa689c66e4b4c0d637012201a738bcb2c6118a",
+                          "bytes": 1446
+                        },
+                        "shared-derived.md": {
+                          "kind": "file",
+                          "sha256": "0f8ed970e4e0cfcdc12a2a7123c6fb2c8a01706d52e22e279511e027dbe93c9a",
+                          "bytes": 3822
+                        }
+                      }
+                    },
+                    "core": {
+                      "kind": "directory",
+                      "children": {
+                        "worklet-overview.md": {
+                          "kind": "file",
+                          "sha256": "d4b70829bb416426c6776f56a05fe61756c3b2176f30f030cd0c92e52b4a4f76",
+                          "bytes": 7594
+                        }
+                      }
+                    },
+                    "tool": {
+                      "kind": "directory",
+                      "children": {
+                        "thread-communication.md": {
+                          "kind": "file",
+                          "sha256": "c953e0f7d659d78c2774954d36b1f145224399b8a99723563a17ca43baf1fbab",
+                          "bytes": 4525
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "wxss": {
+              "kind": "directory",
+              "children": {
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "7220acb775aea93087053bc5382138d00d4174317f6a28c6a6409a0588385bfc",
+                  "bytes": 8826
+                },
+                "references": {
+                  "kind": "directory",
+                  "children": {
+                    "animation.md": {
+                      "kind": "file",
+                      "sha256": "97787fd020687f9ae8d9168abf6b8aef753b18b8f75860bff3aff3db93795122",
+                      "bytes": 3405
+                    },
+                    "basics.md": {
+                      "kind": "file",
+                      "sha256": "97d59f2a03583068bde6a08e97047a45da183dc0aad5b424453024fe8ff1b2d3",
+                      "bytes": 1781
+                    },
+                    "flex.md": {
+                      "kind": "file",
+                      "sha256": "8c00c65dd2dbeb73c2dde2bddcaa4da94f9cfeefd285c50c84208b7c5b02df54",
+                      "bytes": 1849
+                    },
+                    "layout.md": {
+                      "kind": "file",
+                      "sha256": "22bda78e13c4149cd02bed7a6664de44073189b7b2d8224f7afb5c9de850a7b6",
+                      "bytes": 1897
+                    },
+                    "text.md": {
+                      "kind": "file",
+                      "sha256": "37ecd24eb56ea47f6ed0b5850bb22878c3efcdfe745f4d1ae84c88b79ad9f4e6",
+                      "bytes": 2955
+                    },
+                    "visual.md": {
+                      "kind": "file",
+                      "sha256": "f5de09c10f011436fc520202e743740916250efd71b03c4f5601903b1ea36a67",
+                      "bytes": 4357
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codebuddy/skills/微信小程序开发框架": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "b86ad44638a22465c9678dfc663df36ce0d6db01f23a3cf9fb02ddd6405dc8b8",
+          "bytes": 6283
+        },
+        "_skillhub_meta.json": {
+          "kind": "file",
+          "sha256": "0fb73c7ed07d0e859fedf809d20414b21305d02fcc79ccf9dfb423d7eb6383dd",
+          "bytes": 162
+        },
+        "index.md": {
+          "kind": "file",
+          "sha256": "09c1c85836085722b40b748235b7d07b64dc1dc627b5460f7d7af887778d5000",
+          "bytes": 308
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "api.md": {
+              "kind": "file",
+              "sha256": "cde428003a394d53a8045c72ce66a5d565223289f98f9b21f7ecccba6ac11f59",
+              "bytes": 11614
+            },
+            "cloud.md": {
+              "kind": "file",
+              "sha256": "a4a705de99eef7248aaa722fad6094625bed36111cf5d77282b9fceeca299ef5",
+              "bytes": 11534
+            },
+            "components.md": {
+              "kind": "file",
+              "sha256": "f1461ac53e01fdb980d07ee94c3348197d7d042152543b569ecff9a89871e0cc",
+              "bytes": 5458
+            },
+            "framework.md": {
+              "kind": "file",
+              "sha256": "ff436a56d4583b23203ae6d5f8b6e83e0da9c31632c4e51062703114a891207b",
+              "bytes": 172835
+            },
+            "getting_started.md": {
+              "kind": "file",
+              "sha256": "10d4d8ebe0e8e0c71b681564972140221b72aa8f1d284780f08457dd24e6d0b2",
+              "bytes": 52490
+            },
+            "index.md": {
+              "kind": "file",
+              "sha256": "ad3055769c5def9f4d1c13662c5b920042e95fe99745286cbb21cba09d9eff08",
+              "bytes": 315
+            },
+            "other.md": {
+              "kind": "file",
+              "sha256": "8e435cdd1e48f4d5f62042053d30c795148722394e5a1afb46c3e471adc61037",
+              "bytes": 20513
+            },
+            "reference.md": {
+              "kind": "file",
+              "sha256": "3972c3128afa659daf89c04e2eb94f871cb9408301e71725a9eefd7550c5828f",
+              "bytes": 1679
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codex/AGENTS.override.md": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/CODEBUDDY.override.md": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/auth.json": {
+      "kind": "file",
+      "sha256": "0e8f79d6491d9815ee23bc92edc1acf22606c15c338174286ce8e9667e68189d",
+      "bytes": 4151
+    },
+    "/Users/hogenxue/.codex/config.yaml": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/plugins/config.json": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/settings.json": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/skills": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "047aaeeee337338650fdd023277c76681c6b8343139f4a9c1ce25f74de384c4b",
+          "bytes": 20484
+        },
+        ".skills_store_lock.json": {
+          "kind": "file",
+          "sha256": "95feea0fd1764964d6c038f0c9c95a3c2a6865990d314fdbbaa6a6e829e75b0f",
+          "bytes": 312
+        },
+        ".system": {
+          "kind": "directory",
+          "children": {
+            ".codex-system-skills.marker": {
+              "kind": "file",
+              "sha256": "4b857d61192f2fa2df02f1200356167abf381eb1080de74972acd52a365eefca",
+              "bytes": 17
+            },
+            "imagegen": {
+              "kind": "directory",
+              "children": {
+                "LICENSE.txt": {
+                  "kind": "file",
+                  "sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+                  "bytes": 10776
+                },
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "681ddb4ad6d06a2acc78a3535b583f8d0c1ea800ecda3d56370d3310fd2cd4ba",
+                  "bytes": 19201
+                },
+                "agents": {
+                  "kind": "directory",
+                  "children": {
+                    "openai.yaml": {
+                      "kind": "file",
+                      "sha256": "9ca574af14580dc7a2a3dc37a1796d17f93cb8850be66501f0799ef8603e9dc0",
+                      "bytes": 275
+                    }
+                  }
+                },
+                "assets": {
+                  "kind": "directory",
+                  "children": {
+                    "imagegen-small.svg": {
+                      "kind": "file",
+                      "sha256": "cff5f34f57ff60b3ee92eaedd17b15e96dd4b9e776df3e78936c9e00d42be294",
+                      "bytes": 2889
+                    },
+                    "imagegen.png": {
+                      "kind": "file",
+                      "sha256": "95952f644064eb9e890f98d8db07216347186526e4c41ad66d3420629eb86e20",
+                      "bytes": 1711
+                    }
+                  }
+                },
+                "references": {
+                  "kind": "directory",
+                  "children": {
+                    "cli.md": {
+                      "kind": "file",
+                      "sha256": "ecfc2e09261a0feb3482517a5fa0ff410cb7d1958e3cbd2ac6b61586f5b81405",
+                      "bytes": 9655
+                    },
+                    "codex-network.md": {
+                      "kind": "file",
+                      "sha256": "c88298ca4481f6116a16fa7987434fc977f8b311c1bbc0c3d862ffd0c5981148",
+                      "bytes": 1779
+                    },
+                    "image-api.md": {
+                      "kind": "file",
+                      "sha256": "dc975d7af8a4888967251a0276014b4a71ea30455294944b762256373ce3e569",
+                      "bytes": 6072
+                    },
+                    "prompting.md": {
+                      "kind": "file",
+                      "sha256": "b210b051c775860267080941eba968212bf0ac7fce581d75c5dcc217d8293f8b",
+                      "bytes": 8282
+                    },
+                    "sample-prompts.md": {
+                      "kind": "file",
+                      "sha256": "70474177d151855b175c6133de2aae1d90b7f146b0dab50ec830972c47d72183",
+                      "bytes": 17617
+                    }
+                  }
+                },
+                "scripts": {
+                  "kind": "directory",
+                  "children": {
+                    "image_gen.py": {
+                      "kind": "file",
+                      "sha256": "b4345cf835e5b593b97df6bb2b70bda493b8a97eee4cabbc99b2fa57dba9b448",
+                      "bytes": 34667
+                    },
+                    "remove_chroma_key.py": {
+                      "kind": "file",
+                      "sha256": "a5893c4bd04b21abced33731ea89d2ac428e81d92a0368eb18ffbe4fda5253e2",
+                      "bytes": 13905
+                    }
+                  }
+                }
+              }
+            },
+            "openai-docs": {
+              "kind": "directory",
+              "children": {
+                "LICENSE.txt": {
+                  "kind": "file",
+                  "sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9",
+                  "bytes": 10776
+                },
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "aa6829e21df2223167c85d2e49b6337a7345c84c1033f1ec10182c7882b36d45",
+                  "bytes": 5437
+                },
+                "agents": {
+                  "kind": "directory",
+                  "children": {
+                    "openai.yaml": {
+                      "kind": "file",
+                      "sha256": "44b9efac6be1bae32d869aa2942fecbe4dcae82682ee03e4120f2f9b7d4658ec",
+                      "bytes": 370
+                    }
+                  }
+                },
+                "assets": {
+                  "kind": "directory",
+                  "children": {
+                    "openai-small.svg": {
+                      "kind": "file",
+                      "sha256": "45be1f0757eb18889eefb1e7db79668ef46a275dc4e0e78e8df5ebd7f6cdeadc",
+                      "bytes": 1091
+                    },
+                    "openai.png": {
+                      "kind": "file",
+                      "sha256": "156cc84d7332bfe95b310350bd470b690d22aa33d65340cc6c2e06022946194c",
+                      "bytes": 1429
+                    }
+                  }
+                },
+                "references": {
+                  "kind": "directory",
+                  "children": {
+                    "codex-self-knowledge.md": {
+                      "kind": "file",
+                      "sha256": "8c8fb00e6e5cb1977924f5164684a6095427fa828bbc765225f17d9aeb79a912",
+                      "bytes": 7417
+                    },
+                    "latest-model.md": {
+                      "kind": "file",
+                      "sha256": "bdf241d505eb071b1c7b0b732f842b701348cf6eab95d1c36fd97edac64dd158",
+                      "bytes": 2147
+                    },
+                    "mcp-diagnostics.md": {
+                      "kind": "file",
+                      "sha256": "49bbd2f73df7bbd7f86c80425dea4da2d301c22046080399a36bfc0ca49509e9",
+                      "bytes": 2318
+                    },
+                    "model-migration.md": {
+                      "kind": "file",
+                      "sha256": "bef46671036c8e483b7f65df931171217d55a8d26098851c2f89784db8edca2f",
+                      "bytes": 5094
+                    },
+                    "model-selection.md": {
+                      "kind": "file",
+                      "sha256": "ba2d164abbca30435a460a0bc3a7d82398dce2bdf092705c98ba55b3f3af38a8",
+                      "bytes": 1344
+                    },
+                    "official-docs.md": {
+                      "kind": "file",
+                      "sha256": "7962f2dce55089b93bde4115bb89fd42f20993c1597a2b13edd4956f463875b9",
+                      "bytes": 3337
+                    },
+                    "prompting-guide.md": {
+                      "kind": "file",
+                      "sha256": "548d4ca73a34cd4b0041ef05a899592e8c50772b8f3a76c579ec941e403e19f6",
+                      "bytes": 10166
+                    },
+                    "upgrade-guide.md": {
+                      "kind": "file",
+                      "sha256": "ecac89155f910f064fd306e89c74585cabdb2142aba4f2acc0cead092ae1d1a5",
+                      "bytes": 1027
+                    },
+                    "upgrading-to-gpt-6-astra.md": {
+                      "kind": "file",
+                      "sha256": "62ef6d22684662a019d203834fe1205a07e4ca4c65dddcbabe1bb51efe1aa840",
+                      "bytes": 18993
+                    }
+                  }
+                },
+                "scripts": {
+                  "kind": "directory",
+                  "children": {
+                    "fetch-codex-manual.mjs": {
+                      "kind": "file",
+                      "sha256": "f53eb6d2f286e9efcc397e8bee93a938e37296c90953e4e06e94899ef1b6c363",
+                      "bytes": 16085
+                    },
+                    "resolve-latest-model-info": {
+                      "kind": "file",
+                      "sha256": "7354dbb030ca0736dd633a7ca1b930cf640abd40370725dea3a458cb51d49523",
+                      "bytes": 1038
+                    },
+                    "resolve-latest-model-info.cjs": {
+                      "kind": "file",
+                      "sha256": "eeb1bb486018e16b37edfc06b1a37179dbc672982d501040d4f7142f29dd2e64",
+                      "bytes": 3937
+                    }
+                  }
+                }
+              }
+            },
+            "review-agent": {
+              "kind": "directory",
+              "children": {
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "07079efd0dc76f05fade424e5dfb048dce1de2df7626e1a4f56292a4f3f92228",
+                  "bytes": 2661
+                },
+                "agents": {
+                  "kind": "directory",
+                  "children": {
+                    "openai.yaml": {
+                      "kind": "file",
+                      "sha256": "4d867a46d15e36ac880176484aae160f59855340c6059b2ea6ab9fbc9af084de",
+                      "bytes": 252
+                    }
+                  }
+                }
+              }
+            },
+            "skill-creator": {
+              "kind": "directory",
+              "children": {
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66",
+                  "bytes": 15311
+                },
+                "agents": {
+                  "kind": "directory",
+                  "children": {
+                    "openai.yaml": {
+                      "kind": "file",
+                      "sha256": "d07d21b93fcf3d4dc8d9a3399c05fc226a49a333a96d3e1c68b451b8dd9eade6",
+                      "bytes": 183
+                    }
+                  }
+                },
+                "assets": {
+                  "kind": "directory",
+                  "children": {
+                    "skill-creator-small.svg": {
+                      "kind": "file",
+                      "sha256": "6591bf8ea9bb9435890dbdea299e0d2bd05f3aa893a335d26e4c535e93c8e7fb",
+                      "bytes": 1319
+                    },
+                    "skill-creator.png": {
+                      "kind": "file",
+                      "sha256": "a4024b0306ddb05847e1012879d37aaf1e658205199da596f5145ed7a88d9162",
+                      "bytes": 1563
+                    }
+                  }
+                },
+                "license.txt": {
+                  "kind": "file",
+                  "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+                  "bytes": 11358
+                },
+                "references": {
+                  "kind": "directory",
+                  "children": {
+                    "openai_yaml.md": {
+                      "kind": "file",
+                      "sha256": "ffac39318e408108141d40f820968e59f70434a891694f9bf1d25be8237b150c",
+                      "bytes": 2356
+                    }
+                  }
+                },
+                "scripts": {
+                  "kind": "directory",
+                  "children": {
+                    "generate_openai_yaml.py": {
+                      "kind": "file",
+                      "sha256": "816df12072d74faf924d802a6599a139997e1441e90bfe4869ec304f2e5e2851",
+                      "bytes": 6669
+                    },
+                    "init_skill.py": {
+                      "kind": "file",
+                      "sha256": "bf0656a5f9d8d8cdecf0245eaf27e1df8e0e9b6d40ccdda814eb8e3d5f6992c8",
+                      "bytes": 10314
+                    },
+                    "quick_validate.py": {
+                      "kind": "file",
+                      "sha256": "ee6dba90f44d37171c5a6edb8095979c54919ff6822c1a907afca2e78c48738c",
+                      "bytes": 4249
+                    }
+                  }
+                }
+              }
+            },
+            "skill-installer": {
+              "kind": "directory",
+              "children": {
+                "LICENSE.txt": {
+                  "kind": "file",
+                  "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+                  "bytes": 11358
+                },
+                "SKILL.md": {
+                  "kind": "file",
+                  "sha256": "d68b77e5bbb34dedab89d134da52855f140fc4b4299b80104f534e3b9e98f8ee",
+                  "bytes": 3367
+                },
+                "agents": {
+                  "kind": "directory",
+                  "children": {
+                    "openai.yaml": {
+                      "kind": "file",
+                      "sha256": "5ce223d8b1070b82c42298538f1b8d376f788eb9e7a42a987e8c094070d73f0e",
+                      "bytes": 221
+                    }
+                  }
+                },
+                "assets": {
+                  "kind": "directory",
+                  "children": {
+                    "skill-installer-small.svg": {
+                      "kind": "file",
+                      "sha256": "3928703ff00dc1a681e7a22401843b7edcbd4b2051651ce4c43b75f7e140504e",
+                      "bytes": 923
+                    },
+                    "skill-installer.png": {
+                      "kind": "file",
+                      "sha256": "d0a230b1a79b71b858b7c215a0fbb0768d6459c14ea4ef80c61592629bf0e605",
+                      "bytes": 1086
+                    }
+                  }
+                },
+                "scripts": {
+                  "kind": "directory",
+                  "children": {
+                    "github_utils.py": {
+                      "kind": "file",
+                      "sha256": "61c1bbe2ae217433b4b6f9f09f21aca4df52c12598068343ade719f706e4859b",
+                      "bytes": 659
+                    },
+                    "install-skill-from-github.py": {
+                      "kind": "file",
+                      "sha256": "38f311b75664bb063808f982c600271ebc4b560830f491705190f88a94e3e781",
+                      "bytes": 11917
+                    },
+                    "list-skills.py": {
+                      "kind": "file",
+                      "sha256": "9d6dfb2abf3afeee7f027a89fb1626b918a973da18f4eb6c25681286301beb41",
+                      "bytes": 2948
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "codex-primary-runtime": {
+          "kind": "directory",
+          "children": {}
+        },
+        "figma": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "619576167175d495e8eec37fa7223d9252217dda9d46ff604fc6c082d52cf89f",
+              "bytes": 149
+            }
+          }
+        },
+        "ios": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "9f95a39d53dba1f180ca0889a47ea2d6fda561141630d178e54c30779cdbac7d",
+              "bytes": 142
+            }
+          }
+        },
+        "miniprogram-ui-ux-design": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "599bde7a5c0ccc42e9065df78cd3616173ab721459e6887b8f5d5718a489b274",
+              "bytes": 7001
+            },
+            "_meta.json": {
+              "kind": "file",
+              "sha256": "f1119e5821dbf774960c6b4829cdeb37b289350d104cf5d05fb37117de8688fd",
+              "bytes": 297
+            },
+            "references": {
+              "kind": "directory",
+              "children": {
+                "ACCESSIBILITY.md": {
+                  "kind": "file",
+                  "sha256": "c0bafd37a4f749d95c8d37179e00405cfa35a11ca21c347827a9f89195ed847e",
+                  "bytes": 7320
+                },
+                "COMPONENTS.md": {
+                  "kind": "file",
+                  "sha256": "6c37e1d96d82a6bb97a89cda3ea082a898ba5bb49b3da748790b3b08545d5b83",
+                  "bytes": 18561
+                },
+                "DESIGN_TOKENS.md": {
+                  "kind": "file",
+                  "sha256": "1677bc7ee0f05238d880f988240e81e31a73982763b26045dfbaf16a26334440",
+                  "bytes": 8742
+                },
+                "DESIGN_WORKFLOW.md": {
+                  "kind": "file",
+                  "sha256": "ca6aabdafca5a9e10f686f9c175bd0711a554376a7325d9d92b643cc16a7565c",
+                  "bytes": 4073
+                },
+                "MINIPROGRAM_BASICS.md": {
+                  "kind": "file",
+                  "sha256": "24d5582b1713c9226d06fce6bc2b0b46bf120ade4e1abd5b1bf3e6c3842a243c",
+                  "bytes": 9754
+                }
+              }
+            }
+          }
+        },
+        "wechat-miniapp": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "88b16caff6c182116ea18955990a2466a578ac37e9b86cadc009e9c37baa49a0",
+              "bytes": 161
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.codex/skills/.codex-ultimate-v3-backups": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/skills/anysearch": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/skills/debugging": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/skills/figma-implement-design": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/skills/open-spec": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/skills/playwright": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.codex/superpowers/skills": {
+      "kind": "directory",
+      "children": {
+        ".DS_Store": {
+          "kind": "file",
+          "sha256": "fccc524c077d8221e649dda35b7030e38b699cd09b2ffb539730e587c88944c7",
+          "bytes": 10244
+        },
+        "brainstorming": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "b775da9817e43275fac61e461e5f48d8960b32579c1366d3edd995fa9f7b88da",
+              "bytes": 1700
+            },
+            "scripts": {
+              "kind": "directory",
+              "children": {
+                "frame-template.html": {
+                  "kind": "file",
+                  "sha256": "6a8a4e58bd6a44b904e2e3c57de774481d909204597e1498de53f1b2fecc4c4e",
+                  "bytes": 8094
+                },
+                "helper.js": {
+                  "kind": "file",
+                  "sha256": "43c6d69954a46ec34a2a262bcc62a9a7e83e839c739f199cb72646d397c686e3",
+                  "bytes": 5615
+                },
+                "server.cjs": {
+                  "kind": "file",
+                  "sha256": "2d2961ea8d11f56c5f4c3a1a68d22709efa5d7601a2246d8c880774e7e9e8412",
+                  "bytes": 25693
+                },
+                "start-server.sh": {
+                  "kind": "file",
+                  "sha256": "a4e5ae84275bcaacd2f84345afeabe59cf7b00ba080e123da7cc1fb226f12847",
+                  "bytes": 6908
+                },
+                "stop-server.sh": {
+                  "kind": "file",
+                  "sha256": "0b5ccbbd57f62d3ed88993f7940b5ee0e5c0fc9b21c550c623da4f6292e47daf",
+                  "bytes": 3263
+                }
+              }
+            },
+            "spec-document-reviewer-prompt.md": {
+              "kind": "file",
+              "sha256": "95a0a195de9d984be2fffa95bab16fc8c563bc296a9cfc5e9c29cb3ece0d7457",
+              "bytes": 1747
+            },
+            "visual-companion.md": {
+              "kind": "file",
+              "sha256": "60cbad29b9dd7eaf08da020e301c498a72230b2e13c1813fa967a135ffcc1d71",
+              "bytes": 13298
+            }
+          }
+        },
+        "dispatching-parallel-agents": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "1968923066f3b707eb01d1992cdf4c42284c3855f70253b9cd5000ff45fca13c",
+              "bytes": 6078
+            }
+          }
+        },
+        "executing-plans": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "c4c3d8b628c51114cd165fb8246fe02744cd8be180032328391252e653028d9b",
+              "bytes": 2305
+            }
+          }
+        },
+        "finishing-a-development-branch": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "d0ac8360ed9d59121776ef95c84bcb38e9747de0d7ae7e227dca81e437593b9b",
+              "bytes": 7022
+            }
+          }
+        },
+        "receiving-code-review": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438",
+              "bytes": 6203
+            }
+          }
+        },
+        "requesting-code-review": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "d71cc01ba56d2325cf8af5f7c11837819b63ecd57de0bfdb812f7f3ff7751df8",
+              "bytes": 2956
+            },
+            "code-reviewer.md": {
+              "kind": "file",
+              "sha256": "b2f2ec7596925fe52dac158fdfbca19b3a7d779d619c481e6706a6c0001662d3",
+              "bytes": 5213
+            }
+          }
+        },
+        "subagent-driven-development": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "349a08ad8b59b19b86c13a7d2f34a1a38719bf88257004a863eefefa8d9f9e40",
+              "bytes": 28077
+            },
+            "implementer-prompt.md": {
+              "kind": "file",
+              "sha256": "946601616a6f76ab3f165ef98377390968f1ec124ecef87422bc3553404e0332",
+              "bytes": 5717
+            },
+            "re-review-prompt.md": {
+              "kind": "file",
+              "sha256": "e1d8e0e65e58ccde6dc920843da9148d23e65aeb0f8932bcc30be1341a703c4c",
+              "bytes": 4300
+            },
+            "scripts": {
+              "kind": "directory",
+              "children": {
+                "review-package": {
+                  "kind": "file",
+                  "sha256": "fac3d4bd7f94369e8037b9ead2a8a502dca6ab333902b560b9455dbb3c450ebe",
+                  "bytes": 1469
+                },
+                "sdd-workspace": {
+                  "kind": "file",
+                  "sha256": "95a09d9d3983ad1aafd093ca72b4587946dea885c6e302caa02a779a2f911c31",
+                  "bytes": 1586
+                },
+                "task-brief": {
+                  "kind": "file",
+                  "sha256": "d6954ef7841c7da3d77373e6ff5118b3f2f2e998606fd95d33e6527851bce044",
+                  "bytes": 1158
+                }
+              }
+            },
+            "task-reviewer-prompt.md": {
+              "kind": "file",
+              "sha256": "e3b4a1bfe7cd55ed0459e5ca9cdddb6ff086c345b99e9097036db6a18545729e",
+              "bytes": 7816
+            }
+          }
+        },
+        "systematic-debugging": {
+          "kind": "directory",
+          "children": {
+            "CREATION-LOG.md": {
+              "kind": "file",
+              "sha256": "c24733a5b1821bd6bed1fc950261f0b9f4e90097e0bbb96459d8179713730789",
+              "bytes": 4257
+            },
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "808fc5717aa88ad65efff312b11c186294d3e6ee301afb584e2f86599b137787",
+              "bytes": 9465
+            },
+            "condition-based-waiting-example.ts": {
+              "kind": "file",
+              "sha256": "40ae5ebe497fdf310200e43fe986552546d0a22837c0d39e855db1cfd33eb88e",
+              "bytes": 5054
+            },
+            "condition-based-waiting.md": {
+              "kind": "file",
+              "sha256": "e89fec8400d6cd50f43407cec9fab50976ba4d55d0ec2eb51c0bd68036b54c26",
+              "bytes": 3516
+            },
+            "defense-in-depth.md": {
+              "kind": "file",
+              "sha256": "1e175fb86fc357e58c6aebf5441e481e1b7868b4380c0456b63a17eefbd18ba7",
+              "bytes": 3650
+            },
+            "find-polluter.sh": {
+              "kind": "file",
+              "sha256": "dd7b8f13c4cc2a24b33ff87b18da9248f3e1c80a085c3316224f69ff0fa5c43c",
+              "bytes": 1986
+            },
+            "root-cause-tracing.md": {
+              "kind": "file",
+              "sha256": "6b0622269e098ca1399e123e553fd385f0b6412d88ef0e9c4f5a8ea9cf1cec7b",
+              "bytes": 5316
+            },
+            "test-academic.md": {
+              "kind": "file",
+              "sha256": "fe2ba480d78ac0d686dc025f41c2a32a43d642bf533f91b0c6053a04d35d6486",
+              "bytes": 653
+            },
+            "test-pressure-1.md": {
+              "kind": "file",
+              "sha256": "0b6a915db0054577819834c79be9eb614e97bddba10d73768e1fbe91cfed048a",
+              "bytes": 1900
+            },
+            "test-pressure-2.md": {
+              "kind": "file",
+              "sha256": "b2030aeffba07050e8ad573ddf87486457c4a016a786bb326235bebd856f2016",
+              "bytes": 2283
+            },
+            "test-pressure-3.md": {
+              "kind": "file",
+              "sha256": "96b50a52e2c7989c9cf20fb752c47c1e9a3a70dc362f8f7989f8f5b64dac7708",
+              "bytes": 2692
+            }
+          }
+        },
+        "test-driven-development": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "bf1b8216e523851a411e91d429a7c1c2a173e79d88957bc78e348218d50edd54",
+              "bytes": 9015
+            },
+            "writing-good-tests.md": {
+              "kind": "file",
+              "sha256": "51471c853306ff92ca8bb41dcaea05f31c0e46b03651f8f3c99754b7172f4ae1",
+              "bytes": 8268
+            }
+          }
+        },
+        "using-git-worktrees": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "8cfb86f121269e8f7f12361e6795c4f6738828340e28964c9229d365666c9edd",
+              "bytes": 6813
+            }
+          }
+        },
+        "using-superpowers": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "2977230594d1cb23849a8e2abccaa31fa675507c01f4a72ea061b0d38efa51cb",
+              "bytes": 1061
+            },
+            "references": {
+              "kind": "directory",
+              "children": {
+                "antigravity-tools.md": {
+                  "kind": "file",
+                  "sha256": "4880f6de3da4e32f9659ebe7a72b9e0ebfff04e028c2ed96173f86d0387a04c0",
+                  "bytes": 1495
+                },
+                "codex-tools.md": {
+                  "kind": "file",
+                  "sha256": "d3f113a8ebbd748e8ba847b09b57b7685442775ca4ee194d693ce3663f8fac68",
+                  "bytes": 1774
+                },
+                "gemini-tools.md": {
+                  "kind": "file",
+                  "sha256": "62b9157bcb0ee3c6784e3d0da0798ddfa5872f9e0c34bea48f3079dabea71965",
+                  "bytes": 4598
+                },
+                "pi-tools.md": {
+                  "kind": "file",
+                  "sha256": "703dbc83d23ecab9c6f388460c38abc482e9dee2fe6772a8c7a255152ad3a4d5",
+                  "bytes": 1242
+                }
+              }
+            }
+          }
+        },
+        "verification-before-completion": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "f7953f15914cbbe0864392b83a13f5da695901bc76bf2cf5391e820035be27b8",
+              "bytes": 3846
+            }
+          }
+        },
+        "writing-plans": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "ff8141598672e339ad86643835102a2a56e0d5b2b954a71e8a7f0531fbc48208",
+              "bytes": 7181
+            },
+            "plan-document-reviewer-prompt.md": {
+              "kind": "file",
+              "sha256": "aa728b96aad603c8be28875a4305637f6c984aa81ffcadcb13e743202fa2a0c7",
+              "bytes": 1713
+            }
+          }
+        },
+        "writing-skills": {
+          "kind": "directory",
+          "children": {
+            "SKILL.md": {
+              "kind": "file",
+              "sha256": "d34db5c8aed6a4e0440132bd0613aace70a693ec7819d5637ad77481d8e10d1b",
+              "bytes": 26360
+            },
+            "anthropic-best-practices.md": {
+              "kind": "file",
+              "sha256": "217629b356c09c9bd11017c9788e8fc654ca1b32c92d4a51cd490e16dd65e59a",
+              "bytes": 46197
+            },
+            "examples": {
+              "kind": "directory",
+              "children": {
+                "CLAUDE_MD_TESTING.md": {
+                  "kind": "file",
+                  "sha256": "0b379a3415e185d3c434b3ad283d8aa132f3022c2a4f210f168865b5986bcef0",
+                  "bytes": 5423
+                }
+              }
+            },
+            "graphviz-conventions.dot": {
+              "kind": "file",
+              "sha256": "e2890a593c91370e384b42f2f67b1a6232c9e69dddea7891a0c1c46d7b20b694",
+              "bytes": 5970
+            },
+            "persuasion-principles.md": {
+              "kind": "file",
+              "sha256": "a51bc9bf75189ea73a27b3fb504a2fdfdb966fb1f7f1cdf03203230a216ccc03",
+              "bytes": 5901
+            },
+            "render-graphs.js": {
+              "kind": "file",
+              "sha256": "ccda971a87bb185f8febf81c56b556a20d026fa980c17b35fa3e8824fbb37852",
+              "bytes": 4857
+            },
+            "testing-skills-with-subagents.md": {
+              "kind": "file",
+              "sha256": "c711346852c911b24a84aa161e0cff06a4cd7f4e2fa9e9c0a266cead5afcbade",
+              "bytes": 12558
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.cursor/AGENTS.override.md": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.cursor/CODEBUDDY.override.md": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.cursor/config.yaml": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.cursor/settings.json": {
+      "kind": "file",
+      "sha256": "f323d994cc8a8edd423fa901cdf2eea7ce2788a96f441f165f27754795f02b98",
+      "bytes": 1916
+    },
+    "/Users/hogenxue/.cursor/skills/.DS_Store": {
+      "kind": "file",
+      "sha256": "637575c70f650b7d055567585f520a206a8a7ab8cfcf3699e64de524a69c16d0",
+      "bytes": 8196
+    },
+    "/Users/hogenxue/.cursor/skills/.codex-ultimate-v3-backups": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.minimax/AGENTS.override.md": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.minimax/CODEBUDDY.override.md": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.minimax/config.yaml": {
+      "kind": "file",
+      "sha256": "a644ce18ee9703828ffa44f2d06bca70441096e18a5ada940401f363f6da6551",
+      "bytes": 3649
+    },
+    "/Users/hogenxue/.minimax/settings.json": {
+      "kind": "absent"
+    },
+    "/Users/hogenxue/.minimax/skills/.DS_Store": {
+      "kind": "file",
+      "sha256": "bf408c15bc3117cac1429836594da08fccb4f8244aeafdfc02dd390863704017",
+      "bytes": 8196
+    },
+    "/Users/hogenxue/.minimax/skills/agent-browser": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "2c7ff2bd119c773c57fad4977bdd23d4785fd72537c1ac9ab2ac69b0890f30fe",
+          "bytes": 657
+        },
+        "_meta.json": {
+          "kind": "file",
+          "sha256": "f5dcffe5dd14aaca357d5d40b1a9d3c15348079714021923e45a2dec9a3079f4",
+          "bytes": 132
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "package_skill.py": {
+              "kind": "file",
+              "sha256": "9a848870a3cb02186376286e9b2e0a9deb7457cf8903a67b61755a70dfd83d33",
+              "bytes": 8520
+            },
+            "quick_validate.py": {
+              "kind": "file",
+              "sha256": "e58ffb8601678e9ae6a8749c51f554c7ef00cf1c51f51b35c0edfa5a9458f636",
+              "bytes": 7667
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/brainstorming": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "bba47904a7f6bbee3bf8a107ebbe84e65d392be683bbb898ded736b29e415f90",
+          "bytes": 10634
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "frame-template.html": {
+              "kind": "file",
+              "sha256": "fb22ba9d47f3b83b56e0a95d52a3c2727db03b0d4365078d92c850293a62457b",
+              "bytes": 7703
+            },
+            "helper.js": {
+              "kind": "file",
+              "sha256": "e763d82f32b4ebb320be2f0d08449d3e5a0585778edf5c407c1fdab3f39976a5",
+              "bytes": 2707
+            },
+            "server.cjs": {
+              "kind": "file",
+              "sha256": "ea81185f581897c67d4b417eeb9bc7a158c50e0932c73047054fe53efc2683ef",
+              "bytes": 11218
+            },
+            "start-server.sh": {
+              "kind": "file",
+              "sha256": "3442a54b5ee5511637d27bf696e092b72f94c2324f40b5ba4410da4dd0c23bc8",
+              "bytes": 4606
+            },
+            "stop-server.sh": {
+              "kind": "file",
+              "sha256": "f65b7634a27343eab2086bdb6c59ba78695685f471b5a577b08a8817f7c50600",
+              "bytes": 1314
+            }
+          }
+        },
+        "spec-document-reviewer-prompt.md": {
+          "kind": "file",
+          "sha256": "12cb5ed58aef41b8da6fbb505547c71ca3f5658c83b66ca6e556c936308b3189",
+          "bytes": 1748
+        },
+        "visual-companion.md": {
+          "kind": "file",
+          "sha256": "a2bc6fc47d0df1df981d02f707a16225b147f462e7059175ad2bc5e6dd29fcae",
+          "bytes": 12047
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/playwright-skill-chenan": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "89ea56125523bfc54cdd3f7dac9d7ae3dfa33aa7706ce23d07c121c229c36202",
+          "bytes": 726
+        },
+        "_meta.json": {
+          "kind": "file",
+          "sha256": "cf2014bd787fc52a3e7621c3d7e07eeabe4789282d9f342b9501593d23986ed5",
+          "bytes": 142
+        },
+        "package_skill.py": {
+          "kind": "file",
+          "sha256": "9a848870a3cb02186376286e9b2e0a9deb7457cf8903a67b61755a70dfd83d33",
+          "bytes": 8520
+        },
+        "quick_validate.py": {
+          "kind": "file",
+          "sha256": "e58ffb8601678e9ae6a8749c51f554c7ef00cf1c51f51b35c0edfa5a9458f636",
+          "bytes": 7667
+        },
+        "scripts": {
+          "kind": "directory",
+          "children": {
+            "package_skill.py": {
+              "kind": "file",
+              "sha256": "9a848870a3cb02186376286e9b2e0a9deb7457cf8903a67b61755a70dfd83d33",
+              "bytes": 8520
+            },
+            "quick_validate.py": {
+              "kind": "file",
+              "sha256": "e58ffb8601678e9ae6a8749c51f554c7ef00cf1c51f51b35c0edfa5a9458f636",
+              "bytes": 7667
+            }
+          }
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/prd-to-prototype": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "8fda2384b5972e4e0951c20dac5a768ccb3e3bad37afdc5b6ae6963c5446e458",
+          "bytes": 9923
+        },
+        "_meta.json": {
+          "kind": "file",
+          "sha256": "550051a4c8b2c501af194b53d5b9c13c271db73e24f467be91653004f033de76",
+          "bytes": 136
+        }
+      }
+    },
+    "/Users/hogenxue/.minimax/skills/test-planning": {
+      "kind": "directory",
+      "children": {
+        "SKILL.md": {
+          "kind": "file",
+          "sha256": "3e8d755a0dc634f8c51910d8945dc144470891bccd5ad88bb70c18a7bcc63446",
+          "bytes": 4607
+        },
+        "_meta.json": {
+          "kind": "file",
+          "sha256": "4fac343a76b51019b85894ceca68feb6148c16d4d603aa5c4a45270fc8b55c33",
+          "bytes": 132
+        },
+        "assets": {
+          "kind": "directory",
+          "children": {}
+        },
+        "references": {
+          "kind": "directory",
+          "children": {
+            "templates.md": {
+              "kind": "file",
+              "sha256": "4f20425b438fcd6701ae234985fef260417d1e5454bd5899f6f633ac96fc4984",
+              "bytes": 6556
+            }
+          }
+        }
+      }
+    }
+  },
+  "repository_dirty": {
+    ".trellis/tasks/09-18-lan-http-memory-mcp/check.jsonl": {
+      "kind": "file",
+      "sha256": "71793016cf7180991a50c45f3ae0c848ec213827325ac1f1bdac71a864480bd2",
+      "bytes": 375
+    },
+    ".trellis/tasks/09-18-lan-http-memory-mcp/implement.jsonl": {
+      "kind": "file",
+      "sha256": "42be91f40d398cfba5e34d605547da9644cae393bb347b7911217f0b9b4db701",
+      "bytes": 368
+    },
+    ".trellis/tasks/09-18-lan-http-memory-mcp/prd.md": {
+      "kind": "file",
+      "sha256": "7322d33ed67d58df1230b3f5f0cb64c87dad022c81c383e72c5c6b62ad5b99f1",
+      "bytes": 1085
+    },
+    ".trellis/tasks/09-18-lan-http-memory-mcp/task.json": {
+      "kind": "file",
+      "sha256": "0b1905991ecf842855660a0fc5902503fb6a7e771fb21ba56cd8ffa43cc8306b",
+      "bytes": 569
+    },
+    ".trellis/tasks/09-18-lan-http-memory-mcp/verification.json": {
+      "kind": "file",
+      "sha256": "1816573c93e280e1fb57eda1b3cb0ec1c54a492ba9ad8e47722d4c1700d8b604",
+      "bytes": 1242
+    },
+    "AGENTS.md": {
+      "kind": "absent"
+    }
+  },
+  "mcp": {
+    "codex": {
+      "entries": {
+        "computer-use": "694c9865b818a6dc67eabc00857a07696fa33eead72b1ff73243adbe89b59c82",
+        "gitnexus": "bdd286d9b7fc3ad40469dfc9d14b18502d2813c52ec97f9c7f668c5301204693",
+        "headroom": "6412efe1ad99b1023b2982fc94c76cef1c25b9f4e101acff840748c3b581e48f",
+        "mem0": "1dc181a86f24fde5fc4e56b30606a4be58485e0118e569c1860ccbe57c89a2a6",
+        "node_repl": "f80e30800787fc4425e3a07df002671f46948bab0f9e30c3ec1b74efeaf5dda2",
+        "recallium": "2b578df05ed901b36bdaa664374f26b5a9f8fd10560ac8d7b6f32e8ee2f778d6"
+      },
+      "url_sha256": [
+        "18bac63bcdb9ad638f142a648567e506ae452c4718e6280a2c007e39a8142ac0",
+        "caa9b7c83bf37cd873f13e633ab8fd24f2744a7e1203a28d773fa33fcd189c0d",
+        "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b"
+      ]
+    },
+    "cursor": {
+      "entries": {
+        "codegraph": "d1a10658849b12f0e7d096f8eac2ec04479e0e2ccd1cde061f148d5ab5d3f532",
+        "feishu": "a41390c1230053ff8c0cc1178db160923647c8febca72fba12d673008f6b164f",
+        "gitnexus": "bdd286d9b7fc3ad40469dfc9d14b18502d2813c52ec97f9c7f668c5301204693",
+        "mem0": "cd65f3f2b7780f1aaaac0000a22a003e875752465f854261c2ad4b0f24e37d5d",
+        "recallium": "cd65f3f2b7780f1aaaac0000a22a003e875752465f854261c2ad4b0f24e37d5d"
+      },
+      "url_sha256": [
+        "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b"
+      ]
+    },
+    "minimax": {
+      "entries": {
+        "cu": "421cc4cf5cc8ae3441861c26d3ecbde6a2df94f726c5a8192d60008e1346b57f",
+        "gitnexus": "7a4ac8be591616e4ef7e0661cdb2c501174f70a91cb5ff18380a663ec560c931",
+        "matrix": "3f9caba8f587bc24f25306b3e5a9abeadb3c780ecc33def28e0346f1a586fbe1",
+        "mem0": "6485512abf46189b667c1616879ee2d1a7218498cabe7ee1542b88cfa158ca4f",
+        "playwright": "f4df0ea4157a2e3cef4d07bf8e27b73af6276cd1445485b9e9c2ededb0a6a475",
+        "recallium": "db5c8064d2190d7949aef4ed2d38407637c207a1b11e62228b68c60b8cbea7f3",
+        "trash": "34e792e84f6296e1436a0d19dd6229f3b8802f7d55948958e648fe2662df9870"
+      },
+      "url_sha256": [
+        "18bac63bcdb9ad638f142a648567e506ae452c4718e6280a2c007e39a8142ac0",
+        "37f9850c3b0c0abbf7fb7fe989903d934bb2d66cc05f8bdd6c8f44fdd841e3da",
+        "a7573e078e4e94bb5d271aa5db0f2f5e211350ef8917985186fd2129d8e3d9e6",
+        "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b"
+      ]
+    },
+    "workbuddy": {
+      "entries": {
+        "gitnexus": "7a4ac8be591616e4ef7e0661cdb2c501174f70a91cb5ff18380a663ec560c931",
+        "mem0": "db5c8064d2190d7949aef4ed2d38407637c207a1b11e62228b68c60b8cbea7f3",
+        "recallium": "db5c8064d2190d7949aef4ed2d38407637c207a1b11e62228b68c60b8cbea7f3"
+      },
+      "url_sha256": [
+        "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b",
+        "fd4716ce443b012916d0de838670cd5ec5d8d052ef29fae048157cf82af2408b"
+      ]
+    }
+  },
+  "mcp_files": {
+    "codex": {
+      "kind": "file",
+      "sha256": "24fc505a6ac5e78cc9b7761abbbe8edf739cac6e2653f9e2761abf6f5e3e4192",
+      "bytes": 5833
+    },
+    "cursor": {
+      "kind": "file",
+      "sha256": "3def0b2e08c838d687f87e00851cae5f5c6e83419e4a1c15bf62d0a2d892e4d4",
+      "bytes": 959
+    },
+    "minimax": {
+      "kind": "file",
+      "sha256": "2605a69a4dac720a3bf99e1fd2913dc1a3c3349123d4186802cb6bf3a46fdb1b",
+      "bytes": 3433
+    },
+    "workbuddy": {
+      "kind": "file",
+      "sha256": "feb2802c07e18991a7e9319161833b4a7350fc196878aab3e3fd6e49ac341290",
+      "bytes": 329
+    }
+  }
+}

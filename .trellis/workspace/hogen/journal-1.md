@@ -228,3 +228,41 @@ Publication scope: the cleanup Task and this session's Journal/index updates. Ex
 ### Next Steps
 
 - None - task complete
+
+
+## Session 8: Reinstall four local profiles after Skill cleanup
+
+**Date**: 2026-10-10
+**Task**: Reinstall four local profiles after Skill cleanup
+**Branch**: `main`
+
+### Summary
+
+Installed source 276a8d4 on Codex/Cursor/MiniMax/WorkBuddy; verified 72 Skills, byte-identical MCP, 56 protected paths and 85 backups. Kept canonical Graphify and cleanup exclusions; durable evidence saved. Application loading/external connectivity not_run.
+
+### Main Changes
+
+- Current source `276a8d4` installed through the existing PTY wizard for profiles 1, 2, 4 and 5; exit 0.
+- Verified all 72 manifest Skill trees, 4 paired default-config trees, 3 global guides and Codex managed hook; all 4 unrelated hook entries retained.
+- MCP: 21 definitions and 11 URLs preserved; all 4 files byte-identical. Native settings and 56 protected paths unchanged.
+- Canonical constrained Graphify kept; cleared obsolete Skills/duplicate aliases were not revived. Existing usable dependency CLIs retained.
+- All 85 new backups match pre-state and cover every replacement target. Sanitized transcript, per-file fingerprints and backup inventory persist in `.trellis/tasks/10-10-reinstall-four-host-profiles/evidence/`; private snapshots/log are in owner-restricted durable storage.
+- Application loading and external MCP connectivity: `not_run`. No source-code edit, Git publication or Task archive.
+
+
+### Git Commits
+
+Git publication was authorized separately on 2026-10-11. Scope: this installation Task and Session 8 Journal/index updates; existing `AGENTS.md` deletion and old LAN task excluded.
+
+### Testing
+
+- Installer exit 0; payload/MCP/protected-path/backup checks, native Task validation and diff check passed.
+- Application loading/external MCP connectivity: `not_run`. Recallium memory #1302 saved.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
