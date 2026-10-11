@@ -6,6 +6,7 @@
           {
             "type": "command",
             "command": "bash .codex/hooks/session-start.sh",
+            "commandWindows": "python .codex/hooks/session-start.py",
             "statusMessage": "Trellis/Codex session context"
           }
         ]

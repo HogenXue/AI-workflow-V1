@@ -299,6 +299,9 @@ from pathlib import Path
 template, target, hook_script = map(Path, sys.argv[1:])
 data = json.loads(template.read_text(encoding="utf-8"))
 data["hooks"]["SessionStart"][0]["hooks"][0]["command"] = f"bash {shlex.quote(str(hook_script))}"
+data["hooks"]["SessionStart"][0]["hooks"][0]["commandWindows"] = (
+    f'python "{hook_script.with_suffix(".py").as_posix()}"'
+)
 target.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 '@
 

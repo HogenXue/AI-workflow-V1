@@ -161,7 +161,8 @@ rollback_hooks() {
 }
 
 if ! mkdir -p "$dest_hooks_dir" \
-  || ! cp "$templates/hooks/session-start.sh" "$dest_hooks_dir/session-start.sh"; then
+  || ! cp "$templates/hooks/session-start.sh" "$dest_hooks_dir/session-start.sh" \
+  || ! cp "$templates/hooks/session-start.py" "$dest_hooks_dir/session-start.py"; then
   printf 'ERROR: could not install Codex SessionStart hook\n' >&2
   rollback_hooks
   exit 1
@@ -177,6 +178,9 @@ template, target, hook_script = map(Path, sys.argv[1:])
 template_data = json.loads(template.read_text(encoding="utf-8"))
 managed = template_data["hooks"]["SessionStart"]
 managed[0]["hooks"][0]["command"] = f"bash {shlex.quote(str(hook_script))}"
+managed[0]["hooks"][0]["commandWindows"] = (
+    f'python "{hook_script.with_suffix(".py").as_posix()}"'
+)
 
 if target.exists():
     data = json.loads(target.read_text(encoding="utf-8"))
@@ -212,3 +216,4 @@ fi
 chmod +x "$dest_hooks_dir/session-start.sh" 2>/dev/null || true
 printf 'INSTALLED: %s\n' "$dest_hooks_json"
 printf 'INSTALLED: %s\n' "$dest_hooks_dir/session-start.sh"
+printf 'INSTALLED: %s\n' "$dest_hooks_dir/session-start.py"

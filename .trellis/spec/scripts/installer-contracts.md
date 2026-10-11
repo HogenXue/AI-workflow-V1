@@ -166,6 +166,12 @@ install_profile_claude <mem0_url_or_empty>
 - Claude global rules → `~/.claude/CLAUDE.md` only; never rewrite project-root `CLAUDE.md` / `AGENTS.md`.
 - Installer **never** rewrites Trellis / project root `AGENTS.md`.
 - Do not install global `~/.codex/hooks.json` as a mistaken project path; Codex hooks install at user scope under `~/.codex` per `codex-merge`.
+- Codex context hooks retain the Unix Bash command and provide a `commandWindows` native
+  Python override. Both installers distribute `hooks/session-start.py`; installed overrides
+  quote its absolute path. Windows execution must not depend on WSL or Git Bash. The helper
+  resolves Trellis from the session directory or its ancestors and propagates context errors.
+  Verify the installed command actually runs from a nested project and a home path with spaces
+  (`tests/test_install_codex_hook_ps.py`); file existence is not runtime acceptance.
 - Claude recommended full install does **not** install Graphify (same as Cursor).
 - Claude MCP default backup-dir is `~/.claude/.ai-workflow-backups` even when the MCP file is `~/.claude.json`.
 - Multi-select runs selected profiles sequentially; never delete the other host’s files.
