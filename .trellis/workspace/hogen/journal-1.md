@@ -39,3 +39,36 @@ Delivered interactive install.sh with Codex/Cursor multi-select, explicit projec
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: Adapt Matt Skills to Trellis
+
+**Date**: 2026-10-20
+**Task**: Adapt Matt Skills to Trellis
+**Branch**: `codex/ai-workflow-hardening`
+
+### Summary
+
+Packaged a Trellis-compatible setup Skill, restored four adapted shared Skills, and added explicit backed-up Skill lock adoption. Verified 121 tests, isolated setup scenarios and final quality gates; preserved unrelated Skills and global Codex configuration.
+
+### Main Changes
+
+- Detailed change bullets were not supplied; see the summary above.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `29cb55c` | (see git log) |
+
+### Testing
+
+- Validation was not recorded for this session.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
