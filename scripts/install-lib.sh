@@ -131,6 +131,25 @@ install_lib_resolve_project_root() {
   return 0
 }
 
+install_lib_skill_lock_path() {
+  local target="$1"
+  local target_real standard_target standard_real
+  target_real="$(install_lib_normalize_path "$target")" || return 1
+  for standard_target in "$HOME/.agents/skills" \
+    "${CODEX_HOME:-$HOME/.codex}/skills" "$HOME/.cursor/skills"; do
+    standard_real="$(install_lib_normalize_path "$standard_target")" || return 1
+    if [[ "$target_real" == "$standard_real" ]]; then
+      if [[ -n "${XDG_STATE_HOME:-}" ]]; then
+        printf '%s/skills/.skill-lock.json\n' "${XDG_STATE_HOME%/}"
+      else
+        printf '%s/.agents/.skill-lock.json\n' "$HOME"
+      fi
+      return 0
+    fi
+  done
+  printf '%s/.skill-lock.json\n' "$(dirname "${target%/}")"
+}
+
 install_lib_backup_file() {
   local source="$1"
   local backup_dir="$2"

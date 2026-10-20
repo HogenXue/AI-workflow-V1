@@ -33,7 +33,7 @@
 
 ## 能力型 Skill
 
-- 复杂、跨模块或需求不明确：使用 Grill with Docs；简单且需求明确的任务不自动触发。
+- Trellis 项目中，复杂、跨模块或需求不明确时使用 Grill with Docs；简单任务不自动触发。非 Trellis 项目沿用现有需求澄清流程。
 - 历史上下文、长期决策或跨会话延续：使用 Memory（见上节记忆分层）。
 - Graphify（已安装且仓库已有可用图谱时）：用于代码库概览、关系与路径检索；将
   `INFERRED` 或 `AMBIGUOUS` 结果视为待核实线索，编辑前回到源文件确认。
@@ -42,13 +42,13 @@
 - 编码、重构或代码审查：使用 Karpathy Guidelines（完整十二条在 Skill 内；不在本全局文件展开长文）。
 - 行为变化需要自动化证据：使用 TDD。
 - 复杂 Bug 或性能回归：使用 Diagnosing Bugs 建立可重复反馈循环；仅诊断请求不自动实施修复。
-- 模块接口、seam 或深模块设计：使用 Codebase Design；接受的决定写回当前 Trellis Design，实施前按风险使用 GitNexus。
+- 模块接口、seam 或深模块设计：使用 Codebase Design；Trellis 项目将接受的决定写回当前 Design，其他项目使用既有设计记录；实施前按风险使用 GitNexus。
 - 已经进行中的 merge/rebase 冲突：使用 Resolving Merge Conflicts；不得自行开始、终止、继续、提交或推送未获授权的 Git 操作。
 
 - Karpathy Guidelines 是横切行为约束，不是独立阶段；它不替代 Trellis、TDD 或项目既有的质量检查。
 - Grill with Docs 只负责 Phase 1.1 需求澄清及 Trellis 领域/决定 spec；不管理任务生命周期、不写代码、不执行测试、审查或 Git 操作。
-- TDD 是 Trellis 执行阶段的实现方法，不是第二套工作流；仅对需要自动化测试证明的行为变化执行 RED → GREEN → REFACTOR。
-- Diagnosing Bugs、Codebase Design 和 Resolving Merge Conflicts 都是当前 Trellis task 内的能力，不创建平行 PRD、Spec、Task、Review 或提交流程。
+- Trellis 项目中，TDD 是 Trellis 执行阶段的实现方法，不是第二套工作流；其他项目沿用既有实施流程。仅对需要自动化测试证明的行为变化执行 RED → GREEN → REFACTOR。
+- Trellis 项目中，Diagnosing Bugs、Codebase Design 和 Resolving Merge Conflicts 都是当前 Trellis task 内的能力，不创建平行 PRD、Spec、Task、Review 或提交流程；其他项目沿用既有任务和工件位置。
 - Graphify 只提供可选的本地图谱探索，不替代 GitNexus 的正式影响分析、Trellis 的质量证据或
   Memory 的长期记忆；Graphify 的图谱/查询结果不是长期项目记忆。除非用户或项目规则明确授权，
   不自动生成/更新图谱、安装其配置或 hook，或提交 `graphify-out/` 产物。

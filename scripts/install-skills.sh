@@ -195,7 +195,7 @@ if [[ -n "$other_codex_root" ]]; then
   done
 fi
 
-skill_lock="$(dirname "${target%/}")/.skill-lock.json"
+skill_lock="$(install_lib_skill_lock_path "$target")" || exit 1
 skill_lock_conflicts=""
 skill_lock_backup=""
 if ((adopt_skill_lock)); then

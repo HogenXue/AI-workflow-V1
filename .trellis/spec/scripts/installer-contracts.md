@@ -344,10 +344,19 @@ optional resources still receive link/placeholder checks.
 
 ## Convention: Package Skill ownership and external update locks
 
-`install.sh skills --adopt-skill-lock` explicitly detaches manifest names from
-`<parent of target skills directory>/.skill-lock.json`. Replacement and adoption are
-separate choices; normal installs preserve external locks. Preview validates and reports
-the selected entries without creating files. Missing locks or no matching entries are no-ops.
+`install.sh skills --adopt-skill-lock` explicitly detaches manifest names from the
+third-party update lock. Standard `~/.agents/skills`, active CODEX_HOME/skills and
+`~/.cursor/skills` targets share `~/.agents/.skill-lock.json`; when XDG_STATE_HOME is
+configured, use `XDG_STATE_HOME/skills/.skill-lock.json` instead. Custom targets keep
+their adjacent `<parent of target skills directory>/.skill-lock.json` behavior. The
+shared path resolver is used by both the component and full-profile wizard.
+
+Replacement and adoption are separate choices; normal installs preserve external locks.
+The recommended Codex/Cursor wizard offers a separate default-no ownership prompt when
+the selected lock exists and Skills are being installed. Declining or skipping Skills
+preserves registration. Adoption changes shared metadata, not other hosts' Skill trees.
+Preview validates and reports the selected entries without creating files. Missing locks
+or no matching entries are no-ops.
 
 Validate that the lock is a regular, non-symlink JSON file containing a `skills` mapping
 before replacing any Skill. Preserve unrelated names and all other JSON metadata. Back up
@@ -358,3 +367,5 @@ adapted Skills; users must select non-conflicting upstream names instead.
 
 Tests must cover exact-name adoption, unrelated metadata, preview, opt-in behavior,
 malformed/symlink rejection, no matching entries and restoration after lock-write failure.
+Also cover standard host/XDG resolution, custom-target fallback and real TTY consent,
+decline and skip paths for the recommended profiles.

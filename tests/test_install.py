@@ -31,13 +31,16 @@ class ComponentInstallTests(unittest.TestCase):
         self.config_target = self.root / "config"
         self.backup = self.root / "backup"
 
-    def run_component(self, component: str, *args: str) -> subprocess.CompletedProcess[str]:
+    def run_component(
+        self, component: str, *args: str, env: dict[str, str] | None = None
+    ) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
             ["bash", str(ROOT / "scripts" / "install.sh"), component, *args],
             cwd=ROOT,
             text=True,
             capture_output=True,
             check=False,
+            env=env,
         )
 
     def test_skills_dry_run_does_not_create_skills_or_config(self) -> None:
@@ -268,6 +271,104 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(lock.read_text(encoding="utf-8"), original)
         self.assertFalse(self.backup.exists())
+
+    def test_custom_symlink_target_adopts_its_caller_adjacent_lock(self) -> None:
+        actual_skills = self.root / "actual" / "skills"
+        actual_skills.mkdir(parents=True)
+        actual_lock = actual_skills.parent / ".skill-lock.json"
+        actual_original = '{"skills":{"tdd":{"source":"actual-sentinel"}}}\n'
+        actual_lock.write_text(actual_original, encoding="utf-8")
+        target = self.root / "custom" / "skills"
+        target.parent.mkdir()
+        target.symlink_to(actual_skills, target_is_directory=True)
+        lock = target.parent / ".skill-lock.json"
+        original = '{"version":3,"skills":{"tdd":{"source":"upstream"}}}\n'
+        lock.write_text(original, encoding="utf-8")
+
+        result = self.run_component(
+            "skills", "--copy", "--replace", "--adopt-skill-lock",
+            "--target", str(target), "--backup-dir", str(self.backup),
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertEqual(actual_lock.read_text(encoding="utf-8"), actual_original)
+        self.assertEqual(json.loads(lock.read_text(encoding="utf-8")), {"version": 3, "skills": {}})
+        self.assertTrue(target.is_symlink())
+        self.assertEqual((target / "tdd" / "SKILL.md").read_bytes(),
+                         (ROOT / "skills" / "tdd" / "SKILL.md").read_bytes())
+        backups = list(self.backup.glob(".skill-lock.json.*.bak"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(backups[0].read_text(encoding="utf-8"), original)
+
+    def test_standard_host_targets_adopt_the_shared_global_skill_lock(self) -> None:
+        for index, suffix in enumerate((".agents/skills", ".codex/skills", ".cursor/skills")):
+            with self.subTest(target=suffix):
+                fixture_home = self.root / f"host-{index}"
+                target = fixture_home / suffix
+                lock = fixture_home / ".agents" / ".skill-lock.json"
+                lock.parent.mkdir(parents=True)
+                original = {"version": 3, "skills": {"tdd": {"source": "upstream"},
+                            "ask-matt": {"source": "upstream"}}, "dismissed": {"notice": True}}
+                lock.write_text(json.dumps(original), encoding="utf-8")
+                adjacent = target.parent / ".skill-lock.json"
+                if adjacent != lock:
+                    adjacent.parent.mkdir(parents=True)
+                    adjacent.write_text('{"skills":{"tdd":{"source":"adjacent-sentinel"}}}',
+                                        encoding="utf-8")
+                    adjacent_before = adjacent.read_bytes()
+                result = self.run_component(
+                    "skills", "--copy", "--replace", "--adopt-skill-lock", "--target", str(target),
+                    env={**os.environ, "HOME": str(fixture_home),
+                         "CODEX_HOME": str(fixture_home / ".codex"), "XDG_STATE_HOME": ""},
+                )
+
+                self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+                expected = {**original, "skills": {"ask-matt": original["skills"]["ask-matt"]}}
+                self.assertEqual(json.loads(lock.read_text(encoding="utf-8")), expected)
+                self.assertEqual(len(list((target.parent / ".ai-workflow-backups").glob(
+                    ".skill-lock.json.*.bak"))), 1)
+                if adjacent != lock:
+                    self.assertEqual(adjacent.read_bytes(), adjacent_before)
+
+    def test_standard_target_skill_lock_adoption_honors_xdg_state_home(self) -> None:
+        fixture_home = self.root / "xdg-home"
+        target = fixture_home / ".cursor" / "skills"
+        lock = self.root / "state" / "skills" / ".skill-lock.json"
+        lock.parent.mkdir(parents=True)
+        lock.write_text('{"skills":{"tdd":{"source":"upstream"}}}', encoding="utf-8")
+        fallback = fixture_home / ".agents" / ".skill-lock.json"
+        fallback.parent.mkdir(parents=True)
+        fallback.write_text('{"skills":{"tdd":{"source":"fallback-sentinel"}}}',
+                            encoding="utf-8")
+        fallback_before = fallback.read_bytes()
+        result = self.run_component(
+            "skills", "--copy", "--replace", "--adopt-skill-lock", "--target", str(target),
+            env={**os.environ, "HOME": str(fixture_home),
+                 "CODEX_HOME": str(fixture_home / ".codex"),
+                 "XDG_STATE_HOME": str(self.root / "state")},
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertEqual(json.loads(lock.read_text(encoding="utf-8")), {"skills": {}})
+        self.assertEqual(fallback.read_bytes(), fallback_before)
+
+    def test_standard_cursor_skill_lock_preview_uses_global_lock_without_writes(self) -> None:
+        fixture_home = self.root / "preview-home"
+        target = fixture_home / ".cursor" / "skills"
+        lock = fixture_home / ".agents" / ".skill-lock.json"
+        lock.parent.mkdir(parents=True)
+        original = '{"skills":{"tdd":{"source":"upstream"}}}\n'
+        lock.write_text(original, encoding="utf-8")
+        result = self.run_component(
+            "skills", "--dry-run", "--adopt-skill-lock", "--target", str(target),
+            env={**os.environ, "HOME": str(fixture_home),
+                 "CODEX_HOME": str(fixture_home / ".codex"), "XDG_STATE_HOME": ""},
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(str(lock), result.stdout)
+        self.assertEqual(lock.read_text(encoding="utf-8"), original)
+        self.assertFalse(target.parent.exists())
 
     def test_config_is_explicit_and_can_be_copied_separately(self) -> None:
         dry_run = self.run_component("config", "--dry-run", "--target", str(self.config_target))

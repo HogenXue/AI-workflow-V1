@@ -99,16 +99,24 @@ Codex 项目入口优先使用 `AGENTS.md`；非 Trellis 项目沿用自己的�
 
 如果之前通过第三方安装器安装了这些同名 Skills，显式接管其更新登记：
 
+Codex/Cursor 的推荐完整安装向导会在安装 Skills 时，针对已有登记文件单独询问是否
+接管本包名称（默认不接管）。确认覆盖 Skills 不等于确认接管第三方更新登记；拒绝接管
+或跳过 Skills 时保留原登记。
+
 ```bash
 bash scripts/install.sh skills --dry-run --replace --adopt-skill-lock --target ~/.agents/skills
 bash scripts/install.sh skills --copy --replace --adopt-skill-lock --target ~/.agents/skills
 ```
 
-`--adopt-skill-lock` 只处理目标 Skills 目录上一级的 `.skill-lock.json`，先备份，再移除
-manifest 中同名 Skills 的第三方更新登记；其他 Skill、顶层元数据和偏好保持原样。
+`--adopt-skill-lock` 对标准的 `~/.agents/skills`、当前 `CODEX_HOME/skills` 和
+`~/.cursor/skills` 使用第三方共享的 `~/.agents/.skill-lock.json`；设置了
+`XDG_STATE_HOME` 时使用其下的 `skills/.skill-lock.json`。自定义目标继续使用目标目录
+上一级的 `.skill-lock.json`。安装器先备份，再移除 manifest 中同名 Skills 的第三方
+更新登记；其他 Skill、顶层元数据和偏好保持原样。
 没有该参数时不改 lock；缺少 lock 或没有同名条目时不写入。格式错误或符号链接会在替换
 Skills 前报错；接管失败会回滚本组件。接管后使用本包安装器更新这些名称。
 再次显式执行上游的全量安装仍可能覆盖适配版，应只选择不重名的 Matt Skills。
+接管只修改共享登记，不自动同步或删除其他宿主目录里的 Skill 副本。
 
 setup 会预览并备份项目文件，更新已有入口，保留 managed block。它不自动迁移旧的
 `GLOSSARY.md` / `docs/adr/` 内容，也不更改全局 MCP/hooks 或自动创建远端标签。

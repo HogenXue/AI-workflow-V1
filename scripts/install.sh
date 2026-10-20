@@ -46,6 +46,15 @@ prompt_replace_if_needed() {
   return 1
 }
 
+prompt_skill_lock_adoption() {
+  local skill_lock
+  skill_lock="$(install_lib_skill_lock_path "$1")" || return 1
+  if [[ ! -e "$skill_lock" && ! -L "$skill_lock" ]]; then
+    return 1
+  fi
+  install_lib_prompt_yn "Take ownership of this package's Skill update entries in $skill_lock (back up, then detach from third-party updates)?" n
+}
+
 install_profile_codex() {
   local project_root="${1:-}"
   local mem0_url="${2:-}"
@@ -63,6 +72,9 @@ install_profile_codex() {
     fi
   fi
   if ((${#skill_args[@]})); then
+    if prompt_skill_lock_adoption "$skills_target"; then
+      skill_args+=(--adopt-skill-lock)
+    fi
     run_component skills "${skill_args[@]}"
   fi
 
@@ -126,6 +138,9 @@ install_profile_cursor() {
     fi
   fi
   if ((${#skill_args[@]})); then
+    if prompt_skill_lock_adoption "$skills_target"; then
+      skill_args+=(--adopt-skill-lock)
+    fi
     run_component skills "${skill_args[@]}"
   fi
 

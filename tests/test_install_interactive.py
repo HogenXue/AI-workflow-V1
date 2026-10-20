@@ -1,8 +1,15 @@
+import errno
 import json
 import os
+import pty
+import re
+import select
+import signal
 import subprocess
 import sys
 import tempfile
+import termios
+import time
 import unittest
 from pathlib import Path
 
@@ -154,6 +161,175 @@ class InteractiveInstallTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 2)
         self.assertIn("interactive", result.stderr.lower() + result.stdout.lower())
+
+    def prepare_profile_ownership(self, agent: str) -> tuple[Path, Path, bytes]:
+        skills = self.home / (".agents" if agent == "codex" else ".cursor") / "skills"
+        (skills / "tdd").mkdir(parents=True)
+        (skills / "tdd" / "SKILL.md").write_text("upstream tdd\n", encoding="utf-8")
+        lock = self.home / ".agents" / ".skill-lock.json"
+        lock.parent.mkdir(parents=True, exist_ok=True)
+        original = (
+            '{"version":3, "skills": {"tdd":{"source":"mattpocock/skills"},'
+            '"unrelated":{"source":"keep"}}, "lastSelectedAgents":["cursor"],'
+            '"dismissed":{"keep":true}}\n'
+        ).encode()
+        lock.write_bytes(original)
+        mock_bin = self.root / "bin"
+        mock_bin.mkdir()
+        graphify = mock_bin / "graphify"
+        graphify.write_text(
+            '#!/usr/bin/env bash\nset -euo pipefail\n'
+            '[[ "$*" == "install --platform agents" ]] || exit 2\n'
+            'mkdir -p "$HOME/.agents/skills/graphify"\n'
+            'cp "$AI_WORKFLOW_TEST_GRAPHIFY" "$HOME/.agents/skills/graphify/SKILL.md"\n',
+            encoding="utf-8",
+        )
+        graphify.chmod(0o755)
+        (self.root / "graphify.md").write_text("local Graphify fixture\n", encoding="utf-8")
+        return skills, lock, original
+
+    def run_full_profile_tty(
+        self, agent: str, *, replace_skills: str = "y", ownership: str | None = None
+    ) -> str:
+        prompts = [(r"Choice \[1-3\]: ", "1" if agent == "codex" else "2"),
+                   (r"Choice \[1-2\]: ", "1")]
+        if agent == "cursor":
+            # The temporary working directory is not a Git repository: choose skip.
+            prompts.append((r"Choice \[1-2\]: ", "2"))
+        prompts.extend([
+            (r"Provide mem0 MCP URL now\?[^\r\n]*\[y/N\]: ", "n"),
+            (r"Proceed\? \[Y/n\]: ", "y"),
+            (r"Existing skills[^\r\n]*backup and replace\? \[y/N\]: ", replace_skills),
+        ])
+        if ownership is not None:
+            prompts.append((r"Take ownership[^\r\n]*\[y/N\]: ", ownership))
+        prompts.append((r"Overwrite existing [^\r\n]*MCP entries[^\r\n]*\[y/N\]: ", "n"))
+        env = self.env()
+        env.pop("XDG_STATE_HOME", None)
+        env.pop("CURSOR_MCP_FILE", None)
+        env.update(
+            PATH=str(self.root / "bin") + os.pathsep + env["PATH"],
+            AI_WORKFLOW_TEST_GRAPHIFY=str(self.root / "graphify.md"),
+        )
+        master, slave = pty.openpty()
+        try:
+            attributes = termios.tcgetattr(slave)
+            attributes[3] &= ~termios.ECHO
+            termios.tcsetattr(slave, termios.TCSANOW, attributes)
+            process = subprocess.Popen(
+                ["bash", str(ROOT / "scripts" / "install.sh")],
+                cwd=self.project, env=env, stdin=slave, stdout=slave, stderr=slave,
+                start_new_session=True,
+            )
+        except BaseException:
+            os.close(master)
+            raise
+        finally:
+            os.close(slave)
+        output = bytearray()
+        prompt_index = 0
+        consumed = 0
+        deadline = time.monotonic() + 20
+        try:
+            while True:
+                transcript = output.decode("utf-8", errors="replace")
+                if prompt_index < len(prompts):
+                    pattern, answer = prompts[prompt_index]
+                    match = re.search(pattern, transcript[consumed:])
+                    if match:
+                        consumed += match.end()
+                        os.write(master, (answer + "\n").encode())
+                        prompt_index += 1
+                    elif any(re.search(later, transcript[consumed:])
+                             for later, _ in prompts[prompt_index + 1:]):
+                        self.fail(f"TTY installer skipped required prompt {pattern!r}:\n{transcript}")
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    self.fail(f"TTY installer timed out at prompt {prompt_index}:\n{transcript}")
+                readable, _, _ = select.select([master], [], [], min(remaining, 0.2))
+                if not readable:
+                    continue
+                try:
+                    chunk = os.read(master, 65536)
+                except OSError as error:
+                    if error.errno == errno.EIO:
+                        break
+                    raise
+                if not chunk:
+                    break
+                output.extend(chunk)
+            transcript = output.decode("utf-8", errors="replace")
+            self.assertEqual(process.wait(timeout=2), 0, transcript)
+            self.assertEqual(prompt_index, len(prompts), transcript)
+            self.assertIn("Done.", transcript)
+            self.assertEqual((self.project / "AGENTS.md").read_text(), "project-owned\n")
+            self.assertFalse((self.project / ".cursor").exists())
+            self.assertFalse((self.project / ".codex").exists())
+            return transcript
+        finally:
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            process.wait(timeout=2)
+            os.close(master)
+
+    def test_codex_full_tty_accepts_separate_skill_ownership(self) -> None:
+        skills, lock, original = self.prepare_profile_ownership("codex")
+
+        transcript = self.run_full_profile_tty("codex", ownership="y")
+
+        expected = json.loads(original)
+        del expected["skills"]["tdd"]
+        self.assertEqual(json.loads(lock.read_bytes()), expected)
+        self.assertEqual((skills / "tdd" / "SKILL.md").read_bytes(),
+                         (ROOT / "skills" / "tdd" / "SKILL.md").read_bytes())
+        ownership_prompt = next(line for line in transcript.splitlines() if "Take ownership" in line)
+        self.assertIn(str(lock), ownership_prompt)
+        backups = list((skills.parent / ".ai-workflow-backups").glob(".skill-lock.json.*.bak"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(backups[0].read_bytes(), original)
+
+    def test_codex_full_tty_default_declines_skill_ownership(self) -> None:
+        skills, lock, original = self.prepare_profile_ownership("codex")
+
+        self.run_full_profile_tty("codex", ownership="")
+
+        self.assertEqual(lock.read_bytes(), original)
+        self.assertEqual((skills / "tdd" / "SKILL.md").read_bytes(),
+                         (ROOT / "skills" / "tdd" / "SKILL.md").read_bytes())
+        self.assertEqual(list((skills.parent / ".ai-workflow-backups").glob(".skill-lock.json.*.bak")), [])
+
+    def test_cursor_full_tty_adopts_shared_global_skill_lock(self) -> None:
+        skills, lock, original = self.prepare_profile_ownership("cursor")
+        adjacent_lock = self.home / ".cursor" / ".skill-lock.json"
+        adjacent_lock.write_text('{"skills":{"tdd":{"source":"leave-adjacent"}}}\n')
+        adjacent_original = adjacent_lock.read_bytes()
+
+        transcript = self.run_full_profile_tty("cursor", ownership="y")
+
+        expected = json.loads(original)
+        del expected["skills"]["tdd"]
+        self.assertEqual(json.loads(lock.read_bytes()), expected)
+        self.assertEqual(adjacent_lock.read_bytes(), adjacent_original)
+        self.assertEqual((skills / "tdd" / "SKILL.md").read_bytes(),
+                         (ROOT / "skills" / "tdd" / "SKILL.md").read_bytes())
+        ownership_prompt = next(line for line in transcript.splitlines() if "Take ownership" in line)
+        self.assertIn(str(lock), ownership_prompt)
+        backups = list((skills.parent / ".ai-workflow-backups").glob(".skill-lock.json.*.bak"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(backups[0].read_bytes(), original)
+
+    def test_codex_full_tty_skipping_skills_preserves_ownership(self) -> None:
+        skills, lock, original = self.prepare_profile_ownership("codex")
+
+        transcript = self.run_full_profile_tty("codex", replace_skills="n")
+
+        self.assertIn("SKIP: Codex skills", transcript)
+        self.assertNotIn("Take ownership", transcript)
+        self.assertEqual(lock.read_bytes(), original)
+        self.assertEqual((skills / "tdd" / "SKILL.md").read_text(), "upstream tdd\n")
+        self.assertEqual(list((skills.parent / ".ai-workflow-backups").glob(".skill-lock.json.*.bak")), [])
 
     def test_codex_merge_installs_user_hooks_with_skip_flag(self) -> None:
         codex_home = self.home / ".codex"
