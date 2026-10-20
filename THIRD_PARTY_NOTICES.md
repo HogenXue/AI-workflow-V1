@@ -27,6 +27,11 @@
 
 上游许可证为 MIT。上述内容已增加 Trellis 工件所有权、Git 授权和影响分析边界。
 
+`skills/setup-matt-pocock-skills/` 另参考本机已安装的 Matt Pocock setup Skill 的配置职责，
+重新编写为保留既有工作流的兼容入口。任务与领域文档模板已改为 Trellis 路径，Codex
+项目入口改为优先 `AGENTS.md`。本次未核实该已安装 setup 对应的上游提交，不将其归入
+上面所列提交的版本范围；沿用以下 Matt Pocock 归属声明。
+
 ```text
 MIT License
 

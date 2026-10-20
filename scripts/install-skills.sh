@@ -3,7 +3,7 @@
 set -euo pipefail
 
 usage() {
-  printf '%s\n' 'Usage: install-skills.sh [--dry-run] [--link | --copy] [--replace] [--prune-legacy] [--prune-other-root] [--target PATH] [--backup-dir PATH]' >&2
+  printf '%s\n' 'Usage: install-skills.sh [--dry-run] [--link | --copy] [--replace] [--adopt-skill-lock] [--prune-legacy] [--prune-other-root] [--target PATH] [--backup-dir PATH]' >&2
 }
 
 fail_usage() {
@@ -24,6 +24,7 @@ mode_selected=""
 explicit_dry_run=0
 execute_requested=0
 replace=0
+adopt_skill_lock=0
 prune_legacy=0
 prune_other_root=0
 
@@ -43,6 +44,9 @@ while (($#)); do
       ;;
     --replace)
       replace=1
+      ;;
+    --adopt-skill-lock)
+      adopt_skill_lock=1
       ;;
     --prune-legacy)
       prune_legacy=1
@@ -191,6 +195,14 @@ if [[ -n "$other_codex_root" ]]; then
   done
 fi
 
+skill_lock="$(dirname "${target%/}")/.skill-lock.json"
+skill_lock_conflicts=""
+skill_lock_backup=""
+if ((adopt_skill_lock)); then
+  skill_lock_conflicts="$(python3 "$script_dir/lib/adopt_skill_lock.py" \
+    --target "$skill_lock" --skills "${skills[@]}")" || exit 1
+fi
+
 if ((dry_run)); then
   if ((${#conflicts[@]})); then
     printf 'CONFLICT: existing skills: %s\n' "${conflicts[*]}" >&2
@@ -212,6 +224,10 @@ if ((dry_run)); then
   fi
   if ((${#conflicts[@]} || (prune_legacy && ${#legacy_conflicts[@]}) || (prune_other_root && ${#other_root_conflicts[@]}))); then
     printf 'DRY-RUN: backups would use %s/<Skill name>.<UTC timestamp>.bak\n' "$backup_dir"
+  fi
+  if [[ -n "$skill_lock_conflicts" ]]; then
+    printf 'DRY-RUN: would back up %s and detach third-party update entries: %s\n' \
+      "$skill_lock" "$skill_lock_conflicts"
   fi
   exit 0
 fi
@@ -267,8 +283,17 @@ rollback() {
       fi
     done
   fi
+  if [[ -n "$skill_lock_backup" ]]; then
+    install_lib_restore_backup "$skill_lock_backup" "$skill_lock" || \
+      printf 'ERROR: could not restore Skill update lock\n' >&2
+  fi
   exit "$status"
 }
+
+if [[ -n "$skill_lock_conflicts" ]]; then
+  install_lib_backup_file "$skill_lock" "$backup_dir" '.skill-lock.json' || exit 1
+  skill_lock_backup="$INSTALL_BACKUP_PATH"
+fi
 
 if ((${#conflicts[@]})); then
   for skill in "${conflicts[@]}"; do
@@ -309,3 +334,9 @@ for skill in "${skills[@]}"; do
   fi
   printf 'INSTALLED: %s\n' "$skill"
 done
+
+if [[ -n "$skill_lock_conflicts" ]]; then
+  python3 "$script_dir/lib/adopt_skill_lock.py" --target "$skill_lock" \
+    --skills "${skills[@]}" --apply >/dev/null || rollback 1
+  printf 'ADOPTED: package Skill names detached from third-party updates in %s\n' "$skill_lock"
+fi

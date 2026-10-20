@@ -408,6 +408,7 @@ class ManifestTests(unittest.TestCase):
                 "diagnosing-bugs",
                 "codebase-design",
                 "resolving-merge-conflicts",
+                "setup-matt-pocock-skills",
             ],
         )
 
@@ -506,6 +507,14 @@ class BundledSkillContractTests(unittest.TestCase):
                 "sides to their primary intent and verifying the combined result. Use when the "
                 "user explicitly asks to resolve current merge/rebase conflicts; do not start, "
                 "abort, commit, continue, or push the Git operation without matching authorization."
+            ),
+        },
+        "setup-matt-pocock-skills": {
+            "name": "setup-matt-pocock-skills",
+            "description": (
+                "Configure Matt Pocock engineering Skills for this repository while "
+                "preserving its existing workflow, including Trellis task and "
+                "documentation ownership."
             ),
         },
     }

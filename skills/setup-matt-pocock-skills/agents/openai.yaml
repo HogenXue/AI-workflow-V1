@@ -1,0 +1,6 @@
+interface:
+  display_name: "Setup Matt Skills for Trellis"
+  short_description: "Configure Matt Skills within the existing workflow"
+  default_prompt: "Use $setup-matt-pocock-skills to configure this repository while preserving its existing workflow and Trellis ownership."
+policy:
+  allow_implicit_invocation: false

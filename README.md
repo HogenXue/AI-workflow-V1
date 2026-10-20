@@ -1,6 +1,6 @@
 # AI-workflow-V1
 
-可安装的 AI 协作 Skill 包：9 个独立 Skill、全局 AGENTS 模板，以及共享默认配置（`config/`）。
+可安装的 AI 协作 Skill 包：10 个独立 Skill、全局 AGENTS 模板，以及共享默认配置（`config/`）。
 
 GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
@@ -8,11 +8,11 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
 | 组件            | 说明                                                                         |
 | ------------- | -------------------------------------------------------------------------- |
-| **Skills**    | `memory`、`gitnexus`、`release`、`karpathy-guidelines-zh`、`grill-with-docs`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` |
+| **Skills**    | `memory`、`gitnexus`、`release`、`karpathy-guidelines-zh`、`grill-with-docs`、`tdd`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts`、`setup-matt-pocock-skills` |
 | **AGENTS 模板** | [AGENTS.global.md](AGENTS.global.md)：跨项目通用规则；[AGENTS-egm.md](AGENTS-egm.md)：EGM 项目补充规则 |
 | **config/**   | 默认配置、有效配置运行时和平台无关工作流门禁；项目可用 `hogen-codex.yaml` 覆盖                         |
 
-Trellis 是项目唯一工作流；9 个 Skill 按阶段或能力增强它。Codex 用 Grill with Docs 实现 Phase 1.1，用 TDD 实现行为代码，并按需调用诊断、深模块设计和冲突解决能力；质量门由原生 `trellis-check` 负责。
+Trellis 是项目唯一工作流；10 个 Skill 按阶段或能力增强它。Codex 用 Grill with Docs 实现 Phase 1.1，用 TDD 实现行为代码，并按需调用诊断、深模块设计和冲突解决能力；质量门由原生 `trellis-check` 负责。
 
 ## 前置条件
 
@@ -89,6 +89,30 @@ bash scripts/install.sh skills --copy --replace --target ~/.codex/skills
 
 Codex 可能同时发现 `~/.agents/skills` 与 `~/.codex/skills`。同一组 Skill 只选择一个目录；本包对 Codex App 默认使用 `~/.agents/skills`，对应配置目录是 `~/.agents/config`。安装器发现另一目录存在同名 Skill 时会警告；只有显式 `--prune-other-root` 才会先备份再移走另一目录中的本包同名 Skill。
 
+### 与 Matt Pocock Skills 共存
+
+本包维护 `grill-with-docs`、`tdd`、`diagnosing-bugs`、`codebase-design` 的 Trellis
+适配版，并提供兼容的 `/setup-matt-pocock-skills`。这些名称只保留本包版本；其他 Matt
+Skills 可以继续安装。setup 在其他 Trellis 项目中配置 `docs/agents/` 入口，将任务、
+PRD、领域术语和持久决定指向现有 `.trellis/`，保留原生执行与 `trellis-check`。
+Codex 项目入口优先使用 `AGENTS.md`；非 Trellis 项目沿用自己的工作流。
+
+如果之前通过第三方安装器安装了这些同名 Skills，显式接管其更新登记：
+
+```bash
+bash scripts/install.sh skills --dry-run --replace --adopt-skill-lock --target ~/.agents/skills
+bash scripts/install.sh skills --copy --replace --adopt-skill-lock --target ~/.agents/skills
+```
+
+`--adopt-skill-lock` 只处理目标 Skills 目录上一级的 `.skill-lock.json`，先备份，再移除
+manifest 中同名 Skills 的第三方更新登记；其他 Skill、顶层元数据和偏好保持原样。
+没有该参数时不改 lock；缺少 lock 或没有同名条目时不写入。格式错误或符号链接会在替换
+Skills 前报错；接管失败会回滚本组件。接管后使用本包安装器更新这些名称。
+再次显式执行上游的全量安装仍可能覆盖适配版，应只选择不重名的 Matt Skills。
+
+setup 会预览并备份项目文件，更新已有入口，保留 managed block。它不自动迁移旧的
+`GLOSSARY.md` / `docs/adr/` 内容，也不更改全局 MCP/hooks 或自动创建远端标签。
+
 旧版本安装的 OpenSpec、Review 与已被替换的 Grill Me 不在当前 manifest 中，普通更新不会删除它们。先预览，再用显式 `--prune-legacy` 将它们移动到时间戳 `.bak` 备份目录；若两处都曾安装，需要分别处理：
 
 ```bash
@@ -129,7 +153,7 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
 
 | 参数             | 说明                                                                                       |
 | -------------- | ---------------------------------------------------------------------------------------- |
-| `skills`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--prune-legacy`、`--prune-other-root`、`--target PATH`、`--backup-dir PATH` |
+| `skills`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--adopt-skill-lock`、`--prune-legacy`、`--prune-other-root`、`--target PATH`、`--backup-dir PATH` |
 | `graphify`     | 支持 `--dry-run` / `--apply`、`--replace`、`--backup-dir PATH`；只写 `~/.agents/skills/graphify` |
 | `agents`       | 支持 `--dry-run` / `--apply`、`--agents-home PATH`、`--backup-dir PATH`；`--codex-home` 是兼容别名 |
 | `config`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--target PATH`、`--backup-dir PATH`       |
@@ -153,6 +177,7 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
     ├── codebase-design/
     ├── resolving-merge-conflicts/
     ├── karpathy-guidelines-zh/
+    ├── setup-matt-pocock-skills/
     └── graphify/              # 仅执行 graphify 组件后存在
 ```
 

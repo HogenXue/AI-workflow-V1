@@ -9,6 +9,7 @@ skills:
   - diagnosing-bugs
   - codebase-design
   - resolving-merge-conflicts
+  - setup-matt-pocock-skills
 default_install_mode: copy
 requires:
   python: ">=3.10"

@@ -341,3 +341,20 @@ require empty directories or placeholder files.
 **Tests required**: Assert manifest installation includes every current Skill, legacy rename pruning is
 explicit and backed up, a minimal Skill without optional resource directories validates, and existing
 optional resources still receive link/placeholder checks.
+
+## Convention: Package Skill ownership and external update locks
+
+`install.sh skills --adopt-skill-lock` explicitly detaches manifest names from
+`<parent of target skills directory>/.skill-lock.json`. Replacement and adoption are
+separate choices; normal installs preserve external locks. Preview validates and reports
+the selected entries without creating files. Missing locks or no matching entries are no-ops.
+
+Validate that the lock is a regular, non-symlink JSON file containing a `skills` mapping
+before replacing any Skill. Preserve unrelated names and all other JSON metadata. Back up
+the original lock using the shared timestamped helper, then replace its selected entries
+atomically only after all Skill copies succeed. Adoption failure rolls back both the Skill
+tree and exact lock contents. An explicit later upstream reinstall can still replace the
+adapted Skills; users must select non-conflicting upstream names instead.
+
+Tests must cover exact-name adoption, unrelated metadata, preview, opt-in behavior,
+malformed/symlink rejection, no matching entries and restoration after lock-write failure.
