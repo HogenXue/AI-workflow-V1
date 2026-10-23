@@ -266,3 +266,45 @@ Git publication was authorized separately on 2026-10-11. Scope: this installatio
 ### Next Steps
 
 - None - task complete
+
+
+## Session 11: Unify Skill routing and verify four native host updates
+
+**Date**: 2026-10-24
+**Task**: Unify Skill routing and verify four native host updates
+**Branch**: `main`
+
+### Summary
+
+19 packaged Skills aligned; four local hosts updated with zero managed conflicts and preserved MCP; source and installation evidence retained.
+
+### Main Changes
+
+- Task: `.trellis/tasks/10-23-unify-skill-host-compatibility` (active; implementation and local installation verified).
+- Unified all 19 packaged capabilities, added retro, and aligned native workflow owners/authorization/selected checks.
+- Hardened shared catalog identity/conflict checks, TOML/JSONC preservation and native hook merging across Bash/PowerShell; updated contracts/docs/CI.
+- Integrated Python fixture gate: 197 passed / 80 platform-runtime skips (277 total). Supplemental portable macOS PowerShell: 72 passed / 7 Windows-only skips. Final identity integration: 68 passed; overlapping suites are not additive unique coverage.
+- Approved real four-host installation exited 0. Verified 76 Skill trees, 21 MCP definitions / 11 URLs / four MCP files unchanged, 150 protected paths, 88 matching backups. Final managed audit: 0 conflicts, 0 drift, 19 capabilities per selected host.
+- Codex 0.154.0 native discovery: all 19 unique and enabled, including retro. Three installed context-hook smoke checks passed; native event trust and desktop loading remain untested.
+- Independent malformed miniprogram-ui-ux-design files were preserved; personal Skill validity outside the package is not asserted. Native Windows, other-host app loading, model invocation, hook trust and MCP business connectivity remain not_run.
+- All 61 pre-existing dirty paths were unchanged before this journal append. Source remains uncommitted based on a45d784; no push/archive. Exact source scope, sanitized fingerprints/transcripts and backup inventory live in Task/evidence; private originals are durably retained.
+- One candidate PowerShell fixture created normal runtime caches due to an outer HOME/XDG omission; corrected isolation and retest are documented. No whole-HOME no-write claim is made for that invocation.
+- Recallium saved as #1444. Next action: user review and separately authorized Git delivery or archive; do not rerun successful checks merely for bookkeeping.
+
+
+### Git Commits
+
+Git publication authorized on 2026-10-24; the scoped commit and remote verification are reported by the delivery run.
+
+### Testing
+
+- Integrated fixtures: 197 passed, 80 platform/runtime skips; supplemental PowerShell: 72 passed, 7 Windows-only skips.
+- Final identity integration: 68 passed. Package/Task/Bash/whitespace and local installation preservation checks passed.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- Publish the authorized scoped commit; retain application/runtime limits and await separate archive authorization.

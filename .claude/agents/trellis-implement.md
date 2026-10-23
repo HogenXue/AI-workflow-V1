@@ -75,7 +75,7 @@ Read the task's prd.md, design.md if present, and implement.md if present:
 
 ### 4. Verify
 
-Run project's lint and typecheck commands to verify changes.
+Run the task-selected checks required by applicable specs, with scope proportionate to the change. Documentation may use structural/reference checks. Reuse still-valid evidence; rerun affected checks after changes. Report actual commands, results and uncovered boundaries, and keep unrelated failures outside the assigned fix scope.
 
 ---
 
@@ -96,8 +96,8 @@ Run project's lint and typecheck commands to verify changes.
 
 ### Verification Results
 
-- Lint: Passed
-- TypeCheck: Passed
+- Actual command: result and coverage
+- Not run or uncovered: reason
 ```
 
 ---

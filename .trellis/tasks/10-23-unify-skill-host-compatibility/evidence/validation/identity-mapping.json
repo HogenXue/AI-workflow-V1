@@ -1,0 +1,22 @@
+{
+  "scripts/lib/skill_catalog.py": {
+    "original_sha256": "4d01325aa6b7497a16d6f8de631283e3f13300fcd73a6b2cb41261cd48373e89",
+    "candidate_path": "/private/tmp/skill-preflight-fix-0jv82wqf/scripts/lib/skill_catalog.py",
+    "candidate_sha256": "86e137f15ba013975873784122903479e100284dbaf3239a6715cd0c9b0801ad"
+  },
+  "tests/test_skill_catalog.py": {
+    "original_sha256": "2fa31643e14a51596aa8b6de3d4f88caa6907d8c07e3d21eb2b807162bfa1fac",
+    "candidate_path": "/private/tmp/skill-preflight-fix-0jv82wqf/tests/test_skill_catalog.py",
+    "candidate_sha256": "caf5b928cb83c5842f7a33f4a08029759d0890de3fac63e411d8bf0f750b08ef"
+  },
+  "tests/test_install.py": {
+    "original_sha256": "714e2143e3ae206dcb260007db4789a47202f35d8f7b3f8b6ff4df9cb70d9647",
+    "candidate_path": "/private/tmp/skill-preflight-fix-0jv82wqf/tests/test_install.py",
+    "candidate_sha256": "e3a9befdfb389aaf972e9d2766a38c8a62e7baafc30cbd453804a0e2a2771083"
+  },
+  "tests/test_aihero_install.py": {
+    "original_sha256": "1691349dc03500e6b7ccf0cd21e32288f7b486ff6a5803f5bb6ebb9ac55f543e",
+    "candidate_path": "/private/tmp/skill-preflight-fix-0jv82wqf/tests/test_aihero_install.py",
+    "candidate_sha256": "fe66dae64f0e6b036a84ebfc4ef7269fac6e67fc3905e08f00a26ed7808ff66d"
+  }
+}

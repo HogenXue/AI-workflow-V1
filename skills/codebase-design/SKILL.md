@@ -12,21 +12,21 @@ Design **deep modules**: a lot of behaviour behind a small interface, placed at 
 - This skill supplies design vocabulary and alternatives; it does not create a second Design, Spec, task, or implementation workflow.
 - In a Trellis repo, record accepted task-specific decisions in the current task's `design.md` and keep requirements in its PRD. Put only stable domain terms in `.trellis/spec/domain/` and durable cross-task trade-offs in `.trellis/spec/decisions/`.
 - Before applying a cross-module, public-contract, deletion, migration, or unfamiliar-call-chain design, use GitNexus impact analysis and report HIGH/CRITICAL risk before edits.
-- Do not refactor or delete tests merely because a deeper design looks attractive. Implementation requires user authorization, a Trellis plan, and behavior evidence through the local `$tdd` skill.
+- Do not refactor or delete tests merely because a deeper design looks attractive. Implementation follows the existing authorization and project planning gate. In Trellis, use its current task; elsewhere use the established workflow. Apply `tdd` when behavior changes need automated evidence, with proportional validation for other work.
 
 ## Glossary
 
-Use these terms exactly — don't substitute "component," "service," "API," or "boundary." Consistent language is the whole point.
+Use these terms to compare design alternatives while preserving the project's established domain and architecture vocabulary. Clarify the intended meaning when an existing term is overloaded; the glossary does not authorize renaming code or documents.
 
-**Module** — anything with an interface and an implementation. Deliberately scale-agnostic: a function, class, package, or tier-spanning slice. _Avoid_: unit, component, service.
+**Module** — anything with an interface and an implementation. Deliberately scale-agnostic: a function, class, package, or tier-spanning slice.
 
-**Interface** — everything a caller must know to use the module correctly: the type signature, but also invariants, ordering constraints, error modes, required configuration, and performance characteristics. _Avoid_: API, signature (too narrow — they refer only to the type-level surface).
+**Interface** — everything a caller must know to use the module correctly: the type signature, but also invariants, ordering constraints, error modes, required configuration, and performance characteristics. A signature alone describes only part of this surface.
 
 **Implementation** — what's inside a module, its body of code. Distinct from **Adapter**: a thing can be a small adapter with a large implementation (a Postgres repo) or a large adapter with a small implementation (an in-memory fake). Reach for "adapter" when the seam is the topic; "implementation" otherwise.
 
 **Depth** — leverage at the interface: the amount of behaviour a caller (or test) can exercise per unit of interface they have to learn. A module is **deep** when a large amount of behaviour sits behind a small interface, **shallow** when the interface is nearly as complex as the implementation.
 
-**Seam** _(Michael Feathers)_ — a place where you can alter behaviour without editing in that place; the *location* at which a module's interface lives. Where to put the seam is its own design decision, distinct from what goes behind it. _Avoid_: boundary (overloaded with DDD's bounded context).
+**Seam** _(Michael Feathers)_ — a place where you can alter behaviour without editing in that place; the *location* at which a module's interface lives. Where to put the seam is its own design decision, distinct from what goes behind it. Distinguish this design seam from a domain bounded context when both are discussed.
 
 **Adapter** — a concrete thing that satisfies an interface at a seam. Describes *role* (what slot it fills), not substance (what's inside).
 
@@ -113,7 +113,7 @@ Good interfaces make testing natural:
 
 - **Depth as ratio of implementation-lines to interface-lines** (Ousterhout): rewards padding the implementation. We use depth-as-leverage instead.
 - **"Interface" as the TypeScript `interface` keyword or a class's public methods**: too narrow — interface here includes every fact a caller must know.
-- **"Boundary"**: overloaded with DDD's bounded context. Say **seam** or **interface**.
+- **Ambiguous boundaries**: distinguish design seams, interfaces and domain bounded contexts when the distinction matters; retain the project's established names.
 
 ## Going deeper
 

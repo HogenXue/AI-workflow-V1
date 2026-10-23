@@ -180,12 +180,7 @@ if ((Test-Path -LiteralPath $mcpFile) -and (Test-SameFilesystemPath -Left $mcpFi
 }
 
 $mcpParent = [System.IO.Path]::GetDirectoryName($mcpFile)
-try {
-    New-Item -ItemType Directory -Path $mcpParent -Force -ErrorAction Stop | Out-Null
-} catch {
-    [Console]::Error.WriteLine("ERROR: could not create MCP parent directory: $mcpParent")
-    exit 1
-}
+
 
 $script:mcpOriginalExisted = 0
 $script:mcpBackupPath = ''
@@ -313,7 +308,8 @@ if ($dryRun -eq 1) {
     [Console]::Out.WriteLine(
         "DRY-RUN: would generate $rulesDest from $agentsSrc and install Cursor hooks under $proj/.cursor"
     )
-    exit 0
+    & $python (Join-Path $scriptDir 'lib/merge_host_hooks.py') --host cursor --templates $templates --target $hooksJsonDest --dry-run
+    exit $LASTEXITCODE
 }
 
 $rulesBackup = ''
@@ -341,34 +337,15 @@ if ($replace -eq 1) {
         }
         $hooksDirBackup = $script:InstallBackupPath
     }
-    try {
-        if (Test-InstallLibExistsOrLink -Path $rulesDest) {
-            Remove-Item -LiteralPath $rulesDest -Force -ErrorAction Stop
-        }
-        if (Test-InstallLibExistsOrLink -Path $hooksJsonDest) {
-            Remove-Item -LiteralPath $hooksJsonDest -Force -ErrorAction Stop
-        }
-        if (Test-InstallLibExistsOrLink -Path $hooksDirDest) {
-            Remove-Item -LiteralPath $hooksDirDest -Recurse -Force -ErrorAction Stop
-        }
-    } catch {
-        Restore-CursorProjectFiles -RulesBackup $rulesBackup -HooksJsonBackup $hooksJsonBackup `
-            -HooksDirBackup $hooksDirBackup -RulesDest $rulesDest -HooksJsonDest $hooksJsonDest `
-            -HooksDirDest $hooksDirDest
-        [Console]::Error.WriteLine('ERROR: could not replace existing Cursor project hooks/rules')
-        $null = Invoke-RollbackMcp
-        exit 1
-    }
+
 }
 
 try {
     New-Item -ItemType Directory -Path (Join-Path $proj '.cursor/rules') -Force -ErrorAction Stop | Out-Null
     New-Item -ItemType Directory -Path $hooksDirDest -Force -ErrorAction Stop | Out-Null
     Write-RulesMdcFromAgentsGlobal -Dest $rulesDest -AgentsSrc $agentsSrc
-    Copy-Item -LiteralPath $templateHooksJson -Destination $hooksJsonDest -Force -ErrorAction Stop
-    Get-ChildItem -LiteralPath $templateHooksDir -Force | ForEach-Object {
-        Copy-Item -LiteralPath $_.FullName -Destination $hooksDirDest -Recurse -Force -ErrorAction Stop
-    }
+    & $python (Join-Path $scriptDir 'lib/merge_host_hooks.py') --host cursor --templates $templates --target $hooksJsonDest
+    if ($LASTEXITCODE -ne 0) { throw 'Hook merge failed' }
 } catch {
     Restore-CursorProjectFiles -RulesBackup $rulesBackup -HooksJsonBackup $hooksJsonBackup `
         -HooksDirBackup $hooksDirBackup -RulesDest $rulesDest -HooksJsonDest $hooksJsonDest `

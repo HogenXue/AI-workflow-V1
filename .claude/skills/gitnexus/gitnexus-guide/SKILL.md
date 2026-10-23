@@ -7,15 +7,17 @@ description: "Use when the user asks about GitNexus itself — available tools, 
 
 Quick reference for all GitNexus MCP tools, resources, and the knowledge graph schema.
 
-## Always Start Here
+## Select the needed capability
 
-For any task involving code understanding, debugging, impact analysis, or refactoring:
+Use GitNexus when the user asks for graph analysis or current project rules and change risk require it. Local low-risk source navigation and ordinary Git synchronization can use source/language tools. When the graph is stale or unavailable, state that limit and verify current source. Rebuild only when the current task needs graph evidence and updating is authorized; a read-only request does not authorize generated context files or index writes.
+
+When graph evidence is needed:
 
 1. **Read `gitnexus://repo/{name}/context`** — codebase overview + check index freshness
 2. **Match your task to a skill below** and **read that skill file**
 3. **Follow the skill's workflow and checklist**
 
-> If step 1 warns the index is stale, run `npx gitnexus analyze` in the terminal first.
+Keep the current task, diagnosis or review owner; the selected graph helper supplies evidence within that same workflow.
 
 ## Skills
 

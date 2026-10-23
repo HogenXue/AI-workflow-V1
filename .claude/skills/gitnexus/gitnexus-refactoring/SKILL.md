@@ -11,7 +11,9 @@ description: "Use when the user wants to rename, extract, split, move, or restru
 - "Extract this into a module"
 - "Split this service"
 - "Move this to a new file"
-- Any task involving renaming, extracting, splitting, or restructuring code
+- Authorized refactoring where project rules or cross-module/public-contract risk call for graph evidence
+
+Use the current task and implementation authorization before applying edits. A request to assess a refactor authorizes analysis only.
 
 ## Workflow
 
@@ -22,7 +24,7 @@ description: "Use when the user wants to rename, extract, split, move, or restru
 4. Plan update order: interfaces → implementations → callers → tests
 ```
 
-> If "Index is stale" → run `npx gitnexus analyze` in terminal.
+Use GitNexus when the user asks for graph analysis or current project rules and change risk require it. Local low-risk source navigation and ordinary Git synchronization can use source/language tools. When the graph is stale or unavailable, state that limit and verify current source. Rebuild only when the current task needs graph evidence and updating is authorized; a read-only request does not authorize generated context files or index writes.
 
 ## Checklists
 

@@ -16,6 +16,7 @@ SKILLS = (
     "diagnosing-bugs",
     "codebase-design",
     "resolving-merge-conflicts",
+    "retro",
 )
 
 
@@ -82,6 +83,7 @@ class ComponentInstallTests(unittest.TestCase):
         sentinel = self.skills_target / "tdd" / "sentinel"
         sentinel.parent.mkdir(parents=True)
         sentinel.write_text("keep", encoding="utf-8")
+        (sentinel.parent / "SKILL.md").write_text("---\nname: tdd\ndescription: Existing TDD fixture.\n---\nOld body.\n", encoding="utf-8")
 
         result = self.run_component("skills", "--copy", "--target", str(self.skills_target))
 
@@ -508,6 +510,7 @@ class ComponentInstallTests(unittest.TestCase):
         duplicate = codex_home / "skills" / "memory" / "sentinel"
         duplicate.parent.mkdir(parents=True)
         duplicate.write_text("duplicate", encoding="utf-8")
+        (duplicate.parent / "SKILL.md").write_text("---\nname: memory\ndescription: Existing memory fixture.\n---\nOld body.\n", encoding="utf-8")
         target = home / ".agents" / "skills"
 
         preview = subprocess.run(
@@ -580,6 +583,7 @@ class ComponentInstallTests(unittest.TestCase):
         tdd_sentinel = skills_target / "tdd" / "sentinel"
         tdd_sentinel.parent.mkdir(parents=True)
         tdd_sentinel.write_text("old tdd\n", encoding="utf-8")
+        (tdd_sentinel.parent / "SKILL.md").write_text("---\nname: tdd\ndescription: Existing TDD fixture.\n---\nOld body.\n", encoding="utf-8")
 
         skills = subprocess.run(
             ["bash", str(ROOT / "scripts" / "install.sh"), "skills", "--copy", "--replace"],

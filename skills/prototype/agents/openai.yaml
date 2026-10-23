@@ -1,4 +1,4 @@
 interface:
   display_name: "Prototype"
-  short_description: "AIHero capability adapted to native Trellis"
-  default_prompt: "Use $prototype within the current project workflow and authorization."
+  short_description: "Build a bounded demo to settle a design question"
+  default_prompt: "Use $prototype to build a disposable demonstration of the agreed design question and record what it reveals."

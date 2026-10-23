@@ -1,0 +1,115 @@
+test_alias_identity_blocks_installer_without_mutation (test_skill_catalog.SkillCatalogTests.test_alias_identity_blocks_installer_without_mutation) ... ok
+test_host_discovery_distinguishes_copies_from_conflicts (test_skill_catalog.SkillCatalogTests.test_host_discovery_distinguishes_copies_from_conflicts) ... ok
+test_invalid_catalog_rejected_before_install (test_skill_catalog.SkillCatalogTests.test_invalid_catalog_rejected_before_install) ... ok
+test_malformed_parent_skill_does_not_hide_nested_managed_alias (test_skill_catalog.SkillCatalogTests.test_malformed_parent_skill_does_not_hide_nested_managed_alias) ... FAIL
+test_nested_archive_and_legacy_alias_are_detected (test_skill_catalog.SkillCatalogTests.test_nested_archive_and_legacy_alias_are_detected) ... ok
+test_other_root_prune_requires_matching_declared_identity_before_any_write (test_skill_catalog.SkillCatalogTests.test_other_root_prune_requires_matching_declared_identity_before_any_write) ...
+  test_other_root_prune_requires_matching_declared_identity_before_any_write (test_skill_catalog.SkillCatalogTests.test_other_root_prune_requires_matching_declared_identity_before_any_write) (content=None) ... FAIL
+  test_other_root_prune_requires_matching_declared_identity_before_any_write (test_skill_catalog.SkillCatalogTests.test_other_root_prune_requires_matching_declared_identity_before_any_write) (content='malformed old document\n') ... FAIL
+  test_other_root_prune_requires_matching_declared_identity_before_any_write (test_skill_catalog.SkillCatalogTests.test_other_root_prune_requires_matching_declared_identity_before_any_write) (content='---\nname: independent-report\ndescription: Keep this useful capability.\n---\nUser content\n') ... FAIL
+test_other_root_pruning_does_not_remove_independent_skills (test_skill_catalog.SkillCatalogTests.test_other_root_pruning_does_not_remove_independent_skills) ... ok
+test_symlink_cycles_do_not_hide_a_managed_alias (test_skill_catalog.SkillCatalogTests.test_symlink_cycles_do_not_hide_a_managed_alias) ... ok
+
+======================================================================
+FAIL: test_malformed_parent_skill_does_not_hide_nested_managed_alias (test_skill_catalog.SkillCatalogTests.test_malformed_parent_skill_does_not_hide_nested_managed_alias)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/skill-preflight-fix-0jv82wqf/tests/test_skill_catalog.py", line 107, in test_malformed_parent_skill_does_not_hide_nested_managed_alias
+    self.assertNotEqual(preflight.returncode, 0, preflight.stdout)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0 :
+
+======================================================================
+FAIL: test_other_root_prune_requires_matching_declared_identity_before_any_write (test_skill_catalog.SkillCatalogTests.test_other_root_prune_requires_matching_declared_identity_before_any_write) (content=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/skill-preflight-fix-0jv82wqf/tests/test_skill_catalog.py", line 132, in test_other_root_prune_requires_matching_declared_identity_before_any_write
+    self.assertNotEqual(result.returncode, 0, result.stdout)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0 : BACKUP: /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpy5ky1uc4/.agents/.ai-workflow-backups/code-review.20261023T155353Z.bak
+PRUNED: other-root Skill /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpy5ky1uc4/.codex/skills/code-review
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: retro
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+
+
+======================================================================
+FAIL: test_other_root_prune_requires_matching_declared_identity_before_any_write (test_skill_catalog.SkillCatalogTests.test_other_root_prune_requires_matching_declared_identity_before_any_write) (content='malformed old document\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/skill-preflight-fix-0jv82wqf/tests/test_skill_catalog.py", line 132, in test_other_root_prune_requires_matching_declared_identity_before_any_write
+    self.assertNotEqual(result.returncode, 0, result.stdout)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0 : BACKUP: /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmps_b71s8k/.agents/.ai-workflow-backups/code-review.20261023T155353Z.bak
+PRUNED: other-root Skill /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmps_b71s8k/.codex/skills/code-review
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: retro
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+
+
+======================================================================
+FAIL: test_other_root_prune_requires_matching_declared_identity_before_any_write (test_skill_catalog.SkillCatalogTests.test_other_root_prune_requires_matching_declared_identity_before_any_write) (content='---\nname: independent-report\ndescription: Keep this useful capability.\n---\nUser content\n')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/skill-preflight-fix-0jv82wqf/tests/test_skill_catalog.py", line 132, in test_other_root_prune_requires_matching_declared_identity_before_any_write
+    self.assertNotEqual(result.returncode, 0, result.stdout)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0 : BACKUP: /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmp4o2c46dw/.agents/.ai-workflow-backups/code-review.20261023T155353Z.bak
+PRUNED: other-root Skill /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmp4o2c46dw/.codex/skills/code-review
+INSTALLED: memory
+INSTALLED: gitnexus
+INSTALLED: grill-me
+INSTALLED: grill-with-docs
+INSTALLED: grilling
+INSTALLED: domain-modeling
+INSTALLED: to-spec
+INSTALLED: to-tickets
+INSTALLED: wayfinder
+INSTALLED: research
+INSTALLED: prototype
+INSTALLED: implement
+INSTALLED: code-review
+INSTALLED: handoff
+INSTALLED: retro
+INSTALLED: tdd
+INSTALLED: diagnosing-bugs
+INSTALLED: codebase-design
+INSTALLED: resolving-merge-conflicts
+
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.534s
+
+FAILED (failures=4)

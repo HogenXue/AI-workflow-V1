@@ -21,6 +21,7 @@ SKILLS = (
     "diagnosing-bugs",
     "codebase-design",
     "resolving-merge-conflicts",
+    "retro",
 )
 
 

@@ -26,141 +26,6 @@ function Get-InstallHome {
     return $HOME
 }
 
-function Test-IsRegularFile {
-    param([Parameter(Mandatory)][string]$Path)
-    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
-        return $false
-    }
-    $item = Get-Item -LiteralPath $Path -Force
-    if ($null -ne $item.LinkType) {
-        return $false
-    }
-    return ($item -is [System.IO.FileInfo])
-}
-
-function Test-ConfigFileValid {
-    param([Parameter(Mandatory)][string]$AgentsHome)
-    $configFile = Join-Path $AgentsHome 'config.toml'
-    if (Test-InstallLibExistsOrLink -Path $configFile) {
-        if (-not (Test-IsRegularFile -Path $configFile)) {
-            [Console]::Error.WriteLine("ERROR: config.toml is not a regular file: $configFile")
-            return $false
-        }
-    }
-    return $true
-}
-
-function Enable-HooksFeature {
-    param(
-        [Parameter(Mandatory)][string]$AgentsHome,
-        [Parameter(Mandatory)][string]$BackupDir
-    )
-
-    $configFile = Join-Path $AgentsHome 'config.toml'
-    $hookSetting = 'hooks = true   # Codex 0.129+。旧版用 `codex_hooks = true`。'
-
-    if (-not (Test-ConfigFileValid -AgentsHome $AgentsHome)) {
-        return $false
-    }
-
-    $tempName = [System.IO.Path]::GetRandomFileName()
-    $configTmp = Join-Path $AgentsHome ".config.toml.trellis.$tempName"
-    try {
-        $null = New-Item -ItemType File -Path $configTmp -Force -ErrorAction Stop
-    } catch {
-        [Console]::Error.WriteLine('ERROR: could not create a temporary config file')
-        return $false
-    }
-
-    if (Test-Path -LiteralPath $configFile -PathType Leaf) {
-        try {
-            $lines = Get-Content -LiteralPath $configFile
-            $output = [System.Collections.Generic.List[string]]::new()
-            $inFeatures = $false
-            $featuresFound = $false
-            $hooksFound = $false
-
-            function Test-IsFeaturesHeader {
-                param([string]$Line)
-                $value = $Line -replace '^\s+', ''
-                return $value -match '^\[features\]\s*(#.*)?$'
-            }
-
-            function Test-IsTableHeader {
-                param([string]$Line)
-                $value = $Line -replace '^\s+', ''
-                return $value -match '^\[[^\]]+\]\s*(#.*)?$'
-            }
-
-            foreach ($line in $lines) {
-                if (Test-IsTableHeader -Line $line) {
-                    if ($inFeatures -and -not $hooksFound) {
-                        $output.Add($hookSetting)
-                        $hooksFound = $true
-                    }
-                    $inFeatures = Test-IsFeaturesHeader -Line $line
-                    if ($inFeatures) {
-                        $featuresFound = $true
-                    }
-                    $output.Add($line)
-                    continue
-                }
-                if ($inFeatures -and ($line -match '^\s*hooks\s*=')) {
-                    $output.Add($hookSetting)
-                    $hooksFound = $true
-                    continue
-                }
-                $output.Add($line)
-            }
-
-            if ($inFeatures -and -not $hooksFound) {
-                $output.Add($hookSetting)
-            }
-            if (-not $featuresFound) {
-                if ($output.Count -gt 0) {
-                    $output.Add('')
-                }
-                $output.Add('[features]')
-                $output.Add($hookSetting)
-            }
-
-            Set-Content -LiteralPath $configTmp -Value $output -Encoding utf8NoBOM
-        } catch {
-            Remove-Item -LiteralPath $configTmp -Force -ErrorAction SilentlyContinue
-            [Console]::Error.WriteLine('ERROR: could not update config.toml')
-            return $false
-        }
-
-        $originalText = Get-Content -LiteralPath $configFile -Raw
-        $newText = Get-Content -LiteralPath $configTmp -Raw
-        if ($originalText -eq $newText) {
-            Remove-Item -LiteralPath $configTmp -Force -ErrorAction SilentlyContinue
-            [Console]::Out.WriteLine('UNCHANGED: config.toml already enables hooks')
-            return $true
-        }
-
-        if (-not (Install-LibBackupFile -Source $configFile -BackupDir $BackupDir -Name 'config.toml')) {
-            Remove-Item -LiteralPath $configTmp -Force -ErrorAction SilentlyContinue
-            return $false
-        }
-    } else {
-        @(
-            '[features]'
-            $hookSetting
-        ) | Set-Content -LiteralPath $configTmp -Encoding utf8NoBOM
-    }
-
-    try {
-        Move-Item -LiteralPath $configTmp -Destination $configFile -Force -ErrorAction Stop
-    } catch {
-        Remove-Item -LiteralPath $configTmp -Force -ErrorAction SilentlyContinue
-        [Console]::Error.WriteLine('ERROR: could not install config.toml update')
-        return $false
-    }
-    [Console]::Out.WriteLine('UPDATED: config.toml hooks feature enabled')
-    return $true
-}
-
 $scriptDir = $PSScriptRoot
 $rootDir = (Resolve-Path -LiteralPath (Join-Path $scriptDir '..')).ProviderPath
 $sourceFile = Join-Path $rootDir 'agents/AGENTS.global.md'
@@ -250,6 +115,11 @@ if ([string]::IsNullOrEmpty($backupDir)) {
     $backupDir = Join-Path $agentsHome '.ai-workflow-backups'
 }
 
+$overrideFile = Join-Path $agentsHome 'AGENTS.override.md'
+if (($noHooksFeature -eq 0) -and ($documentName -eq 'AGENTS.md') -and (Test-Path -LiteralPath $overrideFile -PathType Leaf) -and ((Get-Item -LiteralPath $overrideFile).Length -gt 0)) {
+    [Console]::Out.WriteLine("NOTE: $overrideFile is the effective global instruction file; installed AGENTS.md remains shadowed")
+}
+
 if ($mode -eq 'dry-run') {
     [Console]::Out.WriteLine("DRY-RUN: would copy $sourceFile -> $targetFile")
     if (Test-InstallLibExistsOrLink -Path $targetFile) {
@@ -258,7 +128,7 @@ if ($mode -eq 'dry-run') {
         )
     }
     if ($noHooksFeature -eq 0) {
-        [Console]::Out.WriteLine('DRY-RUN: would ensure [features].hooks = true in config.toml')
+        [Console]::Out.WriteLine('DRY-RUN: preserving config.toml and native hook settings')
     } else {
         [Console]::Out.WriteLine('DRY-RUN: skipping config.toml hooks feature (--no-hooks-feature)')
     }
@@ -270,12 +140,6 @@ try {
 } catch {
     [Console]::Error.WriteLine("ERROR: could not create agents home: $agentsHome")
     exit 1
-}
-
-if ($noHooksFeature -eq 0) {
-    if (-not (Test-ConfigFileValid -AgentsHome $agentsHome)) {
-        exit 1
-    }
 }
 
 $agentsBackupAvailable = $false
@@ -309,24 +173,6 @@ try {
 }
 [Console]::Out.WriteLine("INSTALLED: $targetFile")
 
-if ($noHooksFeature -eq 1) {
-    exit 0
-}
-
-if (-not (Enable-HooksFeature -AgentsHome $agentsHome -BackupDir $backupDir)) {
-    [Console]::Error.WriteLine("ERROR: config.toml update failed; restoring $documentName.")
-    if ($agentsBackupAvailable) {
-        if (-not (Install-LibRestoreBackup -Backup $agentsBackupPath -Destination $targetFile)) {
-            [Console]::Error.WriteLine("ERROR: could not restore $documentName from backup")
-            exit 1
-        }
-    } else {
-        try {
-            Remove-Item -LiteralPath $targetFile -Force -ErrorAction Stop
-        } catch {
-            [Console]::Error.WriteLine("ERROR: could not remove newly installed $documentName")
-            exit 1
-        }
-    }
-    exit 1
+if ($noHooksFeature -eq 0) {
+    [Console]::Out.WriteLine('UNCHANGED: config.toml and native hook settings preserved; use Codex /hooks to review hook trust')
 }

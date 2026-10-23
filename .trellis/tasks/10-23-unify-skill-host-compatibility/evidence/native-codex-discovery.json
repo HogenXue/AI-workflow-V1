@@ -1,0 +1,153 @@
+{
+  "method": "skills/list",
+  "server": {
+    "userAgent": "Codex Desktop/0.154.0 (Mac OS 27.0.1; arm64) dumb (local_skill_discovery_audit; 1.0.0)",
+    "platformFamily": "unix",
+    "platformOs": "macos",
+    "codexHome": "/Users/hogenxue/.codex"
+  },
+  "managed_skills": [
+    {
+      "name": "memory",
+      "path": "/Users/hogenxue/.agents/skills/memory/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "gitnexus",
+      "path": "/Users/hogenxue/.agents/skills/gitnexus/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "grill-me",
+      "path": "/Users/hogenxue/.agents/skills/grill-me/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "grill-with-docs",
+      "path": "/Users/hogenxue/.agents/skills/grill-with-docs/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "grilling",
+      "path": "/Users/hogenxue/.agents/skills/grilling/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "domain-modeling",
+      "path": "/Users/hogenxue/.agents/skills/domain-modeling/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "to-spec",
+      "path": "/Users/hogenxue/.agents/skills/to-spec/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "to-tickets",
+      "path": "/Users/hogenxue/.agents/skills/to-tickets/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "wayfinder",
+      "path": "/Users/hogenxue/.agents/skills/wayfinder/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "research",
+      "path": "/Users/hogenxue/.agents/skills/research/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "prototype",
+      "path": "/Users/hogenxue/.agents/skills/prototype/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "implement",
+      "path": "/Users/hogenxue/.agents/skills/implement/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "code-review",
+      "path": "/Users/hogenxue/.agents/skills/code-review/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "handoff",
+      "path": "/Users/hogenxue/.agents/skills/handoff/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "retro",
+      "path": "/Users/hogenxue/.agents/skills/retro/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "tdd",
+      "path": "/Users/hogenxue/.agents/skills/tdd/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "diagnosing-bugs",
+      "path": "/Users/hogenxue/.agents/skills/diagnosing-bugs/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "codebase-design",
+      "path": "/Users/hogenxue/.agents/skills/codebase-design/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    },
+    {
+      "name": "resolving-merge-conflicts",
+      "path": "/Users/hogenxue/.agents/skills/resolving-merge-conflicts/SKILL.md",
+      "enabled": true,
+      "scope": "user",
+      "pluginId": null
+    }
+  ],
+  "managed_unique_enabled": 19,
+  "unmanaged_errors": [
+    {
+      "path": "/Users/hogenxue/.codex/skills/miniprogram-ui-ux-design/SKILL.md",
+      "message": "missing YAML frontmatter delimited by ---"
+    }
+  ],
+  "desktop_ui_reload": "not_run",
+  "model_routing": "not_run"
+}

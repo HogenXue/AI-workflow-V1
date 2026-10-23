@@ -1,0 +1,1108 @@
+{
+  "conflicts": [
+    {
+      "host": "cursor",
+      "name": "code-review",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/code-review",
+        "/Users/hogenxue/.cursor/skills/code-review",
+        "/Users/hogenxue/.claude/skills/code-review"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "codebase-design",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/codebase-design",
+        "/Users/hogenxue/.cursor/skills/codebase-design",
+        "/Users/hogenxue/.claude/skills/codebase-design"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "diagnosing-bugs",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/diagnosing-bugs",
+        "/Users/hogenxue/.cursor/skills/diagnosing-bugs",
+        "/Users/hogenxue/.claude/skills/diagnosing-bugs"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "domain-modeling",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/domain-modeling",
+        "/Users/hogenxue/.cursor/skills/domain-modeling",
+        "/Users/hogenxue/.claude/skills/domain-modeling"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "grill-me",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/grill-me",
+        "/Users/hogenxue/.cursor/skills/grill-me",
+        "/Users/hogenxue/.claude/skills/grill-me"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "grill-with-docs",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/grill-with-docs",
+        "/Users/hogenxue/.cursor/skills/grill-with-docs",
+        "/Users/hogenxue/.claude/skills/grill-with-docs"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "grilling",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/grilling",
+        "/Users/hogenxue/.cursor/skills/grilling",
+        "/Users/hogenxue/.claude/skills/grilling"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "handoff",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/handoff",
+        "/Users/hogenxue/.cursor/skills/handoff",
+        "/Users/hogenxue/.claude/skills/handoff"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "implement",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/implement",
+        "/Users/hogenxue/.cursor/skills/implement",
+        "/Users/hogenxue/.claude/skills/implement"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "prototype",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/prototype",
+        "/Users/hogenxue/.cursor/skills/prototype",
+        "/Users/hogenxue/.claude/skills/prototype"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "research",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/research",
+        "/Users/hogenxue/.cursor/skills/research",
+        "/Users/hogenxue/.claude/skills/research"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "tdd",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/tdd",
+        "/Users/hogenxue/.cursor/skills/tdd",
+        "/Users/hogenxue/.claude/skills/tdd"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "to-spec",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/to-spec",
+        "/Users/hogenxue/.cursor/skills/to-spec",
+        "/Users/hogenxue/.claude/skills/to-spec"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "to-tickets",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/to-tickets",
+        "/Users/hogenxue/.cursor/skills/to-tickets",
+        "/Users/hogenxue/.claude/skills/to-tickets"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "wayfinder",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/wayfinder",
+        "/Users/hogenxue/.cursor/skills/wayfinder",
+        "/Users/hogenxue/.claude/skills/wayfinder"
+      ]
+    }
+  ],
+  "equivalent_copies": [
+    {
+      "host": "cursor",
+      "name": "gitnexus",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/gitnexus",
+        "/Users/hogenxue/.cursor/skills/gitnexus"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "memory",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/memory",
+        "/Users/hogenxue/.cursor/skills/memory"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "resolving-merge-conflicts",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/resolving-merge-conflicts",
+        "/Users/hogenxue/.cursor/skills/resolving-merge-conflicts"
+      ]
+    },
+    {
+      "host": "cursor",
+      "name": "retro",
+      "paths": [
+        "/Users/hogenxue/.agents/skills/retro",
+        "/Users/hogenxue/.claude/skills/retro"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "code-review",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/code-review",
+        "/Users/hogenxue/.claude/skills/code-review",
+        "/Users/hogenxue/.agents/skills/code-review"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "codebase-design",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/codebase-design",
+        "/Users/hogenxue/.claude/skills/codebase-design",
+        "/Users/hogenxue/.agents/skills/codebase-design"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "diagnosing-bugs",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/diagnosing-bugs",
+        "/Users/hogenxue/.claude/skills/diagnosing-bugs",
+        "/Users/hogenxue/.agents/skills/diagnosing-bugs"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "domain-modeling",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/domain-modeling",
+        "/Users/hogenxue/.claude/skills/domain-modeling",
+        "/Users/hogenxue/.agents/skills/domain-modeling"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "gitnexus",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/gitnexus",
+        "/Users/hogenxue/.agents/skills/gitnexus"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "grill-me",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/grill-me",
+        "/Users/hogenxue/.claude/skills/grill-me",
+        "/Users/hogenxue/.agents/skills/grill-me"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "grill-with-docs",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/grill-with-docs",
+        "/Users/hogenxue/.claude/skills/grill-with-docs",
+        "/Users/hogenxue/.agents/skills/grill-with-docs"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "grilling",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/grilling",
+        "/Users/hogenxue/.claude/skills/grilling",
+        "/Users/hogenxue/.agents/skills/grilling"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "handoff",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/handoff",
+        "/Users/hogenxue/.claude/skills/handoff",
+        "/Users/hogenxue/.agents/skills/handoff"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "implement",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/implement",
+        "/Users/hogenxue/.claude/skills/implement",
+        "/Users/hogenxue/.agents/skills/implement"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "memory",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/memory",
+        "/Users/hogenxue/.agents/skills/memory"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "prototype",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/prototype",
+        "/Users/hogenxue/.claude/skills/prototype",
+        "/Users/hogenxue/.agents/skills/prototype"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "research",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/research",
+        "/Users/hogenxue/.claude/skills/research",
+        "/Users/hogenxue/.agents/skills/research"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "resolving-merge-conflicts",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/resolving-merge-conflicts",
+        "/Users/hogenxue/.agents/skills/resolving-merge-conflicts"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "retro",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/retro",
+        "/Users/hogenxue/.claude/skills/retro",
+        "/Users/hogenxue/.agents/skills/retro"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "tdd",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/tdd",
+        "/Users/hogenxue/.claude/skills/tdd",
+        "/Users/hogenxue/.agents/skills/tdd"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "to-spec",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/to-spec",
+        "/Users/hogenxue/.claude/skills/to-spec",
+        "/Users/hogenxue/.agents/skills/to-spec"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "to-tickets",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/to-tickets",
+        "/Users/hogenxue/.claude/skills/to-tickets",
+        "/Users/hogenxue/.agents/skills/to-tickets"
+      ]
+    },
+    {
+      "host": "minimax",
+      "name": "wayfinder",
+      "paths": [
+        "/Users/hogenxue/.minimax/skills/wayfinder",
+        "/Users/hogenxue/.claude/skills/wayfinder",
+        "/Users/hogenxue/.agents/skills/wayfinder"
+      ]
+    }
+  ],
+  "drift": [
+    {
+      "host": "codex",
+      "name": "code-review",
+      "path": "/Users/hogenxue/.agents/skills/code-review"
+    },
+    {
+      "host": "codex",
+      "name": "codebase-design",
+      "path": "/Users/hogenxue/.agents/skills/codebase-design"
+    },
+    {
+      "host": "codex",
+      "name": "diagnosing-bugs",
+      "path": "/Users/hogenxue/.agents/skills/diagnosing-bugs"
+    },
+    {
+      "host": "codex",
+      "name": "domain-modeling",
+      "path": "/Users/hogenxue/.agents/skills/domain-modeling"
+    },
+    {
+      "host": "codex",
+      "name": "grill-me",
+      "path": "/Users/hogenxue/.agents/skills/grill-me"
+    },
+    {
+      "host": "codex",
+      "name": "grill-with-docs",
+      "path": "/Users/hogenxue/.agents/skills/grill-with-docs"
+    },
+    {
+      "host": "codex",
+      "name": "grilling",
+      "path": "/Users/hogenxue/.agents/skills/grilling"
+    },
+    {
+      "host": "codex",
+      "name": "handoff",
+      "path": "/Users/hogenxue/.agents/skills/handoff"
+    },
+    {
+      "host": "codex",
+      "name": "implement",
+      "path": "/Users/hogenxue/.agents/skills/implement"
+    },
+    {
+      "host": "codex",
+      "name": "prototype",
+      "path": "/Users/hogenxue/.agents/skills/prototype"
+    },
+    {
+      "host": "codex",
+      "name": "research",
+      "path": "/Users/hogenxue/.agents/skills/research"
+    },
+    {
+      "host": "codex",
+      "name": "retro",
+      "path": "/Users/hogenxue/.agents/skills/retro"
+    },
+    {
+      "host": "codex",
+      "name": "tdd",
+      "path": "/Users/hogenxue/.agents/skills/tdd"
+    },
+    {
+      "host": "codex",
+      "name": "to-spec",
+      "path": "/Users/hogenxue/.agents/skills/to-spec"
+    },
+    {
+      "host": "codex",
+      "name": "to-tickets",
+      "path": "/Users/hogenxue/.agents/skills/to-tickets"
+    },
+    {
+      "host": "codex",
+      "name": "wayfinder",
+      "path": "/Users/hogenxue/.agents/skills/wayfinder"
+    },
+    {
+      "host": "cursor",
+      "name": "code-review",
+      "path": "/Users/hogenxue/.agents/skills/code-review"
+    },
+    {
+      "host": "cursor",
+      "name": "codebase-design",
+      "path": "/Users/hogenxue/.agents/skills/codebase-design"
+    },
+    {
+      "host": "cursor",
+      "name": "diagnosing-bugs",
+      "path": "/Users/hogenxue/.agents/skills/diagnosing-bugs"
+    },
+    {
+      "host": "cursor",
+      "name": "domain-modeling",
+      "path": "/Users/hogenxue/.agents/skills/domain-modeling"
+    },
+    {
+      "host": "cursor",
+      "name": "grill-me",
+      "path": "/Users/hogenxue/.agents/skills/grill-me"
+    },
+    {
+      "host": "cursor",
+      "name": "grill-with-docs",
+      "path": "/Users/hogenxue/.agents/skills/grill-with-docs"
+    },
+    {
+      "host": "cursor",
+      "name": "grilling",
+      "path": "/Users/hogenxue/.agents/skills/grilling"
+    },
+    {
+      "host": "cursor",
+      "name": "handoff",
+      "path": "/Users/hogenxue/.agents/skills/handoff"
+    },
+    {
+      "host": "cursor",
+      "name": "implement",
+      "path": "/Users/hogenxue/.agents/skills/implement"
+    },
+    {
+      "host": "cursor",
+      "name": "prototype",
+      "path": "/Users/hogenxue/.agents/skills/prototype"
+    },
+    {
+      "host": "cursor",
+      "name": "research",
+      "path": "/Users/hogenxue/.agents/skills/research"
+    },
+    {
+      "host": "cursor",
+      "name": "retro",
+      "path": "/Users/hogenxue/.agents/skills/retro"
+    },
+    {
+      "host": "cursor",
+      "name": "tdd",
+      "path": "/Users/hogenxue/.agents/skills/tdd"
+    },
+    {
+      "host": "cursor",
+      "name": "to-spec",
+      "path": "/Users/hogenxue/.agents/skills/to-spec"
+    },
+    {
+      "host": "cursor",
+      "name": "to-tickets",
+      "path": "/Users/hogenxue/.agents/skills/to-tickets"
+    },
+    {
+      "host": "cursor",
+      "name": "wayfinder",
+      "path": "/Users/hogenxue/.agents/skills/wayfinder"
+    },
+    {
+      "host": "cursor",
+      "name": "code-review",
+      "path": "/Users/hogenxue/.cursor/skills/code-review"
+    },
+    {
+      "host": "cursor",
+      "name": "codebase-design",
+      "path": "/Users/hogenxue/.cursor/skills/codebase-design"
+    },
+    {
+      "host": "cursor",
+      "name": "diagnosing-bugs",
+      "path": "/Users/hogenxue/.cursor/skills/diagnosing-bugs"
+    },
+    {
+      "host": "cursor",
+      "name": "domain-modeling",
+      "path": "/Users/hogenxue/.cursor/skills/domain-modeling"
+    },
+    {
+      "host": "cursor",
+      "name": "grill-with-docs",
+      "path": "/Users/hogenxue/.cursor/skills/grill-with-docs"
+    },
+    {
+      "host": "cursor",
+      "name": "grilling",
+      "path": "/Users/hogenxue/.cursor/skills/grilling"
+    },
+    {
+      "host": "cursor",
+      "name": "handoff",
+      "path": "/Users/hogenxue/.cursor/skills/handoff"
+    },
+    {
+      "host": "cursor",
+      "name": "implement",
+      "path": "/Users/hogenxue/.cursor/skills/implement"
+    },
+    {
+      "host": "cursor",
+      "name": "prototype",
+      "path": "/Users/hogenxue/.cursor/skills/prototype"
+    },
+    {
+      "host": "cursor",
+      "name": "research",
+      "path": "/Users/hogenxue/.cursor/skills/research"
+    },
+    {
+      "host": "cursor",
+      "name": "tdd",
+      "path": "/Users/hogenxue/.cursor/skills/tdd"
+    },
+    {
+      "host": "cursor",
+      "name": "to-spec",
+      "path": "/Users/hogenxue/.cursor/skills/to-spec"
+    },
+    {
+      "host": "cursor",
+      "name": "to-tickets",
+      "path": "/Users/hogenxue/.cursor/skills/to-tickets"
+    },
+    {
+      "host": "cursor",
+      "name": "wayfinder",
+      "path": "/Users/hogenxue/.cursor/skills/wayfinder"
+    },
+    {
+      "host": "cursor",
+      "name": "code-review",
+      "path": "/Users/hogenxue/.claude/skills/code-review"
+    },
+    {
+      "host": "cursor",
+      "name": "codebase-design",
+      "path": "/Users/hogenxue/.claude/skills/codebase-design"
+    },
+    {
+      "host": "cursor",
+      "name": "diagnosing-bugs",
+      "path": "/Users/hogenxue/.claude/skills/diagnosing-bugs"
+    },
+    {
+      "host": "cursor",
+      "name": "domain-modeling",
+      "path": "/Users/hogenxue/.claude/skills/domain-modeling"
+    },
+    {
+      "host": "cursor",
+      "name": "grill-me",
+      "path": "/Users/hogenxue/.claude/skills/grill-me"
+    },
+    {
+      "host": "cursor",
+      "name": "grill-with-docs",
+      "path": "/Users/hogenxue/.claude/skills/grill-with-docs"
+    },
+    {
+      "host": "cursor",
+      "name": "grilling",
+      "path": "/Users/hogenxue/.claude/skills/grilling"
+    },
+    {
+      "host": "cursor",
+      "name": "handoff",
+      "path": "/Users/hogenxue/.claude/skills/handoff"
+    },
+    {
+      "host": "cursor",
+      "name": "implement",
+      "path": "/Users/hogenxue/.claude/skills/implement"
+    },
+    {
+      "host": "cursor",
+      "name": "prototype",
+      "path": "/Users/hogenxue/.claude/skills/prototype"
+    },
+    {
+      "host": "cursor",
+      "name": "research",
+      "path": "/Users/hogenxue/.claude/skills/research"
+    },
+    {
+      "host": "cursor",
+      "name": "retro",
+      "path": "/Users/hogenxue/.claude/skills/retro"
+    },
+    {
+      "host": "cursor",
+      "name": "tdd",
+      "path": "/Users/hogenxue/.claude/skills/tdd"
+    },
+    {
+      "host": "cursor",
+      "name": "to-spec",
+      "path": "/Users/hogenxue/.claude/skills/to-spec"
+    },
+    {
+      "host": "cursor",
+      "name": "to-tickets",
+      "path": "/Users/hogenxue/.claude/skills/to-tickets"
+    },
+    {
+      "host": "cursor",
+      "name": "wayfinder",
+      "path": "/Users/hogenxue/.claude/skills/wayfinder"
+    },
+    {
+      "host": "minimax",
+      "name": "code-review",
+      "path": "/Users/hogenxue/.minimax/skills/code-review"
+    },
+    {
+      "host": "minimax",
+      "name": "codebase-design",
+      "path": "/Users/hogenxue/.minimax/skills/codebase-design"
+    },
+    {
+      "host": "minimax",
+      "name": "diagnosing-bugs",
+      "path": "/Users/hogenxue/.minimax/skills/diagnosing-bugs"
+    },
+    {
+      "host": "minimax",
+      "name": "domain-modeling",
+      "path": "/Users/hogenxue/.minimax/skills/domain-modeling"
+    },
+    {
+      "host": "minimax",
+      "name": "grill-me",
+      "path": "/Users/hogenxue/.minimax/skills/grill-me"
+    },
+    {
+      "host": "minimax",
+      "name": "grill-with-docs",
+      "path": "/Users/hogenxue/.minimax/skills/grill-with-docs"
+    },
+    {
+      "host": "minimax",
+      "name": "grilling",
+      "path": "/Users/hogenxue/.minimax/skills/grilling"
+    },
+    {
+      "host": "minimax",
+      "name": "handoff",
+      "path": "/Users/hogenxue/.minimax/skills/handoff"
+    },
+    {
+      "host": "minimax",
+      "name": "implement",
+      "path": "/Users/hogenxue/.minimax/skills/implement"
+    },
+    {
+      "host": "minimax",
+      "name": "prototype",
+      "path": "/Users/hogenxue/.minimax/skills/prototype"
+    },
+    {
+      "host": "minimax",
+      "name": "research",
+      "path": "/Users/hogenxue/.minimax/skills/research"
+    },
+    {
+      "host": "minimax",
+      "name": "retro",
+      "path": "/Users/hogenxue/.minimax/skills/retro"
+    },
+    {
+      "host": "minimax",
+      "name": "tdd",
+      "path": "/Users/hogenxue/.minimax/skills/tdd"
+    },
+    {
+      "host": "minimax",
+      "name": "to-spec",
+      "path": "/Users/hogenxue/.minimax/skills/to-spec"
+    },
+    {
+      "host": "minimax",
+      "name": "to-tickets",
+      "path": "/Users/hogenxue/.minimax/skills/to-tickets"
+    },
+    {
+      "host": "minimax",
+      "name": "wayfinder",
+      "path": "/Users/hogenxue/.minimax/skills/wayfinder"
+    },
+    {
+      "host": "minimax",
+      "name": "code-review",
+      "path": "/Users/hogenxue/.claude/skills/code-review"
+    },
+    {
+      "host": "minimax",
+      "name": "codebase-design",
+      "path": "/Users/hogenxue/.claude/skills/codebase-design"
+    },
+    {
+      "host": "minimax",
+      "name": "diagnosing-bugs",
+      "path": "/Users/hogenxue/.claude/skills/diagnosing-bugs"
+    },
+    {
+      "host": "minimax",
+      "name": "domain-modeling",
+      "path": "/Users/hogenxue/.claude/skills/domain-modeling"
+    },
+    {
+      "host": "minimax",
+      "name": "grill-me",
+      "path": "/Users/hogenxue/.claude/skills/grill-me"
+    },
+    {
+      "host": "minimax",
+      "name": "grill-with-docs",
+      "path": "/Users/hogenxue/.claude/skills/grill-with-docs"
+    },
+    {
+      "host": "minimax",
+      "name": "grilling",
+      "path": "/Users/hogenxue/.claude/skills/grilling"
+    },
+    {
+      "host": "minimax",
+      "name": "handoff",
+      "path": "/Users/hogenxue/.claude/skills/handoff"
+    },
+    {
+      "host": "minimax",
+      "name": "implement",
+      "path": "/Users/hogenxue/.claude/skills/implement"
+    },
+    {
+      "host": "minimax",
+      "name": "prototype",
+      "path": "/Users/hogenxue/.claude/skills/prototype"
+    },
+    {
+      "host": "minimax",
+      "name": "research",
+      "path": "/Users/hogenxue/.claude/skills/research"
+    },
+    {
+      "host": "minimax",
+      "name": "retro",
+      "path": "/Users/hogenxue/.claude/skills/retro"
+    },
+    {
+      "host": "minimax",
+      "name": "tdd",
+      "path": "/Users/hogenxue/.claude/skills/tdd"
+    },
+    {
+      "host": "minimax",
+      "name": "to-spec",
+      "path": "/Users/hogenxue/.claude/skills/to-spec"
+    },
+    {
+      "host": "minimax",
+      "name": "to-tickets",
+      "path": "/Users/hogenxue/.claude/skills/to-tickets"
+    },
+    {
+      "host": "minimax",
+      "name": "wayfinder",
+      "path": "/Users/hogenxue/.claude/skills/wayfinder"
+    },
+    {
+      "host": "minimax",
+      "name": "code-review",
+      "path": "/Users/hogenxue/.agents/skills/code-review"
+    },
+    {
+      "host": "minimax",
+      "name": "codebase-design",
+      "path": "/Users/hogenxue/.agents/skills/codebase-design"
+    },
+    {
+      "host": "minimax",
+      "name": "diagnosing-bugs",
+      "path": "/Users/hogenxue/.agents/skills/diagnosing-bugs"
+    },
+    {
+      "host": "minimax",
+      "name": "domain-modeling",
+      "path": "/Users/hogenxue/.agents/skills/domain-modeling"
+    },
+    {
+      "host": "minimax",
+      "name": "grill-me",
+      "path": "/Users/hogenxue/.agents/skills/grill-me"
+    },
+    {
+      "host": "minimax",
+      "name": "grill-with-docs",
+      "path": "/Users/hogenxue/.agents/skills/grill-with-docs"
+    },
+    {
+      "host": "minimax",
+      "name": "grilling",
+      "path": "/Users/hogenxue/.agents/skills/grilling"
+    },
+    {
+      "host": "minimax",
+      "name": "handoff",
+      "path": "/Users/hogenxue/.agents/skills/handoff"
+    },
+    {
+      "host": "minimax",
+      "name": "implement",
+      "path": "/Users/hogenxue/.agents/skills/implement"
+    },
+    {
+      "host": "minimax",
+      "name": "prototype",
+      "path": "/Users/hogenxue/.agents/skills/prototype"
+    },
+    {
+      "host": "minimax",
+      "name": "research",
+      "path": "/Users/hogenxue/.agents/skills/research"
+    },
+    {
+      "host": "minimax",
+      "name": "retro",
+      "path": "/Users/hogenxue/.agents/skills/retro"
+    },
+    {
+      "host": "minimax",
+      "name": "tdd",
+      "path": "/Users/hogenxue/.agents/skills/tdd"
+    },
+    {
+      "host": "minimax",
+      "name": "to-spec",
+      "path": "/Users/hogenxue/.agents/skills/to-spec"
+    },
+    {
+      "host": "minimax",
+      "name": "to-tickets",
+      "path": "/Users/hogenxue/.agents/skills/to-tickets"
+    },
+    {
+      "host": "minimax",
+      "name": "wayfinder",
+      "path": "/Users/hogenxue/.agents/skills/wayfinder"
+    },
+    {
+      "host": "workbuddy",
+      "name": "code-review",
+      "path": "/Users/hogenxue/.codebuddy/skills/code-review"
+    },
+    {
+      "host": "workbuddy",
+      "name": "codebase-design",
+      "path": "/Users/hogenxue/.codebuddy/skills/codebase-design"
+    },
+    {
+      "host": "workbuddy",
+      "name": "diagnosing-bugs",
+      "path": "/Users/hogenxue/.codebuddy/skills/diagnosing-bugs"
+    },
+    {
+      "host": "workbuddy",
+      "name": "domain-modeling",
+      "path": "/Users/hogenxue/.codebuddy/skills/domain-modeling"
+    },
+    {
+      "host": "workbuddy",
+      "name": "grill-me",
+      "path": "/Users/hogenxue/.codebuddy/skills/grill-me"
+    },
+    {
+      "host": "workbuddy",
+      "name": "grill-with-docs",
+      "path": "/Users/hogenxue/.codebuddy/skills/grill-with-docs"
+    },
+    {
+      "host": "workbuddy",
+      "name": "grilling",
+      "path": "/Users/hogenxue/.codebuddy/skills/grilling"
+    },
+    {
+      "host": "workbuddy",
+      "name": "handoff",
+      "path": "/Users/hogenxue/.codebuddy/skills/handoff"
+    },
+    {
+      "host": "workbuddy",
+      "name": "implement",
+      "path": "/Users/hogenxue/.codebuddy/skills/implement"
+    },
+    {
+      "host": "workbuddy",
+      "name": "prototype",
+      "path": "/Users/hogenxue/.codebuddy/skills/prototype"
+    },
+    {
+      "host": "workbuddy",
+      "name": "research",
+      "path": "/Users/hogenxue/.codebuddy/skills/research"
+    },
+    {
+      "host": "workbuddy",
+      "name": "retro",
+      "path": "/Users/hogenxue/.codebuddy/skills/retro"
+    },
+    {
+      "host": "workbuddy",
+      "name": "tdd",
+      "path": "/Users/hogenxue/.codebuddy/skills/tdd"
+    },
+    {
+      "host": "workbuddy",
+      "name": "to-spec",
+      "path": "/Users/hogenxue/.codebuddy/skills/to-spec"
+    },
+    {
+      "host": "workbuddy",
+      "name": "to-tickets",
+      "path": "/Users/hogenxue/.codebuddy/skills/to-tickets"
+    },
+    {
+      "host": "workbuddy",
+      "name": "wayfinder",
+      "path": "/Users/hogenxue/.codebuddy/skills/wayfinder"
+    }
+  ],
+  "metadata_errors": [
+    {
+      "host": "codex",
+      "error": "missing Skill frontmatter: /Users/hogenxue/.codex/skills/miniprogram-ui-ux-design/SKILL.md"
+    },
+    {
+      "host": "cursor",
+      "error": "missing Skill frontmatter: /Users/hogenxue/.codex/skills/miniprogram-ui-ux-design/SKILL.md"
+    },
+    {
+      "host": "minimax",
+      "error": "missing Skill frontmatter: /Users/hogenxue/.codex/skills/miniprogram-ui-ux-design/SKILL.md"
+    },
+    {
+      "host": "workbuddy",
+      "error": "missing Skill frontmatter: /Users/hogenxue/.codebuddy/skills/miniprogram-ui-ux-design/SKILL.md"
+    }
+  ],
+  "hosts": {
+    "codex": {
+      "roots": [
+        "/Users/hogenxue/.agents/skills",
+        "/Users/hogenxue/.codex/skills"
+      ],
+      "managed_identities": [
+        "code-review",
+        "codebase-design",
+        "diagnosing-bugs",
+        "domain-modeling",
+        "gitnexus",
+        "grill-me",
+        "grill-with-docs",
+        "grilling",
+        "handoff",
+        "implement",
+        "memory",
+        "prototype",
+        "research",
+        "resolving-merge-conflicts",
+        "retro",
+        "tdd",
+        "to-spec",
+        "to-tickets",
+        "wayfinder"
+      ],
+      "missing": []
+    },
+    "cursor": {
+      "roots": [
+        "/Users/hogenxue/.agents/skills",
+        "/Users/hogenxue/.cursor/skills",
+        "/Users/hogenxue/.claude/skills",
+        "/Users/hogenxue/.codex/skills"
+      ],
+      "managed_identities": [
+        "code-review",
+        "codebase-design",
+        "diagnosing-bugs",
+        "domain-modeling",
+        "gitnexus",
+        "grill-me",
+        "grill-with-docs",
+        "grilling",
+        "handoff",
+        "implement",
+        "memory",
+        "prototype",
+        "research",
+        "resolving-merge-conflicts",
+        "retro",
+        "tdd",
+        "to-spec",
+        "to-tickets",
+        "wayfinder"
+      ],
+      "missing": []
+    },
+    "minimax": {
+      "roots": [
+        "/Users/hogenxue/.minimax/skills",
+        "/Users/hogenxue/.claude/skills",
+        "/Users/hogenxue/.codex/skills",
+        "/Users/hogenxue/.agents/skills"
+      ],
+      "managed_identities": [
+        "code-review",
+        "codebase-design",
+        "diagnosing-bugs",
+        "domain-modeling",
+        "gitnexus",
+        "grill-me",
+        "grill-with-docs",
+        "grilling",
+        "handoff",
+        "implement",
+        "memory",
+        "prototype",
+        "research",
+        "resolving-merge-conflicts",
+        "retro",
+        "tdd",
+        "to-spec",
+        "to-tickets",
+        "wayfinder"
+      ],
+      "missing": []
+    },
+    "workbuddy": {
+      "roots": [
+        "/Users/hogenxue/.codebuddy/skills"
+      ],
+      "managed_identities": [
+        "code-review",
+        "codebase-design",
+        "diagnosing-bugs",
+        "domain-modeling",
+        "gitnexus",
+        "grill-me",
+        "grill-with-docs",
+        "grilling",
+        "handoff",
+        "implement",
+        "memory",
+        "prototype",
+        "research",
+        "resolving-merge-conflicts",
+        "retro",
+        "tdd",
+        "to-spec",
+        "to-tickets",
+        "wayfinder"
+      ],
+      "missing": []
+    }
+  }
+}

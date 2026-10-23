@@ -34,6 +34,7 @@ Codex 全局 home 优先选非空 `AGENTS.override.md`，否则选 `AGENTS.md`�
 | 试验一个设计问题 | `prototype` | 有界可丢弃演示；不自动转成生产实现 |
 | 实施已批准工作 | `implement` + 按风险使用 `tdd` | 原生执行、规格加载、inline/dispatch 规则 |
 | 审查当前改动 | `code-review` | Spec/Standards 分析融入同一次原生 `trellis-check` |
+| 完成后复盘 | `retro`，原生 `trellis-break-loop` 复用同一次分析 | 基于证据形成经验与建议；落盘依已有授权，复盘不自动执行修复或 Git |
 | 交接会话 | `handoff` | 当前 Task/Journal 与已有工件指针，不自动恢复工作 |
 | 专项诊断/设计/冲突 | `diagnosing-bugs` / `codebase-design` / `resolving-merge-conflicts` | 服务当前任务；诊断/设计本身不授权修复、重构或 Git |
 

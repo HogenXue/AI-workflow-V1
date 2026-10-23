@@ -1,0 +1,42 @@
+{
+  "total": 79,
+  "passed": 71,
+  "skipped": [
+    [
+      "test_install_entry_ps.InstallEntryPsTests.test_install_cmd_propagates_component_error",
+      "install.cmd is Windows-only"
+    ],
+    [
+      "test_install_entry_ps.InstallEntryPsTests.test_install_cmd_skills_dry_run",
+      "install.cmd is Windows-only"
+    ],
+    [
+      "test_install_review_ps.SourceAliasSafetyTests.test_parent_junction_cannot_alias_source_for_replacement",
+      "Windows junction"
+    ],
+    [
+      "test_install_review_ps.SourceAliasSafetyTests.test_unresolved_device_namespace_is_refused",
+      "Windows device namespace"
+    ],
+    [
+      "test_install_review_ps.GraphifyPsRecoveryTests.test_fresh_failure_clears_target_and_allows_retry",
+      "PowerShell Windows CMD fixture"
+    ],
+    [
+      "test_install_review_ps.GraphifyPsRecoveryTests.test_replacement_failure_restores_original",
+      "PowerShell Windows CMD fixture"
+    ],
+    [
+      "test_install_codex_hook_ps.CodexContextHookTests.test_installed_windows_command_runs_without_bash",
+      "Windows PowerShell required"
+    ]
+  ],
+  "failures": [
+    [
+      "test_install_wizard.PowerShellWizardTests.test_dependency_paths_reach_profile_components",
+      "Traceback (most recent call last):\n  File \"/Users/hogenxue/Projects/CodexTamplate/tests/test_install_wizard.py\", line 146, in test_dependency_paths_reach_profile_components\n    self.assertEqual(result.returncode, 0, result.stderr + result.stdout)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0 : Proceed? [Y/n]: Get-Command: /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpv0u2mvgq/install-skills.ps1:3\nLine |\n   3 |  Get-Command path-marker -ErrorAction Stop | Out-Null; if ((Get-Comman \u2026\n     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n     | The term 'path-marker' is not recognized as a name of a cmdlet,\n     | function, script file, or executable program. Check the spelling of the\n     | name, or if a path was included, verify that the path is correct and try\n     | again.\nERROR: installer component 'skills' failed (exit 1); stopping.\nAI-workflow installer\nSelect target agent(s):\n  1) Codex\n  2) Cursor\n  3) Claude\n  4) MiniMax Code (mcode)\n  5) WorkBuddy\nSelect agents (e.g. 1, 1 3, 1,2,3): Install mode:\n  1) Recommended full install\n  2) Single component (advanced)\nChoice [1-2]: --- Recommended full install plan ---\n- AIHero/Trellis: main-flow and support Skills from manifest.yaml + global rules from agents/AGENTS.global.md\n- Dependencies: keep usable GitNexus/Trellis/Graphify CLIs; install missing tools first\n- Claude: ~/.claude/skills + ~/.claude/config + CLAUDE.md + ~/.claude.json MCP (no Graphify, no project .claude/)\n- Project-scoped steps: skipped\nCALLED:deps\nARGS:--apply --path-file /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpK6rtYn.tmp\n=== Installing Claude profile ===\nCALLED:skills\nARGS:--copy --target /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpv0u2mvgq/home/.claude/skills\n\n"
+    ]
+  ],
+  "errors": [],
+  "successful": false
+}

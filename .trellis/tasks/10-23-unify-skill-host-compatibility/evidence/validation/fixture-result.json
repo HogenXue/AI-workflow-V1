@@ -1,0 +1,27 @@
+{
+  "fixture": "/var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/codextamplate-review-probe-364rrgua",
+  "fixture_type": "isolated git --no-index diff; no Git refs or index created",
+  "diff_exit": 1,
+  "diff": "diff --git a/baseline/src/pricing.py b/candidate/src/pricing.py\nindex a420f4d..84c3b79 100644\n--- a/baseline/src/pricing.py\n+++ b/candidate/src/pricing.py\n@@ -1,2 +1,2 @@\n def total_cents(unit_cents, quantity):\n-    return unit_cents * quantity\n+    return unit_cents + quantity\n",
+  "spec_finding": {
+    "file": "candidate/src/pricing.py",
+    "line": 2,
+    "expected": 250,
+    "observed": 127,
+    "severity": "P1",
+    "fix_applied": false
+  },
+  "standards_findings": [],
+  "reviewed_files": 7,
+  "preservation": {
+    "all_file_hashes_unchanged": true,
+    "task_state_unchanged": true,
+    "spec_unchanged": true,
+    "unrelated_unchanged": true
+  },
+  "limitations": [
+    "No native host invocation",
+    "No staged/unstaged/untracked Git index coverage",
+    "Behavioral exercise by evaluator, not probabilistic model regression"
+  ]
+}

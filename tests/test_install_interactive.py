@@ -652,14 +652,14 @@ class InteractiveInstallTests(unittest.TestCase):
             0,
         )
 
-    def test_cursor_replace_removes_obsolete_hooks_and_preserves_unrelated_files(self) -> None:
+    def test_cursor_replace_preserves_unowned_hooks_and_unrelated_files(self) -> None:
         mcp_file = self.home / ".cursor" / "mcp.json"
         mcp_file.parent.mkdir(parents=True)
         mcp_file.write_text('{"mcpServers":{}}', encoding="utf-8")
         cursor_dir = self.project / ".cursor"
         hooks_dir = cursor_dir / "hooks"
         hooks_dir.mkdir(parents=True)
-        (cursor_dir / "hooks.json").write_text("old hooks\n", encoding="utf-8")
+        (cursor_dir / "hooks.json").write_text('{"version": 1, "hooks": {}}\n', encoding="utf-8")
         rules = cursor_dir / "rules" / "ai-workflow-global.mdc"
         rules.parent.mkdir(parents=True)
         rules.write_text("old rules\n", encoding="utf-8")
@@ -682,7 +682,7 @@ class InteractiveInstallTests(unittest.TestCase):
         )
 
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-        self.assertFalse((hooks_dir / "obsolete.py").exists())
+        self.assertEqual((hooks_dir / "obsolete.py").read_text(), "obsolete\n")
         self.assertEqual(unrelated.read_text(encoding="utf-8"), "keep\n")
         self.assertEqual(len(list(backup_dir.glob("mcp.json.*.bak"))), 1)
         self.assertEqual(len(list(backup_dir.glob("hooks.json.*.bak"))), 1)

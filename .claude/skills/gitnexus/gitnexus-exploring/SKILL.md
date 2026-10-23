@@ -23,7 +23,7 @@ description: "Use when the user asks how code works, wants to understand archite
 5. READ gitnexus://repo/{name}/process/{name}      → Trace full execution flow
 ```
 
-> If step 2 says "Index is stale" → run `npx gitnexus analyze` in terminal.
+Use GitNexus when the user asks for graph analysis or current project rules and change risk require it. Local low-risk source navigation and ordinary Git synchronization can use source/language tools. When the graph is stale or unavailable, state that limit and verify current source. Rebuild only when the current task needs graph evidence and updating is authorized; a read-only request does not authorize generated context files or index writes.
 
 ## Checklist
 

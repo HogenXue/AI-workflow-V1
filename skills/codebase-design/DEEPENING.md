@@ -2,7 +2,7 @@
 
 How to deepen a cluster of shallow modules safely, given its dependencies. Assumes the vocabulary in [SKILL.md](SKILL.md) — **module**, **interface**, **seam**, **adapter**.
 
-This reference informs a Trellis design; it does not authorize refactoring. Before applying a deepening plan, confirm the current task, run required GitNexus impact analysis, and use the local `$tdd` workflow for behavior changes.
+This reference informs the project's existing design record; it does not authorize refactoring. Before applying a deepening plan, confirm scope and authorization, satisfy applicable impact gates, and use `tdd` when behavior changes need automated evidence. In Trellis, retain its current task and planning gate.
 
 ## Dependency categories
 
@@ -33,7 +33,7 @@ Third-party services (Stripe, Twilio, etc.) you don't control. The deepened modu
 
 ## Testing strategy: replace, don't layer
 
-- Old unit tests on shallow modules may become redundant once equivalent behavior is proven at the deepened module's interface. Delete them only when the Trellis plan explicitly includes that migration and the replacement tests demonstrably cover the same contract.
+- Old unit tests on shallow modules may become redundant once equivalent behavior is proven at the deepened module's interface. Delete them only when the authorized project plan includes that migration and the replacement tests demonstrably cover the same contract.
 - Write new tests at the deepened module's interface. The **interface is the test surface**.
 - Tests assert on observable outcomes through the interface, not internal state.
 - Tests should survive internal refactors — they describe behaviour, not implementation. If a test has to change when the implementation changes, it's testing past the interface.

@@ -1,4 +1,5 @@
 import contextlib
+import os
 import io
 import importlib.util
 import subprocess
@@ -272,7 +273,8 @@ class ValidateAllSkillsTests(unittest.TestCase):
         project_root = self.root / "project"
         package_root.mkdir()
         project_root.mkdir()
-        (package_root / "manifest.yaml").write_text("skills: []\n", encoding="utf-8")
+        (package_root / "manifest.yaml").write_text("skills: [sample]\n", encoding="utf-8")
+        create_complete_skill(package_root / "skills", "sample")
         config_dir = package_root / "config"
         config_dir.mkdir()
         (config_dir / "defaults.yaml").write_text(
@@ -345,7 +347,8 @@ class ValidateAllSkillsTests(unittest.TestCase):
         project_root = self.root / "project"
         package_root.mkdir()
         project_root.mkdir()
-        (package_root / "manifest.yaml").write_text("skills: []\n", encoding="utf-8")
+        (package_root / "manifest.yaml").write_text("skills: [sample]\n", encoding="utf-8")
+        create_complete_skill(package_root / "skills", "sample")
         config_dir = package_root / "config"
         config_dir.mkdir()
         (config_dir / "defaults.yaml").write_text("tools: {}\n", encoding="utf-8")
@@ -385,6 +388,7 @@ class ValidateAllSkillsTests(unittest.TestCase):
             text=True,
             capture_output=True,
             check=False,
+            env={k: v for k, v in os.environ.items() if k != "PYTHONPATH"},
         )
 
         self.assertEqual(result.returncode, 2)
@@ -403,7 +407,7 @@ class ManifestTests(unittest.TestCase):
                 "gitnexus",
                 "grill-me",
                 "grill-with-docs", "grilling", "domain-modeling", "to-spec", "to-tickets", "wayfinder",
-                "research", "prototype", "implement", "code-review", "handoff",
+                "research", "prototype", "implement", "code-review", "handoff", "retro",
                 "tdd",
                 "diagnosing-bugs",
                 "codebase-design",
@@ -627,7 +631,7 @@ class BundledSkillContractTests(unittest.TestCase):
             "codebase-design": (
                 "does not create a second Design, Spec, task, or implementation workflow",
                 "GitNexus impact analysis",
-                "local `$tdd` skill",
+                "Implementation follows the existing authorization",
             ),
             "resolving-merge-conflicts": (
                 "does not by itself authorize",

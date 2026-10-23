@@ -4,7 +4,7 @@ set -euo pipefail
 
 usage() {
   cat >&2 <<'EOF'
-Usage: install.sh <deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge> [component options]
+Usage: install.sh <deps|skills|audit-skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge> [component options]
        install.sh   # interactive (TTY only)
 
 Run "install.sh <component> --help" for component-specific options.
@@ -22,6 +22,7 @@ run_component() {
   case "$component" in
     deps) bash "$script_dir/install-deps.sh" "$@" ;;
     skills) bash "$script_dir/install-skills.sh" "$@" ;;
+    audit-skills) bash "$script_dir/install-audit-skills.sh" "$@" ;;
     graphify) bash "$script_dir/install-graphify.sh" "$@" ;;
     agents) bash "$script_dir/install-agents.sh" "$@" ;;
     config) bash "$script_dir/install-config.sh" "$@" ;;
@@ -317,12 +318,12 @@ interactive_main() {
   local mem0_url=""
 
   if [[ "$mode_choice" == "2" ]]; then
-    printf '%s\n' 'Component: deps | skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge | minimax-merge | workbuddy-merge'
+    printf '%s\n' 'Component: deps | skills | audit-skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge | minimax-merge | workbuddy-merge'
     printf 'Component: '
     local comp
     read -r comp || comp=""
     case "$comp" in
-      deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge)
+      deps|skills|audit-skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge)
         local extra=()
         if [[ "$comp" == *-merge && -n "$project_root" ]]; then
           extra+=(--project-root "$project_root" --interactive)
@@ -384,6 +385,13 @@ interactive_main() {
     printf '%s\n' '=== Installing WorkBuddy profile ==='
     install_profile_workbuddy "$mem0_url"
   fi
+  local audit_args=()
+  ((want_codex)) && audit_args+=(--host codex)
+  ((want_cursor)) && audit_args+=(--host cursor)
+  ((want_claude)) && audit_args+=(--host claude)
+  ((want_minimax)) && audit_args+=(--host minimax)
+  ((want_workbuddy)) && audit_args+=(--host workbuddy)
+  run_component audit-skills "${audit_args[@]}"
   printf '%s\n' 'Done.'
 }
 
@@ -400,7 +408,7 @@ component="$1"
 shift
 
 case "$component" in
-  deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge)
+  deps|skills|audit-skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge)
     run_component "$component" "$@"
     ;;
   --help|-h|help)

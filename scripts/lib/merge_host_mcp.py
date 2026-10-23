@@ -4,12 +4,26 @@
 from __future__ import annotations
 
 import argparse
+import copy
+import datetime
 import ipaddress
 import json
+import math
+import os
 import re
 import sys
+import stat
+import tempfile
 from pathlib import Path
 from urllib.parse import urlsplit
+
+try:
+    import tomllib
+except ImportError:  # Python 3.10 remains supported when tomli is available.
+    try:
+        import tomli as tomllib
+    except ImportError:
+        tomllib = None
 
 
 SERVERS = ("gitnexus", "recallium", "mem0")
@@ -18,7 +32,6 @@ PRIVATE_NETWORKS = tuple(
     ipaddress.ip_network(cidr)
     for cidr in ("10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "fc00::/7")
 )
-TOML_URL = re.compile(r"^\s*url\s*=\s*([\"'])(.*?)\1\s*(?:#.*)?$", re.M)
 
 
 class McpUrlError(ValueError):
@@ -61,37 +74,208 @@ def validate_mcp_url(url: object, location: str) -> None:
 def read_text(path: Path) -> str:
     if not path.exists():
         return ""
-    return path.read_text(encoding="utf-8")
+    # Preserve CRLF and comments when a keep operation does not require a write.
+    with path.open(encoding="utf-8", newline="") as stream:
+        return stream.read()
 
 
 def write_atomic(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(content, encoding="utf-8")
-    tmp.replace(path)
+    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
+    tmp = Path(temporary)
+    try:
+        if path.exists():
+            os.chmod(tmp, stat.S_IMODE(path.stat().st_mode))
+        with os.fdopen(descriptor, "w", encoding="utf-8", newline="") as stream:
+            descriptor = -1
+            stream.write(content)
+            stream.flush()
+            os.fsync(stream.fileno())
+        tmp.replace(path)
+    finally:
+        if descriptor != -1:
+            os.close(descriptor)
+        tmp.unlink(missing_ok=True)
 
 
-def section_exists_toml(text: str, server: str) -> bool:
-    return bool(re.search(rf"^\[mcp_servers\.{re.escape(server)}\]\s*$", text, re.M))
+def parse_toml(text: str, location: str) -> dict:
+    if tomllib is None:
+        raise ValueError(
+            "TOML parsing requires Python 3.11+ or the optional tomli package on Python 3.10; "
+            "no configuration was changed"
+        )
+    try:
+        return tomllib.loads(text)
+    except ValueError as error:
+        raise ValueError(f"invalid TOML in {location}: {error}") from error
 
 
-def section_url_toml(text: str, server: str) -> str | None:
-    header = re.search(rf"^\[mcp_servers\.{re.escape(server)}\]\s*$", text, re.M)
-    if not header:
-        return None
-    remainder = text[header.end() :]
-    next_section = re.search(r"^\[", remainder, re.M)
-    body = remainder[: next_section.start()] if next_section else remainder
-    match = TOML_URL.search(body)
-    return match.group(2) if match else None
+def toml_servers(data: dict, location: str) -> dict:
+    servers = data.get("mcp_servers", {})
+    if not isinstance(servers, dict):
+        raise ValueError(f"{location}: mcp_servers must be a table")
+    for name, entry in servers.items():
+        if not isinstance(entry, dict):
+            raise ValueError(f"{location}: mcp_servers.{name} must be a server table")
+    return servers
 
 
-def remove_toml_section(text: str, server: str) -> str:
-    pattern = re.compile(
-        rf"^\[mcp_servers\.{re.escape(server)}\][^\n]*\n(?:(?!^\[).*\n)*",
-        re.M,
+def toml_statements(text: str):
+    """Split only at real statement boundaries, never inside strings or collections.
+
+    This scanner locates text to preserve; tomllib remains the syntax authority.
+    Every edited result is reparsed and compared with the expected full document.
+    """
+    start = index = depth = 0
+    quote = None
+    comment = False
+    while index < len(text):
+        char = text[index]
+        if comment:
+            if char == "\n":
+                comment = False
+            else:
+                index += 1
+                continue
+        elif quote:
+            if quote.startswith('"') and char == "\\":
+                index += 2
+                continue
+            if text.startswith(quote, index):
+                index += len(quote)
+                if len(quote) == 3:
+                    # Four/five quote endings include one/two literal quotes.
+                    while index < len(text) and text[index] == quote[0]:
+                        index += 1
+                quote = None
+                continue
+            index += 1
+            continue
+        elif char in ("'", '"'):
+            quote = char * 3 if text.startswith(char * 3, index) else char
+            index += len(quote)
+            continue
+        elif char == "#":
+            comment = True
+        elif char in "[{":
+            depth += 1
+        elif char in "]}":
+            depth -= 1
+        if char == "\n" and depth == 0:
+            yield text[start:index + 1]
+            start = index + 1
+        index += 1
+    if start < len(text):
+        yield text[start:]
+
+
+def single_toml_path(data: dict) -> tuple[str, ...]:
+    """Decode a single header/key with the TOML parser, including quoted dots."""
+    path = []
+    node = data
+    while isinstance(node, dict) and len(node) == 1:
+        key, node = next(iter(node.items()))
+        path.append(key)
+        if isinstance(node, list) and len(node) == 1 and isinstance(node[0], dict):
+            node = node[0]
+    return tuple(path)
+
+
+def assignment_path(statement: str) -> tuple[str, ...]:
+    quote = None
+    index = 0
+    while index < len(statement):
+        char = statement[index]
+        if quote:
+            if char == "\\" and quote == '"':
+                index += 2
+                continue
+            if char == quote:
+                quote = None
+        elif char in ("'", '"'):
+            quote = char
+        elif char == "=":
+            key = statement[:index]
+            return single_toml_path(parse_toml(key + " = 0", "assignment key"))
+        index += 1
+    raise ValueError("unsupported TOML assignment; no configuration was changed")
+
+
+def toml_key(value: str) -> str:
+    return value if re.fullmatch(r"[A-Za-z0-9_-]+", value) else json.dumps(value, ensure_ascii=False)
+
+
+def toml_value(value) -> str:
+    if isinstance(value, str):
+        return json.dumps(value, ensure_ascii=False)
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (int, float)):
+        return repr(value)
+    if isinstance(value, (datetime.datetime, datetime.date, datetime.time)):
+        return value.isoformat()
+    if isinstance(value, list):
+        return "[" + ", ".join(toml_value(item) for item in value) + "]"
+    if isinstance(value, dict):
+        return "{ " + ", ".join(f"{toml_key(key)} = {toml_value(item)}" for key, item in value.items()) + " }"
+    raise ValueError(f"unsupported TOML value type: {type(value).__name__}")
+
+
+def same_data(left, right) -> bool:
+    if isinstance(left, dict) and isinstance(right, dict):
+        return left.keys() == right.keys() and all(same_data(left[key], right[key]) for key in left)
+    if isinstance(left, list) and isinstance(right, list):
+        return len(left) == len(right) and all(same_data(a, b) for a, b in zip(left, right))
+    if isinstance(left, float) and isinstance(right, float) and math.isnan(left) and math.isnan(right):
+        return True
+    return type(left) is type(right) and left == right
+
+
+def replace_toml_server(text: str, server: str, entry: dict, expected: dict) -> str:
+    """Replace only this server's declarations, retaining unrelated source text.
+
+    Table headers, dotted assignments and individual inline server entries work.
+    A closed inline mcp_servers parent cannot be safely extended or surgically
+    rewritten; reject it explicitly instead of rewriting unrelated user config.
+    """
+    prefix = ("mcp_servers", server)
+    table = ()
+    retained = []
+    for statement in toml_statements(text):
+        trimmed = statement.lstrip()
+        if trimmed.startswith("["):
+            table = single_toml_path(parse_toml(statement, "table header"))
+        elif trimmed and not trimmed.startswith("#"):
+            key = table + assignment_path(statement)
+            if len(key) < len(prefix) and prefix[:len(key)] == key:
+                raise ValueError(
+                    "cannot safely update a closed inline mcp_servers table; "
+                    "expand it to [mcp_servers.<name>] tables before updating; no configuration was changed"
+                )
+            if key[:len(prefix)] == prefix:
+                continue
+        if table[:len(prefix)] != prefix:
+            retained.append(statement)
+    rendered = f"[mcp_servers.{server}]\n" + "".join(
+        f"{toml_key(key)} = {toml_value(value)}\n" for key, value in entry.items()
     )
-    return pattern.sub("", text)
+    result = "".join(retained)
+    if result and not result.endswith("\n"):
+        result += "\n"
+    result += ("\n" if result else "") + rendered
+    actual = parse_toml(result, "proposed MCP configuration")
+    if not same_data(actual, expected):
+        raise ValueError("TOML preservation check failed; no configuration was changed")
+    return result
+
+
+def merged_server_entry(current: dict | None, fragment: dict) -> dict:
+    # Preserve host extensions (headers/env/timeouts/enablement); replace only
+    # connection selectors so a URL/stdio switch cannot retain both transports.
+    retained = copy.deepcopy(current or {})
+    for key in ("url", "command", "args", "type", "transport"):
+        retained.pop(key, None)
+    return {**fragment, **{key: value for key, value in retained.items() if key not in fragment}}
 
 
 def prompt_yes_no(question: str, default: bool = False) -> bool:
@@ -129,18 +313,22 @@ def choose_existing_url(
     return True, replacement_url
 
 
-def load_fragment(path: Path, mem0_url: str | None) -> str | None:
-    text = path.read_text(encoding="utf-8")
+def load_fragment(path: Path, mem0_url: str | None) -> dict | None:
+    document = parse_toml(read_text(path), str(path))
+    servers = toml_servers(document, str(path))
+    if set(document) != {"mcp_servers"} or set(servers) != {path.stem}:
+        raise ValueError(f"{path}: fragment must define only mcp_servers.{path.stem}")
+    entry = copy.deepcopy(servers[path.stem])
     if path.stem == "mem0" and mem0_url:
-        text = TOML_URL.sub(lambda _: f"url = {json.dumps(mem0_url)}", text)
-    if "__MEM0_URL__" in text:
+        entry["url"] = mem0_url
+    if entry.get("url") == "__MEM0_URL__":
         if not mem0_url:
             print("SKIP: mcp_servers.mem0 (pass --mem0-url or answer TTY prompt)")
             return None
-        text = text.replace("__MEM0_URL__", mem0_url)
-    for _, url in TOML_URL.findall(text):
-        validate_mcp_url(url, f"mcp_servers.{path.stem}")
-    return text.rstrip() + "\n"
+        entry["url"] = mem0_url
+    if "url" in entry:
+        validate_mcp_url(entry["url"], f"mcp_servers.{path.stem}")
+    return entry
 
 
 def merge_codex_toml(
@@ -152,59 +340,137 @@ def merge_codex_toml(
     dry_run: bool,
 ) -> int:
     text = read_text(target)
+    document = parse_toml(text, str(target))
+    servers = toml_servers(document, str(target))
     changed = False
     for server in SERVERS:
-        frag_path = fragments_dir / f"{server}.toml"
-        if not frag_path.exists():
+        fragment_path = fragments_dir / f"{server}.toml"
+        if not fragment_path.exists():
             continue
-        exists = section_exists_toml(text, server)
-        current_url = section_url_toml(text, server) if exists else None
-        replacement_url = section_url_toml(read_text(frag_path), server)
-        if server == "mem0" and mem0_url:
-            replacement_url = mem0_url
-        if replacement_url == "__MEM0_URL__":
-            replacement_url = None
+        exists = server in servers
+        current = servers.get(server)
+        current_url = current.get("url") if current else None
+        # Keeping an existing server never interprets its source spelling or
+        # rewrites it just to normalize the file.
+        if exists and not (current_url and interactive):
+            if policy == "keep":
+                print(f"KEEP: mcp_servers.{server}")
+                continue
+            if policy == "ask":
+                print(f"CONFLICT: mcp_servers.{server} (use --mcp-keep or --mcp-overwrite)", file=sys.stderr)
+                return 2
+        fragment = load_fragment(fragment_path, mem0_url if server == "mem0" else None)
+        replacement_url = fragment.get("url") if fragment else None
         if exists and current_url and interactive:
-            replace, replacement_url = choose_existing_url(
-                "Codex", server, current_url, replacement_url
-            )
+            replace, replacement_url = choose_existing_url("Codex", server, current_url, replacement_url)
             if not replace:
                 print(f"KEEP: mcp_servers.{server}")
                 continue
-            if server == "mem0":
-                mem0_url = replacement_url
-        elif exists and policy == "keep":
-            print(f"KEEP: mcp_servers.{server}")
-            continue
-        elif exists and policy == "ask":
-            print(f"CONFLICT: mcp_servers.{server} (use --mcp-keep or --mcp-overwrite)", file=sys.stderr)
-            return 2
-        if not exists and server == "mem0" and not replacement_url and interactive:
+            if replacement_url:
+                validate_mcp_url(replacement_url, f"mcp_servers.{server}")
+                if fragment is None:
+                    fragment = {"url": replacement_url}
+                else:
+                    fragment["url"] = replacement_url
+        if not exists and server == "mem0" and fragment is None and interactive:
             if prompt_yes_no("Add Codex mem0 URL now?"):
                 mem0_url = prompt_mcp_url("Codex", server)
-        fragment = load_fragment(frag_path, mem0_url if server == "mem0" else None)
+                fragment = load_fragment(fragment_path, mem0_url)
         if fragment is None:
             continue
-        if exists:
-            text = remove_toml_section(text, server)
-            print(f"OVERWRITE: mcp_servers.{server}")
-        else:
-            print(f"ADD: mcp_servers.{server}")
-        if text and not text.endswith("\n"):
-            text += "\n"
-        if "[mcp_servers]" not in text:
-            text = (text + "\n" if text else "") + "[mcp_servers]\n"
-        text = text.rstrip() + "\n\n" + fragment
+        entry = merged_server_entry(current, fragment)
+        expected = copy.deepcopy(document)
+        expected.setdefault("mcp_servers", {})[server] = entry
+        text = replace_toml_server(text, server, entry, expected)
+        document = expected
+        servers = document["mcp_servers"]
+        print(("OVERWRITE" if exists else "ADD") + f": mcp_servers.{server}")
         changed = True
+    # Reparse the complete planned transaction before the first filesystem write.
+    if changed and not same_data(parse_toml(text, "proposed MCP configuration"), document):
+        raise ValueError("TOML preservation check failed; no configuration was changed")
     if dry_run:
         print(f"DRY-RUN: would update {target}")
-        return 0
-    if changed:
-        write_atomic(target, text if text.endswith("\n") else text + "\n")
+    elif changed:
+        write_atomic(target, text)
         print(f"UPDATED: {target}")
     else:
         print(f"UNCHANGED: {target}")
     return 0
+
+
+def unique_json_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate JSON object key: {key}")
+        result[key] = value
+    return result
+
+
+def parse_json(text: str, *, allow_jsonc: bool = False):
+    """Read native WorkBuddy JSONC without altering comment markers in strings.
+
+    Keep mode never writes; a changed JSONC file is serialized as standard JSON,
+    retaining all unrelated data values (comments/formatting are not retained).
+    """
+    if allow_jsonc:
+        text = text.removeprefix("\ufeff")
+        chars = list(text)
+        index = 0
+        in_string = False
+        while index < len(chars):
+            char = chars[index]
+            if in_string:
+                if char == "\\":
+                    index += 2
+                    continue
+                if char == '"':
+                    in_string = False
+            elif char == '"':
+                in_string = True
+            elif text.startswith("//", index):
+                end = text.find("\n", index + 2)
+                end = len(text) if end == -1 else end
+                for offset in range(index, end):
+                    if chars[offset] != "\r":
+                        chars[offset] = " "
+                index = end
+                continue
+            elif text.startswith("/*", index):
+                end = text.find("*/", index + 2)
+                if end == -1:
+                    raise ValueError("unterminated JSONC block comment")
+                end += 2
+                for offset in range(index, end):
+                    if chars[offset] not in "\r\n":
+                        chars[offset] = " "
+                index = end
+                continue
+            index += 1
+        index = 0
+        in_string = False
+        while index < len(chars):
+            char = chars[index]
+            if in_string:
+                if char == "\\":
+                    index += 2
+                    continue
+                if char == '"':
+                    in_string = False
+            elif char == '"':
+                in_string = True
+            elif char == ",":
+                following = index + 1
+                while following < len(chars) and chars[following].isspace():
+                    following += 1
+                if following < len(chars) and chars[following] in "]}":
+                    chars[index] = " "
+            index += 1
+        text = "".join(chars)
+    def invalid_constant(value):
+        raise ValueError(f"invalid JSON numeric constant: {value}")
+    return json.loads(text, object_pairs_hook=unique_json_object, parse_constant=invalid_constant)
 
 
 def merge_json_mcp_servers(
@@ -218,18 +484,22 @@ def merge_json_mcp_servers(
 ) -> int:
     """Merge managed servers into a host's JSON mcpServers object."""
     raw = read_text(target).strip()
-    data = json.loads(raw) if raw else {"mcpServers": {}}
+    data = parse_json(raw, allow_jsonc=host_label == "WorkBuddy") if raw else {"mcpServers": {}}
     if not isinstance(data, dict):
         raise ValueError("MCP configuration must be a JSON object")
     if "mcpServers" in data and not isinstance(data["mcpServers"], dict):
         raise ValueError("mcpServers must be a JSON object")
     if "mcpServers" not in data:
         data["mcpServers"] = {}
-    servers = json.loads(fragment_file.read_text(encoding="utf-8"))
+    servers = parse_json(read_text(fragment_file))
+    if not isinstance(servers, dict):
+        raise ValueError("MCP fragment must be a JSON object")
     changed = False
     for name in SERVERS:
         if name not in servers:
             continue
+        if not isinstance(servers[name], dict):
+            raise ValueError(f"MCP fragment entry {name} must be an object")
         entry = dict(servers[name])
         existing_entry = data["mcpServers"].get(name)
         current_url = existing_entry.get("url") if isinstance(existing_entry, dict) else None
@@ -270,14 +540,22 @@ def merge_json_mcp_servers(
         elif exists and not interactive_url_replaced and policy == "ask":
             print(f"CONFLICT: mcpServers.{name} (use --mcp-keep or --mcp-overwrite)", file=sys.stderr)
             return 2
-        data["mcpServers"][name] = entry
+        if interactive_url_replaced and replacement_url is not None:
+            entry["url"] = replacement_url
+            validate_mcp_url(replacement_url, f"mcpServers.{name}")
+        data["mcpServers"][name] = merged_server_entry(
+            existing_entry if isinstance(existing_entry, dict) else None, entry
+        )
         print(("OVERWRITE" if exists else "ADD") + f": mcpServers.{name}")
         changed = True
     if dry_run:
         print(f"DRY-RUN: would update {target}")
         return 0
     if changed:
-        write_atomic(target, json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+        content = json.dumps(data, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+        if parse_json(content) != data:
+            raise ValueError("JSON preservation check failed; no configuration was changed")
+        write_atomic(target, content)
         print(f"UPDATED: {target}")
     else:
         print(f"UNCHANGED: {target}")

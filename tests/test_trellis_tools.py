@@ -41,147 +41,76 @@ class TrellisInstallTests(unittest.TestCase):
         self.assertFalse((self.codex_home / "config.toml").exists())
         self.assertFalse(self.backup_dir.exists())
 
-    def test_apply_backs_up_agents_and_enables_hooks_in_config(self) -> None:
+    def test_apply_backs_up_agents_and_preserves_native_config(self) -> None:
         self.codex_home.mkdir()
-        target_agents = self.codex_home / "AGENTS.md"
-        target_agents.write_text("existing global instructions\n", encoding="utf-8")
+        target = self.codex_home / "AGENTS.md"
+        target.write_text("existing instructions\n")
         config = self.codex_home / "config.toml"
-        config.write_text(
-            '[mcp_servers.example]\napi_key = "sentinel-secret"\n',
-            encoding="utf-8",
-        )
-
+        original = '[mcp_servers.example]\napi_key = "sentinel-secret"\n'
+        config.write_text(original)
         result = self.run_install("--apply")
-
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("INSTALLED:", result.stdout)
-        self.assertIn("UPDATED: config.toml", result.stdout)
-        self.assertIn("AI 工作原则（Trellis 兼容全局模板）", target_agents.read_text(encoding="utf-8"))
-        self.assertEqual(
-            config.read_text(encoding="utf-8"),
-            '[mcp_servers.example]\napi_key = "sentinel-secret"\n\n'
-            "[features]\n"
-            "hooks = true   # Codex 0.129+。旧版用 `codex_hooks = true`。\n",
-        )
+        self.assertEqual(target.read_bytes(), (ROOT / "agents/AGENTS.global.md").read_bytes())
+        self.assertEqual(config.read_text(), original)
         backups = list(self.backup_dir.glob("AGENTS.md.*.bak"))
         self.assertEqual(len(backups), 1)
-        self.assertRegex(
-            backups[0].name,
-            r"^AGENTS\.md\.\d{8}T\d{6}Z(?:-\d+)?\.bak$",
-        )
-        self.assertEqual(backups[0].read_text(encoding="utf-8"), "existing global instructions\n")
-        config_backups = list(self.backup_dir.glob("config.toml.*.bak"))
-        self.assertEqual(len(config_backups), 1)
-        self.assertRegex(
-            config_backups[0].name,
-            r"^config\.toml\.\d{8}T\d{6}Z(?:-\d+)?\.bak$",
-        )
-        self.assertEqual(
-            config_backups[0].read_text(encoding="utf-8"),
-            '[mcp_servers.example]\napi_key = "sentinel-secret"\n',
-        )
+        self.assertEqual(backups[0].read_text(), "existing instructions\n")
+        self.assertFalse(list(self.backup_dir.glob("config.toml.*.bak")))
 
-    def test_apply_enables_hooks_in_existing_features_section(self) -> None:
+    def test_apply_preserves_explicit_disabled_hooks(self) -> None:
         self.codex_home.mkdir()
         config = self.codex_home / "config.toml"
-        config.write_text(
-            "[features]\n"
-            "experimental = true\n"
-            "hooks = false\n"
-            "\n"
-            "[mcp_servers.example]\n"
-            'api_key = "sentinel-secret"\n',
-            encoding="utf-8",
-        )
-
+        original = '[features]\nhooks = false\nexperimental = true\n[mcp_servers.example]\napi_key = "sentinel-secret"\n'
+        config.write_text(original)
         result = self.run_install("--apply")
-
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("UPDATED: config.toml", result.stdout)
-        self.assertEqual(
-            config.read_text(encoding="utf-8"),
-            "[features]\n"
-            "experimental = true\n"
-            "hooks = true   # Codex 0.129+。旧版用 `codex_hooks = true`。\n"
-            "\n"
-            "[mcp_servers.example]\n"
-            'api_key = "sentinel-secret"\n',
-        )
+        self.assertEqual(config.read_text(), original)
+        self.assertIn("preserved", result.stdout)
 
-    def test_apply_rejects_non_regular_config_without_changing_agents(self) -> None:
+    def test_agents_install_does_not_touch_non_regular_config(self) -> None:
         self.codex_home.mkdir()
-        target_agents = self.codex_home / "AGENTS.md"
-        target_agents.write_text("existing instructions\n", encoding="utf-8")
-        config_directory = self.codex_home / "config.toml"
-        config_directory.mkdir()
-
-        result = self.run_install("--apply")
-
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("not a regular file", result.stderr)
-        self.assertEqual(target_agents.read_text(encoding="utf-8"), "existing instructions\n")
-        self.assertFalse(list(config_directory.iterdir()))
-        self.assertFalse(self.backup_dir.exists())
-
-    def test_apply_rejects_symlinked_config_without_changing_agents(self) -> None:
-        self.codex_home.mkdir()
-        target_agents = self.codex_home / "AGENTS.md"
-        target_agents.write_text("existing instructions\n", encoding="utf-8")
-        linked_config = Path(self.temp_dir.name) / "linked-config.toml"
-        linked_config.write_text("sentinel = true\n", encoding="utf-8")
-        (self.codex_home / "config.toml").symlink_to(linked_config)
-
-        result = self.run_install("--apply")
-
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("not a regular file", result.stderr)
-        self.assertEqual(target_agents.read_text(encoding="utf-8"), "existing instructions\n")
-        self.assertEqual(linked_config.read_text(encoding="utf-8"), "sentinel = true\n")
-
-    def test_apply_restores_agents_when_config_update_fails(self) -> None:
-        self.codex_home.mkdir()
-        target_agents = self.codex_home / "AGENTS.md"
-        target_agents.write_text("existing instructions\n", encoding="utf-8")
         config = self.codex_home / "config.toml"
-        config.write_text("sentinel = true\n", encoding="utf-8")
-        self.codex_home.chmod(0o555)
+        config.mkdir()
+        sentinel = config / "keep.txt"
+        sentinel.write_text("unrelated")
+        result = self.run_install("--apply")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(sentinel.read_text(), "unrelated")
+        self.assertEqual((self.codex_home / "AGENTS.md").read_bytes(), (ROOT / "agents/AGENTS.global.md").read_bytes())
+
+    def test_agents_install_preserves_symlinked_config(self) -> None:
+        self.codex_home.mkdir()
+        linked = Path(self.temp_dir.name) / "linked.toml"
+        linked.write_text("sentinel = true\n")
+        config = self.codex_home / "config.toml"
+        config.symlink_to(linked)
+        result = self.run_install("--apply")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(config.is_symlink())
+        self.assertEqual(linked.read_text(), "sentinel = true\n")
+
+    def test_apply_restores_agents_when_copy_fails(self) -> None:
+        self.codex_home.mkdir()
+        target = self.codex_home / "AGENTS.md"
+        target.write_text("existing instructions\n")
+        target.chmod(0o444)
         try:
             result = self.run_install("--apply")
         finally:
-            self.codex_home.chmod(0o755)
-
+            target.chmod(0o644)
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("could not create a temporary config file", result.stderr)
-        self.assertEqual(target_agents.read_text(encoding="utf-8"), "existing instructions\n")
-        self.assertEqual(config.read_text(encoding="utf-8"), "sentinel = true\n")
+        self.assertEqual(target.read_text(), "existing instructions\n")
+        self.assertEqual(len(list(self.backup_dir.glob("AGENTS.md.*.bak"))), 1)
 
-    def test_apply_removes_new_agents_when_config_backup_fails(self) -> None:
+    def test_apply_leaves_existing_guide_when_backup_fails(self) -> None:
         self.codex_home.mkdir()
-        config = self.codex_home / "config.toml"
-        config.write_text("sentinel = true\n", encoding="utf-8")
-        invalid_backup_dir = Path(self.temp_dir.name) / "backup-file"
-        invalid_backup_dir.write_text("not a directory\n", encoding="utf-8")
-
-        result = subprocess.run(
-            [
-                "bash",
-                str(ROOT / "trellis" / "install.sh"),
-                "--apply",
-                "--codex-home",
-                str(self.codex_home),
-                "--backup-dir",
-                str(invalid_backup_dir),
-            ],
-            cwd=ROOT,
-            text=True,
-            capture_output=True,
-            check=False,
-        )
-
+        target = self.codex_home / "AGENTS.md"
+        target.write_text("original guide\n")
+        self.backup_dir.write_text("not a directory\n")
+        result = self.run_install("--apply")
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("could not create backup directory", result.stderr)
-        self.assertFalse((self.codex_home / "AGENTS.md").exists())
-        self.assertEqual(config.read_text(encoding="utf-8"), "sentinel = true\n")
+        self.assertEqual(target.read_text(), "original guide\n")
+        self.assertFalse((self.codex_home / "config.toml").exists())
 
     def test_agents_home_installs_and_backs_up_agents_file(self) -> None:
         agents_home = Path(self.temp_dir.name) / "other-ai"
@@ -211,39 +140,14 @@ class TrellisInstallTests(unittest.TestCase):
         self.assertEqual(len(backups), 1)
         self.assertEqual(backups[0].read_text(encoding="utf-8"), "existing instructions\n")
 
-    def test_unified_agents_component_enables_hooks(self) -> None:
+    def test_unified_agents_component_preserves_config(self) -> None:
         self.codex_home.mkdir()
-        target_agents = self.codex_home / "AGENTS.md"
-        target_agents.write_text("existing instructions\n", encoding="utf-8")
         config = self.codex_home / "config.toml"
-        config.write_text("sentinel = true\n", encoding="utf-8")
-
-        result = subprocess.run(
-            [
-                "bash",
-                str(ROOT / "scripts" / "install.sh"),
-                "agents",
-                "--apply",
-                "--agents-home",
-                str(self.codex_home),
-                "--backup-dir",
-                str(self.backup_dir),
-            ],
-            cwd=ROOT,
-            text=True,
-            capture_output=True,
-            check=False,
-        )
-
+        config.write_text("sentinel = true\n")
+        result = subprocess.run(["bash", str(ROOT / "scripts/install.sh"), "agents", "--apply", "--agents-home", str(self.codex_home)], text=True, capture_output=True)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("AI 工作原则（Trellis 兼容全局模板）", target_agents.read_text(encoding="utf-8"))
-        self.assertEqual(
-            config.read_text(encoding="utf-8"),
-            "sentinel = true\n\n"
-            "[features]\n"
-            "hooks = true   # Codex 0.129+。旧版用 `codex_hooks = true`。\n",
-        )
-        self.assertEqual(len(list(self.backup_dir.glob("AGENTS.md.*.bak"))), 1)
+        self.assertEqual(config.read_text(), "sentinel = true\n")
+        self.assertEqual((self.codex_home / "AGENTS.md").read_bytes(), (ROOT / "agents/AGENTS.global.md").read_bytes())
 
     def test_repeated_apply_keeps_unique_timestamped_backups(self) -> None:
         self.codex_home.mkdir()

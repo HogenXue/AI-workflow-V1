@@ -1,0 +1,123 @@
+RUNTIME: {"PSEdition":"Core","Platform":"Unix","PSCompatibleVersions":[{"Major":1,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":2,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":3,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":4,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":5,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":5,"Minor":1,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":6,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":7,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1}],"PSRemotingProtocolVersion":{"Major":2,"Minor":4,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},"GitCommitId":"7.6.7","WSManStackVersion":{"Major":3,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},"PSVersion":{"Major":7,"Minor":6,"Patch":7,"PreReleaseLabel":null,"BuildLabel":null},"SerializationVersion":{"Major":1,"Minor":1,"Build":0,"Revision":1,"MajorRevision":0,"MinorRevision":1},"OS":"macOS 27.0.1"}
+test_agents_document_name_no_hooks_feature (test_install_components_ps.InstallComponentsPsTests.test_agents_document_name_no_hooks_feature) ... ok
+test_config_copy_and_overlap_reject (test_install_components_ps.InstallComponentsPsTests.test_config_copy_and_overlap_reject) ... ok
+test_default_skills_target_uses_home_agents (test_install_components_ps.InstallComponentsPsTests.test_default_skills_target_uses_home_agents) ... ok
+test_removed_skills_require_explicit_pruning_and_keep_backups (test_install_components_ps.InstallComponentsPsTests.test_removed_skills_require_explicit_pruning_and_keep_backups) ... ok
+test_skills_copy_and_conflict (test_install_components_ps.InstallComponentsPsTests.test_skills_copy_and_conflict) ... ok
+test_skills_dry_run_does_not_write (test_install_components_ps.InstallComponentsPsTests.test_skills_dry_run_does_not_write) ... ok
+test_agents_dry_run_uses_agents_template_directory (test_install_entry_ps.InstallEntryPsTests.test_agents_dry_run_uses_agents_template_directory) ... ok
+test_claude_merge_dispatched_and_menu_mentions_claude (test_install_entry_ps.InstallEntryPsTests.test_claude_merge_dispatched_and_menu_mentions_claude) ... ok
+test_component_usage_error_exits_2 (test_install_entry_ps.InstallEntryPsTests.test_component_usage_error_exits_2) ... ok
+test_dependency_preview_via_dispatch (test_install_entry_ps.InstallEntryPsTests.test_dependency_preview_via_dispatch) ... ok
+test_help_exits_0 (test_install_entry_ps.InstallEntryPsTests.test_help_exits_0) ... ok
+test_install_cmd_propagates_component_error (test_install_entry_ps.InstallEntryPsTests.test_install_cmd_propagates_component_error) ... skipped 'install.cmd is Windows-only'
+test_install_cmd_skills_dry_run (test_install_entry_ps.InstallEntryPsTests.test_install_cmd_skills_dry_run) ... skipped 'install.cmd is Windows-only'
+test_no_args_non_tty_exits_2 (test_install_entry_ps.InstallEntryPsTests.test_no_args_non_tty_exits_2) ... ok
+test_skills_dry_run_via_dispatch (test_install_entry_ps.InstallEntryPsTests.test_skills_dry_run_via_dispatch) ... ok
+test_unknown_component_exits_2 (test_install_entry_ps.InstallEntryPsTests.test_unknown_component_exits_2) ... ok
+test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable (test_install_existing_hooks_ps.ExistingHooksInteractiveTests.test_codex_existing_hooks_keep_and_replace_finish_without_unset_variable) ... ok
+test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable (test_install_existing_hooks_ps.ExistingHooksInteractiveTests.test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable) ... ok
+test_backup_emits_backup_line_and_preserves_content (test_install_lib_ps.InstallLibPsTests.test_backup_emits_backup_line_and_preserves_content) ... ok
+test_failed_backup_copy_never_publishes_partial_bak (test_install_lib_ps.InstallLibPsTests.test_failed_backup_copy_never_publishes_partial_bak) ... ok
+test_nested_backup_directory_inside_target_is_rejected (test_install_lib_ps.InstallLibPsTests.test_nested_backup_directory_inside_target_is_rejected) ... ok
+test_parallel_backups_never_overwrite_each_other (test_install_lib_ps.InstallLibPsTests.test_parallel_backups_never_overwrite_each_other) ... ok
+test_reservation_is_exclusive_when_directory_creation_races (test_install_lib_ps.InstallLibPsTests.test_reservation_is_exclusive_when_directory_creation_races) ... ok
+test_resolve_project_root_skip_and_explicit_path (test_install_lib_ps.InstallLibPsTests.test_resolve_project_root_skip_and_explicit_path) ... ok
+test_unwritable_backup_directory_fails_without_hanging (test_install_lib_ps.InstallLibPsTests.test_unwritable_backup_directory_fails_without_hanging) ... ok
+test_claude_merge_mcp_overwrite_preserves_other_keys (test_install_merge_ps.InstallMergePsSmokeTests.test_claude_merge_mcp_overwrite_preserves_other_keys) ... ok
+test_claude_merge_rejects_remote_http_before_mutating (test_install_merge_ps.InstallMergePsSmokeTests.test_claude_merge_rejects_remote_http_before_mutating) ... ok
+test_codex_merge_apply_user_hooks_ignores_project_root (test_install_merge_ps.InstallMergePsSmokeTests.test_codex_merge_apply_user_hooks_ignores_project_root) ... ok
+test_codex_merge_backs_up_dangling_config_symlink (test_install_merge_ps.InstallMergePsSmokeTests.test_codex_merge_backs_up_dangling_config_symlink) ... ok
+test_codex_merge_conflict_restores_mcp (test_install_merge_ps.InstallMergePsSmokeTests.test_codex_merge_conflict_restores_mcp) ... ok
+test_codex_merge_rejects_remote_http_before_mutating_target (test_install_merge_ps.InstallMergePsSmokeTests.test_codex_merge_rejects_remote_http_before_mutating_target) ... ok
+test_codex_merge_skip_project_dry_run (test_install_merge_ps.InstallMergePsSmokeTests.test_codex_merge_skip_project_dry_run) ... ok
+test_cursor_merge_backs_up_dangling_mcp_symlink (test_install_merge_ps.InstallMergePsSmokeTests.test_cursor_merge_backs_up_dangling_mcp_symlink) ... ok
+test_cursor_merge_project_root_generates_rules_leaves_agents_md (test_install_merge_ps.InstallMergePsSmokeTests.test_cursor_merge_project_root_generates_rules_leaves_agents_md) ... ok
+test_cursor_merge_rejects_packaged_mcp_fragment (test_install_merge_ps.InstallMergePsSmokeTests.test_cursor_merge_rejects_packaged_mcp_fragment) ... ok
+test_cursor_merge_rejects_remote_http_before_mutating_target (test_install_merge_ps.InstallMergePsSmokeTests.test_cursor_merge_rejects_remote_http_before_mutating_target) ... ok
+test_cursor_merge_skip_project_leaves_project_untouched (test_install_merge_ps.InstallMergePsSmokeTests.test_cursor_merge_skip_project_leaves_project_untouched) ... ok
+test_backup_inside_aliased_target_is_refused_before_mutation (test_install_review_ps.SourceAliasSafetyTests.test_backup_inside_aliased_target_is_refused_before_mutation) ... ok
+test_link_cycle_is_refused_by_overlap_check (test_install_review_ps.SourceAliasSafetyTests.test_link_cycle_is_refused_by_overlap_check) ... ok
+test_nonexistent_suffix_under_source_alias_is_refused (test_install_review_ps.SourceAliasSafetyTests.test_nonexistent_suffix_under_source_alias_is_refused) ... ok
+test_parent_junction_cannot_alias_source_for_replacement (test_install_review_ps.SourceAliasSafetyTests.test_parent_junction_cannot_alias_source_for_replacement) ... skipped 'Windows junction'
+test_parent_symbolic_link_cannot_alias_source_for_replacement (test_install_review_ps.SourceAliasSafetyTests.test_parent_symbolic_link_cannot_alias_source_for_replacement) ... ok
+test_relative_parent_link_cannot_alias_source (test_install_review_ps.SourceAliasSafetyTests.test_relative_parent_link_cannot_alias_source) ... ok
+test_script_invoked_through_alias_cannot_overwrite_physical_source (test_install_review_ps.SourceAliasSafetyTests.test_script_invoked_through_alias_cannot_overwrite_physical_source) ... ok
+test_unrelated_parent_junction_still_allows_copy (test_install_review_ps.SourceAliasSafetyTests.test_unrelated_parent_junction_still_allows_copy) ... ok
+test_unresolved_device_namespace_is_refused (test_install_review_ps.SourceAliasSafetyTests.test_unresolved_device_namespace_is_refused) ... skipped 'Windows device namespace'
+test_fresh_failure_clears_target_and_allows_retry (test_install_review_ps.GraphifyPsRecoveryTests.test_fresh_failure_clears_target_and_allows_retry) ... skipped 'PowerShell Windows CMD fixture'
+test_replacement_failure_restores_original (test_install_review_ps.GraphifyPsRecoveryTests.test_replacement_failure_restores_original) ... skipped 'PowerShell Windows CMD fixture'
+test_conflict_and_invalid_inputs_do_not_overwrite (test_install_new_hosts.PowerShellNewHostMergeTests.test_conflict_and_invalid_inputs_do_not_overwrite) ... ok
+test_directory_targets_and_package_fragment_are_rejected (test_install_new_hosts.PowerShellNewHostMergeTests.test_directory_targets_and_package_fragment_are_rejected) ... ok
+test_home_overrides_and_explicit_mcp_file (test_install_new_hosts.PowerShellNewHostMergeTests.test_home_overrides_and_explicit_mcp_file) ... ok
+test_invalid_options_and_backup_failure_stop_without_writes (test_install_new_hosts.PowerShellNewHostMergeTests.test_invalid_options_and_backup_failure_stop_without_writes) ... ok
+test_keep_and_overwrite_preserve_other_keys_and_exact_backup (test_install_new_hosts.PowerShellNewHostMergeTests.test_keep_and_overwrite_preserve_other_keys_and_exact_backup) ... ok
+test_native_transport_and_host_isolation (test_install_new_hosts.PowerShellNewHostMergeTests.test_native_transport_and_host_isolation) ... ok
+test_preview_creates_no_directories_and_preserves_existing_file (test_install_new_hosts.PowerShellNewHostMergeTests.test_preview_creates_no_directories_and_preserves_existing_file) ... ok
+test_real_profile_installs_skills_defaults_and_rules_in_temporary_home (test_install_new_hosts.PowerShellNewHostMergeTests.test_real_profile_installs_skills_defaults_and_rules_in_temporary_home) ... ok
+test_symlink_targets_are_rejected_without_touching_referent (test_install_new_hosts.PowerShellNewHostMergeTests.test_symlink_targets_are_rejected_without_touching_referent) ... ok
+test_workbuddy_legacy_precedence_and_minimax_nested_file (test_install_new_hosts.PowerShellNewHostMergeTests.test_workbuddy_legacy_precedence_and_minimax_nested_file) ... ok
+test_declined_dangling_roots_skip_skills_and_config (test_install_wizard.PowerShellWizardTests.test_declined_dangling_roots_skip_skills_and_config) ... ok
+test_default_mode_and_successful_profile (test_install_wizard.PowerShellWizardTests.test_default_mode_and_successful_profile) ... ok
+test_dependencies_run_before_profile_writes (test_install_wizard.PowerShellWizardTests.test_dependencies_run_before_profile_writes) ... ok
+test_dependency_failure_stops_before_profile_writes (test_install_wizard.PowerShellWizardTests.test_dependency_failure_stops_before_profile_writes) ... ok
+test_dependency_paths_reach_profile_components (test_install_wizard.PowerShellWizardTests.test_dependency_paths_reach_profile_components) ... FAIL
+test_failed_component_stops_remaining_profiles (test_install_wizard.PowerShellWizardTests.test_failed_component_stops_remaining_profiles) ... ok
+test_invalid_modes_and_eof_do_not_run_components (test_install_wizard.PowerShellWizardTests.test_invalid_modes_and_eof_do_not_run_components) ... ok
+test_new_profile_multiselect_and_failure_stop (test_install_wizard.PowerShellWizardTests.test_new_profile_multiselect_and_failure_stop) ... ok
+test_new_profiles_route_native_roots_and_documents (test_install_wizard.PowerShellWizardTests.test_new_profiles_route_native_roots_and_documents) ... ok
+test_single_component_failure_propagates (test_install_wizard.PowerShellWizardTests.test_single_component_failure_propagates) ... ok
+test_fresh_install_copies_all_skills_metadata_and_licenses (test_aihero_install.AiheroInstallPsTests.test_fresh_install_copies_all_skills_metadata_and_licenses) ... ok
+test_preview_preserves_old_restored_skills_and_does_not_prune_them (test_aihero_install.AiheroInstallPsTests.test_preview_preserves_old_restored_skills_and_does_not_prune_them) ... ok
+test_upgrade_replaces_restored_skills_with_backups_and_prunes_only_legacy (test_aihero_install.AiheroInstallPsTests.test_upgrade_replaces_restored_skills_with_backups_and_prunes_only_legacy) ... ok
+test_agents_do_not_create_config_to_enable_hooks (test_host_preservation.PowerShellHostPreservationTests.test_agents_do_not_create_config_to_enable_hooks) ... ok
+test_agents_preserve_disabled_hooks_and_report_effective_override (test_host_preservation.PowerShellHostPreservationTests.test_agents_preserve_disabled_hooks_and_report_effective_override) ... ok
+test_codex_merge_keeps_foreign_handlers_inside_managed_group (test_host_preservation.PowerShellHostPreservationTests.test_codex_merge_keeps_foreign_handlers_inside_managed_group) ... ok
+test_cursor_merge_keeps_foreign_hooks_and_scripts (test_host_preservation.PowerShellHostPreservationTests.test_cursor_merge_keeps_foreign_hooks_and_scripts) ... ok
+test_five_host_previews_create_no_directories (test_host_preservation.PowerShellHostPreservationTests.test_five_host_previews_create_no_directories) ... ok
+test_invalid_hook_config_rolls_back_mcp (test_host_preservation.PowerShellHostPreservationTests.test_invalid_hook_config_rolls_back_mcp) ... ok
+test_unknown_public_script_is_not_overwritten_and_mcp_rolls_back (test_host_preservation.PowerShellHostPreservationTests.test_unknown_public_script_is_not_overwritten_and_mcp_rolls_back) ... ok
+test_installed_windows_command_runs_without_bash (test_install_codex_hook_ps.CodexContextHookTests.test_installed_windows_command_runs_without_bash) ... skipped 'Windows PowerShell required'
+
+======================================================================
+FAIL: test_dependency_paths_reach_profile_components (test_install_wizard.PowerShellWizardTests.test_dependency_paths_reach_profile_components)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hogenxue/Projects/CodexTamplate/tests/test_install_wizard.py", line 146, in test_dependency_paths_reach_profile_components
+    self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : Proceed? [Y/n]: Get-Command: /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpv0u2mvgq/install-skills.ps1:3
+Line |
+   3 |  Get-Command path-marker -ErrorAction Stop | Out-Null; if ((Get-Comman …
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | The term 'path-marker' is not recognized as a name of a cmdlet,
+     | function, script file, or executable program. Check the spelling of the
+     | name, or if a path was included, verify that the path is correct and try
+     | again.
+ERROR: installer component 'skills' failed (exit 1); stopping.
+AI-workflow installer
+Select target agent(s):
+  1) Codex
+  2) Cursor
+  3) Claude
+  4) MiniMax Code (mcode)
+  5) WorkBuddy
+Select agents (e.g. 1, 1 3, 1,2,3): Install mode:
+  1) Recommended full install
+  2) Single component (advanced)
+Choice [1-2]: --- Recommended full install plan ---
+- AIHero/Trellis: main-flow and support Skills from manifest.yaml + global rules from agents/AGENTS.global.md
+- Dependencies: keep usable GitNexus/Trellis/Graphify CLIs; install missing tools first
+- Claude: ~/.claude/skills + ~/.claude/config + CLAUDE.md + ~/.claude.json MCP (no Graphify, no project .claude/)
+- Project-scoped steps: skipped
+CALLED:deps
+ARGS:--apply --path-file /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpK6rtYn.tmp
+=== Installing Claude profile ===
+CALLED:skills
+ARGS:--copy --target /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpv0u2mvgq/home/.claude/skills
+
+
+----------------------------------------------------------------------
+Ran 79 tests in 150.085s
+
+FAILED (failures=1, skipped=7)

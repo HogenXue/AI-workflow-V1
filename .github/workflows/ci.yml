@@ -68,10 +68,10 @@ jobs:
       - name: Run PowerShell installer tests
         shell: pwsh
         run: |
-          python -m unittest discover -s tests -p "test_aihero_install.py" -v
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          python -m unittest discover -s tests -p "test_install_*_ps.py" -v
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          python -m unittest discover -s tests -p "test_install_wizard.py" -v
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          python -m unittest discover -s tests -p "test_install_dependencies.py" -v
+          $suites = @('test_aihero_install.py', 'test_install_*_ps.py', 'test_install_new_hosts.py',
+                      'test_host_preservation.py', 'test_skill_catalog.py', 'test_mcp_native_formats.py',
+                      'test_install_wizard.py', 'test_install_dependencies.py')
+          foreach ($suite in $suites) {
+            python -m unittest discover -s tests -p $suite -v
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }

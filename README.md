@@ -1,6 +1,6 @@
 # AI-workflow-V1
 
-可安装的 AI 协作 Skill 包：18 个独立 Skill、Trellis 兼容的全局 AGENTS 模板，以及共享默认配置（`config/`）。
+可安装的 AI 协作 Skill 包：19 个独立 Skill、Trellis 兼容的全局 AGENTS 模板，以及共享默认配置（`config/`）。
 
 GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
@@ -8,11 +8,11 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
 | 组件            | 说明                                                                         |
 | ------------- | -------------------------------------------------------------------------- |
-| **Skills**    | AIHero 主流程与配套技能，以及 Memory/GitNexus；18 项安装清单以 `manifest.yaml` 为准 |
+| **Skills**    | AIHero 主流程与配套技能，以及 Memory/GitNexus；19 项安装清单以 `manifest.yaml` 为准 |
 | **AGENTS 模板** | [AGENTS.global.md](agents/AGENTS.global.md)：跨项目通用规则；[AGENTS.project.md](agents/AGENTS.project.md)：项目补充规则；[AGENTS-egm.md](agents/AGENTS-egm.md)：EGM 项目补充规则 |
 | **config/**   | 默认配置、有效配置运行时和平台无关工作流门禁；项目可用 `hogen-codex.yaml` 覆盖                         |
 
-Trellis 是任务、工件、状态和最终质量门的唯一所有者。本包安装经过 Trellis 适配的 AIHero 独立技能；同一需求不重复访谈、建规格或审查。记忆由 `memory` 对接 Recallium/Mem0，代码分析按需使用 GitNexus/Graphify；Graphify 单独安装，不在 18 项 manifest 中。
+Trellis 是任务、工件、状态和最终质量门的唯一所有者。本包安装经过 Trellis 适配的 AIHero 独立技能；同一需求不重复访谈、建规格或审查。记忆由 `memory` 对接 Recallium/Mem0，代码分析按需使用 GitNexus/Graphify；Graphify 单独安装，不在 19 项 manifest 中。
 
 | 阶段/目的 | 可安装入口 | 产物与边界 |
 | --- | --- | --- |
@@ -21,6 +21,7 @@ Trellis 是任务、工件、状态和最终质量门的唯一所有者。本包
 | 拆分交付与梳理决定 | `to-tickets`、`wayfinder` | 原生父子任务及当前 Design/Plan 的阻塞/决定地图 |
 | 获取证据 | `research`、`prototype` | 当前 Task 的研究或原型，实施仍需对应授权 |
 | 实施与审查 | `implement`、`tdd`、`code-review` | 原生执行阶段；Spec/Standards 融入一次 `trellis-check` |
+| 完成后复盘 | `retro` | 一次证据复盘；复用当前 Task/Spec，修复、归档和 Git 仍需相应授权 |
 | 会话交接 | `handoff` | 既有 Task/Journal 与工件指针 |
 | 既有专项能力 | `grill-me`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` | 无状态 Grill 仍显式调用，其他能力服务当前任务 |
 
@@ -32,7 +33,7 @@ Trellis 是任务、工件、状态和最终质量门的唯一所有者。本包
 
 - macOS / Linux：Bash
 - Windows：PowerShell 7+（`pwsh`）；可用 `winget install Microsoft.PowerShell` 安装
-- `python3 >= 3.10` 与 PyYAML（配置合并、工作流门禁和包校验需要）
+- `python3 >= 3.10` 与 PyYAML；Python 3.10 另需 tomli（以下 requirements 已包含条件依赖）
 - 缺失 GitNexus/Trellis 时需要 Node.js/npm；使用受支持的 Node.js LTS。npm 安装启用
   `--engine-strict`，版本不满足软件包要求时停止。Graphify 的独立环境需要 Python 的 `venv`/pip。
 
@@ -51,7 +52,7 @@ cd AI-workflow-V1
 
 ### macOS / Linux（bash）
 
-安装统一入口：`scripts/install.sh <deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge>`。TTY 下无参数运行进入交互向导（多选编号：`1` Codex、`2` Cursor、`3` Claude、`4` MiniMax Code、`5` WorkBuddy，如 `1 3` / `4 5`）；非 TTY 无参数则打印用法并以 exit 2 退出。交互向导会按宿主逐项检测已有的 URL 型 MCP：显示当前 URL，并默认沿用；只有用户明确选择替换时才写入模板 URL 或显式指定的 Mem0 URL。Codex hooks 与 MCP 安装到用户级 `~/.codex`；Claude MCP 合并到用户级 `~/.claude.json`，全局规则写入 `~/.claude/CLAUDE.md`；两者都不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择，且仅当选中 Cursor）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；安装 `agents --apply` 到 Codex 目录时仅会增量确保 `[features].hooks = true`，不会覆盖其他全局配置；Claude 使用 `agents --document-name CLAUDE.md --no-hooks-feature`，不写 `config.toml`。
+安装统一入口：`scripts/install.sh <deps|skills|audit-skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge>`。TTY 下无参数运行进入交互向导（多选编号：`1` Codex、`2` Cursor、`3` Claude、`4` MiniMax Code、`5` WorkBuddy，如 `1 3` / `4 5`）；非 TTY 无参数则打印用法并以 exit 2 退出。交互向导会按宿主逐项检测已有的 URL 型 MCP：显示当前 URL，并默认沿用；只有用户明确选择替换时才写入模板 URL 或显式指定的 Mem0 URL。Codex hooks 与 MCP 安装到用户级 `~/.codex`；Claude MCP 合并到用户级 `~/.claude.json`，全局规则写入 `~/.claude/CLAUDE.md`；两者都不需要项目路径。Cursor 的项目级 hooks/rules **必须显式选择** `--project-root`（或在交互菜单中选择，且仅当选中 Cursor）；**不会**静默使用当前 Git 根。每个组件独立预览、写入和备份；`agents --apply` 只更新全局指导文档，保留 `config.toml`、显式禁用 hooks 的设置和已有 override。Codex 的新/变化 hook 需要在原生 `/hooks` 中审核信任；安装文件不等于宿主已启用。`--no-hooks-feature` 保留为兼容参数。
 
 所有组件在覆盖、删除或迁移现有目标前都会先备份。备份直接写入所选备份目录，命名为 `<原名称>.<UTC 时间戳>.bak`；同一秒内重复执行会追加序号，绝不会覆盖已有备份。目录同样使用 `.bak` 后缀并保留完整内容。备份失败时当前组件立即停止，原目标保持不变。自定义 `--backup-dir` 不能等于正被备份的目标或位于其内部。
 
@@ -61,6 +62,7 @@ cd AI-workflow-V1
 
 | 组件           | 写入范围                         | 默认行为            |
 | ------------ | ---------------------------- | --------------- |
+| `audit-skills` | 只读审计所选宿主实际发现范围中的包管理 Skill | 同名异内容冲突返回非零；`--json` 输出报告 |
 | `skills`     | manifest 中的 Skill 目录         | dry-run         |
 | `graphify`   | `~/.agents/skills/graphify`（第三方 Graphify Skill） | dry-run；需已安装 Graphify CLI |
 | `agents`     | `<agents-home>/<document>`（默认 `AGENTS.md`；Claude 用 `CLAUDE.md` + `--no-hooks-feature`） | dry-run；已有文件先备份 |
@@ -212,7 +214,7 @@ scripts\install.cmd workbuddy-merge --dry-run --mcp-keep
 bash scripts/install.sh skills --copy --replace --target ~/.codex/skills
 ```
 
-Codex 可能同时发现 `~/.agents/skills` 与 `~/.codex/skills`。同一组 Skill 只选择一个目录；本包对 Codex App 默认使用 `~/.agents/skills`，对应配置目录是 `~/.agents/config`。安装器发现另一目录存在同名 Skill 时会警告；只有显式 `--prune-other-root` 才会先备份再移走另一目录中的本包同名 Skill。
+Codex 可能同时发现 `~/.agents/skills` 与 `~/.codex/skills`。同一组 Skill 只选择一个目录；本包对 Codex App 默认使用 `~/.agents/skills`，对应配置目录是 `~/.agents/config`。安装器发现另一目录存在同名 Skill 时会阻止写入；显式 `--prune-other-root` 会核对真实 Skill 身份，先备份再移走另一目录中的本包同名 Skill。目录名称相同但元数据缺失、损坏或声明其他身份时，先报告冲突，不替换或清理。
 
 旧版本的 `openspec`、`review`、`release` 和 `karpathy-guidelines-zh` 不在当前 manifest 中，普通更新不会删除它们。`grill-with-docs`、`grilling`、`domain-modeling` 已恢复为当前技能，按普通冲突/备份替换处理，`--prune-legacy` 不会清理它们。先预览，再用显式 `--prune-legacy` 备份并移除上述四个旧技能；若两处都曾安装，需要分别处理：
 
@@ -234,7 +236,7 @@ bash scripts/install.sh skills --link --replace --target ~/.agents/skills
 
 ### 安装全局 AGENTS 模板
 
-以下命令会替换 AI 工具目录中的 `AGENTS.md`；已有文件会先备份。对 Codex 目录执行 `--apply` 时，脚本会增量确保 `config.toml` 中的 `[features].hooks = true`（Codex 0.129+），保留 MCP、插件和其他配置：
+以下命令会替换 AI 工具目录中的 `AGENTS.md`；已有文件会先备份。对 Codex 目录执行 `--apply` 时，脚本保留 `config.toml` 和 hook 设置；若非空 `AGENTS.override.md` 优先生效，会明确提示并保留它：
 
 ```bash
 bash scripts/install.sh agents --dry-run --agents-home ~/.codex
@@ -371,3 +373,52 @@ Skill 不可用时须明确说明限制，不得虚报已执行工具结果。
 - 未发布变更见 [CHANGELOG.md](CHANGELOG.md)。
 - AI Hero 改编内容及保留的历史归属声明见
   [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。该说明不为本仓库其他内容指定许可证。
+
+## Skill 冲突检查与原生入口
+
+安装器使用同一严格 catalog 解析 `manifest.yaml`，拒绝重复、非法或越界名称，以及
+目录名与 frontmatter.name 不一致的源 Skill。执行前检查目标内别名和 Codex 旧发现根；
+无效父目录不会遮住嵌套 Skill。待覆盖或迁移的同名目录必须有匹配的有效身份，
+缺失、损坏或不同身份的元数据会阻止写入。
+发现冲突先停止，列出准确路径。`--replace` 不会顺手删除别名。
+`--prune-other-root` 只迁移包管理名称；独立 legacy 名称仍需单独的 `--prune-legacy`。
+
+```bash
+bash scripts/install.sh audit-skills --host codex --host cursor --json
+bash scripts/install.sh audit-skills --host minimax --host workbuddy --require-current --require-complete
+# PowerShell 对应入口
+pwsh -File scripts/install.ps1 audit-skills --host codex --json
+```
+
+Cursor 和 MiniMax 会跨读其他宿主的 Skill 根。审计按每个宿主的真实发现集合比较
+Skill 名称和有效载荷，报告同源副本与内容冲突；同目录别名和 Codex 多重定义单独判为冲突。
+完整安装结束前自动执行所选宿主冲突检查。检查范围是本包 manifest，其他 Skill 的格式
+问题单列告警并保留。`--require-current` 检查已安装版本漂移；`--require-complete` 同时
+检查是否可发现全部包管理能力。不要将第三方插件的相似用途当成自动删除授权。
+
+| 宿主 | 复盘入口与发现边界 |
+| --- | --- |
+| Codex | `$retro` 或 `/skills`；桌面菜单显示依当前版本。优先 `~/.agents/skills`，避免旧 `.codex/skills` 同名副本 |
+| Cursor | `/retro`；跨读 `.agents/.cursor/.claude/.codex` 的用户/项目 Skill 根 |
+| Claude Code | `/retro`；使用 `.claude/skills`，全局指导为 `CLAUDE.md` |
+| MiniMax Code | 使用原生 Skill 列表/命令；读取 dataDir 及兼容根，内建命令优先。显式调用约束同时写在 Skill 正文中 |
+| WorkBuddy / CodeBuddy | 使用原生 Skill 入口（CodeBuddy CLI 为 `/retro`）；配置按原生文件优先级选择 |
+
+`retro` 与原生 `trellis-break-loop` 复用同一次分析；排障、代码审查、交接继续由各自主入口负责。
+`grill-me` 保留双平台显式调用元数据和正文约束。各宿主的发现、执行、hook 信任及实际事件
+触发属于不同验收层级，不能只凭文件复制就宣称全部生效。
+
+Codex/ Cursor 的 hooks 采用增量合并，只更新已识别的包 handler 和脚本；混合组里的用户
+handler、其他事件和脚本均保留。脚本所有权指纹记录于 `hooks/.ai-workflow-managed.json`；
+未知或被个人改写的同名脚本会阻止替换，组件回滚到备份。`--dry-run` 不创建宿主目录。
+
+MCP 合并保留原生格式语义及无关字段。Codex 支持引号/注释表头、dotted keys、独立 inline
+server 和 nested tables；整体 closed inline `mcp_servers = {...}` 需要增改时会安全拒绝，
+应先将其展开为原生 server tables。WorkBuddy JSONC 的 keep 操作不改字节，实际更新会
+规范化为标准 JSON（保留数据、不保留注释）。所有写入前后均校验结构。
+
+兼容契约来源：[Codex Skills](https://learn.chatgpt.com/docs/build-skills)、
+[Codex Hooks](https://learn.chatgpt.com/docs/hooks)、[Cursor Skills](https://cursor.com/docs/skills)、
+[Cursor Hooks](https://cursor.com/docs/hooks)、[Claude Skills](https://code.claude.com/docs/en/skills)、
+[MiniMax discovery](https://github.com/MiniMax-AI/minimax-code/blob/da22f11c55d4748155d7162c1030414228a00565/packages/local-runtime/src/skills/roots.ts)、
+[WorkBuddy 配置](https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Project)。

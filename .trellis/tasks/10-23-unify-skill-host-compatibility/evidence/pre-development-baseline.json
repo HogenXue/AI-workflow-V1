@@ -1,0 +1,229 @@
+{
+  "head": "a45d78432529414a193f20e722d1b9dde728e52c",
+  "dirty": {
+    ".trellis/tasks/09-18-lan-http-memory-mcp/check.jsonl": {
+      "sha256": "71793016cf7180991a50c45f3ae0c848ec213827325ac1f1bdac71a864480bd2",
+      "mode": 420
+    },
+    ".trellis/tasks/09-18-lan-http-memory-mcp/implement.jsonl": {
+      "sha256": "42be91f40d398cfba5e34d605547da9644cae393bb347b7911217f0b9b4db701",
+      "mode": 420
+    },
+    ".trellis/tasks/09-18-lan-http-memory-mcp/prd.md": {
+      "sha256": "7322d33ed67d58df1230b3f5f0cb64c87dad022c81c383e72c5c6b62ad5b99f1",
+      "mode": 420
+    },
+    ".trellis/tasks/09-18-lan-http-memory-mcp/task.json": {
+      "sha256": "0b1905991ecf842855660a0fc5902503fb6a7e771fb21ba56cd8ffa43cc8306b",
+      "mode": 420
+    },
+    ".trellis/tasks/09-18-lan-http-memory-mcp/verification.json": {
+      "sha256": "1816573c93e280e1fb57eda1b3cb0ec1c54a492ba9ad8e47722d4c1700d8b604",
+      "mode": 420
+    },
+    ".trellis/tasks/10-10-local-skill-cleanup/check.jsonl": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-local-skill-cleanup/cleanup-plan.json": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-local-skill-cleanup/cleanup-receipt.json": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-local-skill-cleanup/implement.jsonl": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-local-skill-cleanup/implement.md": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-local-skill-cleanup/prd.md": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-local-skill-cleanup/task.json": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-local-skill-cleanup/verification.md": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/check.jsonl": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/evidence/README.md": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/evidence/backup-inventory.json": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/evidence/before-fingerprints.json": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/evidence/installation.redacted.log": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/evidence/installed-fingerprints.json": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/evidence/provenance.json": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/implement.jsonl": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/installed-verification.json": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/prd.md": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/task.json": {
+      "absent": true
+    },
+    ".trellis/tasks/10-10-reinstall-four-host-profiles/verification.md": {
+      "absent": true
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/check.jsonl": {
+      "sha256": "b75e53c94c37cc95964aead18ce34e8eb1c3dcfc5177723c2e17c7104120a51a",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/evidence/README.md": {
+      "sha256": "b2929508665288045bc5e0fe11a300672584bbd5381ff33f2aba8eb0eb489221",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/evidence/backup-inventory.json": {
+      "sha256": "3f9cdea413ed28716f19399e3b890114ddd67a2fb5ef75309ff330645ca6e853",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/evidence/before-fingerprints.json": {
+      "sha256": "a39f7c0e3ad08ca13a501000aaa0aa0f378cee8fdc6b4a939025e7460020a7dd",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/evidence/hook-runtime.json": {
+      "sha256": "ce1f2033a4ac4fd7cd8ba54fde51d6dcaa230f207e2514b51e660ddf04246628",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/evidence/installation.redacted.log": {
+      "sha256": "b0ba53b31aa85c6e78f793f59a19800eb3e2f0459c54170b28bb26dbc45263ce",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/evidence/installed-fingerprints.json": {
+      "sha256": "03dc40ccd76f259fb225c6954d1bbee9550054021ed01246db7f2ea5b49615b0",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/evidence/provenance.json": {
+      "sha256": "0174f21308cbd7feea6f7a1a8d44af8c3e86c789cd23f48cf4ee9fdfd2598a99",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/implement.jsonl": {
+      "sha256": "b75e53c94c37cc95964aead18ce34e8eb1c3dcfc5177723c2e17c7104120a51a",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/installed-verification.json": {
+      "sha256": "aa688cfb449e510f5554726bc892ad53e0ae62b944d4d76766316db271741328",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/prd.md": {
+      "sha256": "02bd8eae6d26322b7e23ebdef6662186542d98cd908541bf97cce4dfbbb88e9d",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/task.json": {
+      "sha256": "57fc822a4df564ae85f08f12ed66d46e4696af7a897c1eab057d16b5c1f4afd4",
+      "mode": 420
+    },
+    ".trellis/tasks/10-19-install-four-local-hosts/verification.md": {
+      "sha256": "8db3417ca29ead296eb822294fee69eb14015441f33a4b56ddd8a809adc70ddb",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/check.jsonl": {
+      "sha256": "eb9b6528fecac22379bbf2e937cb300a2553194f3ae59b1dc51a77ce5e703558",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/cleanup-plan.json": {
+      "sha256": "8692c2db02286511ee9cf726d856e99b4c032c66ec12a4737b5ec5e691f3f57f",
+      "mode": 384
+    },
+    ".trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/cleanup-receipt.json": {
+      "sha256": "d1d419947c989982069ea28044833d0e1258851a6bde7af505957b5478237114",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/implement.jsonl": {
+      "sha256": "eb9b6528fecac22379bbf2e937cb300a2553194f3ae59b1dc51a77ce5e703558",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/implement.md": {
+      "sha256": "82eb389b86211add6d1380e4c3a768d99fd92612d75e176d613ebd4374de4c5d",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/prd.md": {
+      "sha256": "44fb8f09aa87f0bbfbd0db12b4c66adeca73a31bbd50d5140dc5c26335eb7f75",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/task.json": {
+      "sha256": "b158c498511b6222c340f92e0cabf34928933e5b722229e208093cf984f3786f",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/verification.md": {
+      "sha256": "cba3943af38dfd94ffd7497c6c70950761715450038dc78a0d99b1a123081984",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/check.jsonl": {
+      "sha256": "aced426b634ca56ada0277159099960024f0f947c49f478fd05e37f6280f1f33",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/README.md": {
+      "sha256": "b916352f72faab09779f535b40608cc6cf0cee7cb9bd88b3a3993c27e2e36212",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/backup-inventory.json": {
+      "sha256": "c0ad89987fbd7685ffe62996beab184b40fe0995cc403e38b7267ab2ce7f7fa8",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/before-fingerprints.json": {
+      "sha256": "3eb1b8bd23715c5e3600028ce01c5e5942350c82db0bc87c875260095303ceaf",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/installation.redacted.log": {
+      "sha256": "3558295419b877730b04bfedd8a109adfa96386c21959be259de40608f4bda60",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/installed-fingerprints.json": {
+      "sha256": "5bd2770ee663d4259ed1d7a72f6123b586c0aaeb744f781ee551740b4d7ce7de",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/provenance.json": {
+      "sha256": "c649730c88ffba3c39258d053c5fa8191685bd4b04aa917cac1ad0d4d7183ced",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/implement.jsonl": {
+      "sha256": "aced426b634ca56ada0277159099960024f0f947c49f478fd05e37f6280f1f33",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/installed-verification.json": {
+      "sha256": "ca930c1f60fd8b96fe842f52405effcaf9330cf46df4b63db1435705a79691fa",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/prd.md": {
+      "sha256": "1faa906c1583bf3a2a4d4aad95396ba5c9887e860a2f2c9210aed8ae966d35a5",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/task.json": {
+      "sha256": "76157487338a8455b8bb0968342bbb859ab3e950115ba9fe6c027aababb9b079",
+      "mode": 420
+    },
+    ".trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/verification.md": {
+      "sha256": "0a4b2bc1a76e302cbca8085daafef50d61268a8a113d5d84320ddb5c4cb1b5d5",
+      "mode": 420
+    },
+    ".trellis/workspace/hogen/index.md": {
+      "sha256": "f6ac2677dd782963153933a4f783491cccdca99171b860d9ef43fa554bb6fc26",
+      "mode": 420
+    },
+    ".trellis/workspace/hogen/journal-1.md": {
+      "sha256": "e001d7d49a4b9b7b3689365d196fcc24527338e63c58836735a07793532a7b92",
+      "mode": 420
+    },
+    "AGENTS.md": {
+      "absent": true
+    }
+  },
+  "status": " D .trellis/tasks/10-10-local-skill-cleanup/check.jsonl\n D .trellis/tasks/10-10-local-skill-cleanup/cleanup-plan.json\n D .trellis/tasks/10-10-local-skill-cleanup/cleanup-receipt.json\n D .trellis/tasks/10-10-local-skill-cleanup/implement.jsonl\n D .trellis/tasks/10-10-local-skill-cleanup/implement.md\n D .trellis/tasks/10-10-local-skill-cleanup/prd.md\n D .trellis/tasks/10-10-local-skill-cleanup/task.json\n D .trellis/tasks/10-10-local-skill-cleanup/verification.md\n D .trellis/tasks/10-10-reinstall-four-host-profiles/check.jsonl\n D .trellis/tasks/10-10-reinstall-four-host-profiles/evidence/README.md\n D .trellis/tasks/10-10-reinstall-four-host-profiles/evidence/backup-inventory.json\n D .trellis/tasks/10-10-reinstall-four-host-profiles/evidence/before-fingerprints.json\n D .trellis/tasks/10-10-reinstall-four-host-profiles/evidence/installation.redacted.log\n D .trellis/tasks/10-10-reinstall-four-host-profiles/evidence/installed-fingerprints.json\n D .trellis/tasks/10-10-reinstall-four-host-profiles/evidence/provenance.json\n D .trellis/tasks/10-10-reinstall-four-host-profiles/implement.jsonl\n D .trellis/tasks/10-10-reinstall-four-host-profiles/installed-verification.json\n D .trellis/tasks/10-10-reinstall-four-host-profiles/prd.md\n D .trellis/tasks/10-10-reinstall-four-host-profiles/task.json\n D .trellis/tasks/10-10-reinstall-four-host-profiles/verification.md\n M .trellis/workspace/hogen/index.md\n M .trellis/workspace/hogen/journal-1.md\n D AGENTS.md\n?? .trellis/tasks/09-18-lan-http-memory-mcp/check.jsonl\n?? .trellis/tasks/09-18-lan-http-memory-mcp/implement.jsonl\n?? .trellis/tasks/09-18-lan-http-memory-mcp/prd.md\n?? .trellis/tasks/09-18-lan-http-memory-mcp/task.json\n?? .trellis/tasks/09-18-lan-http-memory-mcp/verification.json\n?? .trellis/tasks/10-19-install-four-local-hosts/check.jsonl\n?? .trellis/tasks/10-19-install-four-local-hosts/evidence/README.md\n?? .trellis/tasks/10-19-install-four-local-hosts/evidence/backup-inventory.json\n?? .trellis/tasks/10-19-install-four-local-hosts/evidence/before-fingerprints.json\n?? .trellis/tasks/10-19-install-four-local-hosts/evidence/hook-runtime.json\n?? .trellis/tasks/10-19-install-four-local-hosts/evidence/installation.redacted.log\n?? .trellis/tasks/10-19-install-four-local-hosts/evidence/installed-fingerprints.json\n?? .trellis/tasks/10-19-install-four-local-hosts/evidence/provenance.json\n?? .trellis/tasks/10-19-install-four-local-hosts/implement.jsonl\n?? .trellis/tasks/10-19-install-four-local-hosts/installed-verification.json\n?? .trellis/tasks/10-19-install-four-local-hosts/prd.md\n?? .trellis/tasks/10-19-install-four-local-hosts/task.json\n?? .trellis/tasks/10-19-install-four-local-hosts/verification.md\n?? .trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/check.jsonl\n?? .trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/cleanup-plan.json\n?? .trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/cleanup-receipt.json\n?? .trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/implement.jsonl\n?? .trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/implement.md\n?? .trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/prd.md\n?? .trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/task.json\n?? .trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/verification.md\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/check.jsonl\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/README.md\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/backup-inventory.json\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/before-fingerprints.json\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/installation.redacted.log\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/installed-fingerprints.json\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/evidence/provenance.json\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/implement.jsonl\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/installed-verification.json\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/prd.md\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/task.json\n?? .trellis/tasks/archive/2026-10/10-10-reinstall-four-host-profiles/verification.md\n"
+}

@@ -1,0 +1,7 @@
+RUNTIME: {"PSEdition":"Core","SerializationVersion":{"Major":1,"Minor":1,"Build":0,"Revision":1,"MajorRevision":0,"MinorRevision":1},"OS":"macOS 27.0.1","Platform":"Unix","PSCompatibleVersions":[{"Major":1,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":2,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":3,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":4,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":5,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":5,"Minor":1,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":6,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},{"Major":7,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1}],"GitCommitId":"7.6.7","WSManStackVersion":{"Major":3,"Minor":0,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},"PSRemotingProtocolVersion":{"Major":2,"Minor":4,"Build":-1,"Revision":-1,"MajorRevision":-1,"MinorRevision":-1},"PSVersion":{"Major":7,"Minor":6,"Patch":7,"PreReleaseLabel":null,"BuildLabel":null}}
+test_dependency_paths_reach_profile_components (test_install_wizard.PowerShellWizardTests.test_dependency_paths_reach_profile_components) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 2.852s
+
+OK

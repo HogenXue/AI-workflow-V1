@@ -89,8 +89,6 @@ if [[ -e "$mcp_file" && "$mcp_file" -ef "$fragment_file" ]]; then
   printf 'ERROR: Claude MCP target must not be the package MCP fragment: %s\n' "$mcp_file" >&2
   exit 1
 fi
-mkdir -p "$(dirname "$mcp_file")"
-mkdir -p "$(dirname "$backup_dir")"
 
 mcp_original_existed=0
 mcp_backup_path=""

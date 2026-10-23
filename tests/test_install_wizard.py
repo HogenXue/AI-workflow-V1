@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-COMPONENTS = ("deps", "skills", "graphify", "config", "agents", "codex-merge", "cursor-merge", "claude-merge", "minimax-merge", "workbuddy-merge")
+COMPONENTS = ("deps", "skills", "audit-skills", "graphify", "config", "agents", "codex-merge", "cursor-merge", "claude-merge", "minimax-merge", "workbuddy-merge")
 
 
 class WizardHarness:
@@ -136,10 +136,10 @@ class WizardHarness:
         self.publish_path = True
         directory = self.root / "tools bin"
         directory.mkdir()
-        marker = directory / ("path-marker.cmd" if self.ext == "ps1" else "path-marker")
+        marker = directory / ("path-marker.cmd" if self.ext == "ps1" and os.name == "nt" else "path-marker")
         marker.write_text("echo marker\n", encoding="utf-8", newline="\n")
         marker.chmod(0o755)
-        shadow = directory / (self.python_name + ".cmd" if self.ext == "ps1" else self.python_name)
+        shadow = directory / (self.python_name + ".cmd" if self.ext == "ps1" and os.name == "nt" else self.python_name)
         shadow.write_text("echo unexpected-python\n", encoding="utf-8", newline="\n")
         shadow.chmod(0o755)
         result = self.run_wizard("3\n1\ny\n")

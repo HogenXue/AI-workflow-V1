@@ -1,4 +1,4 @@
 interface:
   display_name: "Wayfinder"
-  short_description: "AIHero capability adapted to native Trellis"
-  default_prompt: "Use $wayfinder within the current project workflow and authorization."
+  short_description: "Map unresolved decisions and their prerequisites"
+  default_prompt: "Use $wayfinder to map the remaining decisions and required evidence in the current design document."

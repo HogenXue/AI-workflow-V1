@@ -12,6 +12,8 @@ python3 ./.trellis/scripts/get_context.py
 
 Confirms: current task, git state, recent commits.
 
+Read the task's `prd.md`, `design.md` / `implement.md` when present, referenced research, and latest verification/task or journal record. Reuse confirmed decisions and still-valid checks instead of restarting discovery. Handoff notes reference these canonical files and record the next action, blockers, and verification coverage; they do not duplicate the specification or create a second status.
+
 ## Step 2: Load the Phase Index
 
 ```bash
@@ -27,10 +29,10 @@ Shows the Phase Index (Plan / Execute / Finish) with routing + skill mapping.
 - `status=planning` + no `prd.md` → **1.1** (load `trellis-brainstorm`)
 - `status=planning` + `prd.md` only → decide whether the task is lightweight or complex. Lightweight can move to **1.4** review; complex returns to **1.1** to add `design.md` + `implement.md`.
 - `status=planning` + complex artifacts complete + sub-agent jsonl not curated (only the seed `_example` row) → **1.3**
-- `status=planning` + required artifacts complete + required jsonl curated or inline mode → **1.4** (ask for start review; only run `task.py start` after user confirms)
+- `status=planning` + required artifacts complete + required jsonl curated or inline mode → **1.4** (reuse existing implementation authorization; ask only for unresolved decisions or an unsatisfied project gate before `task.py start`)
 - `status=in_progress` + implementation not started → **2.1**
 - `status=in_progress` + implementation done, not yet checked → **2.2**
-- `status=in_progress` + check passed → **3.3** (spec update) → **3.4** (commit)
+- `status=in_progress` + check passed → **3.3** (spec update) → **3.4** (commit only when authorized; otherwise report verified work and the pending Git step)
 - `status=completed` (rare; usually archived immediately) → archive flow
 
 Phase rules (full detail in `.trellis/workflow.md`):

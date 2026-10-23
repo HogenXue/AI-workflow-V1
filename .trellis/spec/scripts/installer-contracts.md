@@ -524,8 +524,8 @@ OVERWRITE: mcp_servers.mem0
 
 **Host scope**:
 
-- Codex project replacement backs up and replaces only `.codex/hooks.json` and `.codex/hooks/`; unrelated `.codex` content is preserved.
-- Cursor project replacement backs up rules and hooks, removes the old managed hooks directory, then installs the template so deleted hooks cannot remain active; unrelated `.cursor` content is preserved.
+- Codex user installation backs up hooks, merges managed handlers and updates recognized package scripts; foreign handlers, group metadata, events and files are preserved.
+- Cursor project replacement backs up rules and hooks, then merges exact package handlers and recognized scripts. It preserves unrelated events, handlers and files instead of deleting the hooks directory.
 - Claude merge backs up and updates only the MCP target file (default `~/.claude.json`); non-`mcpServers` keys are preserved; default backup-dir is `~/.claude/.ai-workflow-backups`.
 - Installer targets must not overlap packaged source directories, and Cursor/Claude MCP targets must not be the packaged MCP fragment.
 - A backup directory must not be the target itself or a descendant of the target being backed up.
@@ -596,7 +596,7 @@ the direct CI command references.
 **Manifest contract**: `manifest.yaml` lists only currently distributed Skill names. A renamed or removed
 workflow Skill is not silently deleted during an ordinary install. Add it to the installer's legacy list;
 `--prune-legacy` must preview the removal and, on execution, create a unique timestamped `.bak` before
-removing the old directory or symlink. The current 18-skill manifest includes the restored
+removing the old directory or symlink. The current 19-skill manifest includes the restored
 `grill-with-docs`, `grilling`, and `domain-modeling` plus the AIHero main flow/support capabilities.
 Restored names must not remain in either shell's legacy list: `--replace --prune-legacy` backs up and
 replaces them normally, never removes the newly installed directories. Remaining legacy names are
@@ -620,3 +620,55 @@ require empty directories or placeholder files.
 **Tests required**: Assert manifest installation includes every current Skill, legacy rename pruning is
 explicit and backed up, a minimal Skill without optional resource directories validates, and existing
 optional resources still receive link/placeholder checks.
+
+
+## Convention: Discovery identity and native-host preservation
+
+The shared `scripts/lib/skill_catalog.py` parser is authoritative for installer
+catalog names/mode and package validation. Reject empty/duplicate/illegal names,
+source directory/name mismatches and source escapes before writes. Explicit-only
+packaged Skills carry both cross-host frontmatter and Codex invocation policy.
+Skill metadata absence/format errors in independent installed capabilities are
+reported without deleting them or adopting their lifecycle instructions.
+
+Preflight detects managed identities by frontmatter rather than directory name,
+including aliases and nested archives; it is read-only and prevents mutation on
+an unresolved alias. Invalid metadata on a containing directory does not stop
+recursive discovery of nested Skills. Every existing canonical target selected
+for replacement or other-root pruning must declare the matching identity in valid
+frontmatter; missing, malformed or different identities fail before any writes.
+Other-root pruning includes only managed names unless the
+independent legacy-pruning flag is also explicitly supplied. Read-only audit uses
+native discovery sets: Cursor cross-reads agents/cursor/claude/codex, MiniMax reads
+its dataDir plus compatible roots, Codex uses agents plus legacy codex; Claude
+and WorkBuddy retain their own native roots. Different payloads for one name are
+conflicts. Identical required cross-host copies are reported as equivalent;
+within-root aliases and multiple Codex definitions remain conflicts. Full wizard
+completion requires the selected-host conflict audit to pass. Installed payload
+drift and missing capabilities are available as additional explicit audit gates.
+
+A shared Python hook merger supplies Bash/PowerShell parity. Codex replaces
+individual handlers carrying the package marker, preserving mixed-group foreign
+handlers and metadata. Cursor updates exact package event/command identities and
+rejects customized variants before overwrite. Public context-script paths stay
+compatible. Fingerprinted ownership records permit later package upgrades;
+unknown/customized scripts fail closed and outer component rollback preserves
+MCP/hooks/rules. Preview writes no directories. Agents installation changes only
+its document and reports effective nonempty AGENTS.override.md; it does not force
+native hook enablement or rewrite model/permission/MCP settings. Codex /hooks
+trust and actual application invocation require separate evidence.
+
+MCP input/output is parsed and checked before atomic publication. Codex keep
+preserves bytes for valid TOML spellings; targeted updates preserve unrelated
+semantic values and source text. Unsupported closed-inline parent rewrites fail
+before writes. Python 3.10 needs tomli; Python 3.11+ uses tomllib. WorkBuddy accepts
+JSONC comments/trailing commas and BOM; keep remains byte-exact, updates emit
+standard JSON with unrelated data retained. Credential-bearing config snapshots
+stay in restricted private storage; public evidence contains hashes and redacted
+logs.
+
+Regression gates include invalid catalogs, same-name aliases/cycles/cross-root
+variants, independent-capability preservation, native TOML/JSONC forms, mixed hook
+groups and unknown scripts, inherited environment isolation, no-write previews,
+and actual context helper execution. Windows CI runs new-host, preservation,
+catalog and MCP-format suites in addition to the existing PowerShell suites.

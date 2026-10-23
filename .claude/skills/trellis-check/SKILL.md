@@ -73,7 +73,7 @@ The installed `code-review` capability supplies this analysis inside the same na
 
 ### Test Coverage
 
-- [ ] New function → unit test added?
+- [ ] New observable behavior → suitable automated evidence, or a stated reason for another verification method?
 - [ ] Bug fix → regression test added?
 - [ ] Changed behavior → existing tests updated?
 
@@ -81,7 +81,7 @@ The installed `code-review` capability supplies this analysis inside the same na
 
 - [ ] Does `.trellis/spec/` need updates? (new patterns, conventions, lessons learned)
 
-> "If I fixed a bug or discovered something non-obvious, should I document it so future me won't hit the same issue?" → If YES, update the relevant spec doc.
+> If the evidence supports a durable lesson, identify the existing spec location. During read-only review, report the proposed update; apply it only when the current authorization includes documentation changes. Task-specific findings remain in the task record when recording is authorized.
 
 ## Step 5: Cross-Layer Dimensions (if applicable)
 
@@ -98,9 +98,9 @@ Skip this step if your change is confined to a single layer.
 
 - [ ] Searched for existing similar code before creating new?
   ```bash
-  grep -r "pattern" src/
+  rg "pattern" src/
   ```
-- [ ] If 2+ places define same value → extracted to shared constant?
+- [ ] Repeated values or logic reviewed for a useful shared owner, with independent concepts kept separate?
 - [ ] After batch modification, all occurrences updated?
 
 ### C. Import/Dependency (creating new files)
@@ -116,6 +116,6 @@ Skip this step if your change is confined to a single layer.
 
 ## Step 6: Report and Fix
 
-Record Spec and Standards findings separately, with criterion/rule evidence and severity. Include the reviewed scope (including task-owned new files), actual commands/results, and uncovered boundaries in the current task. Unrun checks are not passes. Check completion does not grant task-state or Git authorization.
+Report Spec and Standards findings separately, with criterion/rule evidence and severity. Include the reviewed scope (including task-owned new files), actual commands/results, and uncovered boundaries. Write this evidence into the current task only when recording is authorized; a read-only review returns the findings in chat. Unrun checks are not passes. Check completion does not grant task-state or Git authorization.
 
 Report findings with their scope and evidence. When implementation is authorized, fix task-caused violations and rerun affected checks. Report unrelated failures or unresolved business decisions without silently changing their files or relaxing checks.

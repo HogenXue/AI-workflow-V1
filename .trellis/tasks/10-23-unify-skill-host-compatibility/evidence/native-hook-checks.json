@@ -1,0 +1,47 @@
+{
+  "foreign_hooks_preserved": true,
+  "foreign_sessionstart_handlers": 0,
+  "cases": [
+    {
+      "case": "bash-root",
+      "command": [
+        "bash",
+        "/Users/hogenxue/.codex/hooks/session-start.sh"
+      ],
+      "cwd": "/Users/hogenxue/Projects/CodexTamplate",
+      "exit_code": 0,
+      "current_task_found": true,
+      "stdout_sha256": "d95c91259adadd02fe5e5fe0536b5487038e37808b8ac90b0f3e20fe8822acd0"
+    },
+    {
+      "case": "bash-nested",
+      "command": [
+        "bash",
+        "/Users/hogenxue/.codex/hooks/session-start.sh"
+      ],
+      "cwd": "/Users/hogenxue/Projects/CodexTamplate/scripts/lib",
+      "exit_code": 0,
+      "current_task_found": true,
+      "stdout_sha256": "d95c91259adadd02fe5e5fe0536b5487038e37808b8ac90b0f3e20fe8822acd0"
+    },
+    {
+      "case": "python-nested",
+      "command": [
+        "python3",
+        "/Users/hogenxue/.codex/hooks/session-start.py"
+      ],
+      "cwd": "/Users/hogenxue/Projects/CodexTamplate/scripts/lib",
+      "exit_code": 0,
+      "current_task_found": true,
+      "stdout_sha256": "d95c91259adadd02fe5e5fe0536b5487038e37808b8ac90b0f3e20fe8822acd0"
+    }
+  ],
+  "native_hook_trust": "not_run",
+  "foreign_other_events_preserved": true,
+  "foreign_other_event_names": [
+    "PermissionRequest",
+    "PostToolUse",
+    "PreToolUse",
+    "Stop"
+  ]
+}

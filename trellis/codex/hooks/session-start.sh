@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-# Minimal project hook: emit Trellis overview when available.
+# Use the same native context resolver and exit status as the Windows command.
 set -euo pipefail
-if [[ -f .trellis/scripts/get_context.py ]]; then
-  python3 .trellis/scripts/get_context.py 2>/dev/null || true
-else
-  printf '%s\n' 'No .trellis/ in this project; skip session context.'
-fi
+hook_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec python3 "$hook_dir/session-start.py"

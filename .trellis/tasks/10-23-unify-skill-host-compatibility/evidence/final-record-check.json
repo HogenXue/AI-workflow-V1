@@ -1,0 +1,11 @@
+{
+  "original_unrelated_paths_preserved": true,
+  "journal_original_bytes_preserved_as_prefix": true,
+  "prior_session_index_rows_preserved": true,
+  "head_unchanged": true,
+  "index_empty": true,
+  "task_json_parsed": true,
+  "redacted_installer_urls_absent": true,
+  "diff_check": "passed",
+  "recallium_memory_id": 1444
+}

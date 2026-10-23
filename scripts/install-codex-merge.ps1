@@ -133,12 +133,7 @@ if ([string]::IsNullOrEmpty($backupDir)) {
 
 $templates = Join-Path $rootDir 'trellis/codex'
 $configToml = Join-Path $codexHome 'config.toml'
-try {
-    New-Item -ItemType Directory -Path $codexHome -Force -ErrorAction Stop | Out-Null
-} catch {
-    [Console]::Error.WriteLine("ERROR: could not create Codex home: $codexHome")
-    exit 1
-}
+
 
 $script:mcpOriginalExisted = 0
 $script:mcpBackupPath = ''
@@ -215,126 +210,31 @@ if (-not [string]::IsNullOrEmpty($projectRoot)) {
 $destHooksJson = Join-Path $codexHome 'hooks.json'
 $destHooksDir = Join-Path $codexHome 'hooks'
 
-$hooksExist = (
-    (Test-InstallLibExistsOrLink -Path $destHooksJson) -or
-    (Test-InstallLibExistsOrLink -Path $destHooksDir)
-)
-if ($hooksExist -and ($replace -eq 0)) {
-    if (($interactive -eq 1) -and (Test-InstallLibStdinTty)) {
-        if (-not (Install-LibPromptYn -Question "Replace existing Codex user hooks in ${codexHome}?" -Default 'n')) {
-            [Console]::Out.WriteLine('SKIP: existing Codex user hooks preserved')
-            exit 0
-        }
-        $replace = 1
-    } else {
-        [Console]::Error.WriteLine("CONFLICT: existing Codex user hooks at $codexHome (use --replace)")
-        $null = Invoke-RollbackMcp
-        exit 1
-    }
-}
-
+$hookArgs = @((Join-Path $scriptDir 'lib/merge_host_hooks.py'), '--host', 'codex', '--templates', $templates, '--target', $destHooksJson)
 if ($dryRun -eq 1) {
-    if ($hooksExist) {
-        [Console]::Out.WriteLine("DRY-RUN: hook backups would use $backupDir/<name>.<UTC timestamp>.bak")
-    }
-    [Console]::Out.WriteLine("DRY-RUN: would install user Codex hooks under $codexHome")
-    exit 0
+    & $python @hookArgs --dry-run
+    exit $LASTEXITCODE
 }
-
 $hooksJsonBackup = ''
 $hooksDirBackup = ''
-if ($replace -eq 1) {
-    if (Test-InstallLibExistsOrLink -Path $destHooksJson) {
-        if (-not (Install-LibBackupFile -Source $destHooksJson -BackupDir $backupDir -Name 'hooks.json')) {
-            $null = Invoke-RollbackMcp
-            exit 1
-        }
-        $hooksJsonBackup = $script:InstallBackupPath
-    }
-    if (Test-InstallLibExistsOrLink -Path $destHooksDir) {
-        if (-not (Install-LibBackupFile -Source $destHooksDir -BackupDir $backupDir -Name 'hooks')) {
-            $null = Invoke-RollbackMcp
-            exit 1
-        }
-        $hooksDirBackup = $script:InstallBackupPath
-    }
-    try {
-        if (Test-InstallLibExistsOrLink -Path $destHooksJson) {
-            Remove-Item -LiteralPath $destHooksJson -Force -ErrorAction Stop
-        }
-        if (Test-InstallLibExistsOrLink -Path $destHooksDir) {
-            Remove-Item -LiteralPath $destHooksDir -Recurse -Force -ErrorAction Stop
-        }
-    } catch {
-        Restore-CodexUserHooks -HooksJsonBackup $hooksJsonBackup -HooksDirBackup $hooksDirBackup `
-            -DestHooksJson $destHooksJson -DestHooksDir $destHooksDir
-        [Console]::Error.WriteLine('ERROR: could not replace existing Codex user hooks')
+if (Test-InstallLibExistsOrLink -Path $destHooksJson) {
+    if (-not (Install-LibBackupFile -Source $destHooksJson -BackupDir $backupDir -Name 'hooks.json')) {
         $null = Invoke-RollbackMcp
         exit 1
     }
+    $hooksJsonBackup = $script:InstallBackupPath
 }
-
-$templatesHooks = Join-Path $templates 'hooks'
-try {
-    New-Item -ItemType Directory -Path $destHooksDir -Force -ErrorAction Stop | Out-Null
-    Get-ChildItem -LiteralPath $templatesHooks -Force | ForEach-Object {
-        Copy-Item -LiteralPath $_.FullName -Destination $destHooksDir -Recurse -Force -ErrorAction Stop
+if (Test-InstallLibExistsOrLink -Path $destHooksDir) {
+    if (-not (Install-LibBackupFile -Source $destHooksDir -BackupDir $backupDir -Name 'hooks')) {
+        $null = Invoke-RollbackMcp
+        exit 1
     }
-} catch {
+    $hooksDirBackup = $script:InstallBackupPath
+}
+& $python @hookArgs
+if ($LASTEXITCODE -ne 0) {
     Restore-CodexUserHooks -HooksJsonBackup $hooksJsonBackup -HooksDirBackup $hooksDirBackup `
         -DestHooksJson $destHooksJson -DestHooksDir $destHooksDir
-    [Console]::Error.WriteLine('ERROR: could not install Codex user hooks')
     $null = Invoke-RollbackMcp
     exit 1
 }
-
-$templateHooksJson = Join-Path $templates 'hooks.json'
-$hookScript = Join-Path $destHooksDir 'session-start.sh'
-$pyHookRewrite = @'
-import json
-import shlex
-import sys
-from pathlib import Path
-
-template, target, hook_script = map(Path, sys.argv[1:])
-data = json.loads(template.read_text(encoding="utf-8"))
-data["hooks"]["SessionStart"][0]["hooks"][0]["command"] = f"bash {shlex.quote(str(hook_script))}"
-data["hooks"]["SessionStart"][0]["hooks"][0]["commandWindows"] = (
-    f'python "{hook_script.with_suffix(".py").as_posix()}"'
-)
-target.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-'@
-
-$pyTmp = Join-Path ([System.IO.Path]::GetTempPath()) ("codex-hooks-" + [guid]::NewGuid().ToString() + '.py')
-$hookStatus = 1
-try {
-    Set-Content -LiteralPath $pyTmp -Value $pyHookRewrite -Encoding utf8NoBOM
-    & $python $pyTmp $templateHooksJson $destHooksJson $hookScript
-    $hookStatus = $LASTEXITCODE
-} catch {
-    $hookStatus = 1
-} finally {
-    Remove-Item -LiteralPath $pyTmp -Force -ErrorAction SilentlyContinue
-}
-
-if ($hookStatus -ne 0) {
-    Restore-CodexUserHooks -HooksJsonBackup $hooksJsonBackup -HooksDirBackup $hooksDirBackup `
-        -DestHooksJson $destHooksJson -DestHooksDir $destHooksDir
-    [Console]::Error.WriteLine('ERROR: could not install Codex user hook config')
-    $null = Invoke-RollbackMcp
-    exit 1
-}
-
-# chmod +x is best-effort; no-op on Windows for .sh (matches bash `|| true`).
-if (-not $IsWindows) {
-    Get-ChildItem -LiteralPath $destHooksDir -Filter '*.sh' -ErrorAction SilentlyContinue | ForEach-Object {
-        try {
-            & chmod +x $_.FullName 2>$null
-        } catch {
-            # ignore
-        }
-    }
-}
-
-[Console]::Out.WriteLine("INSTALLED: $destHooksJson")
-[Console]::Out.WriteLine("INSTALLED: $destHooksDir")

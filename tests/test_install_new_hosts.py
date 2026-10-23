@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+import yaml
 from pathlib import Path
 
 
@@ -229,7 +230,7 @@ class NewHostMergeHarness:
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         for parent, document in ((minimax, "AGENTS.md"), (workbuddy, "CODEBUDDY.md")):
             self.assertEqual((parent / document).read_bytes(), (ROOT / "agents/AGENTS.global.md").read_bytes())
-            self.assertEqual(len(list((parent / "skills").glob("*/SKILL.md"))), 7)
+            self.assertEqual({p.parent.name for p in (parent / "skills").glob("*/SKILL.md")}, set(yaml.safe_load((ROOT / "manifest.yaml").read_text())["skills"]))
             self.assertTrue((parent / "config/defaults.yaml").is_file())
             self.assertFalse((parent / "config.toml").exists())
             self.assertFalse((parent / "hooks.json").exists())

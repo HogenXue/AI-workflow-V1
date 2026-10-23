@@ -1,4 +1,4 @@
 interface:
   display_name: "To Tickets"
-  short_description: "AIHero capability adapted to native Trellis"
-  default_prompt: "Use $to-tickets within the current project workflow and authorization."
+  short_description: "Split approved outcomes into native project tasks"
+  default_prompt: "Use $to-tickets to divide the approved scope into independently verifiable native tasks and record their blockers."

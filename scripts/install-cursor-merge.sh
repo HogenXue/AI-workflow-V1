@@ -77,7 +77,6 @@ if [[ -e "$mcp_file" && "$mcp_file" -ef "$fragment_file" ]]; then
   printf 'ERROR: Cursor MCP target must not be the package MCP fragment: %s\n' "$mcp_file" >&2
   exit 1
 fi
-mkdir -p "$(dirname "$mcp_file")"
 
 mcp_original_existed=0
 mcp_backup_path=""
@@ -189,6 +188,7 @@ if ((dry_run)); then
   fi
   printf 'DRY-RUN: would generate %s from %s and install Cursor hooks under %s/.cursor\n' \
     "$rules_dest" "$agents_src" "$proj"
+  python3 "$script_dir/lib/merge_host_hooks.py" --host cursor --templates "$templates" --target "$hooks_json_dest" --dry-run
   exit 0
 fi
 
@@ -208,26 +208,12 @@ if ((replace)); then
     install_lib_backup_file "$hooks_dir_dest" "$backup_dir" "hooks" || { rollback_mcp || true; exit 1; }
     hooks_dir_backup="$INSTALL_BACKUP_PATH"
   fi
-  if ! rm -rf "$rules_dest" "$hooks_json_dest" "$hooks_dir_dest"; then
-    if [[ -n "$rules_backup" ]]; then
-      install_lib_restore_backup "$rules_backup" "$rules_dest" || true
-    fi
-    if [[ -n "$hooks_json_backup" ]]; then
-      install_lib_restore_backup "$hooks_json_backup" "$hooks_json_dest" || true
-    fi
-    if [[ -n "$hooks_dir_backup" ]]; then
-      install_lib_restore_backup "$hooks_dir_backup" "$hooks_dir_dest" || true
-    fi
-    printf 'ERROR: could not replace existing Cursor project hooks/rules\n' >&2
-    rollback_mcp || true
-    exit 1
-  fi
+
 fi
 
 if ! mkdir -p "$proj/.cursor/rules" "$hooks_dir_dest" \
   || ! write_rules_mdc_from_agents_global "$rules_dest" \
-  || ! cp "$templates/hooks.json" "$hooks_json_dest" \
-  || ! cp -R "$templates/hooks/." "$hooks_dir_dest/"; then
+  || ! python3 "$script_dir/lib/merge_host_hooks.py" --host cursor --templates "$templates" --target "$hooks_json_dest"; then
   rm -rf "$rules_dest" "$hooks_json_dest" "$hooks_dir_dest" || true
   if [[ -n "$rules_backup" ]]; then
     install_lib_restore_backup "$rules_backup" "$rules_dest" || true

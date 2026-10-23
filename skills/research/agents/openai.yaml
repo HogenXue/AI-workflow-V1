@@ -1,4 +1,4 @@
 interface:
   display_name: "Research"
-  short_description: "AIHero capability adapted to native Trellis"
-  default_prompt: "Use $research within the current project workflow and authorization."
+  short_description: "Gather primary evidence for a defined question"
+  default_prompt: "Use $research to investigate this question with primary sources and capture concise evidence in the existing research location."

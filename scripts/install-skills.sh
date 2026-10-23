@@ -78,11 +78,10 @@ if install_lib_paths_overlap "$root_dir/skills" "$target"; then
   exit 1
 fi
 
+catalog="$script_dir/lib/skill_catalog.py"
+catalog_names="$(python3 "$catalog" catalog --root "$root_dir" --field names)" || exit $?
 if [[ -z "$mode_selected" ]]; then
-  manifest_mode="$(awk -F': ' '/^default_install_mode:/ { gsub(/[[:space:]]+$/, "", $2); print $2; exit }' "$manifest")"
-  if [[ -n "$manifest_mode" ]]; then
-    mode="$manifest_mode"
-  fi
+  mode="$(python3 "$catalog" catalog --root "$root_dir" --field mode)" || exit $?
 fi
 
 if ((explicit_dry_run)); then
@@ -105,19 +104,7 @@ fi
 skills=()
 while IFS= read -r skill; do
   skills+=("$skill")
-done < <(
-  awk '
-    /^skills:[[:space:]]*$/ { in_skills = 1; next }
-    in_skills && /^  - [A-Za-z0-9_-]+[[:space:]]*$/ {
-      name = $0
-      sub(/^  - /, "", name)
-      sub(/[[:space:]]+$/, "", name)
-      print name
-      next
-    }
-    in_skills { exit }
-  ' "$manifest"
-)
+done <<< "$catalog_names"
 
 if ((${#skills[@]} == 0)); then
   printf 'ERROR: manifest must list at least one skill\n' >&2
@@ -139,6 +126,11 @@ fi
 if ((prune_other_root)) && [[ -z "$other_codex_root" ]]; then
   fail_usage '--prune-other-root requires --target ~/.agents/skills or the active CODEX_HOME/skills'
 fi
+
+preflight_args=(preflight --root "$root_dir" --target "$target")
+[[ -n "$other_codex_root" ]] && preflight_args+=(--other-root "$other_codex_root")
+((prune_other_root)) && preflight_args+=(--allow-other-root-prune)
+python3 "$catalog" "${preflight_args[@]}" || exit $?
 
 duplicate_skill_names=()
 if [[ -n "$other_codex_root" ]]; then
@@ -184,7 +176,9 @@ fi
 
 other_root_conflicts=()
 if [[ -n "$other_codex_root" ]]; then
-  for skill in "${skills[@]}" "${legacy_skills[@]}"; do
+  prune_candidates=("${skills[@]}")
+  if ((prune_legacy)); then prune_candidates+=("${legacy_skills[@]}"); fi
+  for skill in "${prune_candidates[@]}"; do
     if [[ -e "$other_codex_root/$skill" || -L "$other_codex_root/$skill" ]]; then
       other_root_conflicts+=("$skill")
     fi

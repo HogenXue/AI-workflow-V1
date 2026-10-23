@@ -25,104 +25,6 @@ mode="dry-run"
 mode_selected=""
 agents_backup_path=""
 
-validate_config_file() {
-  local config_file="$agents_home/config.toml"
-
-  if [[ -L "$config_file" || (-e "$config_file" && ! -f "$config_file") ]]; then
-    printf 'ERROR: config.toml is not a regular file: %s\n' "$config_file" >&2
-    return 1
-  fi
-}
-
-enable_hooks_feature() {
-  local config_file="$agents_home/config.toml"
-  local config_tmp
-  local hook_setting='hooks = true   # Codex 0.129+。旧版用 `codex_hooks = true`。'
-
-  validate_config_file || return 1
-
-  config_tmp="$(mktemp "$agents_home/.config.toml.trellis.XXXXXX")" || {
-    printf 'ERROR: could not create a temporary config file\n' >&2
-    return 1
-  }
-
-  if [[ -f "$config_file" ]]; then
-    awk -v hook_setting="$hook_setting" '
-      function is_features_header(line, value) {
-        value = line
-        sub(/^[[:space:]]*/, "", value)
-        return value ~ /^\[features\][[:space:]]*(#.*)?$/
-      }
-      function is_table_header(line, value) {
-        value = line
-        sub(/^[[:space:]]*/, "", value)
-        return value ~ /^\[[^]]+\][[:space:]]*(#.*)?$/
-      }
-      BEGIN {
-        in_features = 0
-        features_found = 0
-        hooks_found = 0
-      }
-      {
-        if (is_table_header($0)) {
-          if (in_features && !hooks_found) {
-            print hook_setting
-            hooks_found = 1
-          }
-          in_features = is_features_header($0)
-          if (in_features) {
-            features_found = 1
-          }
-          print
-          next
-        }
-        if (in_features && $0 ~ /^[[:space:]]*hooks[[:space:]]*=/) {
-          print hook_setting
-          hooks_found = 1
-          next
-        }
-        print
-      }
-      END {
-        if (in_features && !hooks_found) {
-          print hook_setting
-        }
-        if (!features_found) {
-          if (NR > 0) {
-            print ""
-          }
-          print "[features]"
-          print hook_setting
-        }
-      }
-    ' "$config_file" > "$config_tmp" || {
-      rm -f "$config_tmp"
-      printf 'ERROR: could not update config.toml\n' >&2
-      return 1
-    }
-
-    if cmp -s "$config_file" "$config_tmp"; then
-      rm -f "$config_tmp"
-      printf '%s\n' 'UNCHANGED: config.toml already enables hooks'
-      return
-    fi
-
-    if ! install_lib_backup_file "$config_file" "$backup_dir" 'config.toml'; then
-      rm -f "$config_tmp"
-      return 1
-    fi
-  else
-    printf '[features]\n%s\n' "$hook_setting" > "$config_tmp"
-  fi
-
-  mv "$config_tmp" "$config_file" || {
-    rm -f "$config_tmp"
-    printf 'ERROR: could not install config.toml update\n' >&2
-    return 1
-  }
-  printf 'UPDATED: config.toml hooks feature enabled\n'
-}
-
 while (($#)); do
   case "$1" in
     --dry-run|--apply)
@@ -180,13 +82,17 @@ if [[ -z "$backup_dir" ]]; then
   backup_dir="$agents_home/.ai-workflow-backups"
 fi
 
+if ((no_hooks_feature == 0)) && [[ "$document_name" == AGENTS.md && -s "$agents_home/AGENTS.override.md" ]]; then
+  printf 'NOTE: %s is the effective global instruction file; installed AGENTS.md remains shadowed\n' "$agents_home/AGENTS.override.md"
+fi
+
 if [[ "$mode" == 'dry-run' ]]; then
   printf 'DRY-RUN: would copy %s -> %s\n' "$source_file" "$target_file"
   if [[ -e "$target_file" || -L "$target_file" ]]; then
     printf 'DRY-RUN: would back up %s as %s/%s.<UTC timestamp>.bak\n' "$target_file" "$backup_dir" "$document_name"
   fi
   if ((no_hooks_feature == 0)); then
-    printf '%s\n' 'DRY-RUN: would ensure [features].hooks = true in config.toml'
+    printf '%s\n' 'DRY-RUN: preserving config.toml and native hook settings'
   else
     printf '%s\n' 'DRY-RUN: skipping config.toml hooks feature (--no-hooks-feature)'
   fi
@@ -194,10 +100,6 @@ if [[ "$mode" == 'dry-run' ]]; then
 fi
 
 mkdir -p "$agents_home" || { printf 'ERROR: could not create agents home: %s\n' "$agents_home" >&2; exit 1; }
-
-if ((no_hooks_feature == 0)); then
-  validate_config_file || exit 1
-fi
 
 agents_backup_available=0
 if [[ -e "$target_file" || -L "$target_file" ]]; then
@@ -219,21 +121,6 @@ if ! cp "$source_file" "$target_file"; then
   exit 1
 fi
 printf 'INSTALLED: %s\n' "$target_file"
-if ((no_hooks_feature)); then
-  exit 0
-fi
-if ! enable_hooks_feature; then
-  printf '%s\n' "ERROR: config.toml update failed; restoring $document_name." >&2
-  if ((agents_backup_available)); then
-    install_lib_restore_backup "$agents_backup_path" "$target_file" || {
-      printf 'ERROR: could not restore %s from backup\n' "$document_name" >&2
-      exit 1
-    }
-  else
-    rm -f "$target_file" || {
-      printf 'ERROR: could not remove newly installed %s\n' "$document_name" >&2
-      exit 1
-    }
-  fi
-  exit 1
+if ((no_hooks_feature == 0)); then
+  printf '%s\n' 'UNCHANGED: config.toml and native hook settings preserved; use Codex /hooks to review hook trust'
 fi

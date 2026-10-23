@@ -1,4 +1,4 @@
 interface:
   display_name: "Domain Modeling"
-  short_description: "AIHero capability adapted to native Trellis"
-  default_prompt: "Use $domain-modeling within the current project workflow and authorization."
+  short_description: "Clarify domain terms and record durable decisions"
+  default_prompt: "Use $domain-modeling to clarify these business terms in the existing domain and decision documents."

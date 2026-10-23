@@ -19,6 +19,10 @@ PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 if str(PACKAGE_ROOT) not in sys.path:
     sys.path.insert(0, str(PACKAGE_ROOT))
 
+if str(PACKAGE_ROOT / "scripts" / "lib") not in sys.path:
+    sys.path.insert(0, str(PACKAGE_ROOT / "scripts" / "lib"))
+from skill_catalog import NAME, load_catalog
+
 from config.effective_config import (  # noqa: E402
     load_effective_config,
     validate_config,
@@ -233,17 +237,10 @@ def validate_skill(skill_path: Path) -> list[str]:
 
 
 def _manifest_skills(root: Path) -> tuple[list[str] | None, list[tuple[Path, str]]]:
-    manifest_path = root / "manifest.yaml"
-    manifest, error = load_yaml(manifest_path)
-    if error:
-        return None, [(manifest_path, error)]
-    if not isinstance(manifest, dict):
-        return None, [(manifest_path, "manifest must be a mapping")]
-
-    skills = manifest.get("skills")
-    if not isinstance(skills, list) or not all(isinstance(name, str) and name for name in skills):
-        return None, [(manifest_path, "manifest skills must be a list of non-empty strings")]
-    return skills, []
+    try:
+        return load_catalog(root, check_sources=False)["skills"], []
+    except (OSError, ValueError) as error:
+        return None, [(root / "manifest.yaml", str(error))]
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -272,6 +269,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     errors: list[tuple[Path, str]] = []
     successful_skills: list[str] = []
 
+    if args.skill and (len(args.skill) > 64 or not NAME.fullmatch(args.skill)):
+        print("ERROR: invalid Skill name", file=sys.stderr)
+        return 2
     if args.skill:
         skills = [args.skill]
     else:

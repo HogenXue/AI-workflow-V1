@@ -66,19 +66,16 @@ class ExistingHooksInteractiveTests(unittest.TestCase):
                                   '[mcp_servers.mem0]\ntype = "http"\nurl = "https://www.59005046.xyz:8102/mcp"\n', encoding="utf-8")
                 result = self.invoke("codex", answer, "--codex-home", str(codex))
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                self.assertIn(f"Replace existing Codex user hooks in {codex}?", result.stderr)
+                self.assertNotIn("Replace existing Codex user hooks", result.stderr)
                 text = config.read_text(encoding="utf-8")
                 self.assertIn('url = "http://www.59005046.xyz:8102/mcp"', text)
                 self.assertIn('url = "https://www.59005046.xyz:8102/mcp"', text)
                 self.assertIn("KEEP: mcp_servers.recallium", result.stdout)
-                if answer == "n":
-                    self.assertIn("SKIP: existing Codex user hooks preserved", result.stdout)
-                    self.assertEqual((hooks / "old.txt").read_text(), "original")
-                    self.assertEqual(json.loads((codex / "hooks.json").read_text()), {"original": True})
-                else:
-                    self.assertFalse((hooks / "old.txt").exists())
-                    self.assertTrue((hooks / "session-start.sh").is_file())
-                    self.assertIn("hooks", json.loads((codex / "hooks.json").read_text()))
+                self.assertEqual((hooks / "old.txt").read_text(), "original")
+                self.assertTrue((hooks / "session-start.sh").is_file())
+                payload = json.loads((codex / "hooks.json").read_text())
+                self.assertTrue(payload["original"])
+                self.assertIn("SessionStart", payload["hooks"])
 
     def test_cursor_existing_hooks_keep_and_replace_finish_without_unset_variable(self):
         for answer in ("n", "y"):
@@ -98,7 +95,7 @@ class ExistingHooksInteractiveTests(unittest.TestCase):
                     self.assertIn("SKIP: existing project Cursor hooks/rules preserved", result.stdout)
                     self.assertEqual((hooks / "old.txt").read_text(), "original")
                 else:
-                    self.assertFalse((hooks / "old.txt").exists())
+                    self.assertEqual((hooks / "old.txt").read_text(), "original")
                     self.assertTrue((project / ".cursor/hooks.json").is_file())
                     self.assertTrue((project / ".cursor/rules/ai-workflow-global.mdc").is_file())
 

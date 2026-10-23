@@ -136,7 +136,7 @@ Required before declaring done:
 - [ ] Original repro no longer reproduces (re-run the Phase 1 loop)
 - [ ] Regression test passes (or absence of seam is documented)
 - [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
-- [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
+- [ ] Task-created disposable diagnostic artifacts cleaned up within authorization, or retained with a clear evidence/run pointer; unrelated files and useful evidence preserved
 - [ ] The confirmed hypothesis is recorded in the current Trellis task; include it in a commit or PR message only when that Git action is authorized
 
 **Then ask: what would have prevented this bug?** If the answer involves architectural change (no good test seam, tangled callers, hidden coupling), record a follow-up recommendation using the `$codebase-design` vocabulary. Any implementation returns to Trellis planning and GitNexus impact analysis. Make the recommendation **after** the fix is in, not before — you have more information now than when you started.

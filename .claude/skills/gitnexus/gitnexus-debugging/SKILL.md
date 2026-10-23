@@ -1,6 +1,6 @@
 ---
 name: gitnexus-debugging
-description: "Use when the user is debugging a bug, tracing an error, or asking why something fails. Examples: \"Why is X failing?\", \"Where does this error come from?\", \"Trace this bug\""
+description: "Supply graph evidence for an existing diagnosis when callers or execution flows are unclear. The diagnostic workflow retains reproduction, cause verification and repair ownership."
 ---
 
 # Debugging with GitNexus
@@ -11,7 +11,9 @@ description: "Use when the user is debugging a bug, tracing an error, or asking 
 - "Trace where this error comes from"
 - "Who calls this method?"
 - "This endpoint returns 500"
-- Investigating bugs, errors, or unexpected behavior
+- Supporting an existing diagnosis that needs call-chain evidence
+
+Graph evidence supports the current diagnostic owner; loading this skill does not start a second diagnosis or authorize repair.
 
 ## Workflow
 
@@ -22,7 +24,7 @@ description: "Use when the user is debugging a bug, tracing an error, or asking 
 4. gitnexus_cypher({query: "MATCH path..."})                 → Custom traces if needed
 ```
 
-> If "Index is stale" → run `npx gitnexus analyze` in terminal.
+Use GitNexus when the user asks for graph analysis or current project rules and change risk require it. Local low-risk source navigation and ordinary Git synchronization can use source/language tools. When the graph is stale or unavailable, state that limit and verify current source. Rebuild only when the current task needs graph evidence and updating is authorized; a read-only request does not authorize generated context files or index writes.
 
 ## Checklist
 

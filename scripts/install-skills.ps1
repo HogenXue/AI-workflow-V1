@@ -31,37 +31,6 @@ function Test-ExistsOrLink {
     return (Test-InstallLibExistsOrLink -Path $Path)
 }
 
-function Get-ManifestSkills {
-    param([Parameter(Mandatory)][string]$ManifestPath)
-    $names = [System.Collections.Generic.List[string]]::new()
-    $inSkills = $false
-    foreach ($line in Get-Content -LiteralPath $ManifestPath) {
-        if ($line -match '^skills:\s*$') {
-            $inSkills = $true
-            continue
-        }
-        if ($inSkills) {
-            if ($line -match '^  - ([A-Za-z0-9_-]+)\s*$') {
-                $names.Add($Matches[1])
-                continue
-            }
-            break
-        }
-    }
-    # Emit names to the pipeline so @(Get-ManifestSkills) collects individual strings.
-    return $names.ToArray()
-}
-
-function Get-ManifestDefaultInstallMode {
-    param([Parameter(Mandatory)][string]$ManifestPath)
-    foreach ($line in Get-Content -LiteralPath $ManifestPath) {
-        if ($line -match '^default_install_mode:\s*(.+?)\s*$') {
-            return $Matches[1].Trim()
-        }
-    }
-    return ''
-}
-
 $scriptDir = $PSScriptRoot
 $rootDir = (Resolve-Path -LiteralPath (Join-Path $scriptDir '..')).ProviderPath
 $manifest = Join-Path $rootDir 'manifest.yaml'
@@ -141,14 +110,18 @@ if (Install-LibPathsOverlap -Source (Join-Path $rootDir 'skills') -Target $targe
     exit 1
 }
 
-if (-not $modeSelected) {
-    if (Test-Path -LiteralPath $manifest -PathType Leaf) {
-        $manifestMode = Get-ManifestDefaultInstallMode -ManifestPath $manifest
-        if (-not [string]::IsNullOrEmpty($manifestMode)) {
-            $mode = $manifestMode
-        }
-    }
+$python = $null
+foreach ($name in @('python', 'python3')) {
+    $command = Get-Command $name -ErrorAction SilentlyContinue | Where-Object { $_.CommandType -ne 'Alias' } | Select-Object -First 1
+    if ($command) { $python = $command.Source; break }
 }
+if (-not $python) { Fail-Usage 'Python 3.10+ with PyYAML is required for Skill installation' }
+$catalog = Join-Path $scriptDir 'lib/skill_catalog.py'
+$catalogJson = & $python $catalog catalog --root $rootDir --field json
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+$catalogData = $catalogJson | ConvertFrom-Json
+$skills = @($catalogData.skills)
+if (-not $modeSelected) { $mode = $catalogData.default_install_mode }
 
 if ($explicitDryRun) {
     $dryRun = $true
@@ -167,7 +140,6 @@ if (-not (Test-Path -LiteralPath $manifest -PathType Leaf)) {
     exit 1
 }
 
-$skills = @(Get-ManifestSkills -ManifestPath $manifest)
 if ($skills.Count -eq 0) {
     [Console]::Error.WriteLine('ERROR: manifest must list at least one skill')
     exit 1
@@ -198,6 +170,12 @@ if ([string]::Equals($normalizedTarget, $codexSkills, $comparison)) {
 if ($pruneOtherRoot -and [string]::IsNullOrEmpty($otherCodexRoot)) {
     Fail-Usage '--prune-other-root requires --target ~/.agents/skills or the active CODEX_HOME/skills'
 }
+
+$preflightArgs = @('preflight', '--root', $rootDir, '--target', $target)
+if ($otherCodexRoot) { $preflightArgs += @('--other-root', $otherCodexRoot) }
+if ($pruneOtherRoot) { $preflightArgs += '--allow-other-root-prune' }
+& $python $catalog @preflightArgs
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 $duplicateSkillNames = [System.Collections.Generic.List[string]]::new()
 if (-not [string]::IsNullOrEmpty($otherCodexRoot)) {
@@ -251,7 +229,9 @@ if ($legacyConflicts.Count -gt 0) {
 
 $otherRootConflicts = [System.Collections.Generic.List[string]]::new()
 if (-not [string]::IsNullOrEmpty($otherCodexRoot)) {
-    foreach ($skill in (@($skills) + $legacySkills)) {
+    $pruneCandidates = @($skills)
+    if ($pruneLegacy) { $pruneCandidates += $legacySkills }
+    foreach ($skill in $pruneCandidates) {
         $otherPath = Join-Path $otherCodexRoot $skill
         if (Test-ExistsOrLink -Path $otherPath) {
             if (-not $otherRootConflicts.Contains($skill)) {

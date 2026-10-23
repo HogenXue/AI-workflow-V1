@@ -1,0 +1,4 @@
+interface:
+  display_name: "Retro"
+  short_description: "Review completed work and capture useful lessons"
+  default_prompt: "Use $retro to review this completed work, explain the evidence-backed lessons, and identify the smallest useful follow-ups."

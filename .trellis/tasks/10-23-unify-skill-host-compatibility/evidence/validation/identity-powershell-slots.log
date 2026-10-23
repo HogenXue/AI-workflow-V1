@@ -1,0 +1,72 @@
+[
+  {
+    "action": "replace",
+    "case": 0,
+    "expected_allowed": false,
+    "exit": 2,
+    "passed": true
+  },
+  {
+    "action": "replace",
+    "case": 1,
+    "expected_allowed": false,
+    "exit": 2,
+    "passed": true
+  },
+  {
+    "action": "replace",
+    "case": 2,
+    "expected_allowed": false,
+    "exit": 2,
+    "passed": true
+  },
+  {
+    "action": "replace",
+    "case": 3,
+    "expected_allowed": false,
+    "exit": 2,
+    "passed": true
+  },
+  {
+    "action": "replace",
+    "case": 4,
+    "expected_allowed": true,
+    "exit": 0,
+    "passed": true
+  },
+  {
+    "action": "prune",
+    "case": 0,
+    "expected_allowed": false,
+    "exit": 2,
+    "passed": true
+  },
+  {
+    "action": "prune",
+    "case": 1,
+    "expected_allowed": false,
+    "exit": 2,
+    "passed": true
+  },
+  {
+    "action": "prune",
+    "case": 2,
+    "expected_allowed": false,
+    "exit": 2,
+    "passed": true
+  },
+  {
+    "action": "prune",
+    "case": 3,
+    "expected_allowed": false,
+    "exit": 2,
+    "passed": true
+  },
+  {
+    "action": "prune",
+    "case": 4,
+    "expected_allowed": true,
+    "exit": 0,
+    "passed": true
+  }
+]

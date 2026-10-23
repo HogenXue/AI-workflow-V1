@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 function Show-Usage {
     [Console]::Error.WriteLine(
-        'Usage: install.ps1 <deps|skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge> [component options]'
+        'Usage: install.ps1 <deps|skills|audit-skills|graphify|agents|config|codex-merge|cursor-merge|claude-merge|minimax-merge|workbuddy-merge> [component options]'
     )
     [Console]::Error.WriteLine('       install.ps1   # interactive (TTY only)')
     [Console]::Error.WriteLine('')
@@ -32,6 +32,7 @@ function Invoke-InstallComponent {
     $scriptMap = @{
         'deps'        = 'install-deps.ps1'
         'skills'       = 'install-skills.ps1'
+        'audit-skills' = 'install-audit-skills.ps1'
         'graphify'     = 'install-graphify.ps1'
         'agents'       = 'install-agents.ps1'
         'config'       = 'install-config.ps1'
@@ -398,12 +399,12 @@ function Invoke-InteractiveMain {
     $mem0Url = ''
 
     if ($modeChoice -eq '2') {
-        [Console]::Out.WriteLine('Component: deps | skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge | minimax-merge | workbuddy-merge')
+        [Console]::Out.WriteLine('Component: deps | skills | audit-skills | graphify | agents | config | codex-merge | cursor-merge | claude-merge | minimax-merge | workbuddy-merge')
         [Console]::Out.Write('Component: ')
         $comp = [Console]::In.ReadLine()
         if ($null -eq $comp) { $comp = '' }
         switch ($comp) {
-            { $_ -in @('deps', 'skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge', 'minimax-merge', 'workbuddy-merge') } {
+            { $_ -in @('deps', 'skills', 'audit-skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge', 'minimax-merge', 'workbuddy-merge') } {
                 $extra = [System.Collections.Generic.List[string]]::new()
                 if ($comp -like '*-merge') {
                     if (-not [string]::IsNullOrEmpty($projectRoot)) {
@@ -487,6 +488,13 @@ function Invoke-InteractiveMain {
         [Console]::Out.WriteLine('=== Installing WorkBuddy profile ===')
         Install-ProfileWorkBuddy -Mem0Url $mem0Url
     }
+    $auditArgs = @()
+    if ($wantCodex) { $auditArgs += @('--host', 'codex') }
+    if ($wantCursor) { $auditArgs += @('--host', 'cursor') }
+    if ($wantClaude) { $auditArgs += @('--host', 'claude') }
+    if ($wantMinimax) { $auditArgs += @('--host', 'minimax') }
+    if ($wantWorkBuddy) { $auditArgs += @('--host', 'workbuddy') }
+    Invoke-InstallComponent audit-skills @auditArgs
     [Console]::Out.WriteLine('Done.')
 }
 
@@ -509,7 +517,7 @@ if ($argv.Count -gt 1) {
 }
 
 switch ($component) {
-    { $_ -in @('deps', 'skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge', 'minimax-merge', 'workbuddy-merge') } {
+    { $_ -in @('deps', 'skills', 'audit-skills', 'graphify', 'agents', 'config', 'codex-merge', 'cursor-merge', 'claude-merge', 'minimax-merge', 'workbuddy-merge') } {
         Invoke-InstallComponent $component @rest
     }
     { $_ -in @('--help', '-h', 'help') } {

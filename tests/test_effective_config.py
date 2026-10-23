@@ -1,3 +1,4 @@
+import os
 import json
 import subprocess
 import sys
@@ -129,6 +130,7 @@ class EffectiveConfigCliTests(unittest.TestCase):
             text=True,
             capture_output=True,
             check=False,
+            env={k: v for k, v in os.environ.items() if k != "PYTHONPATH"},
         )
 
         self.assertEqual(result.returncode, 2)

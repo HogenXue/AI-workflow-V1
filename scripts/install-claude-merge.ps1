@@ -155,21 +155,7 @@ if ((Test-Path -LiteralPath $mcpFile) -and (Test-SameFilesystemPath -Left $mcpFi
 }
 
 $mcpParent = [System.IO.Path]::GetDirectoryName($mcpFile)
-try {
-    New-Item -ItemType Directory -Path $mcpParent -Force -ErrorAction Stop | Out-Null
-} catch {
-    [Console]::Error.WriteLine("ERROR: could not create MCP parent directory: $mcpParent")
-    exit 1
-}
-$backupParent = [System.IO.Path]::GetDirectoryName($backupDir)
-if (-not [string]::IsNullOrEmpty($backupParent)) {
-    try {
-        New-Item -ItemType Directory -Path $backupParent -Force -ErrorAction Stop | Out-Null
-    } catch {
-        [Console]::Error.WriteLine("ERROR: could not create backup parent directory: $backupParent")
-        exit 1
-    }
-}
+
 
 $script:mcpOriginalExisted = 0
 $script:mcpBackupPath = ''

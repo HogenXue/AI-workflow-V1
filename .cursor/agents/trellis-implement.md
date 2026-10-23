@@ -1,6 +1,6 @@
 ---
 name: trellis-implement
-description: Trellis implementation agent. Use this exact agent for Trellis task implementation, implement.jsonl context injection, and hook-injection tests. Do not use generic/default/generalPurpose agents for Trellis implementation. No git commit allowed.
+description: Trellis implementation role for an authorized task and its curated implement.jsonl context. Use the native agent type when available; an equivalent scoped role must load the same artifacts. Git actions remain with the main session and user authorization.
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 # Implement Agent
@@ -74,7 +74,7 @@ Read the task's prd.md, design.md if present, and implement.md if present:
 
 ### 4. Verify
 
-Run project's lint and typecheck commands to verify changes.
+Run the task-selected checks required by applicable specs, with scope proportionate to the change. Documentation may use structural/reference checks. Reuse still-valid evidence; rerun affected checks after changes. Report actual commands, results and uncovered boundaries, and keep unrelated failures outside the assigned fix scope.
 
 ---
 
@@ -95,8 +95,8 @@ Run project's lint and typecheck commands to verify changes.
 
 ### Verification Results
 
-- Lint: Passed
-- TypeCheck: Passed
+- Actual command: result and coverage
+- Not run or uncovered: reason
 ```
 
 ---

@@ -1,0 +1,16 @@
+{
+  "root": "/private/tmp/pwsh-validation-bye34yp3",
+  "version": "7.6.7",
+  "release_url": "https://github.com/PowerShell/PowerShell/releases/tag/v7.6.7",
+  "artifact_url": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.7/powershell-7.6.7-osx-arm64.tar.gz",
+  "sha256": "50dde99bb066adacbb9a748182d09eb9beff25119dc3b12e85c84b6b6b1c5da9",
+  "official_checksum_verified": true,
+  "codesign_verify_command": "codesign --verify --deep --strict /private/tmp/pwsh-validation-bye34yp3/runtime/pwsh",
+  "codesign_verify_exit": 0,
+  "quarantine_or_security_changes": false,
+  "global_installation": false,
+  "archive_bytes": 70628335,
+  "runtime_version_file": "/private/tmp/pwsh-validation-bye34yp3/runtime-version.json",
+  "fixture_result_file": "/private/tmp/pwsh-validation-bye34yp3/result.json",
+  "diagnostic_fixture_outcome": "passed with native macOS executable names; no repo change"
+}

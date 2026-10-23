@@ -1,0 +1,26 @@
+{
+  "base_commit": "a45d78432529414a193f20e722d1b9dde728e52c",
+  "source_state": "uncommitted package working tree; see source-package.json for exact installed source",
+  "before_captured_at_utc": "2026-10-23T15:50:07.358380+00:00",
+  "installer_command": [
+    "bash",
+    "scripts/install.sh"
+  ],
+  "selected_profiles": [
+    "codex",
+    "cursor",
+    "minimax",
+    "workbuddy"
+  ],
+  "project_scope": "explicitly skipped; no additional project root requested",
+  "installer_exit_code": 0,
+  "private_root": "/Users/hogenxue/.local/state/codextamplate/installation-audits/2026-10-23-shyz1wxr",
+  "private_root_mode": "0700",
+  "private_files_mode": "0600",
+  "raw_log_sha256": "cc3a697781dd37d8d90e4253d639dba65c998285ef158e82afa4eb555a753d59",
+  "redacted_log_sha256": "118f692937f68979c20e00b254f8ece2475b671a478ce796b58a8c55bffe12d1",
+  "audit_script_sha256": "95f21d73ccd3dc7710c4d1374c459fd593fbb3ab4b989411f3768cd5fa0b8f26",
+  "wrapper_sha256": "cc5fa87e50f28b9603d9db98d501ea6d7fb1bcbf5063ba51a3f4ea50fa4bc93a",
+  "redaction": "URL values replaced by SHA-256; credential-bearing lines redacted",
+  "pre_selection_attempt": "PTY relay was restarted before selection or installer mutations; original transcript retained privately"
+}

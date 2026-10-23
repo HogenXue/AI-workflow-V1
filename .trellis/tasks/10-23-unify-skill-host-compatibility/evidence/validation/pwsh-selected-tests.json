@@ -1,0 +1,48 @@
+{
+  "selection": {
+    "test_install_components_ps": [
+      "InstallComponentsPsTests"
+    ],
+    "test_install_entry_ps": [
+      "InstallEntryPsTests"
+    ],
+    "test_install_existing_hooks_ps": [
+      "ExistingHooksInteractiveTests"
+    ],
+    "test_install_lib_ps": [
+      "InstallLibPsTests"
+    ],
+    "test_install_merge_ps": [
+      "InstallMergePsSmokeTests"
+    ],
+    "test_install_review_ps": [
+      "SourceAliasSafetyTests",
+      "GraphifyPsRecoveryTests"
+    ],
+    "test_install_new_hosts": [
+      "PowerShellNewHostMergeTests"
+    ],
+    "test_install_wizard": [
+      "PowerShellWizardTests"
+    ],
+    "test_aihero_install": [
+      "AiheroInstallPsTests"
+    ],
+    "test_host_preservation": [
+      "PowerShellHostPreservationTests"
+    ]
+  },
+  "count": 79,
+  "source_sha256": {
+    "tests/test_install_components_ps.py": "d960218be037b270e878a3249ce26865e6ae7f7a929c7bb0626d4c85a5a99ad3",
+    "tests/test_install_entry_ps.py": "a5537eda98af65ca1c0cd2fd5fd2d01634415505bf4d08a7fefada5dc0ae8fb8",
+    "tests/test_install_existing_hooks_ps.py": "1bbf04efeab9dc66f510ffe29cd5211568717cc90d5abb7f675977f5452dc18d",
+    "tests/test_install_lib_ps.py": "6aef8fd623bef9ecf80bd927e9adfeec79867eeeeb596187bfca871a2dc2ed14",
+    "tests/test_install_merge_ps.py": "c374a46b46ea7d28f3782ecc70f3b11613f50836698f49d103f08c54d52eefac",
+    "tests/test_install_review_ps.py": "fee185f4f297a476991216ba58b111f13ee2ad3a93e0201ddeea93dcc9994813",
+    "tests/test_install_new_hosts.py": "a5027007bf7924b0f5f83640b42f451e752f3b0898c46d74848190a35f7bb4df",
+    "tests/test_install_wizard.py": "e4c52a0b3d0fab49545e1618ad906c0e1fe64cdb92f94367d3be73890db611ab",
+    "tests/test_aihero_install.py": "1691349dc03500e6b7ccf0cd21e32288f7b486ff6a5803f5bb6ebb9ac55f543e",
+    "tests/test_host_preservation.py": "ee89c333fdc26c645f17b058c1195519bb87a5c79c6c7c81c7ce93a1c199570c"
+  }
+}

@@ -1,0 +1,12 @@
+test_skills_conflict_requires_replace_and_preserves_existing_file (test_install.ComponentInstallTests.test_skills_conflict_requires_replace_and_preserves_existing_file) ... ok
+test_other_root_pruning_is_explicit_and_backed_up (test_install.ComponentInstallTests.test_other_root_pruning_is_explicit_and_backed_up) ... ok
+test_default_component_backups_share_agents_root (test_install.ComponentInstallTests.test_default_component_backups_share_agents_root) ... ok
+test_preview_preserves_old_restored_skills_and_does_not_prune_them (test_aihero_install.AiheroInstallBashTests.test_preview_preserves_old_restored_skills_and_does_not_prune_them) ... ok
+test_upgrade_replaces_restored_skills_with_backups_and_prunes_only_legacy (test_aihero_install.AiheroInstallBashTests.test_upgrade_replaces_restored_skills_with_backups_and_prunes_only_legacy) ... ok
+test_preview_preserves_old_restored_skills_and_does_not_prune_them (test_aihero_install.AiheroInstallPsTests.test_preview_preserves_old_restored_skills_and_does_not_prune_them) ... ok
+test_upgrade_replaces_restored_skills_with_backups_and_prunes_only_legacy (test_aihero_install.AiheroInstallPsTests.test_upgrade_replaces_restored_skills_with_backups_and_prunes_only_legacy) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 5.660s
+
+OK

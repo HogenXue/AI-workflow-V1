@@ -15,7 +15,7 @@ NEW_SKILLS = (
     "grill-with-docs", "to-spec", "to-tickets", "implement", "code-review", "wayfinder",
     "grilling", "domain-modeling", "research", "prototype", "handoff",
 )
-CURRENT_SKILLS = ("memory", "gitnexus", "grill-me", "tdd", "diagnosing-bugs", "codebase-design", "resolving-merge-conflicts")
+CURRENT_SKILLS = ("memory", "gitnexus", "grill-me", "tdd", "diagnosing-bugs", "codebase-design", "resolving-merge-conflicts", "retro")
 RESTORED = ("grill-with-docs", "grilling", "domain-modeling")
 
 
@@ -44,6 +44,9 @@ class AiheroInstallContract:
         sentinel = self.target / name / "sentinel.txt"
         sentinel.parent.mkdir(parents=True, exist_ok=True)
         sentinel.write_text(f"user copy of {name}", encoding="utf-8")
+        (sentinel.parent / "SKILL.md").write_text(
+            f"---\nname: {name}\ndescription: Existing installed Skill fixture.\n---\nOld body.\n", encoding="utf-8"
+        )
         return sentinel
 
     def test_fresh_install_copies_all_skills_metadata_and_licenses(self) -> None:

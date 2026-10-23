@@ -6,9 +6,9 @@
 
 1. **Plan before code** — figure out what to do before you start
 2. **Specs injected, not remembered** — guidelines are injected via hook/skill, not recalled from memory
-3. **Persist everything** — research, decisions, and lessons all go to files; conversations get compacted, files don't
+3. **Persist authorized task evidence** — record confirmed research, decisions and lessons in their existing artifact locations; explicit stateless Grill and read-only consultation retain their boundaries
 4. **Incremental development** — one task at a time
-5. **Capture learnings** — after each task, review and write new knowledge back to spec
+5. **Capture learnings** — review task evidence and promote durable, confirmed knowledge to existing specs within authorization
 
 ---
 
@@ -47,7 +47,7 @@ python3 ./.trellis/scripts/task.py create "<title>" [--slug <name>] [--parent <d
 python3 ./.trellis/scripts/task.py start <name>          # set active task (session-scoped when available)
 python3 ./.trellis/scripts/task.py current --source      # show active task and source
 python3 ./.trellis/scripts/task.py finish                # clear active task (triggers after_finish hooks)
-python3 ./.trellis/scripts/task.py archive <name>        # move to archive/{year-month}/
+python3 ./.trellis/scripts/task.py archive <name> --no-commit  # archive without implicit Git actions
 python3 ./.trellis/scripts/task.py list [--mine] [--status <s>]
 python3 ./.trellis/scripts/task.py list-archive
 
@@ -83,7 +83,7 @@ Records every AI session for cross-session tracking under `.trellis/workspace/<d
 - `index.md` — personal index (total sessions, last active).
 
 ```bash
-python3 ./.trellis/scripts/add_session.py --title "Title" --commit "hash" --summary "Summary"
+python3 ./.trellis/scripts/add_session.py --title "Title" --commit "hash" --summary "Summary" --no-commit
 ```
 
 ### Context Script
@@ -151,6 +151,7 @@ Phase 3: Finish  → verify, update spec, commit when authorized, and wrap up
 
 ### Request Triage
 
+- A focused Git pull/sync request follows the existing Git authorization and preservation procedure; it does not require a new development task, interview or graph rebuild.
 - Conversation or read-only consultation: do not create a task. An explicit small implementation request authorizes lightweight task recording and implementation after requirements and acceptance are clear; do not ask again for the same scope.
 - Explicit complex implementation request: create a planning task and review requirements within the authorized scope. Ask before task creation only when the user requested consultation only, declined task tracking, or a scope/risk decision remains unresolved.
 - Creation-only approval does not authorize implementation. Reuse explicit implementation approval when scope and decisions are already clear; ask only for unresolved or high-risk choices.
@@ -228,7 +229,7 @@ Sub-agent dispatch protocol applies to all platforms and all sub-agents, includi
 
 [workflow-state:in_progress]
 Tools: `trellis-implement` / `trellis-research` are sub-agent types only (Task/Agent tool, NOT Skill; there is no skill by these names). `trellis-update-spec` is a skill. `trellis-check` exists as both; prefer the Agent form when verifying after code changes.
-Flow: `trellis-implement` -> `trellis-check` -> `trellis-update-spec` -> commit (Phase 3.4) -> `/trellis:finish-work`.
+Flow: `trellis-implement` -> `trellis-check` -> `trellis-update-spec` -> Git authorization check (Phase 3.4) -> `/trellis:finish-work`.
 Native checks cover the actual task scope and report Spec and Standards separately; use task-selected verification. Check success does not grant Git authorization.
 The adapted `implement` capability follows this execution policy; `code-review` supplies analysis inside the same native check rather than launching another review. `handoff` records canonical pointers in current task/journal locations.
 Main-session default: dispatch implement/check sub-agents. Sub-agent self-exemption: if already running as `trellis-implement`, do NOT spawn another `trellis-implement` or `trellis-check`; if already running as `trellis-check`, do NOT spawn another `trellis-check` or `trellis-implement`. Dispatch is main session only.
@@ -241,7 +242,7 @@ Dispatch prompt starts with `Active task: <task path from task.py current>`. Rea
      instead of dispatching sub-agents. -->
 
 [workflow-state:in_progress-inline]
-Flow: `trellis-before-dev` -> edit -> `trellis-check` -> validation -> `trellis-update-spec` -> commit (Phase 3.4) -> `/trellis:finish-work`.
+Flow: `trellis-before-dev` -> edit -> `trellis-check` -> validation -> `trellis-update-spec` -> Git authorization check (Phase 3.4) -> `/trellis:finish-work`.
 Native checks cover the actual task scope and report Spec and Standards separately; use task-selected verification. Check success does not grant Git authorization.
 The adapted `implement` capability follows this execution policy; `code-review` supplies analysis inside the same native check rather than launching another review. `handoff` records canonical pointers in current task/journal locations.
 Do not dispatch implement/check sub-agents in inline mode.
@@ -251,7 +252,7 @@ Read context: `prd.md` -> `design.md if present` -> `implement.md if present`, p
 ### Phase 3: Finish
 - 3.2 Debug retrospective `[on demand]`
 - 3.3 Spec update `[required · once]`
-- 3.4 Commit changes `[required · once]`
+- 3.4 Check Git authorization `[required · once]`
 - 3.5 Wrap-up reminder
 
 > Note: step 3.1 was folded into 2.2 (last-iteration full-scope check) and 3.4 (commit preamble). Numbering kept stable to avoid breaking external references.
@@ -265,7 +266,7 @@ Read context: `prd.md` -> `design.md if present` -> `implement.md if present`, p
      channel as the live blocks. -->
 
 [workflow-state:completed]
-Code committed. Run `/trellis:finish-work`; if dirty, return to Phase 3.4 first.
+Verify actual acceptance and Git state. Use the native finish-work entrypoint only within archive/journal authorization; preserve unrelated dirty work and keep pending Git actions explicit.
 [/workflow-state:completed]
 
 ### Rules
@@ -284,7 +285,7 @@ When a user request matches one of these intents inside an active task, route fi
 
 - Unresolved user decisions -> automatically select task-bound `grill-with-docs` under Phase 1.1; reuse the current interview owner and confirmed answers, with native brainstorm as fallback. Clear requests proceed without interviewing. Implementation-discovered requirement gaps return to planning for the affected scope.
 - `in_progress` implementation/check -> dispatch `trellis-implement` / `trellis-check`.
-- Repeated debugging -> `trellis-break-loop`; spec updates -> `trellis-update-spec`.
+- Completed-work retrospective -> `retro`; repeated-debugging retrospective -> native `trellis-break-loop`, which reuses `retro` or its bounded fallback. Active diagnosis keeps its diagnostic owner. Spec updates -> `trellis-update-spec`.
 
 [/Claude Code, Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, Oh My Pi, ZCode, Reasonix, Trae]
 
@@ -292,7 +293,7 @@ When a user request matches one of these intents inside an active task, route fi
 
 - Unresolved user decisions -> automatically select task-bound `grill-with-docs` under Phase 1.1; reuse the current interview owner and confirmed answers, with native brainstorm as fallback. Clear requests proceed without interviewing. Implementation-discovered requirement gaps return to planning for the affected scope.
 - Before editing -> `trellis-before-dev`; after editing -> `trellis-check`.
-- Repeated debugging -> `trellis-break-loop`; spec updates -> `trellis-update-spec`.
+- Completed-work retrospective -> `retro`; repeated-debugging retrospective -> native `trellis-break-loop`, which reuses `retro` or its bounded fallback. Active diagnosis keeps its diagnostic owner. Spec updates -> `trellis-update-spec`.
 
 [/codex-inline, Kilo, Antigravity, Devin]
 
@@ -469,7 +470,7 @@ If `task.py start` errors with a session-identity message (no context key from h
 | Condition | Required |
 |------|:---:|
 | `prd.md` exists | ✅ |
-| User confirms task should enter implementation | ✅ |
+| Existing explicit implementation authorization covers the reviewed scope; outstanding decisions resolved | ✅ |
 | `task.py start` has been run (status = in_progress) | ✅ |
 | `research/` has artifacts (complex tasks) | recommended |
 | `design.md` exists (complex tasks) | ✅ |
@@ -494,7 +495,7 @@ Goal: turn reviewed planning artifacts into code that passes quality checks.
 Spawn the implement sub-agent:
 
 - **Agent type**: `trellis-implement`
-- **Task description**: Implement the reviewed task artifacts, consulting materials under `{TASK_DIR}/research/`; finish by running project lint and type-check
+- **Task description**: Implement the reviewed task artifacts, consulting materials under `{TASK_DIR}/research/`; finish by running the task-selected checks required by applicable specs
 - **Dispatch prompt guard**: Tell the spawned agent it is already the `trellis-implement` sub-agent and must implement directly, not spawn another `trellis-implement` / `trellis-check`.
 
 The platform hook/plugin auto-handles:
@@ -508,7 +509,7 @@ The platform hook/plugin auto-handles:
 Spawn the implement sub-agent:
 
 - **Agent type**: `trellis-implement`
-- **Task description**: Implement the reviewed task artifacts, consulting materials under `{TASK_DIR}/research/`; finish by running project lint and type-check
+- **Task description**: Implement the reviewed task artifacts, consulting materials under `{TASK_DIR}/research/`; finish by running the task-selected checks required by applicable specs
 - **Dispatch prompt guard**: The prompt MUST start with `Active task: <task path>`, then explicitly say the spawned agent is already `trellis-implement` and must implement directly without spawning another `trellis-implement` / `trellis-check`.
 
 The pull-based sub-agent definition auto-handles the context load requirement:
@@ -522,7 +523,7 @@ The pull-based sub-agent definition auto-handles the context load requirement:
 Spawn the implement sub-agent:
 
 - **Agent type**: `trellis-implement`
-- **Task description**: Implement the reviewed task artifacts, consulting materials under `{TASK_DIR}/research/`; finish by running project lint and type-check
+- **Task description**: Implement the reviewed task artifacts, consulting materials under `{TASK_DIR}/research/`; finish by running the task-selected checks required by applicable specs
 - **Dispatch prompt guard**: Tell the spawned agent it is already the `trellis-implement` sub-agent and must implement directly, not spawn another `trellis-implement` / `trellis-check`.
 
 The platform prelude auto-handles the context load requirement:
@@ -537,7 +538,7 @@ The platform prelude auto-handles the context load requirement:
 2. Read `{TASK_DIR}/prd.md`, then `design.md` if present, then `implement.md` if present
 3. Consult materials under `{TASK_DIR}/research/`
 4. Implement the code per reviewed artifacts
-5. Run project lint and type-check
+5. Run the task-selected checks required by applicable specs
 
 [/codex-inline, Kilo, Antigravity, Devin]
 
@@ -550,14 +551,14 @@ One native check covers two dimensions: **Spec** (PRD acceptance, correctness, s
 Spawn the check sub-agent:
 
 - **Agent type**: `trellis-check`
-- **Task description**: Review all code changes against specs and task artifacts; fix any findings directly; ensure lint and type-check pass
-- **Dispatch prompt guard**: Tell the spawned agent it is already the `trellis-check` sub-agent and must review/fix directly, not spawn another `trellis-check` / `trellis-implement`.
+- **Task description**: Review the verified task scope against specs and task artifacts; report Spec and Standards separately. Fix task-caused findings only within authorized implementation scope; read-only review reports findings. Run task-selected checks and record coverage.
+- **Dispatch prompt guard**: Tell the spawned agent it is already the `trellis-check` sub-agent and must perform the assigned review and any authorized fixes directly, not spawn another `trellis-check` / `trellis-implement`.
 
 The check agent's job:
 - Review code changes against specs
 - Review code changes against `prd.md`, `design.md` if present, and `implement.md` if present
-- Auto-fix issues it finds
-- Run lint and typecheck to verify
+- Fix task-caused issues only within authorized implementation scope; report unrelated or read-only findings
+- Run the selected checks proportionate to the task and record actual results
 
 [/Claude Code, Cursor, OpenCode, codex-sub-agent, Kiro, Gemini, Qoder, CodeBuddy, Copilot, Droid, Pi, Oh My Pi, ZCode, Reasonix, Trae]
 
@@ -568,16 +569,16 @@ Load the `trellis-check` skill and verify the code per its guidance:
 - lint / type-check / tests
 - Cross-layer consistency (when changes span layers)
 
-If issues are found → fix → re-check, until green.
+If implementation fixes are authorized, repair task-caused issues and rerun affected checks. For read-only review, report findings; unrelated failures remain outside scope.
 
 [/codex-inline, Kilo, Antigravity, Devin]
 
-**Final pass (before Phase 3.4 commit)**: the last 2.2 of a task must run full-scope, not just on the latest implement chunk. List all affected packages with `python3 ./.trellis/scripts/get_context.py --mode packages`, then load each package's spec index Quality Check section. This catches cross-layer / multi-package issues a mid-iteration local 2.2 cannot.
+**Final pass (before completion or an authorized commit)**: review the entire task scope, including earlier task commits and new files, rather than only the latest chunk. Use `python3 ./.trellis/scripts/get_context.py --mode packages` to identify affected packages and read their relevant Quality Check sections. Run the smallest selected checks that cover the task's risks; task-wide review does not mean a full-repository test run. Reuse still-valid evidence.
 
 #### 2.3 Rollback `[on demand]`
 
 - `check` reveals a prd defect → return to Phase 1, fix `prd.md`, then redo 2.1
-- Implementation went wrong → revert code, redo 2.1
+- Implementation went wrong → correct task-caused changes under existing authorization; preserve unrelated edits and obtain authorization before destructive rollback
 - Need more research → research (same as Phase 1.2), write findings into `research/`
 
 ---
@@ -588,12 +589,9 @@ Goal: ensure code quality, capture lessons, record the work.
 
 #### 3.2 Debug retrospective `[on demand]`
 
-If this task involved repeated debugging (the same issue was fixed multiple times), load the `trellis-break-loop` skill to:
-- Classify the root cause
-- Explain why earlier fixes failed
-- Propose prevention
+For a requested retrospective of completed work, use `retro`. For repeated debugging, use the native `trellis-break-loop` entrypoint, which performs the same analysis through `retro` when available and a bounded local fallback otherwise. Keep one retrospective owner and reuse existing evidence.
 
-The goal is to capture debugging lessons so the same class of issue doesn't recur.
+Capture supported causes, why earlier attempts failed, useful practices and the smallest prevention recommendations. Retrospective analysis does not rerun work, implement fixes, create tasks or grant Git/task-state authority. Write to existing records only within the request or current task's documentation authorization.
 
 #### 3.3 Spec update `[required · once]`
 
@@ -602,65 +600,28 @@ Load the `trellis-update-spec` skill and review whether this task produced new k
 - Pitfalls you hit
 - New technical decisions
 
-Update the docs under `.trellis/spec/` accordingly. Even if the conclusion is "nothing to update", walk through the judgment.
+Promote only durable confirmed lessons to existing `.trellis/spec/` documents within current authorization; task-specific results remain in the task record. Record "no durable spec change" when appropriate. A read-only review or stateless Grill does not grant document writes.
 
-#### 3.4 Commit changes `[required · once]`
+#### 3.4 Check Git authorization `[required · once]`
 
 **Spec-sync preamble**: before drafting commits, ask: did this task fix a bug or surface non-obvious knowledge that should land in `.trellis/spec/` so future-you (or future-AI) doesn't repeat the mistake? If yes, return to Phase 3.3 first — spec writes belong in the same task's commit batch, not as a forgotten follow-up.
 
-The AI drives a batched commit of this task's code changes so `/finish-work` can run cleanly afterwards. Goal: produce work commits FIRST, then bookkeeping (archive + journal) commits land after — never interleaved.
+This step checks the Git authorization boundary; it does not make committing mandatory. When the user has not authorized a commit, report verified work and pending Git state, then continue the permitted wrap-up. A finish/archive request alone does not grant Git permission.
 
-**Step-by-step**:
+When commit authorization exists:
 
-1. **Inspect dirty state**:
-   ```bash
-   git status --porcelain
-   ```
-   Snapshot every dirty path. If the working tree is clean, skip to 3.5.
+1. Inspect `git status --short`, staged/unstaged changes, task-owned new files and recent history. Preserve unrelated work and existing staging.
+2. Establish the task's exact file/hunk allowlist and a suitable commit message. Reuse the user's existing authorization when it covers this concrete scope; ask only if inclusion, history changes or another material choice remains unresolved.
+3. Stage and commit only the allowed changes. Verify the resulting commit and remaining worktree state. Do not amend or rewrite history unless separately authorized.
+4. Push only when explicitly authorized, verify the configured remote/branch and report the actual remote result. An authorized commit alone does not authorize pushing.
 
-2. **Learn commit style** from recent history (so drafted messages blend in):
-   ```bash
-   git log --oneline -5
-   ```
-   Note the prefix convention (`feat:` / `fix:` / `chore:` / `docs:` ...), language (中文/English), and length style.
-
-3. **Classify dirty files into two groups**:
-   - **AI-edited this session** — files you wrote/edited via Edit/Write/Bash tool calls in this session. You know what changed and why.
-   - **Unrecognized** — dirty files you did NOT touch this session (could be the user's manual edits, leftover WIP from a previous session, or unrelated work). Do NOT silently include these.
-
-4. **Draft a commit plan**. Group AI-edited files into logical commits (1 commit per coherent change unit, not 1 commit per file). Each entry: `<commit message>` + file list. List unrecognized files separately at the bottom.
-
-5. **Present the plan once, ask for one-shot confirmation**. Format:
-   ```
-   Proposed commits (in order):
-     1. <message>
-        - <file>
-        - <file>
-     2. <message>
-        - <file>
-
-   Unrecognized dirty files (NOT in any commit — confirm include/exclude):
-     - <file>
-     - <file>
-
-   Reply 'ok' / '行' to execute. Reply with edits, or '我自己来' / 'manual' to abort.
-   ```
-
-6. **On confirmation**: run `git add <files>` + `git commit -m "<msg>"` for each batch in order. Do not amend. Do not push.
-
-7. **On rejection** (user replies "不行" / "我自己来" / "manual" / any pushback on the plan): stop. Do not attempt a second plan. The user will commit by hand; you skip ahead to 3.5 once they confirm.
-
-**Rules**:
-- No `git commit --amend` anywhere — three-stage three-commit flow (work commits → archive commit → journal commit).
-- Never push to remote in this step.
-- If the user wants different message wording but accepts the file grouping, edit the message and re-confirm once — but if they reject the grouping, exit to manual mode.
-- The batched plan is one prompt; do not prompt per commit.
+Archive and journal scripts can auto-commit by default. Callers must pass `--no-commit` unless existing Git authorization covers the exact resulting changes; using the flag and then a scoped Git procedure preserves unrelated task/workspace work. If those records are also authorized for commit, include them through the same scoped Git procedure; there is no mandatory number or sequence of commits.
 
 #### 3.5 Wrap-up reminder
 
 Record the next action, unresolved blockers, and actual verification scope/results in the current task or journal. Reference canonical PRD/design/implementation/research files instead of a second handoff specification. Native continue resumes from task status and artifacts, reuses valid evidence, and does not grant implementation or Git authorization.
 
-After the above, remind the user they can run `/finish-work` to wrap up (archive the task, record the session).
+Report completion and pending actions. If archive/journal work remains, point to the available native finish-work entrypoint; do not assume a command spelling or execute it without matching authorization.
 
 ---
 

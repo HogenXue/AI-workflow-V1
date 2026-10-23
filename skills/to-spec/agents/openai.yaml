@@ -1,4 +1,4 @@
 interface:
   display_name: "To Spec"
-  short_description: "AIHero capability adapted to native Trellis"
-  default_prompt: "Use $to-spec within the current project workflow and authorization."
+  short_description: "Synthesize agreed requirements into the existing spec"
+  default_prompt: "Use $to-spec to consolidate the confirmed requirements and acceptance criteria into the existing specification."

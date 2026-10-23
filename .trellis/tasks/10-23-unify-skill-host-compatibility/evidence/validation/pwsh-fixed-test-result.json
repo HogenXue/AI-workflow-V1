@@ -1,0 +1,6 @@
+{
+  "test": "PowerShellWizardTests.test_dependency_paths_reach_profile_components",
+  "successful": true,
+  "total": 1,
+  "source_sha256": "95ed8fb043132d0e3441518af498c7a3e41f334eba2bb161242224b2989843ad"
+}

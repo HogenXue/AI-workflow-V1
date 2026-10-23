@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 8
-- **Last Active**: 2026-10-10
+- **Total Sessions**: 11
+- **Last Active**: 2026-10-24
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~268 | Active |
+| `journal-1.md` | ~310 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 11 | 2026-10-24 | Unify Skill routing and verify four native host updates | - | `main` |
 | 8 | 2026-10-10 | Reinstall four local profiles after Skill cleanup | - | `main` |
 | 7 | 2026-10-10 | Prune duplicate and obsolete local Skills | - | `main` |
 | 6 | 2026-10-10 | Address evidence retention and private HTTP review comments | - | `main` |

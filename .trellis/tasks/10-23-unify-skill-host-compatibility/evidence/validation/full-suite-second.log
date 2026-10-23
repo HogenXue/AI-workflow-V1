@@ -1,0 +1,47 @@
+...sss.........s..........sssssss.........................s..ssssssDEPENDENCIES: GitNexus, Trellis, Graphify
+.DEPENDENCIES: GitNexus, Trellis, Graphify
+.DEPENDENCIES: GitNexus, Trellis, Graphify
+.DRY-RUN: npm install --global --engine-strict gitnexus@latest
+DRY-RUN: npm install --global --engine-strict @mindfoldhq/trellis@latest
+DRY-RUN: /opt/homebrew/opt/python@3.14/bin/python3.14 -m venv /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpg7tiiubq/.agents/tools/graphify
+DRY-RUN: /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpg7tiiubq/.agents/tools/graphify/bin/python -m pip install graphifyy
+DEPENDENCIES: GitNexus, Trellis, Graphify
+SKIP: gitnexus already usable at existing-gitnexus
+SKIP: trellis already usable at existing-trellis
+SKIP: graphify already usable at existing-graphify
+.PATH: .
+NOTE: CLI installation does not initialize projects or generate graphs. Add the reported directories to your shell PATH if needed.
+DEPENDENCIES: GitNexus, Trellis, Graphify
+SKIP: gitnexus already usable at existing-gitnexus
+SKIP: trellis already usable at existing-trellis
+.DEPENDENCIES: GitNexus, Trellis, Graphify
+.DEPENDENCIES: GitNexus, Trellis, Graphify
+.DEPENDENCIES: GitNexus, Trellis, Graphify
+SKIP: gitnexus already usable at existing-gitnexus
+SKIP: trellis already usable at existing-trellis
+SKIP: graphify already usable at /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpm791qpg1/.agents/tools/graphify/bin/graphify
+.PATH: .
+PATH: /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpm791qpg1/.agents/tools/graphify/bin
+NOTE: CLI installation does not initialize projects or generate graphs. Add the reported directories to your shell PATH if needed.
+DEPENDENCIES: GitNexus, Trellis, Graphify
+.DEPENDENCIES: GitNexus, Trellis, Graphify
+INSTALLED: gitnexus -> /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpqurnsrx5/npm/bin/gitnexus
+INSTALLED: trellis -> /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpqurnsrx5/npm/bin/trellis
+INSTALLED: graphify -> /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpqurnsrx5/.agents/tools/graphify/bin/graphify
+.PATH: /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpqurnsrx5/npm/bin
+PATH: /var/folders/n2/clr4tz2x4571vm2nh8dmlkq80000gn/T/tmpqurnsrx5/.agents/tools/graphify/bin
+NOTE: CLI installation does not initialize projects or generate graphs. Add the reported directories to your shell PATH if needed.
+DEPENDENCIES: GitNexus, Trellis, Graphify
+SKIP: gitnexus already usable at recovered-gitnexus
+SKIP: trellis already usable at recovered-trellis
+SKIP: graphify already usable at existing-graphify
+.PATH: .
+NOTE: CLI installation does not initialize projects or generate graphs. Add the reported directories to your shell PATH if needed.
+DEPENDENCIES: GitNexus, Trellis, Graphify
+.DEPENDENCIES: GitNexus, Trellis, Graphify
+....ssssssssssss..................................sssssss.ssssssssssss..........ssssssssss..sssssssssss.............ssssssssss........................................................................
+----------------------------------------------------------------------
+Ran 277 tests in 17.772s
+
+OK (skipped=80)
+ADD: mcp_servers.mem0

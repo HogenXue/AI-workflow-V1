@@ -74,7 +74,6 @@ fi
 
 templates="$root_dir/trellis/codex"
 config_toml="$codex_home/config.toml"
-mkdir -p "$codex_home"
 
 mcp_original_existed=0
 mcp_backup_path=""
@@ -135,7 +134,7 @@ if ((dry_run)); then
   if [[ -e "$dest_hooks_json" || -L "$dest_hooks_json" || -e "$dest_hooks_dir" || -L "$dest_hooks_dir" ]]; then
     printf 'DRY-RUN: hook backups would use %s/<name>.<UTC timestamp>.bak\n' "$backup_dir"
   fi
-  printf 'DRY-RUN: would merge Trellis SessionStart hook under %s and preserve other hooks\n' "$codex_home"
+  python3 "$script_dir/lib/merge_host_hooks.py" --host codex --templates "$templates" --target "$dest_hooks_json" --dry-run
   exit 0
 fi
 
@@ -160,60 +159,7 @@ rollback_hooks() {
   rollback_mcp || true
 }
 
-if ! mkdir -p "$dest_hooks_dir" \
-  || ! cp "$templates/hooks/session-start.sh" "$dest_hooks_dir/session-start.sh" \
-  || ! cp "$templates/hooks/session-start.py" "$dest_hooks_dir/session-start.py"; then
-  printf 'ERROR: could not install Codex SessionStart hook\n' >&2
+if ! python3 "$script_dir/lib/merge_host_hooks.py" --host codex --templates "$templates" --target "$dest_hooks_json"; then
   rollback_hooks
   exit 1
 fi
-
-if ! python3 - "$templates/hooks.json" "$dest_hooks_json" "$dest_hooks_dir/session-start.sh" <<'PY'
-import json
-import shlex
-import sys
-from pathlib import Path
-
-template, target, hook_script = map(Path, sys.argv[1:])
-template_data = json.loads(template.read_text(encoding="utf-8"))
-managed = template_data["hooks"]["SessionStart"]
-managed[0]["hooks"][0]["command"] = f"bash {shlex.quote(str(hook_script))}"
-managed[0]["hooks"][0]["commandWindows"] = (
-    f'python "{hook_script.with_suffix(".py").as_posix()}"'
-)
-
-if target.exists():
-    data = json.loads(target.read_text(encoding="utf-8"))
-else:
-    data = {"hooks": {}}
-if not isinstance(data, dict) or not isinstance(data.get("hooks"), dict):
-    raise ValueError("existing hooks.json must contain a hooks object")
-
-existing = data["hooks"].get("SessionStart", [])
-if not isinstance(existing, list):
-    raise ValueError("existing SessionStart hook must be a list")
-
-def is_managed(entry: object) -> bool:
-    if not isinstance(entry, dict) or not isinstance(entry.get("hooks"), list):
-        return False
-    return any(
-        isinstance(hook, dict) and hook.get("statusMessage") == "Trellis/Codex session context"
-        for hook in entry["hooks"]
-    )
-
-data["hooks"]["SessionStart"] = [
-    entry
-    for entry in existing
-    if not is_managed(entry)
-] + managed
-target.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-PY
-then
-  printf 'CONFLICT: could not merge Codex user hook config\n' >&2
-  rollback_hooks
-  exit 1
-fi
-chmod +x "$dest_hooks_dir/session-start.sh" 2>/dev/null || true
-printf 'INSTALLED: %s\n' "$dest_hooks_json"
-printf 'INSTALLED: %s\n' "$dest_hooks_dir/session-start.sh"
-printf 'INSTALLED: %s\n' "$dest_hooks_dir/session-start.py"
