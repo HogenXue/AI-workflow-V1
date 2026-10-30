@@ -31,3 +31,15 @@ explicitly Trellis project supplements and need no speculative rewrite.
 The prior task's adjacent-lock design is superseded only for known global host targets.
 Custom-target behavior, existing non-TTY dispatch and host MCP/hook code remain intact.
 No package version bump, release, Git mutation or real host installation is needed here.
+
+## Authorized local Skill compatibility follow-up
+
+The later conflict audit authorizes targeted local Skill adaptation and backup-based
+installation. Keep the package manifest unchanged; third-party Skills remain local.
+Implementation helpers defer to Trellis execution/review and explicit Git authorization.
+Release helpers trigger on actual release requests and delegate Trellis coordination to
+the packaged release Skill. Interview aliases route Trellis work to grill-with-docs;
+domain modeling substitutes canonical Trellis paths before applying its formats.
+Memory requires explicit save consent for every backend. Shared Graphify uses exposed
+host tools and chunk files (parent may persist returned JSON); archive the old Codex
+duplicate outside discovery roots. Do not rebuild graphs or mutate hooks/configuration.

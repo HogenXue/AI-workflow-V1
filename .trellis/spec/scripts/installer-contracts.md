@@ -350,6 +350,8 @@ third-party update lock. Standard `~/.agents/skills`, active CODEX_HOME/skills a
 configured, use `XDG_STATE_HOME/skills/.skill-lock.json` instead. Custom targets keep
 their adjacent `<parent of target skills directory>/.skill-lock.json` behavior. The
 shared path resolver is used by both the component and full-profile wizard.
+Custom target spellings such as `.` and `skills/.` refer to the target directory's
+parent, while an existing symlink target retains the caller-visible parent.
 
 Replacement and adoption are separate choices; normal installs preserve external locks.
 The recommended Codex/Cursor wizard offers a separate default-no ownership prompt when

@@ -272,6 +272,31 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertEqual(lock.read_text(encoding="utf-8"), original)
         self.assertFalse(self.backup.exists())
 
+    def test_custom_dot_target_adopts_parent_lock(self) -> None:
+        target = self.root / "custom" / "skills"
+        target.mkdir(parents=True)
+        lock = target.parent / ".skill-lock.json"
+        lock.write_text('{"skills":{"tdd":{"source":"upstream"}}}', encoding="utf-8")
+        for spelling in (str(target / ".") + "/.", "."):
+            with self.subTest(target=spelling):
+                result = subprocess.run(
+                    ["bash", str(ROOT / "scripts" / "install.sh"), "skills", "--dry-run",
+                     "--adopt-skill-lock", "--target", spelling],
+                    cwd=target, text=True, capture_output=True, check=False,
+                )
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn(str(lock), result.stdout)
+
+    def test_missing_custom_dot_target_previews_parent_lock(self) -> None:
+        parent = self.root / "custom-missing"
+        parent.mkdir()
+        lock = parent / ".skill-lock.json"
+        lock.write_text('{"skills":{"tdd":{"source":"upstream"}}}', encoding="utf-8")
+        result = self.run_component("skills", "--dry-run", "--adopt-skill-lock",
+                                    "--target", str(parent / "skills") + "/.")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(str(lock), result.stdout)
+
     def test_custom_symlink_target_adopts_its_caller_adjacent_lock(self) -> None:
         actual_skills = self.root / "actual" / "skills"
         actual_skills.mkdir(parents=True)

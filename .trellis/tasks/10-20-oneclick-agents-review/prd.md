@@ -18,6 +18,9 @@ Connect ownership adoption to the Codex/Cursor wizard and review AGENTS.global.m
 - Preserve ordinary CLI behavior, opt-out, backup and rollback guarantees. Do not add a
   Claude installation profile, alter EGM business architecture, or modify other projects.
 - Leave Git changes uncommitted unless separately requested.
+- Follow-up: align installed implementation, release, interview and domain Skills with
+  Trellis ownership and explicit Git authorization; unify Memory write consent and
+  Graphify platform dispatch, and sync the repaired packaged Skills locally with backups.
 
 ## Acceptance Criteria
 
@@ -27,8 +30,13 @@ Connect ownership adoption to the Codex/Cursor wizard and review AGENTS.global.m
 - [x] Both review axes and all three template audit outcomes are recorded separately.
 - [x] The global template routes non-Trellis tasks to their existing workflow.
 - [x] Targeted tests and native Trellis review pass with no unresolved implementation findings.
+- [x] Review follow-up: Codex setup selects the active override entry and custom dot
+  target spellings resolve the adjacent lock without changing symlink ownership.
 
 ## Scope confirmation
+
+The user subsequently authorized repair of the six Skill compatibility findings and
+local installation alignment. This does not authorize commits, releases or graph rebuilds.
 
 The user explicitly requested installer adaptation and review, then confirmed baseline
 `3bc7af2` and the three named AGENTS templates. No further product choice remains open.

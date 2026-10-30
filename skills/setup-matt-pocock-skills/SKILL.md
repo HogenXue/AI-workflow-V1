@@ -10,14 +10,15 @@ setup 本身不创建开发任务、需求、领域术语或架构决定。它�
 
 ## 1. 识别项目与宿主
 
-读取项目适用的 `AGENTS.md`、`CLAUDE.md`、已有 `## Agent skills`、`docs/agents/`
+读取项目适用的 `AGENTS.override.md`、`AGENTS.md`、`CLAUDE.md`、已有 `## Agent skills`、`docs/agents/`
 和实际任务/领域文档。若有 `.trellis/`，读取 `.trellis/workflow.md`、相关 spec 和当前
 task（若存在）。Git remote 只用于了解仓库，不能据此把 Trellis 改成 GitHub Issues。
 
 识别当前宿主：
 
-- Codex：配置入口是项目 `AGENTS.md`，即使同目录已有 `CLAUDE.md` 也优先用 AGENTS。
-  只有 CLAUDE 时，创建最小 AGENTS，指向需要共享的现有规则与新配置；避免复制整份规则。
+- Codex：先检查项目规则入口的发现顺序。存在非空 `AGENTS.override.md` 时更新它；否则
+  使用 `AGENTS.md`。同目录只自动加载一个入口，避免把指针写入被覆盖的文件。若仅有
+  `CLAUDE.md`，创建最小 `AGENTS.md`，指向需要共享的现有规则与新配置，避免复制整份规则。
 - Claude：使用现有 `CLAUDE.md`；没有时复用现有 AGENTS，或明确选择需要创建的入口。
 - 其他宿主：沿用已发现、确实会加载的项目规则入口；宿主无法确定且会影响写入时才询问。
 

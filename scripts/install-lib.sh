@@ -147,6 +147,13 @@ install_lib_skill_lock_path() {
       return 0
     fi
   done
+  if [[ -d "$target" ]]; then
+    target="$(cd -L -- "$target" && pwd -L)" || return 1
+  else
+    while [[ "$target" == */. ]]; do
+      target="${target%/.}"
+    done
+  fi
   printf '%s/.skill-lock.json\n' "$(dirname "${target%/}")"
 }
 
