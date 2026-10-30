@@ -324,6 +324,23 @@ curated context, unchecked acceptance criteria, fresh/stale evidence, evidence
 reuse across a commit boundary, unchanged task status, and a temporary
 planning-to-completion lifecycle.
 
+### CI dependency cache contract
+
+- **Scope / trigger**: Changes to Python dependency setup in `.github/workflows/ci.yml`.
+- **Signatures**: `actions/setup-python` uses `cache: pip` and
+  `cache-dependency-path: requirements-dev.txt`; installation runs
+  `python -m pip install -r requirements-dev.txt`.
+- **Contract**: Checkout precedes setup. Cache hashing and installation use the same
+  committed dependency file on both Ubuntu and macOS; quality runs without `--task`.
+- **Validation / errors**: A cache miss is valid. A missing dependency file fails setup;
+  failed installation or quality checks must fail the job.
+- **Cases**: A cold cache installs dependencies; a warm cache still runs installation
+  and quality; a nonexistent dependency path must not be treated as successful setup.
+- **Verification**: For the changed commit, inspect both matrix jobs and confirm setup,
+  dependency installation, and the shared quality entry all execute successfully.
+- **Wrong / correct**: Omitting the path relies on default `requirements.txt` or
+  `pyproject.toml` discovery. Explicitly select this repository's `requirements-dev.txt`.
+
 ---
 
 ## Convention: Skill renames and optional resources
