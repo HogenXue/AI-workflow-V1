@@ -338,6 +338,7 @@ planning-to-completion lifecycle.
   and quality; a nonexistent dependency path must not be treated as successful setup.
 - **Verification**: For the changed commit, inspect both matrix jobs and confirm setup,
   dependency installation, and the shared quality entry all execute successfully.
+  CI uses `--format json` so captured test output and failures remain visible in logs.
 - **Wrong / correct**: Omitting the path relies on default `requirements.txt` or
   `pyproject.toml` discovery. Explicitly select this repository's `requirements-dev.txt`.
 

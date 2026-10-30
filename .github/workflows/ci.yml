@@ -26,4 +26,4 @@ jobs:
       - name: Install development dependencies
         run: python -m pip install -r requirements-dev.txt
       - name: Run shared quality entry
-        run: python config/workflow_check.py --project-root "$GITHUB_WORKSPACE" quality
+        run: python config/workflow_check.py --project-root "$GITHUB_WORKSPACE" --format json quality
