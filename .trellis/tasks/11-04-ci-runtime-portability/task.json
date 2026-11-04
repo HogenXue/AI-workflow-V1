@@ -15,12 +15,12 @@
   "branch": "codex/fix-main-ci-portability",
   "base_branch": "main",
   "worktree_path": null,
-  "commit": null,
+  "commit": "f9b2c216996bcdcc4a70122febe517a37d9af821",
   "pr_url": null,
   "subtasks": [],
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "",
+  "notes": "Repair acceptance verified on three-platform CI run 41794717798; final evidence-only commit is also checked in CI. Main merge and task archival were not requested.",
   "meta": {}
 }

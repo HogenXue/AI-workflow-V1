@@ -18,8 +18,8 @@ Fix the failures at main `4f3753f` without changing installer ownership or weake
 - [x] CRLF lock paths support adoption without losing unrelated lock metadata.
 - [x] Failed Python catalog commands retain their exit status and do not create targets.
 - [x] PowerShell startup state is isolated and the existing strict no-write previews pass.
-- [ ] The exact pushed repair commit passes Ubuntu, macOS, and Windows CI; all actual results and skips are recorded.
-- [ ] The observed Ubuntu parallel-backup failure is diagnosed and fixed; Windows preservation/catalog tests use the actual PATH-resolved Bash and isolate native runtime state.
+- [x] The exact pushed repair commit passes Ubuntu, macOS, and Windows CI; all actual results and skips are recorded.
+- [x] The observed Ubuntu parallel-backup failure is diagnosed and fixed; Windows preservation/catalog tests use the actual PATH-resolved Bash and isolate native runtime state.
 
 ## Notes
 

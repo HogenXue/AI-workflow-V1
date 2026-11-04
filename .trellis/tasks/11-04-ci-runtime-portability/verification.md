@@ -30,7 +30,7 @@
 - Follow-up `edab52e`, run https://github.com/HogenXue/AI-workflow-V1/actions/runs/41791736517: Ubuntu and macOS passed, including the stronger eight-writer backup test. Windows preservation (17 tests) passed after shell/runtime isolation. It then exposed native argv paths versus Git Bash HOME string mismatch in catalog other-root pruning tests; the safety assertions remained enabled and correctly failed at the earlier usage boundary.
 - Standard-root comparison now converts only path representation via `cygpath -u` when available. Original I/O arguments and logical caller/symlink identity remain intact; native PowerShell already uses its native path comparisons.
 - Mac stress of the strengthened eight-writer test: 60 runs passed in 18.794 seconds. This is diagnostic evidence, not a claimed fix for the one observed Ubuntu backup failure.
-- After the logical path-format fix, local catalog tests 9/9 and component installer tests 39/39 passed; shell syntax and diff checks passed. Independent cloud Linux/PowerShell 7.5.4 verification of `edab52e` was reported as 316 tests OK (7 Windows-only skips), with 100 original two-writer Bash, 40 PowerShell, and 100 strengthened eight-writer stress runs also passing. The single earlier payload disappearance remains unreproduced and is not presented as causally repaired.
+- After the logical path-format fix, local catalog tests 9/9 and component installer tests 39/39 passed; shell syntax and diff checks passed. Independent cloud Linux/PowerShell 7.5.4 verification of `edab52e` was reported as 316 tests OK (7 Windows-only skips), with 100 original two-writer Bash, 40 PowerShell, and 100 strengthened eight-writer stress runs also passing. At this stage the disappearance remained unreproduced; the deterministic diagnosis below subsequently resolved it.
 
 ## Deterministic backup diagnosis and repair
 
@@ -41,6 +41,36 @@
 - Source impact review covered all Bash backup call sites in agents/config/skills/Graphify and host merges. No graph tool is exposed; source analysis and full installer/rollback suites provide the verification boundary. The change introduces no Python dependency for shell-only backup callers.
 - The wizard test still asserts the full intended fixture path, using the platform's cygpath representation only for Windows Bash output; no expected path fragment or safety assertion is dropped.
 - Local full suite after the atomic reservation and wizard fixes: 317 tests OK in 159.945 seconds (7 existing Windows-only skips). The additional staging-allocation failure regression then brought component coverage to 41 passing tests; it verifies lock release, empty backup directory and unchanged source. All pre-existing test method names remain; two backup regressions, three CRLF regressions and one startup regression are added overall.
+- Repair commit `f9b2c216996bcdcc4a70122febe517a37d9af821`, run https://github.com/HogenXue/AI-workflow-V1/actions/runs/41794717798: Ubuntu passed 318 tests (7 existing Windows-only skips). Its new diagnostic confirms `/usr/bin/mkdir`, `mkdir (uutils coreutils) 0.10.0`, matching the affected upstream implementation. Both the deterministic race and eight-writer tests passed on that same affected runner; the runner version and utility were not replaced.
+
+## Final repair verification
+
+All jobs for `f9b2c216996bcdcc4a70122febe517a37d9af821` completed successfully in run 41794717798:
+
+| Platform | Actual suite | Result |
+| --- | --- | --- |
+| Ubuntu | Full package validation and 318 tests | 311 passed, 7 existing Windows-only skips |
+| macOS | Full package validation and 318 tests | 311 passed, 7 existing Windows-only skips |
+| Windows | Eight dedicated installer patterns, 177 tests total | 173 passed, 4 existing Unix-Bash-only skips |
+
+The Windows patterns are AIHero installation, native PowerShell installer tests, new hosts,
+host preservation, catalog, MCP native formats, wizard and dependency bootstrap. No failed
+suite is skipped or filtered out. Both Python setup and dependency installation actually ran.
+Independent cloud Linux/PowerShell verification of this same repair commit also passed all
+318 tests (7 Windows-only skips) in 134.194 seconds.
+
+The final evidence-only follow-up changes no source, tests or workflow. Its exact remote HEAD
+is checked separately in CI and linked in the delivery response. The original main remains
+`4f3753f`; no merge, deployment or real host Skills installation is performed. Original dirty
+work remains untouched in Projects/CodexTamplate. Native task archive/journal is not invoked.
+
+## Retrospective (native break-loop / retro)
+
+- Python stdout is a protocol at the Bash boundary: native line endings affect names, modes and paths together. The implemented regression wraps real helpers, including their real failures, instead of mocking a successful installer.
+- An empty preview HOME can be polluted before script entry. Runtime-only startup evidence established the cause; fixture-owned XDG/native profile roots preserve the original exact no-write assertions.
+- Windows shell selection and path identity are distinct contracts. Absolute executable resolution avoids the WSL launcher; cygpath changes representation without dereferencing ownership aliases. Wizard assertions retain the full intended path in the selected shell's representation.
+- Passing hundreds of stress attempts did not prove the backup failure repaired. Complete worker traces exposed two apparent owners; upstream source and the deterministic check/create barrier reproduced the defect. Atomic file reservation and private staging address the cause while preserving backup and rollback behavior.
+- Prevention is implemented in the existing installer spec and regressions. CI keeps all three platforms and the current runner versions, logs the Linux utility implementation, and must be checked against the exact final remote HEAD. No new tracker or installation workflow is introduced.
 
 ## Boundaries
 
