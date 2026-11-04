@@ -2,6 +2,14 @@
 # Shared helpers for interactive / merge installers.
 # shellcheck shell=bash
 
+install_lib_python_text() {
+  # Native Windows Python emits CRLF; Bash only removes LF in $(...).
+  # Normalize line endings at text boundaries without masking Python failures.
+  local output
+  output="$(python3 "$@")" || return $?
+  printf '%s\n' "$output" | sed $'s/\r$//'
+}
+
 install_lib_prompt_yn() {
   # usage: install_lib_prompt_yn "question" default_y_or_n
   local question="$1"
@@ -134,7 +142,7 @@ install_lib_resolve_project_root() {
 install_lib_skill_lock_path() {
   local helper_dir
   helper_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" || return 1
-  python3 "$helper_dir/lib/adopt_skill_lock.py" --resolve-for "$1" --cwd "$(pwd -L)"
+  install_lib_python_text "$helper_dir/lib/adopt_skill_lock.py" --resolve-for "$1" --cwd "$(pwd -L)"
 }
 
 install_lib_backup_file() {

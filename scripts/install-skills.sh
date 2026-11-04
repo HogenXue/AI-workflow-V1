@@ -83,9 +83,9 @@ if install_lib_paths_overlap "$root_dir/skills" "$target"; then
 fi
 
 catalog="$script_dir/lib/skill_catalog.py"
-catalog_names="$(python3 "$catalog" catalog --root "$root_dir" --field names)" || exit $?
+catalog_names="$(install_lib_python_text "$catalog" catalog --root "$root_dir" --field names)" || exit $?
 if [[ -z "$mode_selected" ]]; then
-  mode="$(python3 "$catalog" catalog --root "$root_dir" --field mode)" || exit $?
+  mode="$(install_lib_python_text "$catalog" catalog --root "$root_dir" --field mode)" || exit $?
 fi
 
 if ((explicit_dry_run)); then
@@ -194,7 +194,7 @@ skill_lock_conflicts=""
 skill_lock_backup=""
 if ((adopt_skill_lock)); then
   skill_lock="$(install_lib_skill_lock_path "$target")" || exit 1
-  skill_lock_conflicts="$(python3 "$script_dir/lib/adopt_skill_lock.py" \
+  skill_lock_conflicts="$(install_lib_python_text "$script_dir/lib/adopt_skill_lock.py" \
     --target "$skill_lock" --skills "${skills[@]}")" || exit 1
 fi
 

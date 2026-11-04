@@ -27,6 +27,10 @@ class HostPreservationMixin:
         self.home.mkdir()
         self.env = {k: v for k, v in os.environ.items() if k not in HOST_OVERRIDES}
         self.env.update(HOME=str(self.home), USERPROFILE=str(self.home), PYTHONDONTWRITEBYTECODE='1')
+        # pwsh creates runtime state before any installer code runs. Keep that
+        # state outside the HOME whose exact emptiness the preview tests assert.
+        for kind in ('CACHE', 'DATA', 'CONFIG', 'STATE'):
+            self.env[f'XDG_{kind}_HOME'] = str(self.root / 'runtime' / kind.lower())
         self.project = self.root / 'project'
         self.project.mkdir()
 
@@ -157,6 +161,14 @@ class BashHostPreservationTests(HostPreservationMixin, unittest.TestCase):
 class PowerShellHostPreservationTests(HostPreservationMixin, unittest.TestCase):
     shell = 'pwsh'
     suffix = '.ps1'
+
+    def test_runtime_startup_keeps_installer_home_empty(self):
+        result = subprocess.run(
+            [self.shell, '-NoLogo', '-NoProfile', '-Command', 'exit 0'],
+            env=self.env, capture_output=True, text=True,
+        )
+        self.assert_ok(result)
+        self.assertEqual(list(self.home.iterdir()), [])
 
 
 class HookOwnershipTests(unittest.TestCase):

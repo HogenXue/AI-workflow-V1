@@ -642,6 +642,26 @@ optional resources still receive link/placeholder checks.
 
 ## Convention: Discovery identity and native-host preservation
 
+### Runtime isolation and Python text boundaries
+
+- **Scope**: Bash consumes native Python text; preservation fixtures also launch PowerShell on Unix.
+- **Signature**: `install_lib_python_text <Python args...>` emits LF-delimited text, preserving
+  Python's nonzero exit status and stderr before any normalization.
+- **Contract**: Catalog names/default mode and resolved lock paths/adoption names use this boundary.
+  Remove only a trailing CR from each line, preserving spaces and embedded characters in paths.
+- **Errors**: A failed catalog must abort before writes. Do not hide failure behind a successful
+  normalization pipeline. Failed lock checks keep their existing fail-before-mutation behavior.
+- **Cases**: LF and CRLF output are equivalent; default mode preview and lock adoption both work.
+  Unix `pwsh -NoProfile -Command 'exit 0'` can itself create `.cache` and `.local` under HOME.
+- **Regression gates**: `test_aihero_install.py` exercises CRLF preview/copy, lock backup/adoption,
+  and failed-helper exit codes. `test_host_preservation.py` overrides XDG cache/data/config/state
+  roots to fixture-owned runtime directories outside HOME, including inherited values, and checks
+  both runtime-only startup and installer previews with the unchanged exact empty-HOME assertion.
+- **Wrong / correct**: Do not filter runtime directories out of preservation assertions or strip
+  all CR bytes from arbitrary output. Isolate runtime state before process startup and normalize
+  only the known text boundaries. PowerShell's native text pipeline needs no equivalent change;
+  installer ownership, preview and rollback contracts remain the same for both implementations.
+
 The shared `scripts/lib/skill_catalog.py` parser is authoritative for installer
 catalog names/mode and package validation. Reject empty/duplicate/illegal names,
 source directory/name mismatches and source escapes before writes. Explicit-only

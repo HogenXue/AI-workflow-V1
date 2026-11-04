@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -23,7 +25,7 @@ class AiheroInstallContract:
     shell: str
 
     def setUp(self) -> None:
-        self.temp = tempfile.TemporaryDirectory()
+        self.temp = tempfile.TemporaryDirectory(prefix="aihero install ")
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.target = self.root / "skills"
@@ -90,6 +92,63 @@ class AiheroInstallContract:
 @unittest.skipUnless(shutil.which("bash"), "Bash is required")
 class AiheroInstallBashTests(AiheroInstallContract, unittest.TestCase):
     shell = "bash"
+
+    def install_crlf(self, *args: str, fail_catalog: bool = False) -> subprocess.CompletedProcess[str]:
+        """Run real helpers with Windows-style stdout, including on Unix CI."""
+        shim = self.root / "crlf_stdout.py"
+        shim.write_text(
+            "import os, subprocess, sys\n"
+            "if os.environ.get('AI_WORKFLOW_FAIL_CATALOG') == '1' and '--field' in sys.argv:\n"
+            "    print('fixture catalog failure', file=sys.stderr)\n"
+            "    sys.exit(23)\n"
+            "result = subprocess.run([sys.executable, *sys.argv[1:]], stdout=subprocess.PIPE)\n"
+            "sys.stdout.buffer.write(result.stdout.replace(b'\\r\\n', b'\\n').replace(b'\\n', b'\\r\\n'))\n"
+            "sys.exit(result.returncode)\n",
+            encoding="utf-8",
+        )
+        command = [
+            shutil.which("bash"), "-c",
+            'python3() { "$AI_WORKFLOW_REAL_PYTHON" "$AI_WORKFLOW_CRLF_SHIM" "$@"; }; '
+            'export -f python3; exec bash "$@"',
+            "crlf-fixture", str(ROOT / "scripts/install.sh"), "skills", *args,
+            "--target", str(self.target), "--backup-dir", str(self.backup),
+        ]
+        return subprocess.run(
+            command, cwd=ROOT, text=True, encoding="utf-8", capture_output=True,
+            env={**os.environ, "PYTHONUTF8": "1",
+                 "AI_WORKFLOW_REAL_PYTHON": Path(sys.executable).as_posix(),
+                 "AI_WORKFLOW_CRLF_SHIM": shim.as_posix(),
+                 "AI_WORKFLOW_FAIL_CATALOG": "1" if fail_catalog else "0"},
+        )
+
+    def test_crlf_catalog_supports_default_mode_preview_and_copy(self) -> None:
+        preview = self.install_crlf("--dry-run")
+        self.assertEqual(preview.returncode, 0, preview.stdout + preview.stderr)
+        self.assertIn("DRY-RUN: copy memory ->", preview.stdout)
+        self.assertFalse(self.target.exists())
+        result = self.install_crlf("--copy")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual({p.name for p in self.target.iterdir()}, set(CURRENT_SKILLS + NEW_SKILLS))
+
+    def test_crlf_lock_path_adoption_preserves_unrelated_entries(self) -> None:
+        lock = self.root / ".skill-lock.json"
+        original = {"version": 3, "skills": {"memory": {"source": "upstream"},
+                                            "personal": {"source": "keep"}}}
+        lock.write_text(json.dumps(original), encoding="utf-8")
+        result = self.install_crlf("--copy", "--adopt-skill-lock")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(json.loads(lock.read_text()),
+                         {"version": 3, "skills": {"personal": {"source": "keep"}}})
+        backups = list(self.backup.glob(".skill-lock.json.*.bak"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(json.loads(backups[0].read_text()), original)
+
+    def test_crlf_catalog_failure_preserves_status_and_stderr_without_writes(self) -> None:
+        result = self.install_crlf("--copy", fail_catalog=True)
+        self.assertEqual(result.returncode, 23, result.stdout + result.stderr)
+        self.assertIn("fixture catalog failure", result.stderr)
+        self.assertFalse(self.target.exists())
+        self.assertFalse(self.backup.exists())
 
 
 @unittest.skipUnless(shutil.which("pwsh"), "PowerShell 7+ is required")
