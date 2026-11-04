@@ -184,7 +184,9 @@ install_lib_backup_file() {
       sequence=$((sequence + 1))
       continue
     fi
-    if ! mkdir "$lock" 2>/dev/null; then
+    # Shell noclobber uses exclusive file creation. Some mkdir implementations
+    # report success when another contender creates the directory mid-call.
+    if ! (umask 077; set -o noclobber; : > "$lock") 2>/dev/null; then
       if [[ ! -e "$candidate" && ! -L "$candidate" && ! -e "$lock" && ! -L "$lock" ]]; then
         printf 'ERROR: could not reserve backup path under: %s\n' "$backup_dir" >&2
         return 1
@@ -196,23 +198,32 @@ install_lib_backup_file() {
     if [[ ! -e "$candidate" && ! -L "$candidate" ]]; then
       break
     fi
-    rmdir "$lock" 2>/dev/null || true
+    rm -f "$lock" || true
     candidate="$backup_dir/$name.$stamp-$sequence.bak"
     sequence=$((sequence + 1))
   done
 
-  local staging="$lock/payload"
+  local staging_dir
+  if ! staging_dir="$(mktemp -d "$backup_dir/.backup-stage.XXXXXX")"; then
+    rm -f "$lock" || true
+    printf 'ERROR: could not create backup staging directory under: %s\n' "$backup_dir" >&2
+    return 1
+  fi
+  local staging="$staging_dir/payload"
   if ! cp -pR "$source" "$staging"; then
-    rm -rf "$lock" || true
+    rm -rf "$staging_dir" || true
+    rm -f "$lock" || true
     printf 'ERROR: could not back up existing target: %s\n' "$source" >&2
     return 1
   fi
   if ! mv "$staging" "$candidate"; then
-    rm -rf "$lock" || true
+    rm -rf "$staging_dir" || true
+    rm -f "$lock" || true
     printf 'ERROR: could not finalize backup for: %s\n' "$source" >&2
     return 1
   fi
-  rmdir "$lock" 2>/dev/null || rm -rf "$lock" || true
+  rmdir "$staging_dir" 2>/dev/null || rm -rf "$staging_dir" || true
+  rm -f "$lock" || true
   INSTALL_BACKUP_PATH="$candidate"
   printf 'BACKUP: %s\n' "$candidate"
 }

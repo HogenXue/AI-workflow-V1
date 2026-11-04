@@ -516,7 +516,9 @@ OVERWRITE: mcp_servers.mem0
 
 **What**: Every existing file, directory, or symlink that an installer will overwrite, delete, or migrate is copied first to `<backup-dir>/<name>.<UTC timestamp>.bak`. A same-second collision appends a numeric suffix before `.bak`; an existing backup is never overwritten. Default roots use `.ai-workflow-backups` under the paired host home; legacy backup directories are preserved but receive no new backups.
 
-**Integrity contract**: The helper reserves each backup name with a lock directory, copies into a staging payload, and publishes with a same-filesystem rename. Parallel invocations cannot select the same backup path, and a partial copy is never exposed as a completed `.bak`.
+**Integrity contract**: The helper reserves each backup name with an exclusively created lock file, copies into a private staging payload, and publishes with a same-filesystem rename. Bash uses scoped `noclobber` creation plus a private `mktemp -d` staging directory; PowerShell already uses `FileMode.CreateNew` and a unique staging path. Parallel invocations cannot select the same backup path, and a partial copy is never exposed as a completed `.bak`.
+
+Do not infer exclusive ownership from a `mkdir` exit code: uutils coreutils 0.10.0 can return success after a concurrent creator wins between its existence check and creation call. Keep an eight-writer regression and a deterministic simulation of that utility behavior, asserting distinct backups, exact contents, and no leftover locks or staging directories. Both installer peers retain the same public backup/rollback contract; the PowerShell primitive needs no change.
 
 **Failure contract**: Backup or lock-reservation failure aborts the component before the original target is mutated. Rollback restores from the exact backup path returned by the shared helper without consuming the `.bak` artifact. A host merge that updates MCP and then fails during project-scoped work must restore the original MCP target (including a dangling symlink) or remove a newly created target.
 

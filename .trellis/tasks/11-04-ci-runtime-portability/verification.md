@@ -32,6 +32,16 @@
 - Mac stress of the strengthened eight-writer test: 60 runs passed in 18.794 seconds. This is diagnostic evidence, not a claimed fix for the one observed Ubuntu backup failure.
 - After the logical path-format fix, local catalog tests 9/9 and component installer tests 39/39 passed; shell syntax and diff checks passed. Independent cloud Linux/PowerShell 7.5.4 verification of `edab52e` was reported as 316 tests OK (7 Windows-only skips), with 100 original two-writer Bash, 40 PowerShell, and 100 strengthened eight-writer stress runs also passing. The single earlier payload disappearance remains unreproduced and is not presented as causally repaired.
 
+## Deterministic backup diagnosis and repair
+
+- Third run https://github.com/HogenXue/AI-workflow-V1/actions/runs/41792564783 reproduced the Ubuntu failure with full eight-worker traces. PIDs 4046 and 4070 both treated `...-6.bak.lock` creation as successful and used the same `payload`; PID 4046's cleanup deleted the other worker's staged content. macOS passed. Windows passed catalog/preservation/MCP suites, then its wizard display assertion compared a Windows string with the correct Git Bash `/tmp/...` representation of the same temporary path.
+- Upstream uutils coreutils 0.10.0 `mkdir` checks existence before creation, but its create-error handler returns success for an existing directory even without `-p`. This permits the observed double ownership under a race. Confirmed upstream: https://github.com/uutils/coreutils/issues/13970 and https://github.com/uutils/coreutils/commit/bf423f3 . A Linux CI diagnostic now records the runner's actual mkdir version; no utility implementation is silently substituted.
+- A deterministic two-writer shim models that check/create interleaving and holds both copies before publication. The existing directory-lock helper fails this new regression locally with one lost payload. This establishes a causal regression rather than relying on repeated green stress runs.
+- Bash now reserves via a scoped `noclobber` exclusive lock file and copies into a unique private `mktemp -d` directory. Cleanup cannot remove another worker's payload. Public backup naming, copy-before-mutate and rollback behavior stay unchanged; PowerShell already uses `FileMode.CreateNew` with a unique staging path.
+- Source impact review covered all Bash backup call sites in agents/config/skills/Graphify and host merges. No graph tool is exposed; source analysis and full installer/rollback suites provide the verification boundary. The change introduces no Python dependency for shell-only backup callers.
+- The wizard test still asserts the full intended fixture path, using the platform's cygpath representation only for Windows Bash output; no expected path fragment or safety assertion is dropped.
+- Local full suite after the atomic reservation and wizard fixes: 317 tests OK in 159.945 seconds (7 existing Windows-only skips). The additional staging-allocation failure regression then brought component coverage to 41 passing tests; it verifies lock release, empty backup directory and unchanged source. All pre-existing test method names remain; two backup regressions, three CRLF regressions and one startup regression are added overall.
+
 ## Boundaries
 
 - All install tests target temporary fixtures. No Skills or configuration are installed in real host profiles.

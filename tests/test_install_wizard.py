@@ -85,6 +85,16 @@ class WizardHarness:
         return subprocess.CompletedProcess(result.args, result.returncode,
                                            result.stdout.decode("utf-8"), result.stderr.decode("utf-8"))
 
+    def output_path(self, path: Path) -> str:
+        if os.name == "nt" and self.ext == "sh":
+            converted = subprocess.run(
+                [shutil.which("bash"), "-c", 'cygpath -u -- "$1"', "expected-path", str(path)],
+                env=self.env, capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(converted.returncode, 0, converted.stderr)
+            return converted.stdout.rstrip("\r\n")
+        return str(path)
+
     def test_failed_component_stops_remaining_profiles(self) -> None:
         result = self.run_wizard("1 3\n1\ny\n", failure="skills")
         self.assertEqual(result.returncode, 37, result.stderr + result.stdout)
@@ -110,7 +120,7 @@ class WizardHarness:
                 for component in ("deps", "skills", "config", "agents", f"{host}-merge"):
                     self.assertIn(f"CALLED:{component}", result.stdout)
                 for path in ("skills", "config"):
-                    self.assertIn(str(self.home / directory / path), result.stdout)
+                    self.assertIn(self.output_path(self.home / directory / path), result.stdout)
                 self.assertIn(document, result.stdout)
                 self.assertIn("--no-hooks-feature", result.stdout)
                 self.assertNotIn("CALLED:graphify", result.stdout)

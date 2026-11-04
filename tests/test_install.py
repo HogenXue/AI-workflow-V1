@@ -551,6 +551,12 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertIn("overlaps package source", result.stderr)
 
     def test_parallel_backups_never_overwrite_each_other(self) -> None:
+        self.run_parallel_backups(workers=8)
+
+    def test_backup_reservation_survives_mkdir_concurrent_success(self) -> None:
+        self.run_parallel_backups(workers=2, racing_mkdir=True)
+
+    def run_parallel_backups(self, *, workers: int, racing_mkdir: bool = False) -> None:
         source = self.root / "source.txt"
         source.write_text("original\n", encoding="utf-8")
         fake_bin = self.root / "fake-bin"
@@ -561,6 +567,41 @@ class ComponentInstallTests(unittest.TestCase):
             encoding="utf-8",
         )
         slow_cp.chmod(0o755)
+        if racing_mkdir:
+            # uutils 0.10 treats a create failure followed by is_dir() as
+            # success, even without -p. Force both contenders past its initial
+            # existence check, then keep both copies staged before publication.
+            shim = (
+                '#!/usr/bin/env python3\n'
+                'import os, pathlib, subprocess, sys, time\n'
+                'tool = pathlib.Path(sys.argv[0]).name\n'
+                'args = sys.argv[1:]\n'
+                'root = pathlib.Path(os.environ["BACKUP_RACE_DIR"])\n'
+                'def barrier(kind):\n'
+                '    (root / f"{kind}-{os.getpid()}").touch()\n'
+                '    deadline = time.monotonic() + 10\n'
+                '    while len(list(root.glob(kind + "-*"))) < 2:\n'
+                '        if time.monotonic() > deadline: raise RuntimeError("backup race barrier timed out")\n'
+                '        time.sleep(0.001)\n'
+                'if tool == "mkdir" and len(args) == 1 and args[0].endswith(".lock"):\n'
+                '    target = pathlib.Path(args[0])\n'
+                '    if target.exists(): sys.exit(1)\n'
+                '    barrier("mkdir")\n'
+                '    try: target.mkdir()\n'
+                '    except FileExistsError: pass\n'
+                '    sys.exit(0)\n'
+                'result = subprocess.run(["/bin/" + tool, *args])\n'
+                'if tool == "cp" and result.returncode == 0: barrier("copy")\n'
+                'sys.exit(result.returncode)\n'
+            )
+            for name in ("mkdir", "cp"):
+                tool = fake_bin / name
+                tool.write_text(shim, encoding="utf-8")
+                tool.chmod(0o755)
+            fixed_date = fake_bin / "date"
+            fixed_date.write_text("#!/usr/bin/env bash\nprintf '%s\\n' '20261104T000000Z'\n",
+                                  encoding="utf-8")
+            fixed_date.chmod(0o755)
         backup_dir = self.root / "parallel-backups"
         command = (
             'source "$1"; '
@@ -568,7 +609,7 @@ class ComponentInstallTests(unittest.TestCase):
         )
         env = {**os.environ, "PATH": f"{fake_bin}:{os.environ['PATH']}"}
         env["PS4"] = '+$$:${LINENO}: '
-        workers = 8
+        env["BACKUP_RACE_DIR"] = str(self.root)
 
         processes = [
             subprocess.Popen(
@@ -599,6 +640,7 @@ class ComponentInstallTests(unittest.TestCase):
         backups = list(backup_dir.glob("source.txt.*.bak"))
         self.assertEqual(len(backups), workers)
         self.assertFalse(list(backup_dir.glob("*.lock")))
+        self.assertEqual(set(backup_dir.iterdir()), set(backups))
         self.assertEqual(
             {path.read_text(encoding="utf-8") for path in backups},
             {"original\n"},
@@ -676,7 +718,29 @@ class ComponentInstallTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertFalse(list(backup_dir.glob("*.bak")))
         self.assertFalse(list(backup_dir.glob("*.lock")))
+        self.assertFalse(list(backup_dir.iterdir()))
         self.assertEqual(source.read_text(encoding="utf-8"), "original\n")
+
+    def test_failed_backup_staging_releases_reservation(self) -> None:
+        source = self.root / "source.txt"
+        source.write_text("original\n", encoding="utf-8")
+        fake_bin = self.root / "failing-staging-bin"
+        fake_bin.mkdir()
+        fake_mktemp = fake_bin / "mktemp"
+        fake_mktemp.write_text("#!/usr/bin/env bash\nprintf 'staging fixture failure\\n' >&2\nexit 17\n",
+                               encoding="utf-8")
+        fake_mktemp.chmod(0o755)
+        backup_dir = self.root / "staging-failure-backups"
+        result = subprocess.run(
+            ["bash", "-c", 'source "$1"; install_lib_backup_file "$2" "$3" "source.txt"',
+             "backup-test", str(ROOT / "scripts/install-lib.sh"), str(source), str(backup_dir)],
+            env={**os.environ, "PATH": f"{fake_bin}:{os.environ['PATH']}"},
+            text=True, capture_output=True, check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("could not create backup staging directory", result.stderr)
+        self.assertEqual(source.read_text(encoding="utf-8"), "original\n")
+        self.assertEqual(list(backup_dir.iterdir()), [])
 
     def test_default_skills_target_uses_agents_home(self) -> None:
         home = self.root / "home"
