@@ -657,6 +657,9 @@ optional resources still receive link/placeholder checks.
   and failed-helper exit codes. `test_host_preservation.py` overrides XDG cache/data/config/state
   roots to fixture-owned runtime directories outside HOME, including inherited values, and checks
   both runtime-only startup and installer previews with the unchanged exact empty-HOME assertion.
+  On Windows, native USERPROFILE/AppData roots are separate from installer HOME (which installer
+  peers explicitly prefer). Use absolute `shutil.which` shell paths so Windows CreateProcess
+  cannot choose its System32 WSL launcher before the intended PATH-resolved Git Bash.
 - **Wrong / correct**: Do not filter runtime directories out of preservation assertions or strip
   all CR bytes from arbitrary output. Isolate runtime state before process startup and normalize
   only the known text boundaries. PowerShell's native text pipeline needs no equivalent change;

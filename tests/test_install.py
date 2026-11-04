@@ -567,11 +567,14 @@ class ComponentInstallTests(unittest.TestCase):
             'install_lib_backup_file "$2" "$3" "source.txt"'
         )
         env = {**os.environ, "PATH": f"{fake_bin}:{os.environ['PATH']}"}
+        env["PS4"] = '+$$:${LINENO}: '
+        workers = 8
 
         processes = [
             subprocess.Popen(
                 [
                     "bash",
+                    "-x",
                     "-c",
                     command,
                     "backup-test",
@@ -585,14 +588,16 @@ class ComponentInstallTests(unittest.TestCase):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            for _ in range(2)
+            for _ in range(workers)
         ]
         results = [process.communicate() + (process.returncode,) for process in processes]
 
+        diagnostics = "\n".join(f"worker {i}: status={status}\n{stderr}{stdout}"
+                                for i, (stdout, stderr, status) in enumerate(results))
         for stdout, stderr, returncode in results:
-            self.assertEqual(returncode, 0, stderr + stdout)
+            self.assertEqual(returncode, 0, diagnostics)
         backups = list(backup_dir.glob("source.txt.*.bak"))
-        self.assertEqual(len(backups), 2)
+        self.assertEqual(len(backups), workers)
         self.assertFalse(list(backup_dir.glob("*.lock")))
         self.assertEqual(
             {path.read_text(encoding="utf-8") for path in backups},

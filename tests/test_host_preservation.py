@@ -17,7 +17,7 @@ HOST_OVERRIDES = ('CODEX_HOME', 'CURSOR_MCP_FILE', 'CLAUDE_MCP_FILE', 'MINIMAX_D
 
 class HostPreservationMixin:
     suffix = '.sh'
-    shell = 'bash'
+    shell = shutil.which('bash')
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(prefix='host preserve ')
@@ -31,6 +31,14 @@ class HostPreservationMixin:
         # state outside the HOME whose exact emptiness the preview tests assert.
         for kind in ('CACHE', 'DATA', 'CONFIG', 'STATE'):
             self.env[f'XDG_{kind}_HOME'] = str(self.root / 'runtime' / kind.lower())
+        if os.name == 'nt':
+            # Windows ignores XDG for its known-folder caches. Installer peers
+            # explicitly prefer HOME; keep the runtime's USERPROFILE separate.
+            profile = self.root / 'runtime' / 'profile'
+            profile.mkdir(parents=True)
+            self.env.update(USERPROFILE=str(profile),
+                            APPDATA=str(self.root / 'runtime' / 'roaming'),
+                            LOCALAPPDATA=str(self.root / 'runtime' / 'local'))
         self.project = self.root / 'project'
         self.project.mkdir()
 
@@ -159,7 +167,7 @@ class BashHostPreservationTests(HostPreservationMixin, unittest.TestCase):
 
 @unittest.skipUnless(shutil.which('pwsh'), 'PowerShell runtime not available')
 class PowerShellHostPreservationTests(HostPreservationMixin, unittest.TestCase):
-    shell = 'pwsh'
+    shell = shutil.which('pwsh')
     suffix = '.ps1'
 
     def test_runtime_startup_keeps_installer_home_empty(self):
@@ -168,7 +176,8 @@ class PowerShellHostPreservationTests(HostPreservationMixin, unittest.TestCase):
             env=self.env, capture_output=True, text=True,
         )
         self.assert_ok(result)
-        self.assertEqual(list(self.home.iterdir()), [])
+        self.assertEqual(list(self.home.iterdir()), [],
+                         [str(p.relative_to(self.home)) for p in self.home.rglob('*')])
 
 
 class HookOwnershipTests(unittest.TestCase):
@@ -213,7 +222,7 @@ class ContextHookParityTests(unittest.TestCase):
             context.write_text('import sys\nprint("nested context")\nsys.exit(7)\n')
             results = [subprocess.run(cmd, cwd=nested, capture_output=True, text=True)
                        for cmd in ([sys.executable, str(hooks / 'session-start.py')],
-                                   ['bash', str(hooks / 'session-start.sh')])]
+                                   [shutil.which('bash'), str(hooks / 'session-start.sh')])]
             for result in results:
                 self.assertEqual(result.returncode, 7)
                 self.assertEqual(result.stdout, 'nested context\n')

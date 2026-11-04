@@ -4,6 +4,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -42,7 +43,7 @@ class SkillCatalogTests(unittest.TestCase):
         target = self.home / "skills"
         alias = self.skill(target / "old-review")
         original = (alias / "SKILL.md").read_bytes()
-        run = subprocess.run(["bash", str(ROOT / "scripts/install-skills.sh"), "--copy", "--replace", "--target", str(target)], text=True, capture_output=True)
+        run = subprocess.run([shutil.which("bash"), str(ROOT / "scripts/install-skills.sh"), "--copy", "--replace", "--target", str(target)], text=True, capture_output=True)
         self.assertNotEqual(run.returncode, 0)
         self.assertIn("old-review", run.stderr)
         self.assertEqual((alias / "SKILL.md").read_bytes(), original)
@@ -90,7 +91,7 @@ class SkillCatalogTests(unittest.TestCase):
         independent = self.skill(other / "release", "release", "Independent release capability.")
         self.skill(other / "code-review")
         target = self.home / ".agents/skills"
-        run = subprocess.run(["bash", str(ROOT / "scripts/install-skills.sh"), "--copy", "--replace", "--prune-other-root", "--target", str(target)], text=True, capture_output=True, env={**os.environ, "HOME": str(self.home), "CODEX_HOME": str(self.home / ".codex")})
+        run = subprocess.run([shutil.which("bash"), str(ROOT / "scripts/install-skills.sh"), "--copy", "--replace", "--prune-other-root", "--target", str(target)], text=True, capture_output=True, env={**os.environ, "HOME": str(self.home), "CODEX_HOME": str(self.home / ".codex")})
         self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
         self.assertTrue((independent / "SKILL.md").exists())
         self.assertFalse((other / "code-review").exists())
@@ -128,7 +129,7 @@ class SkillCatalogTests(unittest.TestCase):
                     (candidate / "SKILL.md").write_text(content)
                 target = home / ".agents/skills"
                 env = {**os.environ, "HOME": str(home), "CODEX_HOME": str(home / ".codex")}
-                result = subprocess.run(["bash", str(ROOT / "scripts/install-skills.sh"), "--copy", "--replace", "--prune-other-root", "--target", str(target)], text=True, capture_output=True, env=env)
+                result = subprocess.run([shutil.which("bash"), str(ROOT / "scripts/install-skills.sh"), "--copy", "--replace", "--prune-other-root", "--target", str(target)], text=True, capture_output=True, env=env)
                 self.assertNotEqual(result.returncode, 0, result.stdout)
                 self.assertIn("refusing to prune", result.stderr)
                 self.assertEqual(sentinel.read_text(), "keep exact private contents\n")
@@ -153,7 +154,7 @@ class SkillCatalogTests(unittest.TestCase):
                 if content is not None:
                     (independent / "SKILL.md").write_text(content)
                 for mode in ("--dry-run", "--copy"):
-                    result = subprocess.run(["bash", str(ROOT / "scripts/install-skills.sh"), mode, "--replace", "--target", str(target)], text=True, capture_output=True)
+                    result = subprocess.run([shutil.which("bash"), str(ROOT / "scripts/install-skills.sh"), mode, "--replace", "--target", str(target)], text=True, capture_output=True)
                     self.assertNotEqual(result.returncode, 0, result.stdout)
                     self.assertIn("refusing to replace", result.stderr)
                     self.assertEqual(sentinel.read_text(), "keep exact private contents\n")

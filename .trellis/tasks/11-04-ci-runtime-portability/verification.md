@@ -22,7 +22,11 @@
 - Full suite on macOS/Python 3.12 with the temporary PowerShell runtime: 316 tests, OK in 162.287 seconds; 7 existing Windows-only skips (CMD launcher/fixtures, junction/device namespace).
 - Package validation passed for all 20 Skills; AST parsing passed for 34 Python files and Bash syntax for 17 scripts.
 - Native task context validation and final Git diff checks passed. Spec and Standards review found no remaining violations in the authorized changes.
-- Exact-commit CI results will be added after the independent branch run finishes.
+- First push `7bcd6ef`, run https://github.com/HogenXue/AI-workflow-V1/actions/runs/41790118589: macOS passed (316 tests, 7 skips). Windows passed CRLF regressions and the initial installer suites, then exposed bare `bash` resolving to the WSL launcher and native runtime `AppData` under the preview HOME. Ubuntu exposed `test_parallel_backups_never_overwrite_each_other`: `mv` could not stat a reserved lock's payload. Neither failure is treated as a pass.
+- Windows follow-up uses absolute PATH-resolved shell paths and separates native USERPROFILE/AppData from installer HOME; host installer sources explicitly prefer environment HOME. The parallel-backup test now exercises eight concurrent writers and captures both workers' full traces on failure to diagnose the Ubuntu-only disappearance; no backup assertion is relaxed.
+- Confirmed Ubuntu assertion: `test_install.ComponentInstallTests.test_parallel_backups_never_overwrite_each_other`, exit 1 with `mv: cannot stat '.../parallel-backups/source.txt.20261104T070827Z.bak.lock/payload': No such file or directory`, then `ERROR: could not finalize backup`. Windows first-push totals before stopping: 9 AIHero tests passed; 70 installer tests passed (4 existing skips); 20 new-host tests passed; preservation then failed with WSL launcher output and `home/AppData`. Its runtime-only startup regression also reproduced the AppData creation without installer code.
+- Local Windows-harness follow-up checks: preservation 17/17 passed, catalog 9/9 passed, eight-writer backup test passed on macOS. An extra inherited-XDG experiment left all inherited roots untouched while the two startup/preview cases passed.
+- Local 60-run stress with the original two workers and tracing: passed, so it does not establish an Ubuntu fix. Docker is not running on this Mac; Linux reproduction continues in the authorized CI environment.
 
 ## Boundaries
 
