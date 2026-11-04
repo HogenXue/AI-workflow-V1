@@ -40,6 +40,8 @@ class WizardHarness:
         harness = self.root / f"wizard.{self.ext}"
         harness.write_text(source, encoding="utf-8")
         shutil.copyfile(ROOT / "scripts" / f"install-lib.{self.ext}", self.root / f"install-lib.{self.ext}")
+        (self.root / "lib").mkdir(exist_ok=True)
+        shutil.copyfile(ROOT / "scripts/lib/adopt_skill_lock.py", self.root / "lib/adopt_skill_lock.py")
         for component in COMPONENTS:
             code = status if component == failure else 0
             if self.ext == "ps1":
@@ -187,6 +189,19 @@ class WizardHarness:
 @unittest.skipUnless(shutil.which("pwsh"), "PowerShell 7+ required")
 class PowerShellWizardTests(WizardHarness, unittest.TestCase):
     ext = "ps1"
+
+    def test_ownership_choice_is_forwarded_only_after_separate_consent(self):
+        lock = self.home / ".agents/.skill-lock.json"
+        lock.parent.mkdir()
+        original = '{"skills":{"tdd":{"source":"upstream"}}}'
+        lock.write_text(original)
+        for answer, adopted in (("y", True), ("", False)):
+            with self.subTest(answer=answer):
+                result = self.run_wizard(f"1\n1\ny\n{answer}\nn\n")
+                self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+                self.assertIn("Take ownership", result.stderr + result.stdout)
+                self.assertEqual("--adopt-skill-lock" in result.stdout, adopted)
+                self.assertEqual(lock.read_text(), original)
 
 
 @unittest.skipUnless(shutil.which("bash"), "Bash required")

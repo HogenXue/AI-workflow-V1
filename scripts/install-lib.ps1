@@ -547,3 +547,17 @@ function Install-LibRollbackTarget {
     }
     return $true
 }
+
+# Shared ownership path semantics with Bash; the helper performs no writes.
+function Get-InstallLibSkillLockPath {
+    param([Parameter(Mandatory)][string]$Target)
+    $pythonCommand = $null
+    foreach ($name in @('python', 'python3')) {
+        $pythonCommand = Get-Command $name -ErrorAction SilentlyContinue | Where-Object { $_.CommandType -ne 'Alias' } | Select-Object -First 1
+        if ($pythonCommand) { break }
+    }
+    if (-not $pythonCommand) { throw 'ERROR: Python 3.10+ is required for Skill ownership' }
+    $resolved = & $pythonCommand.Source (Join-Path $PSScriptRoot 'lib/adopt_skill_lock.py') --resolve-for $Target --cwd $ExecutionContext.SessionState.Path.CurrentFileSystemLocation.Path
+    if ($LASTEXITCODE -ne 0) { throw 'ERROR: could not resolve Skill ownership lock' }
+    return [string]$resolved
+}

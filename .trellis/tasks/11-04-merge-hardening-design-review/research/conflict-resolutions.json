@@ -1,0 +1,65 @@
+[
+  {
+    "path": ".github/workflows/ci.yml",
+    "hunk": 1,
+    "choice": "main"
+  },
+  {
+    "path": ".trellis/spec/scripts/installer-contracts.md",
+    "hunk": 1,
+    "choice": "both additive contracts"
+  },
+  {
+    "path": "README.md",
+    "hunk": 1,
+    "choice": "main"
+  },
+  {
+    "path": "README.md",
+    "hunk": 2,
+    "choice": "main"
+  },
+  {
+    "path": "README.md",
+    "hunk": 3,
+    "choice": "incoming ownership section plus current legacy policy"
+  },
+  {
+    "path": "README.md",
+    "hunk": 4,
+    "choice": "main components plus new adoption flag"
+  },
+  {
+    "path": "README.md",
+    "hunk": 5,
+    "choice": "new setup only"
+  },
+  {
+    "path": "scripts/install.sh",
+    "hunk": 1,
+    "choice": "main"
+  },
+  {
+    "path": "skills/memory/SKILL.md",
+    "hunk": 1,
+    "choice": "main"
+  },
+  {
+    "path": "skills/memory/references/memory-backends.md",
+    "hunk": 1,
+    "choice": "main"
+  },
+  {
+    "path": "tests/test_install.py",
+    "hunk": 1,
+    "choice": "both capabilities"
+  },
+  {
+    "path": ".trellis/workspace/hogen/index.md",
+    "choice": "main history retained; incoming branch history preserved separately as evidence"
+  },
+  {
+    "path": ".trellis/workspace/hogen/journal-1.md",
+    "choice": "main history retained; incoming branch history preserved separately as evidence"
+  }
+]

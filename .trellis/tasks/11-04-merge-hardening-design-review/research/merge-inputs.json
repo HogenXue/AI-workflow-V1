@@ -1,0 +1,8 @@
+{
+  "main": "43ca2442e3c98f464f22bd806d1a3047f27f3517",
+  "incoming": "7d685b9c740df2361f8c71f2a65df84a02179884",
+  "merge_base": "3bc7af23029a772d3da9672411b30e3d500e98b0",
+  "private_baseline": "/Users/hogenxue/.local/state/codextamplate/project-audits/2026-11-04-qmu3dcf0",
+  "preexisting_dirty_paths": 67,
+  "authorization": "User: merge branch into main and review/optimize; no push or live install"
+}

@@ -1,6 +1,6 @@
 # AI-workflow-V1
 
-可安装的 AI 协作 Skill 包：19 个独立 Skill、Trellis 兼容的全局 AGENTS 模板，以及共享默认配置（`config/`）。
+可安装的 AI 协作 Skill 包：20 个独立 Skill、Trellis 兼容的全局 AGENTS 模板，以及共享默认配置（`config/`）。
 
 GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
@@ -8,11 +8,11 @@ GitHub：[HogenXue/AI-workflow-V1](https://github.com/HogenXue/AI-workflow-V1)
 
 | 组件            | 说明                                                                         |
 | ------------- | -------------------------------------------------------------------------- |
-| **Skills**    | AIHero 主流程与配套技能，以及 Memory/GitNexus；19 项安装清单以 `manifest.yaml` 为准 |
+| **Skills**    | AIHero 主流程与配套技能，以及 Memory/GitNexus；20 项安装清单以 `manifest.yaml` 为准 |
 | **AGENTS 模板** | [AGENTS.global.md](agents/AGENTS.global.md)：跨项目通用规则；[AGENTS.project.md](agents/AGENTS.project.md)：项目补充规则；[AGENTS-egm.md](agents/AGENTS-egm.md)：EGM 项目补充规则 |
-| **config/**   | 默认配置、有效配置运行时和平台无关工作流门禁；项目可用 `hogen-codex.yaml` 覆盖                         |
+| **config/**   | 默认配置和有效配置运行时；项目可用 `hogen-codex.yaml` 覆盖                         |
 
-Trellis 是任务、工件、状态和最终质量门的唯一所有者。本包安装经过 Trellis 适配的 AIHero 独立技能；同一需求不重复访谈、建规格或审查。记忆由 `memory` 对接 Recallium/Mem0，代码分析按需使用 GitNexus/Graphify；Graphify 单独安装，不在 19 项 manifest 中。
+Trellis 是任务、工件、状态和最终质量门的唯一所有者。本包安装经过 Trellis 适配的 AIHero 独立技能；同一需求不重复访谈、建规格或审查。记忆由 `memory` 对接 Recallium/Mem0，代码分析按需使用 GitNexus/Graphify；Graphify 单独安装，不在 20 项 manifest 中。
 
 | 阶段/目的 | 可安装入口 | 产物与边界 |
 | --- | --- | --- |
@@ -22,6 +22,7 @@ Trellis 是任务、工件、状态和最终质量门的唯一所有者。本包
 | 获取证据 | `research`、`prototype` | 当前 Task 的研究或原型，实施仍需对应授权 |
 | 实施与审查 | `implement`、`tdd`、`code-review` | 原生执行阶段；Spec/Standards 融入一次 `trellis-check` |
 | 完成后复盘 | `retro` | 一次证据复盘；复用当前 Task/Spec，修复、归档和 Git 仍需相应授权 |
+| 可选第三方配置适配 | `setup-matt-pocock-skills`（显式调用） | 仅在确有第三方消费者时配置项目桥接；已适配 Skills 无需重复 setup |
 | 会话交接 | `handoff` | 既有 Task/Journal 与工件指针 |
 | 既有专项能力 | `grill-me`、`diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` | 无状态 Grill 仍显式调用，其他能力服务当前任务 |
 
@@ -216,6 +217,40 @@ bash scripts/install.sh skills --copy --replace --target ~/.codex/skills
 
 Codex 可能同时发现 `~/.agents/skills` 与 `~/.codex/skills`。同一组 Skill 只选择一个目录；本包对 Codex App 默认使用 `~/.agents/skills`，对应配置目录是 `~/.agents/config`。安装器发现另一目录存在同名 Skill 时会阻止写入；显式 `--prune-other-root` 会核对真实 Skill 身份，先备份再移走另一目录中的本包同名 Skill。目录名称相同但元数据缺失、损坏或声明其他身份时，先报告冲突，不替换或清理。
 
+### 与 Matt Pocock Skills 共存
+
+本包的工程 Skills 已内置 Trellis 适配，并提供显式、可选的 `setup-matt-pocock-skills`。
+已有适配版不需要再次 setup；只有第三方 Skill 确实需要项目兼容配置时，才按项目
+现有规则创建 `docs/agents/` 桥接入口。任务、PRD 和质量门始终由原生 Trellis 管理。
+Codex 项目入口优先使用 `AGENTS.md`；非 Trellis 项目沿用自己的工作流。
+
+如果之前通过第三方安装器安装了这些同名 Skills，显式接管其更新登记：
+
+Codex/Cursor 的推荐完整安装向导会在安装 Skills 时，针对已有登记文件单独询问是否
+接管本包名称（默认不接管）。确认覆盖 Skills 不等于确认接管第三方更新登记；拒绝接管
+或跳过 Skills 时保留原登记。
+
+```bash
+bash scripts/install.sh skills --dry-run --replace --adopt-skill-lock --target ~/.agents/skills
+bash scripts/install.sh skills --copy --replace --adopt-skill-lock --target ~/.agents/skills
+# PowerShell peer
+pwsh -File scripts/install.ps1 skills --copy --replace --adopt-skill-lock --target ~/.agents/skills
+```
+
+`--adopt-skill-lock` 对标准的 `~/.agents/skills`、当前 `CODEX_HOME/skills` 和
+`~/.cursor/skills` 使用第三方共享的 `~/.agents/.skill-lock.json`；设置了
+`XDG_STATE_HOME` 时使用其下的 `skills/.skill-lock.json`。自定义目标继续使用目标目录
+上一级的 `.skill-lock.json`。安装器先备份，再移除 manifest 中同名 Skills 的第三方
+更新登记；其他 Skill、顶层元数据和偏好保持原样。
+没有该参数时不改 lock；缺少 lock 或没有同名条目时不写入。格式错误或符号链接会在替换
+Skills 前报错；接管失败会回滚本组件。接管后使用本包安装器更新这些名称。
+再次显式执行上游的全量安装仍可能覆盖适配版，应只选择不重名的 Matt Skills。
+接管只修改共享登记，不自动同步或删除其他宿主目录里的 Skill 副本。Bash 与 PowerShell
+共享路径和 JSON 语义；重复键、非普通文件和损坏数据在写入前拒绝。
+
+setup 会预览并备份项目文件，更新已有入口，保留 managed block。它不自动迁移旧的
+`GLOSSARY.md` / `docs/adr/` 内容，也不更改全局 MCP/hooks 或自动创建远端标签。
+
 旧版本的 `openspec`、`review`、`release` 和 `karpathy-guidelines-zh` 不在当前 manifest 中，普通更新不会删除它们。`grill-with-docs`、`grilling`、`domain-modeling` 已恢复为当前技能，按普通冲突/备份替换处理，`--prune-legacy` 不会清理它们。先预览，再用显式 `--prune-legacy` 备份并移除上述四个旧技能；若两处都曾安装，需要分别处理：
 
 ```bash
@@ -257,7 +292,7 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
 | 参数             | 说明                                                                                       |
 | -------------- | ---------------------------------------------------------------------------------------- |
 | `deps`         | 支持 `--dry-run` / `--apply`；只安装缺失的 GitNexus/Trellis/Graphify CLI并验证可用性 |
-| `skills`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--prune-legacy`、`--prune-other-root`、`--target PATH`、`--backup-dir PATH` |
+| `skills`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--adopt-skill-lock`、`--prune-legacy`、`--prune-other-root`、`--target PATH`、`--backup-dir PATH` |
 | `graphify`     | 支持 `--dry-run` / `--apply`、`--replace`、`--backup-dir PATH`；只写 `~/.agents/skills/graphify` |
 | `agents`       | 支持 `--dry-run` / `--apply`、`--agents-home PATH`、`--backup-dir PATH`；`--codex-home` 是兼容别名 |
 | `config`       | 支持 `--dry-run`、`--copy` / `--link`、`--replace`、`--target PATH`、`--backup-dir PATH`       |
@@ -279,6 +314,7 @@ bash scripts/install.sh config --copy --replace --target ~/.agents/config
     ├── diagnosing-bugs/
     ├── codebase-design/
     ├── resolving-merge-conflicts/
+    ├── setup-matt-pocock-skills/
     └── graphify/              # 仅执行 graphify 组件后存在
 ```
 

@@ -1,0 +1,10 @@
+{
+  "scripts/lib/adopt_skill_lock.py": "e10d0fffe3ae5a1dec44bc02f1166e14d5af0a80571726035ab432d777db99a9",
+  "scripts/install-lib.sh": "9470c824c3fbd708cd71f1c48a0de7529bf2e9dc3d9f75d5fe835d99d7b8ea4f",
+  "scripts/install-lib.ps1": "88f0accd21ff7d2d92a948976997a5e353dc02b57b4a26d3abaeae898e6c254b",
+  "scripts/install-skills.sh": "0c3a821383ba72ef2163ce1715c6898cba484bdb18268aa87276ae82cc691981",
+  "scripts/install-skills.ps1": "2a87b7d37f9c6f81e919db539236d853c0471976c6b01bc7b62585b0e8c6779d",
+  "scripts/install.sh": "879a5c16ebe395fcfae1b58e17bb4eea087ca5159d8233458795df2b64276f07",
+  "scripts/install.ps1": "3c8a938d28c308d81804af253730e9d000ae33499170af32dd0a30f10ddf5eeb",
+  "tests/test_install_skill_lock_ps.py": "84484c667c6d7601363aa14e298b007ebd8ea8e072db3f3b708c01b4ffa5fb91"
+}

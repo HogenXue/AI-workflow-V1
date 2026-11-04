@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "original_paths": 67,
+  "restored_before_merge_commit": true,
+  "merge_index_unchanged_during_restore": true,
+  "recovery_stash": "c15d58edbbc1c27a76a5d94ba8bafc7ee4be6dd5",
+  "stash_retained": true,
+  "private_baseline": "/Users/hogenxue/.local/state/codextamplate/project-audits/2026-11-04-qmu3dcf0",
+  "permission_restoration": [
+    {
+      "path": ".trellis/tasks/archive/2026-10/10-10-local-skill-cleanup/cleanup-plan.json",
+      "stash_mode": 420,
+      "restored_mode": 384
+    }
+  ]
+}

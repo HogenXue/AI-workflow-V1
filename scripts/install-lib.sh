@@ -131,6 +131,12 @@ install_lib_resolve_project_root() {
   return 0
 }
 
+install_lib_skill_lock_path() {
+  local helper_dir
+  helper_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" || return 1
+  python3 "$helper_dir/lib/adopt_skill_lock.py" --resolve-for "$1" --cwd "$(pwd -L)"
+}
+
 install_lib_backup_file() {
   local source="$1"
   local backup_dir="$2"

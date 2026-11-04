@@ -1,0 +1,51 @@
+{
+  "official_release": "https://github.com/PowerShell/PowerShell/releases/tag/v7.6.7",
+  "release_tag": "v7.6.7",
+  "api": "https://api.github.com/repos/PowerShell/PowerShell/releases/tags/v7.6.7",
+  "asset_url": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.7/powershell-7.6.7-osx-arm64.tar.gz",
+  "asset_size": 70628335,
+  "sha256": "50dde99bb066adacbb9a748182d09eb9beff25119dc3b12e85c84b6b6b1c5da9",
+  "official_checksums_url": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.7/hashes.sha256",
+  "official_checksums_encoding": "UTF-16 with BOM",
+  "official_checksum_match": true,
+  "github_digest_match": true,
+  "checks": [
+    {
+      "command": [
+        "/usr/bin/file",
+        "/private/tmp/pwsh-validation-5ds12trv/runtime/pwsh"
+      ],
+      "returncode": 0,
+      "stdout": "/private/tmp/pwsh-validation-5ds12trv/runtime/pwsh: Mach-O 64-bit executable arm64\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=2",
+        "/private/tmp/pwsh-validation-5ds12trv/runtime/pwsh"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "/private/tmp/pwsh-validation-5ds12trv/runtime/pwsh: valid on disk\n/private/tmp/pwsh-validation-5ds12trv/runtime/pwsh: satisfies its Designated Requirement\n"
+    },
+    {
+      "command": [
+        "/usr/bin/codesign",
+        "-dv",
+        "--verbose=4",
+        "/private/tmp/pwsh-validation-5ds12trv/runtime/pwsh"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Executable=/private/tmp/pwsh-validation-5ds12trv/runtime/pwsh\nIdentifier=pwsh-5555494475b0c1e7eee73bc7964fcb848c6d22ad\nFormat=Mach-O thin (arm64)\nCodeDirectory v=20500 size=1369 flags=0x10000(runtime) hashes=31+7 location=embedded\nVersionPlatform=1\nVersionMin=786432\nVersionSDK=984320\nHash type=sha256 size=32\nCandidateCDHash sha256=ff409ddda9e19f3165a0fa926abcdfb5e34847e3\nCandidateCDHashFull sha256=ff409ddda9e19f3165a0fa926abcdfb5e34847e3a5ff128176e2370ef8b2cac4\nHash choices=sha256\nCMSDigest=ff409ddda9e19f3165a0fa926abcdfb5e34847e3a5ff128176e2370ef8b2cac4\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=65536\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=ff409ddda9e19f3165a0fa926abcdfb5e34847e3\nSignature size=9013\nAuthority=Developer ID Application: Microsoft Corporation (UBF8T346G9)\nAuthority=Developer ID Certification Authority\nAuthority=Apple Root CA\nTimestamp=Oct 10, 2026 at 07:39:29\nInfo.plist=not bound\nTeamIdentifier=UBF8T346G9\nRuntime Version=15.5.0\nSealed Resources=none\nInternal requirements count=1 size=208\nTotal signatures=1\nChosen signature=1\n"
+    }
+  ],
+  "runtime_executed": false,
+  "runtime_path": "/private/tmp/pwsh-validation-5ds12trv/runtime/pwsh",
+  "global_install": false,
+  "security_attributes_modified": false
+}

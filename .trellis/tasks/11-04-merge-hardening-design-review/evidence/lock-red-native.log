@@ -1,0 +1,86 @@
+test_explicit_adoption_preserves_unrelated_data_and_backup (test_install_skill_lock_ps.BashAdoptionTests.test_explicit_adoption_preserves_unrelated_data_and_backup) ... ok
+test_malformed_lock_blocks_before_skill_writes (test_install_skill_lock_ps.BashAdoptionTests.test_malformed_lock_blocks_before_skill_writes) ... ok
+test_preview_and_opt_out_preserve_lock_bytes (test_install_skill_lock_ps.BashAdoptionTests.test_preview_and_opt_out_preserve_lock_bytes) ... ok
+test_explicit_adoption_preserves_unrelated_data_and_backup (test_install_skill_lock_ps.PowerShellAdoptionTests.test_explicit_adoption_preserves_unrelated_data_and_backup) ... FAIL
+test_malformed_lock_blocks_before_skill_writes (test_install_skill_lock_ps.PowerShellAdoptionTests.test_malformed_lock_blocks_before_skill_writes) ... FAIL
+test_preview_and_opt_out_preserve_lock_bytes (test_install_skill_lock_ps.PowerShellAdoptionTests.test_preview_and_opt_out_preserve_lock_bytes) ... FAIL
+test_apply_does_not_require_unix_fchmod (test_install_skill_lock_ps.SkillLockHelperTests.test_apply_does_not_require_unix_fchmod) ... ERROR
+test_custom_symlink_keeps_caller_adjacent_lock (test_install_skill_lock_ps.SkillLockHelperTests.test_custom_symlink_keeps_caller_adjacent_lock) ... FAIL
+test_duplicate_keys_fail_before_lock_mutation (test_install_skill_lock_ps.SkillLockHelperTests.test_duplicate_keys_fail_before_lock_mutation) ... FAIL
+
+======================================================================
+ERROR: test_apply_does_not_require_unix_fchmod (test_install_skill_lock_ps.SkillLockHelperTests.test_apply_does_not_require_unix_fchmod)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hogenxue/Projects/CodexTamplate/tests/test_install_skill_lock_ps.py", line 56, in test_apply_does_not_require_unix_fchmod
+    self.module.adopt_skill_lock(lock, ['tdd'], True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/hogenxue/Projects/CodexTamplate/scripts/lib/adopt_skill_lock.py", line 38, in adopt_skill_lock
+    os.fchmod(stream.fileno(), stat.S_IMODE(target_stat.st_mode))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/mock.py", line 1241, in _execute_mock_call
+    raise effect
+AttributeError: not available on Windows
+
+======================================================================
+FAIL: test_explicit_adoption_preserves_unrelated_data_and_backup (test_install_skill_lock_ps.PowerShellAdoptionTests.test_explicit_adoption_preserves_unrelated_data_and_backup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hogenxue/Projects/CodexTamplate/tests/test_install_skill_lock_ps.py", line 88, in test_explicit_adoption_preserves_unrelated_data_and_backup
+    self.assertEqual(run.returncode, 0, run.stderr + run.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 0 : ERROR: unrecognized option: --adopt-skill-lock
+Usage: install-skills.ps1 [--dry-run] [--link | --copy] [--replace] [--prune-legacy] [--prune-other-root] [--target PATH] [--backup-dir PATH]
+
+
+======================================================================
+FAIL: test_malformed_lock_blocks_before_skill_writes (test_install_skill_lock_ps.PowerShellAdoptionTests.test_malformed_lock_blocks_before_skill_writes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hogenxue/Projects/CodexTamplate/tests/test_install_skill_lock_ps.py", line 108, in test_malformed_lock_blocks_before_skill_writes
+    self.assertIn('skill lock:', run.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'skill lock:' not found in 'ERROR: unrecognized option: --adopt-skill-lock\nUsage: install-skills.ps1 [--dry-run] [--link | --copy] [--replace] [--prune-legacy] [--prune-other-root] [--target PATH] [--backup-dir PATH]\n'
+
+======================================================================
+FAIL: test_preview_and_opt_out_preserve_lock_bytes (test_install_skill_lock_ps.PowerShellAdoptionTests.test_preview_and_opt_out_preserve_lock_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hogenxue/Projects/CodexTamplate/tests/test_install_skill_lock_ps.py", line 100, in test_preview_and_opt_out_preserve_lock_bytes
+    self.assertEqual(run.returncode, 0, run.stderr + run.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 0 : ERROR: unrecognized option: --adopt-skill-lock
+Usage: install-skills.ps1 [--dry-run] [--link | --copy] [--replace] [--prune-legacy] [--prune-other-root] [--target PATH] [--backup-dir PATH]
+
+
+======================================================================
+FAIL: test_custom_symlink_keeps_caller_adjacent_lock (test_install_skill_lock_ps.SkillLockHelperTests.test_custom_symlink_keeps_caller_adjacent_lock)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hogenxue/Projects/CodexTamplate/tests/test_install_skill_lock_ps.py", line 48, in test_custom_symlink_keeps_caller_adjacent_lock
+    self.assertEqual(run.returncode, 0, run.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 0 : usage: adopt_skill_lock.py [-h] --target TARGET --skills SKILLS [SKILLS ...]
+                           [--apply]
+adopt_skill_lock.py: error: the following arguments are required: --target, --skills
+
+
+======================================================================
+FAIL: test_duplicate_keys_fail_before_lock_mutation (test_install_skill_lock_ps.SkillLockHelperTests.test_duplicate_keys_fail_before_lock_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hogenxue/Projects/CodexTamplate/tests/test_install_skill_lock_ps.py", line 30, in test_duplicate_keys_fail_before_lock_mutation
+    with self.assertRaises(ValueError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 9 tests in 5.522s
+
+FAILED (failures=5, errors=1)

@@ -195,7 +195,7 @@ install_profile_claude <mem0_url_or_empty>
   under the resolved host home's `.ai-workflow-backups` by default.
 - Malformed JSON or a non-object `mcpServers` is an error; never silently replace
   it with an empty object. Existing unrelated JSON keys and servers are retained.
-- Full profiles install the seven Skills and paired defaults, canonical global
+- Full profiles install the manifest Skills and paired defaults, canonical global
   instructions and MCP. Preserve native `config.yaml` / `settings.json`. No
   guessed hooks, Graphify Skill, application install or project initialization.
 - Wizard choices: `4=MiniMax Code`, `5=WorkBuddy`; duplicates ignored and profiles
@@ -589,6 +589,24 @@ PowerShell installer suite.
 installation without the removed helper, native task context validation, and
 the direct CI command references.
 
+### CI dependency cache contract
+
+- **Scope / trigger**: Changes to Python dependency setup in `.github/workflows/ci.yml`.
+- **Signatures**: `actions/setup-python` uses `cache: pip` and
+  `cache-dependency-path: requirements-dev.txt`; installation runs
+  `python -m pip install -r requirements-dev.txt`.
+- **Contract**: Checkout precedes setup. Cache hashing and installation use the same
+  committed dependency file on both Ubuntu and macOS; quality runs without `--task`.
+- **Validation / errors**: A cache miss is valid. A missing dependency file fails setup;
+  failed installation or quality checks must fail the job.
+- **Cases**: A cold cache installs dependencies; a warm cache still runs installation
+  and quality; a nonexistent dependency path must not be treated as successful setup.
+- **Verification**: For the changed commit, inspect both matrix jobs and confirm setup,
+  dependency installation, and the shared quality entry all execute successfully.
+  CI uses `--format json` so captured test output and failures remain visible in logs.
+- **Wrong / correct**: Omitting the path relies on default `requirements.txt` or
+  `pyproject.toml` discovery. Explicitly select this repository's `requirements-dev.txt`.
+
 ---
 
 ## Convention: Skill renames and optional resources
@@ -596,7 +614,7 @@ the direct CI command references.
 **Manifest contract**: `manifest.yaml` lists only currently distributed Skill names. A renamed or removed
 workflow Skill is not silently deleted during an ordinary install. Add it to the installer's legacy list;
 `--prune-legacy` must preview the removal and, on execution, create a unique timestamped `.bak` before
-removing the old directory or symlink. The current 19-skill manifest includes the restored
+removing the old directory or symlink. The current 20-skill manifest includes the restored
 `grill-with-docs`, `grilling`, and `domain-modeling` plus the AIHero main flow/support capabilities.
 Restored names must not remain in either shell's legacy list: `--replace --prune-legacy` backs up and
 replaces them normally, never removes the newly installed directories. Remaining legacy names are
@@ -672,3 +690,56 @@ variants, independent-capability preservation, native TOML/JSONC forms, mixed ho
 groups and unknown scripts, inherited environment isolation, no-write previews,
 and actual context helper execution. Windows CI runs new-host, preservation,
 catalog and MCP-format suites in addition to the existing PowerShell suites.
+
+## Convention: Package Skill ownership and external update locks
+
+`install.sh skills --adopt-skill-lock` and its PowerShell peer explicitly detach manifest names from the
+third-party update lock. Standard `~/.agents/skills`, active CODEX_HOME/skills and
+`~/.cursor/skills` targets share `~/.agents/.skill-lock.json`; when XDG_STATE_HOME is
+configured, use `XDG_STATE_HOME/skills/.skill-lock.json` instead. Custom targets keep
+their adjacent `<parent of target skills directory>/.skill-lock.json` behavior. The
+shared path resolver is used by both the component and full-profile wizard.
+Custom target spellings such as `.` and `skills/.` refer to the target directory's
+parent, while an existing symlink target retains the caller-visible parent.
+
+Replacement and adoption are separate choices; normal installs preserve external locks.
+The recommended Codex/Cursor wizard offers a separate default-no ownership prompt when
+the selected lock exists and Skills are being installed. Declining or skipping Skills
+preserves registration. Adoption changes shared metadata, not other hosts' Skill trees.
+Preview validates and reports the selected entries without creating files. Missing locks
+or no matching entries are no-ops.
+
+Validate that the lock is a regular, non-symlink JSON file containing a `skills` mapping
+before replacing any Skill. Preserve unrelated names and all other JSON metadata. Back up
+the original lock using the shared timestamped helper, then replace its selected entries
+atomically only after all Skill copies succeed. Adoption failure rolls back both the Skill
+tree and exact lock contents. An explicit later upstream reinstall can still replace the
+adapted Skills; users must select non-conflicting upstream names instead.
+
+Tests must cover exact-name adoption, unrelated metadata, preview, opt-in behavior,
+malformed/symlink rejection, no matching entries and restoration after lock-write failure.
+Also cover standard host/XDG resolution, custom-target fallback and real TTY consent,
+decline and skip paths for the recommended profiles.
+
+
+## Merge integration: optional onboarding and lock identity
+
+The 20-capability catalog retains the existing 19 portable Skills and adds the
+explicit-only `setup-matt-pocock-skills` compatibility tool. Adapted Skills do not
+require onboarding again. Create third-party bridge documents only for consumers
+that actually need them; native Task/PRD/spec paths remain authoritative. Setup's
+source history is disclosed separately in THIRD_PARTY_NOTICES.md; do not invent a
+pinned upstream commit for this locally rewritten compatibility entrypoint.
+
+Lock selection and JSON updates share `scripts/lib/adopt_skill_lock.py` across
+Bash and PowerShell. Compare logical/caller-visible paths, including dot targets
+within symlink directories, and verify any supplied logical cwd against the real
+cwd before using it. A custom alias must not accidentally adopt the shared global
+lock. Reject duplicate JSON keys and preserve unrelated registration/preferences.
+Use a path-based permission operation supported by Windows Python 3.10-3.12.
+Backup, malformed input, opt-out/preview and apply-failure rollback must have
+fixture evidence through both actual installer entrypoints.
+
+CI retains direct Skill validation/unittest jobs and all Windows suites. Both
+Python cache steps reference requirements-dev.txt; verbose unittest output
+provides failure diagnostics without reviving removed workflow_check.py.

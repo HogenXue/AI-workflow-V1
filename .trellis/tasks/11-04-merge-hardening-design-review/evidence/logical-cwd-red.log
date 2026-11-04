@@ -1,0 +1,26 @@
+test_explicit_adoption_preserves_unrelated_data_and_backup (test_install_skill_lock_ps.BashAdoptionTests.test_explicit_adoption_preserves_unrelated_data_and_backup) ... ok
+test_failed_adoption_restores_payload_and_lock (test_install_skill_lock_ps.BashAdoptionTests.test_failed_adoption_restores_payload_and_lock) ... ok
+test_malformed_lock_blocks_before_skill_writes (test_install_skill_lock_ps.BashAdoptionTests.test_malformed_lock_blocks_before_skill_writes) ... ok
+test_preview_and_opt_out_preserve_lock_bytes (test_install_skill_lock_ps.BashAdoptionTests.test_preview_and_opt_out_preserve_lock_bytes) ... ok
+test_explicit_adoption_preserves_unrelated_data_and_backup (test_install_skill_lock_ps.PowerShellAdoptionTests.test_explicit_adoption_preserves_unrelated_data_and_backup) ... ok
+test_failed_adoption_restores_payload_and_lock (test_install_skill_lock_ps.PowerShellAdoptionTests.test_failed_adoption_restores_payload_and_lock) ... ok
+test_malformed_lock_blocks_before_skill_writes (test_install_skill_lock_ps.PowerShellAdoptionTests.test_malformed_lock_blocks_before_skill_writes) ... ok
+test_preview_and_opt_out_preserve_lock_bytes (test_install_skill_lock_ps.PowerShellAdoptionTests.test_preview_and_opt_out_preserve_lock_bytes) ... ok
+test_apply_does_not_require_unix_fchmod (test_install_skill_lock_ps.SkillLockHelperTests.test_apply_does_not_require_unix_fchmod) ... ok
+test_custom_symlink_keeps_caller_adjacent_lock (test_install_skill_lock_ps.SkillLockHelperTests.test_custom_symlink_keeps_caller_adjacent_lock) ... ok
+test_duplicate_keys_fail_before_lock_mutation (test_install_skill_lock_ps.SkillLockHelperTests.test_duplicate_keys_fail_before_lock_mutation) ... ok
+test_relative_target_retains_verified_logical_cwd (test_install_skill_lock_ps.SkillLockHelperTests.test_relative_target_retains_verified_logical_cwd) ... FAIL
+
+======================================================================
+FAIL: test_relative_target_retains_verified_logical_cwd (test_install_skill_lock_ps.SkillLockHelperTests.test_relative_target_retains_verified_logical_cwd)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hogenxue/Projects/CodexTamplate/tests/test_install_skill_lock_ps.py", line 65, in test_relative_target_retains_verified_logical_cwd
+    self.assertEqual(Path(run.stdout.strip()), alias.parent / '.skill-lock.json')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: PosixPath('/private/var/folders/n2/clr4tz2x4571vm2nh8[53 chars]son') != PosixPath('/var/folders/n2/clr4tz2x4571vm2nh8dmlkq800[39 chars]son')
+
+----------------------------------------------------------------------
+Ran 12 tests in 7.632s
+
+FAILED (failures=1)

@@ -15,7 +15,7 @@ NEW_SKILLS = (
     "grill-with-docs", "to-spec", "to-tickets", "implement", "code-review", "wayfinder",
     "grilling", "domain-modeling", "research", "prototype", "handoff",
 )
-CURRENT_SKILLS = ("memory", "gitnexus", "grill-me", "tdd", "diagnosing-bugs", "codebase-design", "resolving-merge-conflicts", "retro")
+CURRENT_SKILLS = ("memory", "gitnexus", "grill-me", "tdd", "diagnosing-bugs", "codebase-design", "resolving-merge-conflicts", "retro", "setup-matt-pocock-skills")
 RESTORED = ("grill-with-docs", "grilling", "domain-modeling")
 
 

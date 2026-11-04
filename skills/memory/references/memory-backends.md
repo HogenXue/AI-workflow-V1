@@ -18,7 +18,7 @@
 ## Recallium MCP（项目记忆）
 
 Codex MCP 服务名：`recallium`（`https://www.59005046.xyz:8102/mcp`）。远端 Recallium
-必须使用 HTTPS；只有本机回环地址可使用明文 HTTP。
+使用 HTTPS；HTTP 仅允许安装契约明确列出的回环、RFC1918 和 IPv6 ULA 地址。
 
 ### 何时优先用 Recallium
 
@@ -48,7 +48,8 @@ Codex MCP 服务名：`recallium`（`https://www.59005046.xyz:8102/mcp`）。远
 
 ### 故障分层
 
-- 工具不可见：检查 `~/.codex/config.toml` 中 `[mcp_servers.recallium]` 并重启 Codex。
+- 工具不可见：先确认当前宿主实际暴露的后端与项目要求。获授权时检查所选宿主的配置；
+  不自动修改真实用户配置或重启应用。
 - `Recent memories: 0`：该项目命名空间为空，不等于服务全局故障。
 - search 与 write 失败原因可能不同；分别报告，不要笼统称「recallium 不可用」。
 

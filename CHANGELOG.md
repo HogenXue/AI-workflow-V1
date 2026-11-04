@@ -4,13 +4,16 @@
 
 ### 新增
 
+- 显式、可选的第三方 Skill 项目配置入口 `setup-matt-pocock-skills`；现有适配版无需重复 setup。
+- Bash/PowerShell 对等的 `--adopt-skill-lock` 接管，独立确认并保留备份及无关登记。
+
 - 平台无关的有效配置输出与公开配置键消费者校验。
 - 原生 Trellis 任务与上下文校验，以及按任务风险选择的质量验证。
 - Ubuntu、macOS 的 Skill 校验和 Python fixture 测试；Windows 的 PowerShell 安装回归。
 - Trellis 兼容的 `diagnosing-bugs`、`codebase-design`、`resolving-merge-conflicts` 能力型 Skill。
 - Claude Code App 用户级安装 profile：`claude-merge`、交互多选（Codex/Cursor/Claude）、`~/.claude/CLAUDE.md` 与 `~/.claude.json` MCP 合并（bash / PowerShell 对等）。
 - MiniMax Code 与 WorkBuddy 原生安装 profile，以及五宿主的发现路径说明。
-- `retro` 复盘 Skill；manifest 共 19 项，复用 Trellis 任务证据与原生 break-loop。
+- `retro` 复盘 Skill；manifest 共 20 项，复用 Trellis 任务证据与原生 break-loop。
 - 共享严格 Skill catalog、安装前身份检查及 `audit-skills` 冲突/漂移/完整性检查。
 
 ### 变更
@@ -24,6 +27,9 @@
 - `agents` 只更新指导文档，保留原生设置和有效 override；hooks 按受管身份合并并保留外部处理器，原生信任审核由宿主负责。
 
 ### 修复
+
+- 拒绝锁文件重复 JSON 键，避免独立登记丢失；自定义 symlink/dot 目标保留调用者的相邻锁路径。
+- 锁接管支持 Windows Python 3.10–3.12，并补齐 CI 缓存依赖与失败诊断。
 
 - `config-check.sh` 不再把嵌套 MCP TOML 节误报为服务器名。
 - 修正文档中的 MCP 内容说明、配置路径和运行时依赖。

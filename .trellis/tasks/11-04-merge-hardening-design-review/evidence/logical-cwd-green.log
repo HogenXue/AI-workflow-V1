@@ -1,0 +1,17 @@
+test_explicit_adoption_preserves_unrelated_data_and_backup (test_install_skill_lock_ps.BashAdoptionTests.test_explicit_adoption_preserves_unrelated_data_and_backup) ... ok
+test_failed_adoption_restores_payload_and_lock (test_install_skill_lock_ps.BashAdoptionTests.test_failed_adoption_restores_payload_and_lock) ... ok
+test_malformed_lock_blocks_before_skill_writes (test_install_skill_lock_ps.BashAdoptionTests.test_malformed_lock_blocks_before_skill_writes) ... ok
+test_preview_and_opt_out_preserve_lock_bytes (test_install_skill_lock_ps.BashAdoptionTests.test_preview_and_opt_out_preserve_lock_bytes) ... ok
+test_explicit_adoption_preserves_unrelated_data_and_backup (test_install_skill_lock_ps.PowerShellAdoptionTests.test_explicit_adoption_preserves_unrelated_data_and_backup) ... ok
+test_failed_adoption_restores_payload_and_lock (test_install_skill_lock_ps.PowerShellAdoptionTests.test_failed_adoption_restores_payload_and_lock) ... ok
+test_malformed_lock_blocks_before_skill_writes (test_install_skill_lock_ps.PowerShellAdoptionTests.test_malformed_lock_blocks_before_skill_writes) ... ok
+test_preview_and_opt_out_preserve_lock_bytes (test_install_skill_lock_ps.PowerShellAdoptionTests.test_preview_and_opt_out_preserve_lock_bytes) ... ok
+test_apply_does_not_require_unix_fchmod (test_install_skill_lock_ps.SkillLockHelperTests.test_apply_does_not_require_unix_fchmod) ... ok
+test_custom_symlink_keeps_caller_adjacent_lock (test_install_skill_lock_ps.SkillLockHelperTests.test_custom_symlink_keeps_caller_adjacent_lock) ... ok
+test_duplicate_keys_fail_before_lock_mutation (test_install_skill_lock_ps.SkillLockHelperTests.test_duplicate_keys_fail_before_lock_mutation) ... ok
+test_relative_target_retains_verified_logical_cwd (test_install_skill_lock_ps.SkillLockHelperTests.test_relative_target_retains_verified_logical_cwd) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 6.588s
+
+OK

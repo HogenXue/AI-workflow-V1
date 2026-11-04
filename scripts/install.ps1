@@ -77,6 +77,13 @@ function Test-PromptReplaceIfNeeded {
     return (Install-LibPromptYn -Question "Existing $Kind at $Target — backup and replace?" -Default 'n')
 }
 
+function Test-SkillLockAdoption {
+    param([Parameter(Mandatory)][string]$Target)
+    $skillLock = Get-InstallLibSkillLockPath -Target $Target
+    if (-not (Test-InstallLibExistsOrLink -Path $skillLock)) { return $false }
+    return (Install-LibPromptYn -Question "Take ownership of this package's Skill update entries in $skillLock (back up, then detach from third-party updates)?" -Default 'n')
+}
+
 function Install-FullDependencies {
     $pathFile = [System.IO.Path]::GetTempFileName()
     try {
@@ -152,6 +159,7 @@ function Install-ProfileCodex {
         }
     }
     if ($skillArgs.Count -gt 0) {
+        if (Test-SkillLockAdoption -Target $skillsTarget) { $skillArgs += '--adopt-skill-lock' }
         Invoke-InstallComponent skills @skillArgs
     }
 
@@ -226,6 +234,7 @@ function Install-ProfileCursor {
         }
     }
     if ($skillArgs.Count -gt 0) {
+        if (Test-SkillLockAdoption -Target $skillsTarget) { $skillArgs += '--adopt-skill-lock' }
         Invoke-InstallComponent skills @skillArgs
     }
 

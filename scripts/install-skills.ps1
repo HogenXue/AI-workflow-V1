@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 
 function Show-Usage {
     [Console]::Error.WriteLine(
-        'Usage: install-skills.ps1 [--dry-run] [--link | --copy] [--replace] [--prune-legacy] [--prune-other-root] [--target PATH] [--backup-dir PATH]'
+        'Usage: install-skills.ps1 [--dry-run] [--link | --copy] [--replace] [--adopt-skill-lock] [--prune-legacy] [--prune-other-root] [--target PATH] [--backup-dir PATH]'
     )
 }
 
@@ -42,6 +42,7 @@ $modeSelected = ''
 $explicitDryRun = $false
 $executeRequested = $false
 $replace = $false
+$adoptSkillLock = $false
 $pruneLegacy = $false
 $pruneOtherRoot = $false
 
@@ -72,6 +73,7 @@ while ($i -lt $argv.Count) {
         '--replace' {
             $replace = $true
         }
+        '--adopt-skill-lock' { $adoptSkillLock = $true }
         '--prune-legacy' {
             $pruneLegacy = $true
         }
@@ -241,6 +243,16 @@ if (-not [string]::IsNullOrEmpty($otherCodexRoot)) {
     }
 }
 
+$skillLock = ''
+$skillLockEntries = @()
+$skillLockBackup = ''
+$adoptHelper = Join-Path $scriptDir 'lib/adopt_skill_lock.py'
+if ($adoptSkillLock) {
+    $skillLock = Get-InstallLibSkillLockPath -Target $target
+    $skillLockEntries = @(& $python $adoptHelper --target $skillLock --skills @skills)
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+}
+
 if ($dryRun) {
     if ($conflicts.Count -gt 0) {
         [Console]::Error.WriteLine("CONFLICT: existing skills: $($conflicts -join ' ')")
@@ -269,6 +281,9 @@ if ($dryRun) {
         [Console]::Out.WriteLine(
             "DRY-RUN: backups would use $backupDir/<Skill name>.<UTC timestamp>.bak"
         )
+    }
+    if ($skillLockEntries.Count -gt 0) {
+        [Console]::Out.WriteLine("DRY-RUN: would back up $skillLock and detach third-party update entries: $($skillLockEntries -join ' ')")
     }
     exit 0
 }
@@ -316,7 +331,17 @@ function Invoke-SkillsRollback {
             [Console]::Error.WriteLine("ERROR: could not restore other-root Skill $skill")
         }
     }
+    if ($skillLockBackup) {
+        if (-not (Install-LibRestoreBackup -Backup $skillLockBackup -Destination $skillLock)) {
+            [Console]::Error.WriteLine('ERROR: could not restore Skill update lock')
+        }
+    }
     exit $Status
+}
+
+if ($skillLockEntries.Count -gt 0) {
+    if (-not (Install-LibBackupFile -Source $skillLock -BackupDir $backupDir -Name '.skill-lock.json')) { exit 1 }
+    $skillLockBackup = $script:InstallBackupPath
 }
 
 if ($conflicts.Count -gt 0) {
@@ -389,4 +414,10 @@ foreach ($skill in $skills) {
         Invoke-SkillsRollback -Status 1
     }
     [Console]::Out.WriteLine("INSTALLED: $skill")
+}
+
+if ($skillLockEntries.Count -gt 0) {
+    & $python $adoptHelper --target $skillLock --skills @skills --apply | Out-Null
+    if ($LASTEXITCODE -ne 0) { Invoke-SkillsRollback -Status 1 }
+    [Console]::Out.WriteLine("ADOPTED: package Skill names detached from third-party updates in $skillLock")
 }

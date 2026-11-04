@@ -1,0 +1,31 @@
+[
+  {
+    "probe": "custom symlink alias to standard root",
+    "exit": 0,
+    "chosen_lock": "/private/tmp/lock-design-audit-w0ludoar/lock-spelling j9trufqn/.agents/.skill-lock.json",
+    "caller_adjacent_lock": "/private/tmp/lock-design-audit-w0ludoar/lock-spelling j9trufqn/aliased/.skill-lock.json"
+  },
+  {
+    "probe": "ordinary install without adoption and irrelevant cyclic CODEX_HOME",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "probe": "duplicate JSON mapping",
+    "exit": 0,
+    "independent_first_retained": false,
+    "independent_last_retained": true,
+    "stderr": ""
+  },
+  {
+    "probe": "atomic publish failure",
+    "original_exact": true,
+    "temporary_count": 0
+  },
+  {
+    "probe": "simulate supported Windows Python3.12 fchmod unavailable",
+    "exception": "AttributeError",
+    "original_exact": true,
+    "temporary_count": 0
+  }
+]
