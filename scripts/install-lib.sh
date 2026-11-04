@@ -10,6 +10,16 @@ install_lib_python_text() {
   printf '%s\n' "$output" | sed $'s/\r$//'
 }
 
+install_lib_shell_path() {
+  # Compare Windows argv/override paths with Git Bash's POSIX-form HOME.
+  # Format conversion preserves the caller's logical path and symlink identity.
+  if command -v cygpath >/dev/null 2>&1; then
+    cygpath -u -- "$1"
+  else
+    printf '%s\n' "$1"
+  fi
+}
+
 install_lib_prompt_yn() {
   # usage: install_lib_prompt_yn "question" default_y_or_n
   local question="$1"

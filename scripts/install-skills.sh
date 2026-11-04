@@ -115,10 +115,10 @@ if ((${#skills[@]} == 0)); then
   exit 1
 fi
 
-normalized_target="${target%/}"
-codex_skills="${CODEX_HOME:-"$HOME/.codex"}/skills"
+normalized_target="$(install_lib_shell_path "${target%/}")" || exit 1
+codex_skills="$(install_lib_shell_path "${CODEX_HOME:-"$HOME/.codex"}/skills")" || exit 1
 codex_skills="${codex_skills%/}"
-shared_skills="$HOME/.agents/skills"
+shared_skills="$(install_lib_shell_path "$HOME/.agents/skills")" || exit 1
 other_codex_root=""
 
 if [[ "$normalized_target" == "$codex_skills" ]]; then

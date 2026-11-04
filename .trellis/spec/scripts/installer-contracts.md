@@ -660,6 +660,10 @@ optional resources still receive link/placeholder checks.
   On Windows, native USERPROFILE/AppData roots are separate from installer HOME (which installer
   peers explicitly prefer). Use absolute `shutil.which` shell paths so Windows CreateProcess
   cannot choose its System32 WSL launcher before the intended PATH-resolved Git Bash.
+  Bash compares standard host roots after `cygpath -u` format conversion when available:
+  native Windows argv/overrides and Git Bash HOME can name the same path differently.
+  Keep original I/O paths and caller-visible symlink identity; do not use physical
+  resolution to reclassify a custom target as a standard host root.
 - **Wrong / correct**: Do not filter runtime directories out of preservation assertions or strip
   all CR bytes from arbitrary output. Isolate runtime state before process startup and normalize
   only the known text boundaries. PowerShell's native text pipeline needs no equivalent change;
