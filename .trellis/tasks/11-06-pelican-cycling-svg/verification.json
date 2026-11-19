@@ -1,0 +1,30 @@
+{
+  "checks": [
+    {
+      "command": ".venv/bin/python -c 'from pathlib import Path; import re, subprocess; html=Path('\\''pelican-cycling.html'\\'').read_text(); scripts=re.findall(r'\\''<script>([\\s\\S]*?)</script>'\\'',html); assert len(scripts)==1; subprocess.run(['\\''node'\\'','\\''--check'\\'','\\''-'\\''],input=scripts[0],text=True,check=True); print('\\''Inline JavaScript syntax passed'\\'')'",
+      "duration_ms": 90,
+      "exit_code": 0,
+      "name": "html-javascript",
+      "status": "passed"
+    },
+    {
+      "command": ".venv/bin/python .trellis/scripts/task.py validate .trellis/tasks/11-06-pelican-cycling-svg",
+      "duration_ms": 76,
+      "exit_code": 0,
+      "name": "task-context",
+      "status": "passed"
+    },
+    {
+      "command": ".venv/bin/python -c 'from pathlib import Path; text=Path('\\''pelican-cycling.html'\\'').read_text(); bad=[n for n,line in enumerate(text.splitlines(),1) if line.rstrip()!=line]; assert not bad,bad; assert text.endswith('\\''\\n'\\''); print('\\''HTML whitespace passed'\\'')'",
+      "duration_ms": 32,
+      "exit_code": 0,
+      "name": "html-whitespace",
+      "status": "passed"
+    }
+  ],
+  "generated_at": "2026-11-06T08:23:28.287275+00:00",
+  "git_head": "4f3753f9dce612a45b4e09fa5d1f17bddc802c1e",
+  "schema_version": 1,
+  "status": "passed",
+  "worktree_fingerprint": "974d475430b1788862e09fdf7de4ae90b1789e999b5d34564093d90da89b62f2"
+}
